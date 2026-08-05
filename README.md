@@ -36,3 +36,5 @@ Discovery reconciliation was agreed on 2026-08-05. The current V1 blueprint, dec
 ## Source-of-truth rule
 
 If code, a conversation, or an external tool conflicts with the repository documentation, update the repository documentation first and record the decision in `docs/decisions.md`. Keep the README status aligned with the current blueprint and release plan.
+
+<!-- trigger: Vercel preview build for design QA, 2026-08-05T17:34:28Z -->
