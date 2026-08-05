@@ -107,7 +107,12 @@ export function RoundWorkspace() {
       {directionsError && <p className="error">Directions error: {directionsError}</p>}
 
       {directions.length > 0 && (
-        <DirectionsComparison directions={directions} designGoal={designGoal} onApprove={handleApprove} />
+        <DirectionsComparison
+          directions={directions}
+          designGoal={designGoal}
+          screenshotRef={screenshotRef}
+          onApprove={handleApprove}
+        />
       )}
 
       {approvedMessage && (

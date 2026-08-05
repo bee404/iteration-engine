@@ -1,4 +1,4 @@
-import { getCodeGenProvider } from "@/lib/providers/codegen";
+import { CodeGenGenerationError, getCodeGenProvider } from "@/lib/providers/codegen";
 import type { Direction } from "@/lib/types";
 
 function isDirection(value: unknown): value is Direction {
@@ -29,23 +29,39 @@ export async function POST(request: Request) {
   if (typeof body.designGoal !== "string" || !body.designGoal.trim()) {
     return new Response(JSON.stringify({ error: "designGoal is required" }), { status: 400 });
   }
-
-  const provider = getCodeGenProvider();
+  if (typeof body.screenshotRef !== "string" || !body.screenshotRef.trim()) {
+    return new Response(JSON.stringify({ error: "screenshotRef is required" }), { status: 400 });
+  }
 
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       const encoder = new TextEncoder();
+      // Provider selection and generation both live inside this try: provider selection can
+      // throw too (e.g. CODEGEN_PROVIDER=claude set without ANTHROPIC_API_KEY), and once the
+      // stream has started there is no HTTP status left to signal failure with — an SSE
+      // "error" event is the only way back to the client, so every failure mode, known or
+      // not, must be normalized into one instead of left to crash the stream uncaught.
       try {
+        const provider = getCodeGenProvider();
         controller.enqueue(encoder.encode(sseEvent("start", { language: provider.language })));
 
-        for await (const token of provider.streamCode({ direction: body.direction, designGoal: body.designGoal })) {
+        for await (const token of provider.streamCode({
+          direction: body.direction,
+          designGoal: body.designGoal,
+          screenshotRef: body.screenshotRef,
+        })) {
           controller.enqueue(encoder.encode(sseEvent("token", { token })));
         }
 
         controller.enqueue(encoder.encode(sseEvent("done", { language: provider.language })));
       } catch (error) {
+        const codeGenError =
+          error instanceof CodeGenGenerationError
+            ? error
+            : new CodeGenGenerationError("internal_error", error instanceof Error ? error.message : String(error));
+        console.error("[api/generate] code generation failed:", codeGenError);
         controller.enqueue(
-          encoder.encode(sseEvent("error", { message: error instanceof Error ? error.message : "Generation failed" })),
+          encoder.encode(sseEvent("error", { message: codeGenError.message, code: codeGenError.code })),
         );
       } finally {
         controller.close();
