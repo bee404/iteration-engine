@@ -7,11 +7,12 @@ import { DirectionCard } from "./direction-card";
 interface DirectionsComparisonProps {
   directions: Direction[];
   designGoal: string;
+  screenshotRef: string | null;
   onApprove: () => void;
 }
 
 /** Side-by-side comparison of the 2-3 generated directions — step 3 of the round workflow. */
-export function DirectionsComparison({ directions, designGoal, onApprove }: DirectionsComparisonProps) {
+export function DirectionsComparison({ directions, designGoal, screenshotRef, onApprove }: DirectionsComparisonProps) {
   const selectedDirectionId = useRoundStore((s) => s.selectedDirectionId);
   const selectDirection = useRoundStore((s) => s.selectDirection);
 
@@ -24,6 +25,7 @@ export function DirectionsComparison({ directions, designGoal, onApprove }: Dire
             key={direction.id}
             direction={direction}
             designGoal={designGoal}
+            screenshotRef={screenshotRef}
             isSelected={selectedDirectionId === direction.id}
             onSelect={() => selectDirection(direction.id)}
           />

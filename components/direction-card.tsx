@@ -8,6 +8,9 @@ import { PreviewFrame } from "./preview-frame";
 interface DirectionCardProps {
   direction: Direction;
   designGoal: string;
+  /** The screenshot this round's directions iterate on, forwarded to /api/generate so
+   * generated code is grounded in what's actually on screen — not just the direction text. */
+  screenshotRef: string | null;
   isSelected: boolean;
   onSelect: () => void;
 }
@@ -17,7 +20,7 @@ interface DirectionCardProps {
  * action. Consumes the /api/generate SSE stream via fetch + ReadableStream (EventSource
  * only supports GET, and this call needs a POST body).
  */
-export function DirectionCard({ direction, designGoal, isSelected, onSelect }: DirectionCardProps) {
+export function DirectionCard({ direction, designGoal, screenshotRef, isSelected, onSelect }: DirectionCardProps) {
   const [isStreaming, setIsStreaming] = useState(false);
   const generated = useRoundStore((s) => s.generatedCodeByDirection[direction.id]);
   const startCodeGen = useRoundStore((s) => s.startCodeGen);
@@ -30,10 +33,14 @@ export function DirectionCard({ direction, designGoal, isSelected, onSelect }: D
     startCodeGen(direction.id, "tsx");
 
     try {
+      if (!screenshotRef) {
+        throw new Error("This round has no screenshot to ground code generation in.");
+      }
+
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ direction, designGoal }),
+        body: JSON.stringify({ direction, designGoal, screenshotRef }),
       });
 
       if (!response.ok || !response.body) {
@@ -72,7 +79,7 @@ export function DirectionCard({ direction, designGoal, isSelected, onSelect }: D
     } finally {
       setIsStreaming(false);
     }
-  }, [direction, designGoal, startCodeGen, appendCodeToken, completeCodeGen, failCodeGen]);
+  }, [direction, designGoal, screenshotRef, startCodeGen, appendCodeToken, completeCodeGen, failCodeGen]);
 
   return (
     <article className={`direction-card ${isSelected ? "selected" : ""}`}>
