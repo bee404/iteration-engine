@@ -11,19 +11,20 @@
     "db:migrate": "tsx lib/db/migrate.ts"
   },
   "dependencies": {
+    "@libsql/client": "0.17.4",
+    "@vercel/analytics": "^2.0.1",
     "next": "16.3.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
-    "zustand": "5.0.14",
-    "@libsql/client": "0.17.4"
+    "zustand": "5.0.14"
   },
   "devDependencies": {
-    "typescript": "6.0.3",
-    "tsx": "4.19.2",
     "@types/node": "26.1.2",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
     "eslint": "9.39.5",
-    "eslint-config-next": "16.3.0"
+    "eslint-config-next": "16.3.0",
+    "tsx": "4.19.2",
+    "typescript": "6.0.3"
   }
 }
