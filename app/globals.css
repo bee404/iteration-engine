@@ -84,6 +84,9 @@ body {
 }
 
 button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   align-self: flex-start;
   background: var(--accent);
   color: #0b0d12;
@@ -98,6 +101,22 @@ button {
 button:disabled {
   opacity: 0.5;
   cursor: default;
+}
+
+.spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(11, 13, 18, 0.35);
+  border-top-color: #0b0d12;
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .critique-summary {
