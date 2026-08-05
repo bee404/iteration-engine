@@ -1,0 +1,28 @@
+# dependencies
+node_modules/
+
+# next.js
+.next/
+out/
+
+# production
+build/
+
+# local env
+.env
+.env.local
+.env*.local
+
+# local sqlite (Turso fallback for local dev)
+*.db
+*.db-journal
+
+# logs
+npm-debug.log*
+*.log
+
+# misc
+.DS_Store
+*.pem
+.vercel
+next-env.d.ts

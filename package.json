@@ -1,0 +1,29 @@
+{
+  "name": "iteration-engine",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Personal design-iteration tool: screenshot + feedback in, critique and rationale-backed directions out, on-demand code generation, Turso-persisted round history.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "db:migrate": "tsx lib/db/migrate.ts"
+  },
+  "dependencies": {
+    "next": "16.3.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "zustand": "5.0.14",
+    "@libsql/client": "0.17.4"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "tsx": "4.19.2",
+    "@types/node": "26.1.2",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "eslint": "9.39.5",
+    "eslint-config-next": "16.3.0"
+  }
+}
