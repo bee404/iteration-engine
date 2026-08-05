@@ -1,3 +1,4 @@
+import { formatDesignSystemForPrompt, getActiveDesignSystem } from "@/lib/design-systems";
 import type { Direction } from "@/lib/types";
 import { CodeGenGenerationError } from "./errors";
 import type { CodeGenProvider, CodeGenRequest } from "./types";
@@ -86,13 +87,15 @@ const SYSTEM_PROMPT =
   "no explanation before or after it.";
 
 /**
- * NOTE (scope gap, flagging rather than inventing a fix): this prompt does not ground generation
- * in the project's design tokens/style guide. docs/blueprint.md and docs/decisions.md describe a
- * planned W3C DTCG token index + condensed style guide as part of the round input model, but
- * lib/types.ts's Round/Project/Direction shapes carry no token or style-guide reference today —
- * there is nothing to thread through without inventing a new loading mechanism out of scope for
- * this change. Direction + screenshot + design goal is the acceptable first pass; once tokens are
- * wired into the round/project data model, add them here as another prompt section.
+ * NOTE (scope gap, tracked but not fully closed by this change): generation is now grounded
+ * in a design system (lib/design-systems), but there is still exactly one system, hardcoded
+ * via getActiveDesignSystem() — not one selected per project/round. docs/blueprint.md and
+ * docs/decisions.md describe a planned W3C DTCG token index + condensed style guide as part
+ * of the round input model, but lib/types.ts's Round/Project/Direction shapes carry no
+ * per-project design-system reference field yet. Building that selection (or a config UI) is
+ * out of scope here; this is a proof-of-concept that grounding changes the output at all, with
+ * lib/design-systems structured so a different system can replace this one without touching
+ * buildPrompt below.
  */
 function buildPrompt(direction: Direction, designGoal: string): string {
   const lines = [
@@ -119,6 +122,18 @@ function buildPrompt(direction: Direction, designGoal: string): string {
       "applies the suggested changes above to what's actually visible in the screenshot, in service of " +
       "the stated design goal and rationale — not a generic template. Reference real elements from the " +
       "screenshot (labels, layout regions, existing components) rather than inventing unrelated content."
+  );
+
+  lines.push(
+    "",
+    "---",
+    "",
+    "Apply the following design system to every element you generate: colors, type scale, spacing, " +
+      "border radius, and named component shapes all come from here, not from your own defaults or " +
+      "invented values. Where a Do/Don't below conflicts with something generic you'd otherwise reach " +
+      "for, follow the Do/Don't.",
+    "",
+    formatDesignSystemForPrompt(getActiveDesignSystem())
   );
 
   return lines.join("\n");
