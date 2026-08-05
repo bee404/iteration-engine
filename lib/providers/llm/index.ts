@@ -5,7 +5,7 @@ import type { LLMProvider } from "./types";
 
 export type { LLMProvider, CritiqueRequest, CritiqueResult, DirectionsRequest, DirectionsResult } from "./types";
 export type { CritiqueErrorCode } from "./errors";
-export { CritiqueGenerationError } from "./errors";
+export { CRITIQUE_ERROR_STATUS, CritiqueGenerationError } from "./errors";
 
 /**
  * Provider factory.

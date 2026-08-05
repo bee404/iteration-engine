@@ -8,6 +8,20 @@ import { CritiqueDisplay } from "./critique-display";
 import { DirectionsComparison } from "./directions-comparison";
 
 /**
+ * The critique route always returns a typed `{ error, code }` JSON body on failure (see
+ * app/api/critique/route.ts), even for errors it didn't anticipate. Surface that message
+ * instead of just the bare status code — "Critique request failed (502)" tells a reviewer
+ * nothing about whether that's an invalid screenshot, an Anthropic outage, or a real bug.
+ */
+async function describeCritiqueFailure(response: Response): Promise<string> {
+  const body = await response.json().catch(() => null);
+  if (body && typeof body.error === "string") {
+    return typeof body.code === "string" ? `${body.error} (${body.code})` : body.error;
+  }
+  return `Critique request failed (${response.status})`;
+}
+
+/**
  * Orchestrates the full round workflow against the store: intake -> critique ->
  * directions -> (optional per-direction code-gen) -> approval. Each step's API call
  * is made here; components below only read/write store state and render.
@@ -47,7 +61,7 @@ export function RoundWorkspace() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ screenshotRef, designGoal, feedbackText, reviewerContext, constraints }),
       });
-      if (!response.ok) throw new Error(`Critique request failed (${response.status})`);
+      if (!response.ok) throw new Error(await describeCritiqueFailure(response));
       const data: { critique: Critique } = await response.json();
       setCritique(data.critique);
     } catch (error) {
