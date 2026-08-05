@@ -26,9 +26,16 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
       setScreenshotRef(null);
       return;
     }
-    // v1 stores a client-side object URL as the screenshot reference; a real upload
-    // pipeline (e.g. blob storage) can replace this without changing the round shape.
-    setScreenshotRef(URL.createObjectURL(file));
+    // Real critique generation sends screenshotRef to the server for a Claude vision call,
+    // so it has to carry actual image bytes — a client-only object URL (blob:...) can't be
+    // dereferenced there. A base64 data URL keeps screenshotRef a plain string (no contract
+    // change) while making it usable server-side; a real upload pipeline (e.g. blob storage)
+    // can replace this without changing the round shape.
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === "string") setScreenshotRef(reader.result);
+    };
+    reader.readAsDataURL(file);
   }
 
   const canSubmit = !!screenshotRef && designGoal.trim().length > 0 && feedbackText.trim().length > 0;
