@@ -107,6 +107,7 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
       </label>
 
       <button type="submit" disabled={disabled || !canSubmit}>
+        {disabled && <span className="spinner" role="status" aria-hidden="true" />}
         {disabled ? "Generating critique…" : "Generate critique"}
       </button>
     </form>
