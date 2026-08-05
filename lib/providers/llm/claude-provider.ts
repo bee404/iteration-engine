@@ -89,6 +89,16 @@ async function resolveScreenshot(screenshotRef: string): Promise<ResolvedImage> 
       );
     }
     const [, mediaType, base64Data] = match;
+    // Both groups are required (non-optional) in the regex above, so a successful match
+    // always populates them — but noUncheckedIndexedAccess types array destructuring as
+    // possibly-undefined regardless. Guard explicitly rather than asserting past it: an
+    // undefined capture here means the input didn't actually match the shape we expect.
+    if (typeof mediaType !== "string" || typeof base64Data !== "string") {
+      throw new CritiqueGenerationError(
+        "invalid_screenshot",
+        "screenshotRef data URL is missing a media type or base64 payload."
+      );
+    }
     if (!SUPPORTED_IMAGE_MEDIA_TYPES.has(mediaType)) {
       throw new CritiqueGenerationError(
         "invalid_screenshot",
