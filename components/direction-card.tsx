@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import type { Direction } from "@/lib/types";
 import { useRoundStore } from "@/store/round-store";
-import { PreviewFrame } from "./preview-frame";
+import { CodeSheet } from "./code-sheet";
 
 interface DirectionCardProps {
   direction: Direction;
@@ -22,13 +22,15 @@ interface DirectionCardProps {
  */
 export function DirectionCard({ direction, designGoal, screenshotRef, isSelected, onSelect }: DirectionCardProps) {
   const [isStreaming, setIsStreaming] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const generateButtonRef = useRef<HTMLButtonElement>(null);
   const generated = useRoundStore((s) => s.generatedCodeByDirection[direction.id]);
   const startCodeGen = useRoundStore((s) => s.startCodeGen);
   const appendCodeToken = useRoundStore((s) => s.appendCodeToken);
   const completeCodeGen = useRoundStore((s) => s.completeCodeGen);
   const failCodeGen = useRoundStore((s) => s.failCodeGen);
 
-  const handleGenerate = useCallback(async () => {
+  const runGeneration = useCallback(async () => {
     setIsStreaming(true);
     startCodeGen(direction.id, "tsx");
 
@@ -81,6 +83,20 @@ export function DirectionCard({ direction, designGoal, screenshotRef, isSelected
     }
   }, [direction, designGoal, screenshotRef, startCodeGen, appendCodeToken, completeCodeGen, failCodeGen]);
 
+  // Generating starts the stream and opens the sheet together. Once a direction has completed
+  // output, re-clicking just reopens the sheet instead of re-streaming; a fresh direction or one
+  // that errored kicks off a new /api/generate call (same retry-on-error behavior as before).
+  const handleTriggerClick = useCallback(() => {
+    setIsSheetOpen(true);
+    if (!generated || generated.status === "error") {
+      void runGeneration();
+    }
+  }, [generated, runGeneration]);
+
+  const handleSheetClose = useCallback(() => {
+    setIsSheetOpen(false);
+  }, []);
+
   return (
     <article className={`direction-card ${isSelected ? "selected" : ""}`}>
       <header>
@@ -108,19 +124,29 @@ export function DirectionCard({ direction, designGoal, screenshotRef, isSelected
         </a>
       )}
 
-      <button type="button" onClick={handleGenerate} disabled={isStreaming} className="generate-button">
-        {isStreaming ? "Streaming code…" : "Generate code (optional)"}
+      <button
+        type="button"
+        ref={generateButtonRef}
+        onClick={handleTriggerClick}
+        disabled={isStreaming}
+        className="generate-button"
+      >
+        {isStreaming
+          ? "Streaming code…"
+          : generated?.status === "complete"
+            ? "View generated code"
+            : generated?.status === "error"
+              ? "Retry generation"
+              : "Generate code (optional)"}
       </button>
 
-      {generated && (
-        <div className="code-preview">
-          <PreviewFrame code={generated.code} language={generated.language} />
-          <p className="code-status">
-            Status: {generated.status}
-            {generated.error ? ` — ${generated.error}` : ""}
-          </p>
-        </div>
-      )}
+      <CodeSheet
+        isOpen={isSheetOpen}
+        directionTitle={direction.title}
+        generated={generated}
+        onClose={handleSheetClose}
+        triggerRef={generateButtonRef}
+      />
     </article>
   );
 }
