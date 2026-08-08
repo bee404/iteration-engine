@@ -1,6 +1,7 @@
 "use client";
 
 import { useRoundStore } from "@/store/round-store";
+import { readImageDimensions } from "@/lib/image-dimensions";
 
 interface UploadFormProps {
   onSubmit: () => void;
@@ -15,6 +16,7 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
   const reviewerContext = useRoundStore((s) => s.reviewerContext);
   const constraints = useRoundStore((s) => s.constraints);
   const setScreenshotRef = useRoundStore((s) => s.setScreenshotRef);
+  const setScreenshotDimensions = useRoundStore((s) => s.setScreenshotDimensions);
   const setDesignGoal = useRoundStore((s) => s.setDesignGoal);
   const setFeedbackText = useRoundStore((s) => s.setFeedbackText);
   const setReviewerContext = useRoundStore((s) => s.setReviewerContext);
@@ -24,6 +26,7 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
     const file = event.target.files?.[0];
     if (!file) {
       setScreenshotRef(null);
+      setScreenshotDimensions(null);
       return;
     }
     // Real critique generation sends screenshotRef to the server for a Claude vision call,
@@ -32,8 +35,13 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
     // change) while making it usable server-side; a real upload pipeline (e.g. blob storage)
     // can replace this without changing the round shape.
     const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === "string") setScreenshotRef(reader.result);
+    reader.onload = async () => {
+      if (typeof reader.result !== "string") return;
+      setScreenshotRef(reader.result);
+      // Natural pixel size is load-bearing for the before/after visual diff (the generated
+      // component gets scaled to the screenshot's captured viewport). Capture it here, at the
+      // one point the image bytes are in hand.
+      setScreenshotDimensions(await readImageDimensions(reader.result));
     };
     reader.readAsDataURL(file);
   }

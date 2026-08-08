@@ -4,6 +4,15 @@
  * returned from the stubbed provider calls (see lib/providers/**).
  */
 
+/** Natural pixel size of an uploaded screenshot, captured client-side at upload time.
+ * Load-bearing for the before/after visual diff: the generated component must be scaled to
+ * the same viewport the screenshot was captured at. Null until a screenshot with readable
+ * dimensions is provided. */
+export interface ImageDimensions {
+  width: number;
+  height: number;
+}
+
 export type SignalPreferenceKind = "signal" | "preference";
 
 export interface SignalPreferenceItem {
@@ -68,6 +77,9 @@ export interface Round {
   /** Links this round to the round it iterates on, for version history across rounds. */
   previousRoundId: string | null;
   screenshotRef: string;
+  /** Natural pixel dimensions of screenshotRef, or null for legacy rounds captured before
+   * dimension capture existed (or when the image never loaded). */
+  screenshotDimensions: ImageDimensions | null;
   designGoal: string;
   feedbackText: string;
   reviewerContext: string | null;

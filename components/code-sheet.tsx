@@ -35,13 +35,19 @@ const FOCUSABLE_SELECTOR =
  */
 export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerRef }: CodeSheetProps) {
   const [isMounted, setIsMounted] = useState(isOpen);
-  // Render-phase state adjustment (not an effect): mount immediately when isOpen flips true so
-  // the open transition can play. Closing instead unmounts from the transitionend handler below,
-  // once the slide-down animation has actually finished.
+  // The `.open` class drives the slide/fade. It must be applied one frame *after* the sheet
+  // first paints in its closed position, or the CSS transition has no prior state to animate
+  // from and the enter animation is skipped (the exit works because the mounted sheet already
+  // carries `.open` when it's removed). So mounting and activating are two separate states.
+  const [isActive, setIsActive] = useState(isOpen);
+  // Render-phase mount when opening; unmount happens from the transitionend handler below once
+  // the slide-down has finished.
   const [trackedIsOpen, setTrackedIsOpen] = useState(isOpen);
   if (isOpen !== trackedIsOpen) {
     setTrackedIsOpen(isOpen);
     if (isOpen) setIsMounted(true);
+    // Closing: drop `.open` now (render phase) so the exit transition plays before unmount.
+    else setIsActive(false);
   }
   const sheetRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -86,6 +92,14 @@ export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerR
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
+  // Add `.open` on the frame after mount so the enter transition animates from the closed
+  // position rather than snapping open. (Closing is handled in the render phase above.)
+  useEffect(() => {
+    if (!isOpen) return;
+    const frame = requestAnimationFrame(() => setIsActive(true));
+    return () => cancelAnimationFrame(frame);
+  }, [isOpen]);
+
   const handleTransitionEnd = useCallback(() => {
     if (!isOpen) setIsMounted(false);
   }, [isOpen]);
@@ -94,13 +108,13 @@ export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerR
 
   return (
     <div
-      className={`code-sheet-scrim ${isOpen ? "open" : ""}`}
+      className={`code-sheet-scrim ${isActive ? "open" : ""}`}
       aria-hidden={!isOpen}
       onClick={onClose}
     >
       <div
         ref={sheetRef}
-        className={`code-sheet ${isOpen ? "open" : ""}`}
+        className={`code-sheet ${isActive ? "open" : ""}`}
         role="dialog"
         aria-modal="true"
         aria-label={`Generated code for ${directionTitle}`}
@@ -125,7 +139,7 @@ export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerR
 
         <div className="code-sheet-body">
           {generated ? (
-            <PreviewFrame code={generated.code} language={generated.language} />
+            <PreviewFrame code={generated.code} language={generated.language} status={generated.status} />
           ) : (
             <p className="code-status">Nothing generated yet.</p>
           )}
