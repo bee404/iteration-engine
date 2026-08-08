@@ -30,7 +30,7 @@ export default function HomePage() {
         <h1>Iteration Engine</h1>
         <p>Screenshot + feedback in. Critique and rationale-backed directions out. Code generation is optional, per direction.</p>
       </header>
-      <RoundWorkspace demoMode={demoMode} />
+      <RoundWorkspace />
     </main>
   );
 }
