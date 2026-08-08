@@ -1,18 +1,124 @@
 "use client";
 
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { GeneratedCodeStatus } from "@/lib/types";
+import { buildPreviewDocument, transpilePreviewComponent } from "@/lib/preview/build-preview-document";
+
 interface PreviewFrameProps {
   code: string;
   language: string;
+  status: GeneratedCodeStatus;
 }
 
+const RUNTIME_PATH = "/preview-runtime/react-globals.js";
+
 /**
- * Sandboxed iframe rendering streamed generated code. Uses srcDoc so the generated
- * source never executes in the parent app's origin/context — it is display-only for
- * v1 (a real bundler/transform step would be needed to actually mount the component;
- * this renders it as readable, continuously-updating source while streaming).
+ * Renders a direction's generated code. Once generation is complete it transpiles the TSX
+ * with Sucrase and mounts it as a live, interactive component inside a sandboxed iframe.
+ * While the code is still streaming (or after a codegen error) it shows the accumulated
+ * source as read-only text, and if the completed code fails to transpile or throws at mount
+ * it falls back to that same source view with a notice — never a blank frame.
  */
-export function PreviewFrame({ code, language }: PreviewFrameProps) {
-  const doc = `<!doctype html>
+export function PreviewFrame({ code, language, status }: PreviewFrameProps) {
+  if (status !== "complete") {
+    return <SourceView code={code} language={language} />;
+  }
+  return <LiveMount code={code} language={language} />;
+}
+
+function LiveMount({ code, language }: { code: string; language: string }) {
+  const transpiled = useMemo(() => transpilePreviewComponent(code), [code]);
+  const runtimeUrl = useMemo(
+    () => (typeof window === "undefined" ? RUNTIME_PATH : new URL(RUNTIME_PATH, window.location.origin).href),
+    [],
+  );
+  const srcDoc = useMemo(
+    () =>
+      transpiled.ok
+        ? buildPreviewDocument({
+            transpiledCode: transpiled.code,
+            componentName: transpiled.componentName,
+            runtimeUrl,
+          })
+        : null,
+    [transpiled, runtimeUrl],
+  );
+
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [mountError, setMountError] = useState<string | null>(null);
+
+  // Clear a stale mount error when the document to mount changes (new code, or a retry).
+  // Adjusting state during render is React's recommended alternative to a reset effect.
+  const [mountedDoc, setMountedDoc] = useState(srcDoc);
+  if (srcDoc !== mountedDoc) {
+    setMountedDoc(srcDoc);
+    setMountError(null);
+  }
+
+  // The sandboxed iframe can't be reached across its opaque origin, so it reports mount
+  // failures back over postMessage.
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.source !== iframeRef.current?.contentWindow) return;
+      const data = event.data;
+      if (data && typeof data === "object" && data.type === "preview-mount-error") {
+        setMountError(typeof data.message === "string" ? data.message : "The component failed to render.");
+      }
+    };
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
+
+  if (!transpiled.ok) {
+    return (
+      <SourceView
+        code={code}
+        language={language}
+        notice={`Couldn't render this as live UI — showing the source instead. ${transpiled.error}`}
+      />
+    );
+  }
+  if (mountError) {
+    return (
+      <SourceView
+        code={code}
+        language={language}
+        notice={`This component compiled but failed to mount — showing the source instead. ${mountError}`}
+      />
+    );
+  }
+
+  return (
+    <iframe
+      ref={iframeRef}
+      title={`Live ${language} preview`}
+      className="preview-frame"
+      sandbox="allow-scripts"
+      srcDoc={srcDoc ?? undefined}
+    />
+  );
+}
+
+/** Read-only source view: the generated code escaped into a <pre> inside a script-less
+ * iframe. Used while streaming, and as the fallback when a live mount isn't possible. */
+function SourceView({ code, language, notice }: { code: string; language: string; notice?: string }) {
+  const doc = useMemo(() => sourceDocument(code), [code]);
+  const frame = (
+    <iframe title={`Generated ${language} source`} className="preview-frame" sandbox="" srcDoc={doc} />
+  );
+  if (!notice) return frame;
+  return (
+    <div className="preview-shell">
+      <p className="preview-notice" role="status">
+        {notice}
+      </p>
+      {frame}
+    </div>
+  );
+}
+
+function sourceDocument(code: string): string {
+  return `<!doctype html>
 <html>
   <head>
     <meta charset="utf-8" />
@@ -25,15 +131,6 @@ export function PreviewFrame({ code, language }: PreviewFrameProps) {
     <pre>${escapeHtml(code)}</pre>
   </body>
 </html>`;
-
-  return (
-    <iframe
-      title={`Generated ${language} preview`}
-      className="preview-frame"
-      sandbox="allow-scripts"
-      srcDoc={doc}
-    />
-  );
 }
 
 function escapeHtml(value: string): string {

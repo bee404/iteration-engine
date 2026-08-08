@@ -17,6 +17,10 @@ CREATE TABLE IF NOT EXISTS rounds (
   -- Links this round to the round it iterates on, enabling version history across rounds.
   previous_round_id TEXT REFERENCES rounds(id),
   screenshot_ref TEXT NOT NULL,
+  -- Natural pixel size of the screenshot, captured at upload. Nullable for legacy rounds
+  -- created before dimension capture existed; load-bearing for the before/after visual diff.
+  screenshot_width INTEGER,
+  screenshot_height INTEGER,
   design_goal TEXT NOT NULL,
   feedback_text TEXT NOT NULL,
   reviewer_context TEXT,

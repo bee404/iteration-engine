@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Critique, Direction, GeneratedCode } from "@/lib/types";
+import type { Critique, Direction, GeneratedCode, ImageDimensions } from "@/lib/types";
 
 interface GeneratedCodeState {
   status: GeneratedCode["status"];
@@ -14,6 +14,8 @@ interface GeneratedCodeState {
 interface RoundState {
   // Inputs
   screenshotRef: string | null;
+  /** Natural pixel size of the uploaded screenshot; null until an image is loaded. */
+  screenshotDimensions: ImageDimensions | null;
   designGoal: string;
   feedbackText: string;
   reviewerContext: string;
@@ -37,6 +39,7 @@ interface RoundState {
 
   // Actions
   setScreenshotRef: (ref: string | null) => void;
+  setScreenshotDimensions: (dimensions: ImageDimensions | null) => void;
   setDesignGoal: (value: string) => void;
   setFeedbackText: (value: string) => void;
   setReviewerContext: (value: string) => void;
@@ -65,6 +68,7 @@ interface RoundState {
 
 const initialState = {
   screenshotRef: null,
+  screenshotDimensions: null,
   designGoal: "",
   feedbackText: "",
   reviewerContext: "",
@@ -85,6 +89,7 @@ export const useRoundStore = create<RoundState>((set) => ({
   ...initialState,
 
   setScreenshotRef: (ref) => set({ screenshotRef: ref }),
+  setScreenshotDimensions: (dimensions) => set({ screenshotDimensions: dimensions }),
   setDesignGoal: (value) => set({ designGoal: value }),
   setFeedbackText: (value) => set({ feedbackText: value }),
   setReviewerContext: (value) => set({ reviewerContext: value }),

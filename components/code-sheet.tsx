@@ -125,7 +125,7 @@ export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerR
 
         <div className="code-sheet-body">
           {generated ? (
-            <PreviewFrame code={generated.code} language={generated.language} />
+            <PreviewFrame code={generated.code} language={generated.language} status={generated.status} />
           ) : (
             <p className="code-status">Nothing generated yet.</p>
           )}

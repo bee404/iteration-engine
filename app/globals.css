@@ -241,6 +241,34 @@ button:disabled {
   height: 220px;
   border: 1px solid var(--border);
   border-radius: 6px;
+  background: #fff;
+}
+
+/* Live-mount fallback: a notice above the read-only source view when generated code can't
+   be transpiled or fails to mount. */
+.preview-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+
+.preview-shell .preview-frame {
+  flex: 1;
+  min-height: 0;
+  height: auto;
+}
+
+.preview-notice {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 8px 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--preference);
+  background: rgba(255, 212, 121, 0.08);
+  border: 1px solid var(--border);
+  border-radius: 6px;
 }
 
 .code-status {
