@@ -1,4 +1,5 @@
 import { CodeGenGenerationError, getCodeGenProvider } from "@/lib/providers/codegen";
+import { postProcessGeneratedCode } from "@/lib/providers/codegen/postprocess";
 import type { Direction } from "@/lib/types";
 
 function isDirection(value: unknown): value is Direction {
@@ -45,14 +46,26 @@ export async function POST(request: Request) {
         const provider = getCodeGenProvider();
         controller.enqueue(encoder.encode(sseEvent("start", { language: provider.language })));
 
+        // Stream raw tokens for the live preview, but accumulate them so the deterministic
+        // post-processing stage can run over the complete output. Per-token transforms are
+        // unsafe (a code fence or off-palette hex can straddle two tokens), so cleanup runs
+        // once at the end.
+        let raw = "";
         for await (const token of provider.streamCode({
           direction: body.direction,
           designGoal: body.designGoal,
           screenshotRef: body.screenshotRef,
         })) {
+          raw += token;
           controller.enqueue(encoder.encode(sseEvent("token", { token })));
         }
 
+        // Deterministic guarantees that must not depend on model compliance: strip markdown
+        // fences, rewrite off-palette colors, inject the self-hosted font. The "code" event
+        // carries the authoritative post-processed source the client replaces the streamed
+        // buffer with; "warnings" surfaces issues the model must fix (e.g. emoji icons).
+        const { code, warnings } = postProcessGeneratedCode(raw);
+        controller.enqueue(encoder.encode(sseEvent("code", { code, warnings })));
         controller.enqueue(encoder.encode(sseEvent("done", { language: provider.language })));
       } catch (error) {
         const codeGenError =

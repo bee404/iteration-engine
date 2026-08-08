@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "db:migrate": "tsx lib/db/migrate.ts"
+    "db:migrate": "tsx lib/db/migrate.ts",
+    "verify:codegen": "tsx scripts/verify-codegen-postprocess.ts"
   },
   "dependencies": {
     "@libsql/client": "0.17.4",

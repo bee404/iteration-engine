@@ -10,6 +10,8 @@ interface GeneratedCodeState {
   code: string;
   language: string;
   error?: string;
+  /** QA notes from the codegen post-processing stage (off-palette rewrites, emoji icons). */
+  warnings?: string[];
 }
 
 interface CodeSheetProps {
@@ -134,6 +136,14 @@ export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerR
             Status: {generated.status}
             {generated.error ? ` — ${generated.error}` : ""}
           </p>
+        )}
+
+        {generated?.warnings && generated.warnings.length > 0 && (
+          <ul className="code-warnings" aria-label="Design-system post-processing warnings">
+            {generated.warnings.map((warning) => (
+              <li key={warning}>{warning}</li>
+            ))}
+          </ul>
         )}
       </div>
     </div>

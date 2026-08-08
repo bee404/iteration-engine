@@ -5,11 +5,23 @@ export type {
   DesignSystem,
   DesignSystemColor,
   DesignSystemComponent,
+  DesignSystemFont,
   DesignSystemRadius,
   DesignSystemSpacing,
   DesignSystemTypeStyle,
 } from "./types";
 export { formatDesignSystemForPrompt } from "./format";
+export { getGeistFontFaceCss, GEIST_FONT_FAMILY } from "./geist-font";
+
+/**
+ * The closed set of hex values this system allows, lower-cased. The codegen
+ * post-processor (lib/providers/codegen/postprocess.ts) treats any other hex in
+ * generated output as off-palette. Derived from the active system's color tokens so
+ * it can never drift from what the prompt advertises.
+ */
+export function getColorAllowlist(system: DesignSystem = getActiveDesignSystem()): ReadonlySet<string> {
+  return new Set(system.colors.map((color) => color.value.toLowerCase()));
+}
 
 /**
  * PROOF-OF-CONCEPT SCOPE: returns one hardcoded design system for every codegen request,

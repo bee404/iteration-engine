@@ -108,8 +108,28 @@ export const vercelGeistDesignSystem: DesignSystem = {
       spec: "Background white, ink text in Geist Mono (code type), 1px hairline border, 12px radius, 16px padding.",
     },
   ],
+  fonts: [
+    {
+      family: "Geist",
+      usage: "every heading, body, label, and button — the primary sans for all UI text",
+      loading: "selfHostedInline",
+    },
+    {
+      family: "Geist Mono",
+      usage: "code blocks and small uppercase section eyebrows only",
+      loading: "systemFallback",
+    },
+  ],
+  iconography:
+    "Icons are inline SVG line icons only: ~1.5px stroke, no fill (fill=\"none\"), rounded " +
+    "linecaps/joins, drawn in the ink/mute grey range — never accent-colored. Do NOT use emoji " +
+    "characters (❄️🔧☁️⚛️ etc.) or icon-font glyphs as icons; they read as decoration, not chrome, " +
+    "and break the restrained black-on-white language. Prefer a single 24x24 viewBox sized down.",
   dos: [
     "Keep the page canvas near-white (#fafafa) and let near-black ink (#171717) carry headings, CTAs, and borders — this is a black-and-white duet.",
+    "Use every color from the token list above verbatim and treat it as a closed allowlist — if a shade you want is not a listed token, pick the nearest listed token instead of inventing a new hex.",
+    "Render secondary/tertiary actions as the button-ghost-sm spec (white fill, 1px hairline border, 6px radius) — a real bordered button, never a bare underlined text link.",
+    "Draw all icons as inline SVG line icons (see the icon policy above); never reach for emoji or glyph fonts.",
     "Confine color to a hero mesh gradient and small illustration accents; reserve the link blue (#0070f3) for links/focus only.",
     "Use the two button shapes strictly by context: a fully-rounded black pill for marketing CTAs, a tight 6px square for nav/app controls.",
     "Define cards and inputs with a 1px hairline border (#ebebeb) before reaching for any shadow — flat is the default.",
@@ -117,6 +137,9 @@ export const vercelGeistDesignSystem: DesignSystem = {
     "Step body text through the grey ladder deliberately (ink → body → mute → faint) rather than using one grey everywhere.",
   ],
   donts: [
+    "Don't invent hex values outside the color token list — it is a closed allowlist; the codegen pipeline rejects and rewrites any off-palette hex, so use the tokens directly.",
+    "Don't use emoji or icon-font glyphs as icons — icons are inline SVG line icons only.",
+    "Don't render a secondary action as a bare underlined text link — use the ghost-button spec.",
     "Don't fill large surfaces with the accent colors (violet/cyan/pink/blue) — they live in the gradient and illustrations, not as chrome.",
     "Don't mix the button shapes within one context — marketing CTAs stay pills, nav/app controls stay 6px squares.",
     "Don't pile on shadows — depth is a 1px hairline plus, at most, a single finely-layered low-alpha shadow.",

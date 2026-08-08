@@ -6,6 +6,9 @@ interface GeneratedCodeState {
   code: string;
   language: string;
   error?: string;
+  /** Non-blocking notes from the deterministic post-processing stage (e.g. an off-palette
+   * color was rewritten, or emoji icons were detected). Surfaced for design QA. */
+  warnings?: string[];
 }
 
 interface RoundState {
@@ -50,6 +53,9 @@ interface RoundState {
 
   startCodeGen: (directionId: string, language: string) => void;
   appendCodeToken: (directionId: string, token: string) => void;
+  /** Replaces the streamed buffer with the authoritative post-processed source once the
+   * codegen pipeline's deterministic cleanup has run (see app/api/generate/route.ts). */
+  finalizeCode: (directionId: string, code: string, warnings: string[]) => void;
   completeCodeGen: (directionId: string) => void;
   failCodeGen: (directionId: string, error: string) => void;
 
@@ -108,6 +114,17 @@ export const useRoundStore = create<RoundState>((set) => ({
         generatedCodeByDirection: {
           ...state.generatedCodeByDirection,
           [directionId]: { ...current, code: current.code + token },
+        },
+      };
+    }),
+  finalizeCode: (directionId, code, warnings) =>
+    set((state) => {
+      const current = state.generatedCodeByDirection[directionId];
+      if (!current) return state;
+      return {
+        generatedCodeByDirection: {
+          ...state.generatedCodeByDirection,
+          [directionId]: { ...current, code, warnings },
         },
       };
     }),
