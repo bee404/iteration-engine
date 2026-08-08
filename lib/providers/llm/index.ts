@@ -1,5 +1,7 @@
+import { isDemoMode } from "@/lib/demo-mode";
 import { ClaudeLLMProvider } from "./claude-provider";
 import { CritiqueGenerationError } from "./errors";
+import { FixtureLLMProvider } from "./fixture-provider";
 import { MockLLMProvider } from "./mock-provider";
 import type { LLMProvider } from "./types";
 
@@ -21,6 +23,10 @@ export { CRITIQUE_ERROR_STATUS, CritiqueGenerationError } from "./errors";
  * Claude branch is implemented today. No API route or component depends on which branch runs.
  */
 export function getLLMProvider(): LLMProvider {
+  // DEMO_MODE wins over every other selector so the live path is fully bypassed regardless of
+  // ANTHROPIC_API_KEY / LLM_PROVIDER. See lib/demo-mode.ts.
+  if (isDemoMode()) return new FixtureLLMProvider();
+
   const override = process.env.LLM_PROVIDER?.trim().toLowerCase();
   if (override === "mock") return new MockLLMProvider();
 

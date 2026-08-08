@@ -1,5 +1,7 @@
+import { isDemoMode } from "@/lib/demo-mode";
 import { ClaudeCodeGenProvider } from "./claude-provider";
 import type { CodeGenProvider } from "./types";
+import { FixtureCodeGenProvider } from "./fixture-provider";
 import { MockCodeGenProvider } from "./mock-provider";
 
 export type { CodeGenProvider, CodeGenRequest } from "./types";
@@ -17,6 +19,10 @@ export { CodeGenGenerationError } from "./errors";
  *   silently falling back.
  */
 export function getCodeGenProvider(): CodeGenProvider {
+  // DEMO_MODE wins over every other selector so the live path is fully bypassed regardless of
+  // ANTHROPIC_API_KEY / CODEGEN_PROVIDER. See lib/demo-mode.ts.
+  if (isDemoMode()) return new FixtureCodeGenProvider();
+
   const override = process.env.CODEGEN_PROVIDER?.trim().toLowerCase();
   if (override === "mock") return new MockCodeGenProvider();
 
