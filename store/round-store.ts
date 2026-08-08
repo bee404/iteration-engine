@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import type { Critique, Direction, GeneratedCode } from "@/lib/types";
+import { listFixtures } from "@/lib/fixtures/examples";
 
 interface GeneratedCodeState {
   status: GeneratedCode["status"];
@@ -32,6 +33,10 @@ interface RoundState {
 
   approvalStatus: "pending" | "approved" | "rejected";
 
+  // Index into lib/fixtures/examples' registry of the fixture the demo walkthrough is
+  // currently on. Unused outside DEMO_MODE; advanceDemoRound() is the only writer.
+  demoFixtureIndex: number;
+
   // Actions
   setScreenshotRef: (ref: string | null) => void;
   setDesignGoal: (value: string) => void;
@@ -55,6 +60,17 @@ interface RoundState {
 
   setApprovalStatus: (status: "pending" | "approved" | "rejected") => void;
   reset: () => void;
+
+  /**
+   * Demo-mode-only equivalent of reset(): advances to the next fixture in
+   * lib/fixtures/examples' registry (wrapping to the first once the sequence is exhausted)
+   * instead of clearing every input. Carries the uploaded screenshot forward — the fixture
+   * providers ignore its content and replay captured output regardless — and pre-fills the
+   * next fixture's captured designGoal/feedbackText/reviewerContext/constraints so the
+   * reviewer can walk straight into "Generate critique" for that round instead of re-typing
+   * intake fields demo mode never actually reads.
+   */
+  advanceDemoRound: () => void;
 }
 
 const initialState = {
@@ -72,6 +88,7 @@ const initialState = {
   selectedDirectionId: null,
   generatedCodeByDirection: {},
   approvalStatus: "pending" as const,
+  demoFixtureIndex: 0,
 };
 
 /** Current round's working state — screenshot through generated code. Cleared on reset() after approval. */
@@ -136,4 +153,20 @@ export const useRoundStore = create<RoundState>((set) => ({
 
   setApprovalStatus: (status) => set({ approvalStatus: status }),
   reset: () => set(initialState),
+
+  advanceDemoRound: () =>
+    set((state) => {
+      const fixtures = listFixtures();
+      const nextIndex = fixtures.length > 0 ? (state.demoFixtureIndex + 1) % fixtures.length : 0;
+      const nextFixture = fixtures[nextIndex];
+      return {
+        ...initialState,
+        demoFixtureIndex: nextIndex,
+        screenshotRef: state.screenshotRef,
+        designGoal: nextFixture?.inputs.designGoal ?? initialState.designGoal,
+        feedbackText: nextFixture?.inputs.feedbackText ?? initialState.feedbackText,
+        reviewerContext: nextFixture?.inputs.reviewerContext ?? initialState.reviewerContext,
+        constraints: nextFixture?.inputs.constraints ?? initialState.constraints,
+      };
+    }),
 }));

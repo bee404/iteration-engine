@@ -26,7 +26,13 @@ async function describeCritiqueFailure(response: Response): Promise<string> {
  * directions -> (optional per-direction code-gen) -> approval. Each step's API call
  * is made here; components below only read/write store state and render.
  */
-export function RoundWorkspace() {
+interface RoundWorkspaceProps {
+  /** Computed server-side from DEMO_MODE (see lib/demo-mode.ts) and passed down as a prop —
+   * client components can't read raw server env vars directly. */
+  demoMode: boolean;
+}
+
+export function RoundWorkspace({ demoMode }: RoundWorkspaceProps) {
   const [approvedMessage, setApprovedMessage] = useState<string | null>(null);
 
   const screenshotRef = useRoundStore((s) => s.screenshotRef);
@@ -52,6 +58,7 @@ export function RoundWorkspace() {
 
   const setApprovalStatus = useRoundStore((s) => s.setApprovalStatus);
   const reset = useRoundStore((s) => s.reset);
+  const advanceDemoRound = useRoundStore((s) => s.advanceDemoRound);
 
   const handleGenerateCritique = useCallback(async () => {
     startCritique();
@@ -94,6 +101,20 @@ export function RoundWorkspace() {
     );
   }, [setApprovalStatus, directions, selectedDirectionId]);
 
+  // In demo mode there's no real "new round" to start — reset() would just dump the reviewer
+  // back at a blank intake form requiring a fresh screenshot upload and re-typed inputs demo
+  // mode never reads anyway. advanceDemoRound() instead walks forward to the next captured
+  // fixture, pre-filled and ready to replay. Outside demo mode, reset() is still correct: a
+  // live round genuinely needs fresh inputs.
+  const handleNextRound = useCallback(() => {
+    if (demoMode) {
+      advanceDemoRound();
+    } else {
+      reset();
+    }
+    setApprovedMessage(null);
+  }, [demoMode, advanceDemoRound, reset]);
+
   return (
     <div className="workspace">
       <UploadForm onSubmit={handleGenerateCritique} disabled={isCritiquing} />
@@ -118,8 +139,8 @@ export function RoundWorkspace() {
       {approvedMessage && (
         <section className="card approved-banner">
           <p>{approvedMessage}</p>
-          <button type="button" onClick={() => { reset(); setApprovedMessage(null); }}>
-            Start next round
+          <button type="button" onClick={handleNextRound}>
+            {demoMode ? "Next round \u2192" : "Start next round"}
           </button>
         </section>
       )}
