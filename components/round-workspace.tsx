@@ -3,9 +3,11 @@
 import { useCallback, useState } from "react";
 import { useRoundStore } from "@/store/round-store";
 import type { Critique, Direction } from "@/lib/types";
+import { persistApprovedRound } from "@/lib/persist-round";
 import { UploadForm } from "./upload-form";
 import { CritiqueDisplay } from "./critique-display";
 import { DirectionsComparison } from "./directions-comparison";
+import { RoundHistory } from "./round-history";
 
 /**
  * The critique route always returns a typed `{ error, code }` JSON body on failure (see
@@ -28,6 +30,8 @@ async function describeCritiqueFailure(response: Response): Promise<string> {
  */
 export function RoundWorkspace() {
   const [approvedMessage, setApprovedMessage] = useState<string | null>(null);
+  const [isPersisting, setIsPersisting] = useState(false);
+  const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
 
   const screenshotRef = useRoundStore((s) => s.screenshotRef);
   const designGoal = useRoundStore((s) => s.designGoal);
@@ -49,6 +53,7 @@ export function RoundWorkspace() {
   const setDirections = useRoundStore((s) => s.setDirections);
   const setDirectionsError = useRoundStore((s) => s.setDirectionsError);
   const selectedDirectionId = useRoundStore((s) => s.selectedDirectionId);
+  const generatedCodeByDirection = useRoundStore((s) => s.generatedCodeByDirection);
 
   const setApprovalStatus = useRoundStore((s) => s.setApprovalStatus);
   const reset = useRoundStore((s) => s.reset);
@@ -86,13 +91,52 @@ export function RoundWorkspace() {
     }
   }, [critique, designGoal, feedbackText, constraints, startDirections, setDirections, setDirectionsError]);
 
-  const handleApprove = useCallback(() => {
+  const handleApprove = useCallback(async () => {
     setApprovalStatus("approved");
-    setApprovedMessage(
-      `Round approved with direction "${directions.find((d) => d.id === selectedDirectionId)?.title ?? selectedDirectionId}". ` +
-        "Persistence to Turso happens via POST /api/rounds once this workspace is wired to a real project.",
-    );
-  }, [setApprovalStatus, directions, selectedDirectionId]);
+    setIsPersisting(true);
+
+    const directionTitle = directions.find((d) => d.id === selectedDirectionId)?.title ?? selectedDirectionId;
+    const result = await persistApprovedRound({
+      screenshotRef,
+      designGoal,
+      feedbackText,
+      reviewerContext,
+      constraints,
+      critique,
+      directions,
+      selectedDirectionId,
+      generatedCodeByDirection,
+      approvalStatus: "approved",
+    });
+
+    setIsPersisting(false);
+
+    if (result.status === "persisted") {
+      setApprovedMessage(
+        `Round approved with direction "${directionTitle}" and saved to Turso (round ${result.round.id.slice(0, 8)}).`,
+      );
+      setHistoryRefreshKey((key) => key + 1);
+    } else if (result.status === "demo_mode") {
+      setApprovedMessage(
+        `Round approved with direction "${directionTitle}". Persistence is disabled while demo mode is on — nothing was written to Turso.`,
+      );
+    } else {
+      setApprovedMessage(
+        `Round approved with direction "${directionTitle}", but saving to Turso failed: ${result.message}`,
+      );
+    }
+  }, [
+    screenshotRef,
+    designGoal,
+    feedbackText,
+    reviewerContext,
+    constraints,
+    critique,
+    directions,
+    selectedDirectionId,
+    generatedCodeByDirection,
+    setApprovalStatus,
+  ]);
 
   return (
     <div className="workspace">
@@ -112,6 +156,7 @@ export function RoundWorkspace() {
           designGoal={designGoal}
           screenshotRef={screenshotRef}
           onApprove={handleApprove}
+          isApproving={isPersisting}
         />
       )}
 
@@ -123,6 +168,8 @@ export function RoundWorkspace() {
           </button>
         </section>
       )}
+
+      <RoundHistory refreshKey={historyRefreshKey} />
     </div>
   );
 }
