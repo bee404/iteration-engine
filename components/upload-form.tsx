@@ -1,6 +1,7 @@
 "use client";
 
 import { useRoundStore } from "@/store/round-store";
+import { readImageDimensions } from "@/lib/image-dimensions";
 
 interface UploadFormProps {
   onSubmit: () => void;
@@ -15,6 +16,7 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
   const reviewerContext = useRoundStore((s) => s.reviewerContext);
   const constraints = useRoundStore((s) => s.constraints);
   const setScreenshotRef = useRoundStore((s) => s.setScreenshotRef);
+  const setScreenshotDimensions = useRoundStore((s) => s.setScreenshotDimensions);
   const setDesignGoal = useRoundStore((s) => s.setDesignGoal);
   const setFeedbackText = useRoundStore((s) => s.setFeedbackText);
   const setReviewerContext = useRoundStore((s) => s.setReviewerContext);
@@ -24,11 +26,24 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
     const file = event.target.files?.[0];
     if (!file) {
       setScreenshotRef(null);
+      setScreenshotDimensions(null);
       return;
     }
-    // v1 stores a client-side object URL as the screenshot reference; a real upload
-    // pipeline (e.g. blob storage) can replace this without changing the round shape.
-    setScreenshotRef(URL.createObjectURL(file));
+    // Real critique generation sends screenshotRef to the server for a Claude vision call,
+    // so it has to carry actual image bytes — a client-only object URL (blob:...) can't be
+    // dereferenced there. A base64 data URL keeps screenshotRef a plain string (no contract
+    // change) while making it usable server-side; a real upload pipeline (e.g. blob storage)
+    // can replace this without changing the round shape.
+    const reader = new FileReader();
+    reader.onload = async () => {
+      if (typeof reader.result !== "string") return;
+      setScreenshotRef(reader.result);
+      // Natural pixel size is load-bearing for the before/after visual diff (the generated
+      // component gets scaled to the screenshot's captured viewport). Capture it here, at the
+      // one point the image bytes are in hand.
+      setScreenshotDimensions(await readImageDimensions(reader.result));
+    };
+    reader.readAsDataURL(file);
   }
 
   const canSubmit = !!screenshotRef && designGoal.trim().length > 0 && feedbackText.trim().length > 0;
@@ -100,6 +115,7 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
       </label>
 
       <button type="submit" disabled={disabled || !canSubmit}>
+        {disabled && <span className="spinner" role="status" aria-hidden="true" />}
         {disabled ? "Generating critique…" : "Generate critique"}
       </button>
     </form>

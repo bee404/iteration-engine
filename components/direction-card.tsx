@@ -1,13 +1,16 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import type { Direction } from "@/lib/types";
 import { useRoundStore } from "@/store/round-store";
-import { PreviewFrame } from "./preview-frame";
+import { CodeSheet } from "./code-sheet";
 
 interface DirectionCardProps {
   direction: Direction;
   designGoal: string;
+  /** The screenshot this round's directions iterate on, forwarded to /api/generate so
+   * generated code is grounded in what's actually on screen — not just the direction text. */
+  screenshotRef: string | null;
   isSelected: boolean;
   onSelect: () => void;
 }
@@ -17,23 +20,30 @@ interface DirectionCardProps {
  * action. Consumes the /api/generate SSE stream via fetch + ReadableStream (EventSource
  * only supports GET, and this call needs a POST body).
  */
-export function DirectionCard({ direction, designGoal, isSelected, onSelect }: DirectionCardProps) {
+export function DirectionCard({ direction, designGoal, screenshotRef, isSelected, onSelect }: DirectionCardProps) {
   const [isStreaming, setIsStreaming] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const generateButtonRef = useRef<HTMLButtonElement>(null);
   const generated = useRoundStore((s) => s.generatedCodeByDirection[direction.id]);
   const startCodeGen = useRoundStore((s) => s.startCodeGen);
   const appendCodeToken = useRoundStore((s) => s.appendCodeToken);
+  const finalizeCode = useRoundStore((s) => s.finalizeCode);
   const completeCodeGen = useRoundStore((s) => s.completeCodeGen);
   const failCodeGen = useRoundStore((s) => s.failCodeGen);
 
-  const handleGenerate = useCallback(async () => {
+  const runGeneration = useCallback(async () => {
     setIsStreaming(true);
     startCodeGen(direction.id, "tsx");
 
     try {
+      if (!screenshotRef) {
+        throw new Error("This round has no screenshot to ground code generation in.");
+      }
+
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ direction, designGoal }),
+        body: JSON.stringify({ direction, designGoal, screenshotRef }),
       });
 
       if (!response.ok || !response.body) {
@@ -62,6 +72,15 @@ export function DirectionCard({ direction, designGoal, isSelected, onSelect }: D
           const data = JSON.parse(dataLine.slice("data: ".length));
 
           if (event === "token") appendCodeToken(direction.id, data.token);
+          // The pipeline's deterministic post-processing runs after streaming; "code" carries
+          // the authoritative cleaned source (fences stripped, colors normalized, font
+          // injected) that replaces the raw streamed buffer, plus any QA warnings.
+          if (event === "code") {
+            const warnings: string[] = Array.isArray(data.warnings)
+              ? data.warnings.map((warning: { message: string }) => warning.message)
+              : [];
+            finalizeCode(direction.id, data.code, warnings);
+          }
           if (event === "error") throw new Error(data.message);
         }
       }
@@ -72,7 +91,21 @@ export function DirectionCard({ direction, designGoal, isSelected, onSelect }: D
     } finally {
       setIsStreaming(false);
     }
-  }, [direction, designGoal, startCodeGen, appendCodeToken, completeCodeGen, failCodeGen]);
+  }, [direction, designGoal, screenshotRef, startCodeGen, appendCodeToken, finalizeCode, completeCodeGen, failCodeGen]);
+
+  // Generating starts the stream and opens the sheet together. Once a direction has completed
+  // output, re-clicking just reopens the sheet instead of re-streaming; a fresh direction or one
+  // that errored kicks off a new /api/generate call (same retry-on-error behavior as before).
+  const handleTriggerClick = useCallback(() => {
+    setIsSheetOpen(true);
+    if (!generated || generated.status === "error") {
+      void runGeneration();
+    }
+  }, [generated, runGeneration]);
+
+  const handleSheetClose = useCallback(() => {
+    setIsSheetOpen(false);
+  }, []);
 
   return (
     <article className={`direction-card ${isSelected ? "selected" : ""}`}>
@@ -101,19 +134,29 @@ export function DirectionCard({ direction, designGoal, isSelected, onSelect }: D
         </a>
       )}
 
-      <button type="button" onClick={handleGenerate} disabled={isStreaming} className="generate-button">
-        {isStreaming ? "Streaming code…" : "Generate code (optional)"}
+      <button
+        type="button"
+        ref={generateButtonRef}
+        onClick={handleTriggerClick}
+        disabled={isStreaming}
+        className="generate-button"
+      >
+        {isStreaming
+          ? "Streaming code…"
+          : generated?.status === "complete"
+            ? "View generated code"
+            : generated?.status === "error"
+              ? "Retry generation"
+              : "Generate code (optional)"}
       </button>
 
-      {generated && (
-        <div className="code-preview">
-          <PreviewFrame code={generated.code} language={generated.language} />
-          <p className="code-status">
-            Status: {generated.status}
-            {generated.error ? ` — ${generated.error}` : ""}
-          </p>
-        </div>
-      )}
+      <CodeSheet
+        isOpen={isSheetOpen}
+        directionTitle={direction.title}
+        generated={generated}
+        onClose={handleSheetClose}
+        triggerRef={generateButtonRef}
+      />
     </article>
   );
 }

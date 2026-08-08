@@ -8,7 +8,11 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "db:migrate": "tsx lib/db/migrate.ts"
+    "test": "node --import tsx --test lib/**/*.test.ts",
+    "build:preview-runtime": "node scripts/build-preview-runtime.mjs",
+    "prebuild": "npm run build:preview-runtime",
+    "db:migrate": "tsx lib/db/migrate.ts",
+    "verify:codegen": "tsx scripts/verify-codegen-postprocess.ts"
   },
   "dependencies": {
     "@libsql/client": "0.17.4",
@@ -16,12 +20,14 @@
     "next": "16.3.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "sucrase": "3.35.1",
     "zustand": "5.0.14"
   },
   "devDependencies": {
     "@types/node": "26.1.2",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
+    "esbuild": "0.28.1",
     "eslint": "9.39.5",
     "eslint-config-next": "16.3.0",
     "tsx": "4.19.2",
