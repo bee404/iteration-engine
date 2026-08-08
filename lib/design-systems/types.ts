@@ -40,6 +40,21 @@ export interface DesignSystemComponent {
   spec: string;
 }
 
+export interface DesignSystemFont {
+  /** The font-family name generated code must reference (e.g. "Geist"). */
+  family: string;
+  /** Which type roles this family carries, so the model applies it in the right place. */
+  usage: string;
+  /**
+   * How the family is made available. The codegen pipeline injects a self-hosted
+   * @font-face for `selfHostedInline` families deterministically (see
+   * lib/design-systems/geist-font.ts + lib/providers/codegen/postprocess.ts) rather
+   * than trusting the model — or the render host — to have the font installed. A
+   * `systemFallback` family is a plain stack the model may assume is present.
+   */
+  loading: "selfHostedInline" | "systemFallback";
+}
+
 /**
  * A condensed, prompt-agnostic design system reference — colors, type scale, spacing,
  * radii, named component specs, and explicit do's/don'ts. Any design system doc (Vercel's
@@ -56,6 +71,14 @@ export interface DesignSystem {
   spacing: DesignSystemSpacing[];
   radii: DesignSystemRadius[];
   components: DesignSystemComponent[];
+  /** Fonts the system uses and how each is loaded (see DesignSystemFont.loading). */
+  fonts: DesignSystemFont[];
+  /**
+   * Icon policy in prose — what iconography is allowed (e.g. inline SVG line icons)
+   * and what is banned (e.g. emoji). Kept explicit so the codegen prompt can enforce
+   * it rather than leaving icon style to the model's defaults.
+   */
+  iconography: string;
   dos: string[];
   donts: string[];
 }

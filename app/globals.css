@@ -218,6 +218,20 @@ button:disabled {
   margin: 0;
 }
 
+/* Non-blocking QA notes from the codegen post-processing stage (e.g. an off-palette
+   color was rewritten, or emoji icons were detected). */
+.code-warnings {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  font-size: 12px;
+  color: var(--warning, #f5a623);
+  list-style: disc;
+}
+
+.code-warnings li {
+  margin: 2px 0;
+}
+
 .error {
   color: var(--signal);
 }
