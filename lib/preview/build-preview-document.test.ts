@@ -40,14 +40,18 @@ test("transpilePreviewComponent rejects empty input", () => {
   assert.equal(transpilePreviewComponent("   ").ok, false);
 });
 
-test("buildPreviewDocument embeds the runtime url and neutralizes closing script tags", () => {
+test("buildPreviewDocument inlines the runtime source and neutralizes closing script tags", () => {
   const doc = buildPreviewDocument({
     transpiledCode: 'var s = "</script>";',
     componentName: "App",
-    runtimeUrl: "https://example.test/preview-runtime/react-globals.js",
+    runtimeSource: 'window.React = {}; var t = "</script>";',
   });
-  assert.match(doc, /src="https:\/\/example\.test\/preview-runtime\/react-globals\.js"/);
+  // Runtime is inlined, not fetched — the sandboxed iframe can't load a network URL.
+  assert.doesNotMatch(doc, /<script src=/);
+  assert.match(doc, /window\.React = \{\};/);
+  // Both the transpiled code and the runtime source have their closing tags neutralized.
   assert.doesNotMatch(doc, /var s = "<\/script>";/);
+  assert.doesNotMatch(doc, /var t = "<\/script>";/);
   assert.match(doc, /window\.__PREVIEW_COMPONENT__/);
 });
 

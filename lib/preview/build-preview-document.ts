@@ -76,8 +76,11 @@ function escapeScript(code: string): string {
 interface PreviewDocumentParams {
   transpiledCode: string;
   componentName: string | null;
-  /** Absolute URL of the vendored React runtime (public/preview-runtime/react-globals.js). */
-  runtimeUrl: string;
+  /** Source of the vendored React runtime (lib/preview/react-runtime.generated.ts), inlined
+   * into the iframe rather than fetched — the sandboxed opaque-origin iframe sends no cookies,
+   * so a network fetch to a deployment-protected preview 302s to SSO and never defines
+   * window.React. */
+  runtimeSource: string;
 }
 
 /**
@@ -89,7 +92,7 @@ interface PreviewDocumentParams {
  * import them, and an error boundary plus global handlers turn any mount-time throw into a
  * single `preview-mount-error` message the parent renders its fallback from.
  */
-export function buildPreviewDocument({ transpiledCode, componentName, runtimeUrl }: PreviewDocumentParams): string {
+export function buildPreviewDocument({ transpiledCode, componentName, runtimeSource }: PreviewDocumentParams): string {
   const registration = componentName
     ? `try { window.__PREVIEW_COMPONENT__ = typeof ${componentName} !== "undefined" ? ${componentName} : window.__PREVIEW_COMPONENT__; } catch (e) {}`
     : "";
@@ -154,7 +157,7 @@ ${registration}
   </head>
   <body>
     <div id="root"></div>
-    <script src="${runtimeUrl}"><\/script>
+    <script>${escapeScript(runtimeSource)}<\/script>
     <script>${bootstrap}<\/script>
   </body>
 </html>`;

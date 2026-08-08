@@ -3,14 +3,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { GeneratedCodeStatus } from "@/lib/types";
 import { buildPreviewDocument, transpilePreviewComponent } from "@/lib/preview/build-preview-document";
+import { REACT_RUNTIME_SOURCE } from "@/lib/preview/react-runtime.generated";
 
 interface PreviewFrameProps {
   code: string;
   language: string;
   status: GeneratedCodeStatus;
 }
-
-const RUNTIME_PATH = "/preview-runtime/react-globals.js";
 
 /**
  * Renders a direction's generated code. Once generation is complete it transpiles the TSX
@@ -28,20 +27,16 @@ export function PreviewFrame({ code, language, status }: PreviewFrameProps) {
 
 function LiveMount({ code, language }: { code: string; language: string }) {
   const transpiled = useMemo(() => transpilePreviewComponent(code), [code]);
-  const runtimeUrl = useMemo(
-    () => (typeof window === "undefined" ? RUNTIME_PATH : new URL(RUNTIME_PATH, window.location.origin).href),
-    [],
-  );
   const srcDoc = useMemo(
     () =>
       transpiled.ok
         ? buildPreviewDocument({
             transpiledCode: transpiled.code,
             componentName: transpiled.componentName,
-            runtimeUrl,
+            runtimeSource: REACT_RUNTIME_SOURCE,
           })
         : null,
-    [transpiled, runtimeUrl],
+    [transpiled],
   );
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
