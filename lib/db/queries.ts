@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { assertWritesAllowed } from "@/lib/demo-mode";
 import { getDbClient } from "./client";
 import type {
   ApprovalStatus,
@@ -18,6 +19,7 @@ function nowIso(): string {
 // ---------------------------------------------------------------------------
 
 export async function createProject(input: { name: string; description?: string }): Promise<Project> {
+  assertWritesAllowed("createProject");
   const db = getDbClient();
   const id = randomUUID();
   const createdAt = nowIso();
@@ -73,6 +75,7 @@ export interface CreateRoundInput {
 }
 
 export async function createRound(input: CreateRoundInput): Promise<Round> {
+  assertWritesAllowed("createRound");
   const db = getDbClient();
   const id = randomUUID();
   const createdAt = nowIso();
@@ -192,6 +195,7 @@ export async function updateRoundApproval(
   approvalStatus: ApprovalStatus,
   selectedDirectionId?: string | null,
 ): Promise<void> {
+  assertWritesAllowed("updateRoundApproval");
   const db = getDbClient();
   await db.execute({
     sql: `UPDATE rounds SET approval_status = ?, selected_direction_id = COALESCE(?, selected_direction_id), updated_at = ? WHERE id = ?`,

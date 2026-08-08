@@ -31,7 +31,17 @@ Discovery reconciliation was agreed on 2026-08-05. The current V1 blueprint, dec
 - `docs/blueprint.md`: agreed product blueprint after reconciliation
 - `docs/release-plan.md`: release definition derived from the approved blueprint
 - `app/`: Next.js application routes and UI implementation
+- `lib/fixtures/`: real, previously-captured critique/directions/code-gen output replayed in demo mode
 - `public/`: static assets for the application
+
+## Demo mode (offline front-end QA)
+
+Set `DEMO_MODE=true` to walk the entire flow — upload -> critique -> directions -> code streaming into the bottom sheet — on **real, previously-captured** data with zero external API calls and zero Turso writes. It's implemented as fixture-backed implementations of the existing `LLMProvider` / `CodeGenProvider` interfaces, selected ahead of every other provider by the same factories the live path uses (`lib/providers/**/index.ts`), so flipping the flag off restores normal live behavior with no fixture code on that path.
+
+- Captured examples live in `lib/fixtures/` (`examples.ts` is the registry; `data/` holds verbatim captured code). Add a new example by appending a `DemoFixture` — no provider or format changes needed.
+- Pin which example to replay with `DEMO_FIXTURE=<id>` (defaults to the first registered fixture).
+- Because inputs are replayed, any screenshot/text a reviewer enters is accepted; the fixture's real captured output is what's returned.
+- All persistence routes (`POST /api/rounds`, `POST /api/projects`, `PATCH /api/rounds/[id]`) refuse writes while demo mode is on, backed by a write guard in the DB query layer.
 
 ## Source-of-truth rule
 
