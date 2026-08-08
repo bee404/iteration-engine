@@ -17,17 +17,22 @@ const MAX_VISIBLE_ROUNDS = 5;
 /**
  * Reads back persisted rounds for the implicit project so iteration history is queryable
  * from the same workspace that writes it — step 4 of the round workflow, after approval.
- * Renders its own loading/empty/error states since it fetches independently of the store.
+ *
+ * History only makes sense once a round has actually been saved: on a fresh app (no
+ * project yet, no rounds yet, or a load failure with nothing already shown) this renders
+ * nothing rather than a loading placeholder, an "empty" message, or an error banner. The
+ * write path (persist-round.ts, surfaced via the approve-round banner) is the place real
+ * persistence failures get shown to the user — a failed *read* of an optional, contextual
+ * section shouldn't alarm anyone. Load failures are still logged to the console so they're
+ * not silently lost for diagnostics.
  */
 export function RoundHistory({ refreshKey }: RoundHistoryProps) {
   const [rounds, setRounds] = useState<Round[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
 
     async function load() {
-      setError(null);
       try {
         const projectsResponse = await fetch("/api/projects");
         if (!projectsResponse.ok) throw new Error(`Failed to load projects (${projectsResponse.status})`);
@@ -44,7 +49,8 @@ export function RoundHistory({ refreshKey }: RoundHistoryProps) {
         const { rounds: fetchedRounds } = (await roundsResponse.json()) as { rounds: Round[] };
         if (!cancelled) setRounds(fetchedRounds);
       } catch (err) {
-        if (!cancelled) setError(err instanceof Error ? err.message : "Failed to load round history");
+        console.error("Failed to load round history:", err);
+        if (!cancelled) setRounds([]);
       }
     }
 
@@ -54,36 +60,28 @@ export function RoundHistory({ refreshKey }: RoundHistoryProps) {
     };
   }, [refreshKey]);
 
+  if (!rounds || rounds.length === 0) return null;
+
   return (
     <section className="card">
       <h2>History</h2>
 
-      {error && <p className="error">{error}</p>}
-
-      {!error && rounds === null && <p className="model-tag">Loading round history…</p>}
-
-      {!error && rounds !== null && rounds.length === 0 && (
-        <p className="model-tag">No rounds saved yet. Approve a round to start building iteration history.</p>
-      )}
-
-      {!error && rounds !== null && rounds.length > 0 && (
-        <ul className="round-history-list">
-          {rounds.slice(0, MAX_VISIBLE_ROUNDS).map((round) => (
-            <li key={round.id} className="round-history-item">
-              <div className="round-history-meta">
-                <span className={`round-history-status round-history-status-${round.approvalStatus}`}>
-                  {round.approvalStatus}
-                </span>
-                <span className="model-tag">{new Date(round.createdAt).toLocaleString()}</span>
-              </div>
-              <p className="round-history-goal">{round.designGoal}</p>
-              {round.previousRoundId && (
-                <p className="model-tag">Iterates on round {round.previousRoundId.slice(0, 8)}</p>
-              )}
-            </li>
-          ))}
-        </ul>
-      )}
+      <ul className="round-history-list">
+        {rounds.slice(0, MAX_VISIBLE_ROUNDS).map((round) => (
+          <li key={round.id} className="round-history-item">
+            <div className="round-history-meta">
+              <span className={`round-history-status round-history-status-${round.approvalStatus}`}>
+                {round.approvalStatus}
+              </span>
+              <span className="model-tag">{new Date(round.createdAt).toLocaleString()}</span>
+            </div>
+            <p className="round-history-goal">{round.designGoal}</p>
+            {round.previousRoundId && (
+              <p className="model-tag">Iterates on round {round.previousRoundId.slice(0, 8)}</p>
+            )}
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }
