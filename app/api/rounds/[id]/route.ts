@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isDemoMode } from "@/lib/demo-mode";
 import { getRound, updateRoundApproval } from "@/lib/db/queries";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
@@ -13,6 +14,11 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 }
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  // Demo mode never persists — refuse the write cleanly rather than touching Turso.
+  if (isDemoMode()) {
+    return NextResponse.json({ error: "Persistence is disabled in demo mode", code: "demo_mode" }, { status: 403 });
+  }
+
   const { id } = await params;
   const body = await request.json().catch(() => null);
 
