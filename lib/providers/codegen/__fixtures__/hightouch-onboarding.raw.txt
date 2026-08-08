@@ -1,0 +1,336 @@
+import React, { useState } from 'react';
+
+interface OnboardingStep {
+  id: string;
+  title: string;
+  description?: string;
+  completed: boolean;
+  locked: boolean;
+  primaryAction?: { label: string; onClick: () => void };
+  secondaryAction?: { label: string; onClick: () => void };
+  icons?: string[];
+}
+
+const App: React.FC = () => {
+  const [steps, setSteps] = useState<OnboardingStep[]>([
+    {
+      id: 'warehouse',
+      title: 'Connect to your data warehouse',
+      description: 'Link your data source to start syncing customer information.',
+      completed: false,
+      locked: false,
+      primaryAction: { label: 'Connect warehouse', onClick: () => console.log('Connect warehouse') },
+      secondaryAction: { label: 'Skip for now', onClick: () => console.log('Skip warehouse') },
+      icons: ['❄️', '🔧', '🔍', '📊'],
+    },
+    {
+      id: 'teammates',
+      title: 'Invite teammates',
+      description: 'Collaborate with your team to complete setup faster.',
+      completed: false,
+      locked: false,
+      secondaryAction: { label: 'Invite teammates', onClick: () => console.log('Invite teammates') },
+    },
+    {
+      id: 'destinations',
+      title: 'Add destinations',
+      description: 'Connect tools where you want to send your customer data.',
+      completed: false,
+      locked: true,
+      icons: ['☁️', '⚪', '🔺', '⚛️'],
+    },
+  ]);
+
+  return (
+    <div style={{
+      fontFamily: 'Geist, Arial, sans-serif',
+      backgroundColor: '#fafafa',
+      minHeight: '100vh',
+      display: 'flex',
+    }}>
+      {/* Sidebar */}
+      <aside style={{
+        width: '192px',
+        backgroundColor: '#ffffff',
+        borderRight: '1px solid #ebebeb',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '16px 0',
+      }}>
+        <div style={{
+          padding: '0 16px',
+          marginBottom: '24px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+        }}>
+          <div style={{
+            width: '24px',
+            height: '24px',
+            backgroundColor: '#171717',
+            borderRadius: '4px',
+          }} />
+          <span style={{
+            fontSize: '14px',
+            fontWeight: 600,
+            color: '#171717',
+            letterSpacing: '-0.28px',
+          }}>hightouch</span>
+        </div>
+
+        <div style={{
+          padding: '0 12px',
+          marginBottom: '8px',
+        }}>
+          <select style={{
+            width: '100%',
+            padding: '6px 8px',
+            fontSize: '14px',
+            color: '#171717',
+            backgroundColor: '#ffffff',
+            border: '1px solid #ebebeb',
+            borderRadius: '6px',
+            fontFamily: 'Geist, Arial, sans-serif',
+          }}>
+            <option>Obsidian53</option>
+          </select>
+        </div>
+
+        <nav style={{ flex: 1 }}>
+          <NavItem label="Get started" active icon="▶" />
+          <NavItem label="Agents" icon="✦" />
+          <NavItem label="Activation" icon="◉" />
+          <NavItem label="AI Decisioning" icon="⚡" />
+          <NavItem label="Integrations" icon="⊞" />
+        </nav>
+
+        <div style={{
+          borderTop: '1px solid #ebebeb',
+          paddingTop: '8px',
+        }}>
+          <div style={{
+            padding: '0 16px',
+            fontSize: '12px',
+            color: '#8f8f8f',
+            marginBottom: '8px',
+            fontWeight: 500,
+          }}>More products</div>
+          <NavItem label="Customer Studio" icon="◧" />
+          <NavItem label="Resources" icon="📄" />
+          <NavItem label="Chat support" icon="💬" />
+          <NavItem label="Settings" icon="⚙" />
+          <div style={{
+            margin: '8px 12px',
+            padding: '6px 8px',
+            fontSize: '12px',
+            color: '#4d4d4d',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6px',
+          }}>
+            <div style={{
+              width: '20px',
+              height: '20px',
+              borderRadius: '9999px',
+              backgroundColor: '#ebebeb',
+            }} />
+            bryan@bryanlew.is
+          </div>
+        </div>
+      </aside>
+
+      {/* Main content */}
+      <main style={{
+        flex: 1,
+        padding: '64px 96px',
+        maxWidth: '1200px',
+        margin: '0 auto',
+      }}>
+        <header style={{
+          textAlign: 'center',
+          marginBottom: '64px',
+        }}>
+          <h1 style={{
+            fontSize: '32px',
+            lineHeight: '40px',
+            fontWeight: 600,
+            letterSpacing: '-1.28px',
+            color: '#171717',
+            margin: '0 0 12px 0',
+          }}>Get started with Hightouch</h1>
+          <p style={{
+            fontSize: '16px',
+            lineHeight: '24px',
+            color: '#4d4d4d',
+            margin: 0,
+          }}>A few quick steps and your workspace will be ready to go.</p>
+        </header>
+
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '12px',
+        }}>
+          {steps.map((step, index) => (
+            <StepCard key={step.id} step={step} index={index} />
+          ))}
+        </div>
+      </main>
+    </div>
+  );
+};
+
+const NavItem: React.FC<{ label: string; icon: string; active?: boolean }> = ({ label, icon, active }) => (
+  <div style={{
+    padding: '6px 12px',
+    margin: '2px 12px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '8px',
+    fontSize: '14px',
+    color: active ? '#0070f3' : '#4d4d4d',
+    backgroundColor: active ? '#f0f9ff' : 'transparent',
+    borderRadius: '6px',
+    cursor: 'pointer',
+    fontWeight: active ? 500 : 400,
+  }}>
+    <span style={{ fontSize: '14px', opacity: 0.7 }}>{icon}</span>
+    {label}
+  </div>
+);
+
+const StepCard: React.FC<{ step: OnboardingStep; index: number }> = ({ step, index }) => {
+  const isNextAction = !step.completed && !step.locked;
+  
+  return (
+    <div style={{
+      backgroundColor: '#ffffff',
+      border: `1px solid ${isNextAction ? '#171717' : '#ebebeb'}`,
+      borderRadius: '12px',
+      padding: '20px 24px',
+      display: 'flex',
+      alignItems: 'flex-start',
+      gap: '16px',
+      opacity: step.locked ? 0.5 : 1,
+    }}>
+      {/* Status indicator */}
+      <div style={{
+        width: '24px',
+        height: '24px',
+        borderRadius: '9999px',
+        border: `2px solid ${step.completed ? '#171717' : step.locked ? '#ebebeb' : '#171717'}`,
+        backgroundColor: step.completed ? '#171717' : '#ffffff',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+        marginTop: '2px',
+      }}>
+        {step.completed && (
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+            <path d="M2 6L5 9L10 3" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        )}
+      </div>
+
+      {/* Content */}
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <h3 style={{
+          fontSize: '16px',
+          lineHeight: '24px',
+          fontWeight: 600,
+          color: step.locked ? '#8f8f8f' : '#171717',
+          margin: '0 0 4px 0',
+          letterSpacing: 0,
+        }}>{step.title}</h3>
+        
+        {step.description && (
+          <p style={{
+            fontSize: '14px',
+            lineHeight: '20px',
+            color: '#4d4d4d',
+            margin: '0 0 16px 0',
+          }}>{step.description}</p>
+        )}
+
+        {/* Actions */}
+        {(step.primaryAction || step.secondaryAction) && !step.locked && (
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            flexWrap: 'wrap',
+          }}>
+            {step.primaryAction && (
+              <button
+                onClick={step.primaryAction.onClick}
+                style={{
+                  backgroundColor: '#171717',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '6px',
+                  padding: '8px 14px',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  fontFamily: 'Geist, Arial, sans-serif',
+                  cursor: 'pointer',
+                  letterSpacing: 0,
+                }}
+              >
+                {step.primaryAction.label}
+              </button>
+            )}
+            {step.secondaryAction && (
+              <button
+                onClick={step.secondaryAction.onClick}
+                style={{
+                  backgroundColor: 'transparent',
+                  color: '#4d4d4d',
+                  border: 'none',
+                  padding: '8px 0',
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  fontFamily: 'Geist, Arial, sans-serif',
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                  letterSpacing: 0,
+                }}
+              >
+                {step.secondaryAction.label}
+              </button>
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Icons */}
+      {step.icons && (
+        <div style={{
+          display: 'flex',
+          gap: '4px',
+          flexShrink: 0,
+        }}>
+          {step.icons.map((icon, i) => (
+            <div
+              key={i}
+              style={{
+                width: '24px',
+                height: '24px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '14px',
+                opacity: step.locked ? 0.4 : 0.6,
+              }}
+            >
+              {icon}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;
+```

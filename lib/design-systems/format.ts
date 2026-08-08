@@ -18,12 +18,28 @@ export function formatDesignSystemForPrompt(system: DesignSystem): string {
   const radiusLines = system.radii.map((r) => `- ${r.token}: ${r.value} — ${r.usage}`);
   const componentLines = system.components.map((c) => `- ${c.name}: ${c.spec}`);
 
+  const fontLines = system.fonts.map((f) => {
+    const loading =
+      f.loading === "selfHostedInline"
+        ? "self-hosted @font-face injected by the pipeline — reference this family directly, it will render"
+        : "system/fallback stack — assume available";
+    return `- ${f.family}: ${f.usage} (${loading})`;
+  });
+
+  const allowedHexes = system.colors.map((c) => c.value.toLowerCase()).join(", ");
+
   return [
     `Design system: ${system.name}`,
     system.description,
     "",
-    "Colors (use these values and roles exactly — do not invent other hex values):",
+    "Colors — this is a CLOSED ALLOWLIST. Use these hex values and roles exactly. Do not invent, " +
+      "tint, or approximate any other hex; if the shade you want is not listed, pick the nearest " +
+      "token below. The codegen pipeline rejects and rewrites off-palette hex values after generation.",
     ...colorLines,
+    `Allowed hex values (nothing else): ${allowedHexes}.`,
+    "",
+    "Fonts (match family to role):",
+    ...fontLines,
     "",
     "Typography scale (match family, size, weight, and letter-spacing per role):",
     ...typeLines,
@@ -35,6 +51,9 @@ export function formatDesignSystemForPrompt(system: DesignSystem): string {
     "",
     "Named component specs (match shape/color/type/radius per component role):",
     ...componentLines,
+    "",
+    "Iconography:",
+    system.iconography,
     "",
     "Do:",
     ...system.dos.map((line) => `- ${line}`),

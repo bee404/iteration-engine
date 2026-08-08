@@ -87,6 +87,37 @@ const SYSTEM_PROMPT =
   "no explanation before or after it.";
 
 /**
+ * Enforceable implementation rules the model must follow, appended after the design-system
+ * grounding. These are the fixes that a clearer instruction can reliably produce (the
+ * deterministic guarantees — fence stripping, off-palette color rewriting, font injection —
+ * live in postprocess.ts instead, because they must not depend on model compliance). Each
+ * bullet maps to one of the nine issues the raw Test 1 capture needed hand-fixed.
+ */
+export const IMPLEMENTATION_REQUIREMENTS = [
+  "Implementation requirements (these are not style suggestions — treat them as acceptance criteria):",
+  "",
+  "- Component mapping: render the primary action as the ink-filled primary button and every " +
+    "secondary/tertiary action as the ghost-button spec (white fill, 1px hairline border, 6px " +
+    "radius). Never render a secondary action as a bare underlined text link.",
+  "- Icons: use inline SVG line icons only (~1.5px stroke, fill=\"none\", rounded caps, ink/mute " +
+    "grey). Do NOT use emoji or icon-font glyphs anywhere.",
+  "- Real interactivity: wire actual React state (useState) and handlers so the prototype " +
+    "functions — e.g. completing a step updates state and advances the flow. Do not fake " +
+    "interactivity with static markup or no-op handlers.",
+  "- Emphasis isolation: when one item is 'the next action', emphasize exactly that single item " +
+    "(e.g. compute the first incomplete, unlocked step once and highlight only it). Never apply " +
+    "the emphasized treatment to every eligible item at once.",
+  "- Sequential numbering: when rendering an ordered set of steps, show explicit 1-based step " +
+    "numbers (and/or an 'Step N of M' label) so order is unambiguous.",
+  "- Responsive: include real responsive rules for narrow viewports (a <style> block with media " +
+    "queries, or equivalent) so the layout stays usable on small screens — do not assume a fixed " +
+    "wide desktop width.",
+  "- Fonts: reference the design system's self-hosted font family by name; the pipeline guarantees " +
+    "the @font-face is loaded, so you do not need to embed font bytes yourself.",
+  "- Output raw source only: no markdown code fences, no prose before or after the component.",
+].join("\n");
+
+/**
  * NOTE (scope gap, tracked but not fully closed by this change): generation is now grounded
  * in a design system (lib/design-systems), but there is still exactly one system, hardcoded
  * via getActiveDesignSystem() — not one selected per project/round. docs/blueprint.md and
@@ -135,6 +166,8 @@ function buildPrompt(direction: Direction, designGoal: string): string {
     "",
     formatDesignSystemForPrompt(getActiveDesignSystem())
   );
+
+  lines.push("", "---", "", IMPLEMENTATION_REQUIREMENTS);
 
   return lines.join("\n");
 }

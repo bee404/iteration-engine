@@ -27,6 +27,7 @@ export function DirectionCard({ direction, designGoal, screenshotRef, isSelected
   const generated = useRoundStore((s) => s.generatedCodeByDirection[direction.id]);
   const startCodeGen = useRoundStore((s) => s.startCodeGen);
   const appendCodeToken = useRoundStore((s) => s.appendCodeToken);
+  const finalizeCode = useRoundStore((s) => s.finalizeCode);
   const completeCodeGen = useRoundStore((s) => s.completeCodeGen);
   const failCodeGen = useRoundStore((s) => s.failCodeGen);
 
@@ -71,6 +72,15 @@ export function DirectionCard({ direction, designGoal, screenshotRef, isSelected
           const data = JSON.parse(dataLine.slice("data: ".length));
 
           if (event === "token") appendCodeToken(direction.id, data.token);
+          // The pipeline's deterministic post-processing runs after streaming; "code" carries
+          // the authoritative cleaned source (fences stripped, colors normalized, font
+          // injected) that replaces the raw streamed buffer, plus any QA warnings.
+          if (event === "code") {
+            const warnings: string[] = Array.isArray(data.warnings)
+              ? data.warnings.map((warning: { message: string }) => warning.message)
+              : [];
+            finalizeCode(direction.id, data.code, warnings);
+          }
           if (event === "error") throw new Error(data.message);
         }
       }
@@ -81,7 +91,7 @@ export function DirectionCard({ direction, designGoal, screenshotRef, isSelected
     } finally {
       setIsStreaming(false);
     }
-  }, [direction, designGoal, screenshotRef, startCodeGen, appendCodeToken, completeCodeGen, failCodeGen]);
+  }, [direction, designGoal, screenshotRef, startCodeGen, appendCodeToken, finalizeCode, completeCodeGen, failCodeGen]);
 
   // Generating starts the stream and opens the sheet together. Once a direction has completed
   // output, re-clicking just reopens the sheet instead of re-streaming; a fresh direction or one

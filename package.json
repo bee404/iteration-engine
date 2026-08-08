@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "db:migrate": "tsx lib/db/migrate.ts"
+    "db:migrate": "tsx lib/db/migrate.ts",
+    "verify:codegen": "tsx scripts/verify-codegen-postprocess.ts"
   },
   "dependencies": {
     "next": "16.3.0",
