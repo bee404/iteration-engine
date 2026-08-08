@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { isDemoMode } from "@/lib/demo-mode";
 import { createProject, listProjects } from "@/lib/db/queries";
 
 export async function GET() {
@@ -7,6 +8,11 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  // Demo mode never persists — refuse the write cleanly rather than touching Turso.
+  if (isDemoMode()) {
+    return NextResponse.json({ error: "Persistence is disabled in demo mode", code: "demo_mode" }, { status: 403 });
+  }
+
   const body = await request.json().catch(() => null);
 
   if (!body || typeof body.name !== "string" || !body.name.trim()) {
