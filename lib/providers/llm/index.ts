@@ -6,13 +6,18 @@ import { MockLLMProvider } from "./mock-provider";
 import type { LLMProvider } from "./types";
 
 export type { LLMProvider, CritiqueRequest, CritiqueResult, DirectionsRequest, DirectionsResult } from "./types";
-export type { CritiqueErrorCode } from "./errors";
-export { CRITIQUE_ERROR_STATUS, CritiqueGenerationError } from "./errors";
+export type { CritiqueErrorCode, DirectionsErrorCode } from "./errors";
+export {
+  CRITIQUE_ERROR_STATUS,
+  CritiqueGenerationError,
+  DIRECTIONS_ERROR_STATUS,
+  DirectionsGenerationError,
+} from "./errors";
 
 /**
  * Provider factory.
  *
- * - ANTHROPIC_API_KEY set -> real Claude Sonnet critiques (lib/providers/llm/claude-provider.ts).
+ * - ANTHROPIC_API_KEY set -> real Claude Sonnet critiques AND directions (lib/providers/llm/claude-provider.ts).
  * - ANTHROPIC_API_KEY unset -> typed mock, so local dev without a key still works. This
  *   fallback is a deliberate product decision (docs/decisions.md) and must stay intact.
  * - LLM_PROVIDER=mock forces the mock even when a key is configured (useful for local dev
