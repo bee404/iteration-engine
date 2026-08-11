@@ -18,8 +18,11 @@ export function DirectionsComparison({ directions, designGoal, screenshotRef, on
   const selectDirection = useRoundStore((s) => s.selectDirection);
 
   return (
-    <section className="card">
-      <h2>3. Directions</h2>
+    <section className="panel">
+      <div className="panel-title">
+        <span className="panel-step">Step 3</span>
+        <h2 className="display">Directions</h2>
+      </div>
       <div className="directions-grid">
         {directions.map((direction) => (
           <DirectionCard
@@ -33,7 +36,8 @@ export function DirectionsComparison({ directions, designGoal, screenshotRef, on
         ))}
       </div>
 
-      <button type="button" onClick={onApprove} disabled={!selectedDirectionId || isApproving}>
+      <button type="button" className="btn-primary" onClick={onApprove} disabled={!selectedDirectionId || isApproving}>
+        {isApproving && <span className="spinner" role="status" aria-hidden="true" />}
         {isApproving ? "Saving…" : "Approve round"}
       </button>
     </section>

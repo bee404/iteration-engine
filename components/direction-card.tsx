@@ -122,7 +122,7 @@ export function DirectionCard({ direction, designGoal, screenshotRef, isSelected
         <strong>Tradeoffs:</strong> {direction.tradeoffs}
       </div>
 
-      <ul>
+      <ul className="change-list">
         {direction.suggestedChanges.map((change, i) => (
           <li key={i}>{change}</li>
         ))}
@@ -139,8 +139,9 @@ export function DirectionCard({ direction, designGoal, screenshotRef, isSelected
         ref={generateButtonRef}
         onClick={handleTriggerClick}
         disabled={isStreaming}
-        className="generate-button"
+        className="btn-secondary"
       >
+        {isStreaming && <span className="spinner" role="status" aria-hidden="true" />}
         {isStreaming
           ? "Streaming code…"
           : generated?.status === "complete"

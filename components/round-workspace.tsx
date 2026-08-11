@@ -161,9 +161,9 @@ export function RoundWorkspace() {
       )}
 
       {approvedMessage && (
-        <section className="card approved-banner">
-          <p>{approvedMessage}</p>
-          <button type="button" onClick={() => { reset(); setApprovedMessage(null); }}>
+        <section className="panel approved-banner">
+          <p className="panel-lead">{approvedMessage}</p>
+          <button type="button" className="btn-secondary" onClick={() => { reset(); setApprovedMessage(null); }}>
             Start next round
           </button>
         </section>
