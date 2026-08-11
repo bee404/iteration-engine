@@ -83,15 +83,16 @@ const CODE_END_LINE = /[)\]};]\s*$|`\s*$/;
  */
 export function stripSurroundingProse(source: string): string {
   const lines = source.split("\n");
+  const lineAt = (i: number): string => lines[i] ?? "";
   let start = 0;
-  while (start < lines.length && lines[start].trim() !== "" && !CODE_START_LINE.test(lines[start])) {
+  while (start < lines.length && lineAt(start).trim() !== "" && !CODE_START_LINE.test(lineAt(start))) {
     start += 1;
   }
   if (start >= lines.length) start = 0;
-  while (start < lines.length && lines[start].trim() === "") start += 1;
+  while (start < lines.length && lineAt(start).trim() === "") start += 1;
 
   let end = lines.length - 1;
-  while (end > start && (lines[end].trim() === "" || !CODE_END_LINE.test(lines[end]))) {
+  while (end > start && (lineAt(end).trim() === "" || !CODE_END_LINE.test(lineAt(end)))) {
     end -= 1;
   }
   return lines.slice(start, end + 1).join("\n");
