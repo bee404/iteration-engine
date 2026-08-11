@@ -3,8 +3,11 @@ import { test } from "node:test";
 import {
   buildPreviewDocument,
   extractComponentName,
+  quoteUnitfulStyleValues,
   stripCodeFences,
+  stripSurroundingProse,
   transpilePreviewComponent,
+  wrapBareStyleTagCss,
 } from "./build-preview-document";
 
 test("stripCodeFences removes a wrapping markdown fence but leaves plain source untouched", () => {
@@ -34,6 +37,64 @@ test("transpilePreviewComponent strips TS/JSX and reports the component name", (
 test("transpilePreviewComponent surfaces a syntax error instead of throwing", () => {
   const result = transpilePreviewComponent("export default function App() { return <div>;");
   assert.equal(result.ok, false);
+});
+
+// Real Claude output occasionally emits TSX that Sucrase can't parse (all producing the
+// live-demo error "Unexpected token, expected ';'"). transpilePreviewComponent must repair
+// these deterministically and still mount, so the read-only fallback stays a last resort.
+test("transpilePreviewComponent repairs unquoted unitful inline-style values", () => {
+  const result = transpilePreviewComponent(
+    "export default function App() { return <div style={{ maxWidth: 480px, padding: 24px }}>hi</div>; }",
+  );
+  assert.equal(result.ok, true);
+  if (result.ok) {
+    assert.match(result.code, /480px/);
+    assert.match(result.code, /React\.createElement/);
+  }
+});
+
+test("transpilePreviewComponent repairs a component wrapped in explanatory prose", () => {
+  const result = transpilePreviewComponent(
+    "Here is the component:\n\nexport default function App() { return <div>hi</div>; }\n\nLet me know if you want tweaks.",
+  );
+  assert.equal(result.ok, true);
+  if (result.ok) assert.equal(result.componentName, "App");
+});
+
+test("transpilePreviewComponent repairs raw CSS written as <style> children", () => {
+  const result = transpilePreviewComponent(
+    "export default function App() { return <div><style>.card { color: #111; }</style><p className=\"card\">hi</p></div>; }",
+  );
+  assert.equal(result.ok, true);
+});
+
+test("transpilePreviewComponent leaves already-valid code byte-for-byte transpiled (no needless repair)", () => {
+  const source = 'export default function App() { return <div style={{ opacity: 1, zIndex: 10 }}>hi</div>; }';
+  const viaFull = transpilePreviewComponent(source);
+  assert.equal(viaFull.ok, true);
+});
+
+test("stripSurroundingProse keeps genuine source untouched but trims wrapping prose", () => {
+  const clean = "import React from 'react';\nexport default function App() { return null; }";
+  assert.equal(stripSurroundingProse(clean), clean);
+  assert.equal(
+    stripSurroundingProse(`Sure!\n\n${clean}\n\nHope that helps.`),
+    clean,
+  );
+});
+
+test("quoteUnitfulStyleValues quotes unit values but leaves unitless numbers alone", () => {
+  assert.equal(quoteUnitfulStyleValues("{ padding: 24px, opacity: 1 }"), "{ padding: '24px', opacity: 1 }");
+  assert.equal(quoteUnitfulStyleValues("{ zIndex: 10, flex: 1 }"), "{ zIndex: 10, flex: 1 }");
+});
+
+test("wrapBareStyleTagCss wraps raw CSS but leaves a template-literal child untouched", () => {
+  assert.equal(
+    wrapBareStyleTagCss("<style>.a{color:red}</style>"),
+    "<style>{`.a{color:red}`}</style>",
+  );
+  const already = "<style>{`.a{color:red}`}</style>";
+  assert.equal(wrapBareStyleTagCss(already), already);
 });
 
 test("transpilePreviewComponent rejects empty input", () => {

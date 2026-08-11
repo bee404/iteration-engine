@@ -48,23 +48,120 @@ export function extractComponentName(source: string): string | null {
   return null;
 }
 
-export function transpilePreviewComponent(source: string): TranspileResult {
-  const normalized = stripCodeFences(source);
-  if (!normalized.trim()) {
-    return { ok: false, error: "The generated code is empty." };
-  }
+/**
+ * Sucrase transform with this app's fixed options. Split out so both the first attempt and
+ * each post-repair re-check in transpilePreviewComponent run the exact same transform — a
+ * repair is only ever trusted because *this* function accepts its output.
+ */
+function runSucrase(source: string): TranspileResult {
   try {
-    const { code } = transform(normalized, {
+    const { code } = transform(source, {
       transforms: ["typescript", "jsx", "imports"],
       jsxRuntime: "classic",
       jsxPragma: "React.createElement",
       jsxFragmentPragma: "React.Fragment",
       production: true,
     });
-    return { ok: true, code, componentName: extractComponentName(normalized) };
+    return { ok: true, code, componentName: extractComponentName(source) };
   } catch (error) {
     return { ok: false, error: error instanceof Error ? error.message : String(error) };
   }
+}
+
+// A line that plausibly opens real code, used to find where a component starts when the model
+// wraps it in prose ("Here is the component:") the fence-stripper doesn't catch.
+const CODE_START_LINE =
+  /^\s*(import\b|export\b|const\b|let\b|var\b|function\b|async\b|class\b|interface\b|type\b|enum\b|declare\b|namespace\b|"use |'use |\/\*|\/\/|@|React\b)/;
+// A line that plausibly closes a statement or block, used to find where the component ends
+// before any trailing prose ("Let me know if you want tweaks.").
+const CODE_END_LINE = /[)\]};]\s*$|`\s*$/;
+
+/**
+ * Drops explanatory prose the model sometimes emits before or after the component despite
+ * being told to output raw source only. Keeps the span from the first code-like line to the
+ * last statement-closing line; leaves genuine source (which starts and ends with code) intact.
+ */
+export function stripSurroundingProse(source: string): string {
+  const lines = source.split("\n");
+  let start = 0;
+  while (start < lines.length && lines[start].trim() !== "" && !CODE_START_LINE.test(lines[start])) {
+    start += 1;
+  }
+  if (start >= lines.length) start = 0;
+  while (start < lines.length && lines[start].trim() === "") start += 1;
+
+  let end = lines.length - 1;
+  while (end > start && (lines[end].trim() === "" || !CODE_END_LINE.test(lines[end]))) {
+    end -= 1;
+  }
+  return lines.slice(start, end + 1).join("\n");
+}
+
+// CSS units the model may append to a bare numeric value inside an inline-style object
+// (`maxWidth: 480px`), which is a syntax error — the value must be a quoted string.
+const CSS_UNIT =
+  "(?:px|rem|em|ex|ch|vw|vh|vmin|vmax|pt|pc|cm|mm|in|%|fr|deg|grad|rad|turn|ms|s|dvh|dvw|svh|lvh)";
+const UNITFUL_STYLE_VALUE = new RegExp(`([:,]\\s*)(-?\\d*\\.?\\d+${CSS_UNIT})(\\s*[,}\\n])`, "g");
+
+/**
+ * Quotes unitful numeric CSS values in object-literal value position (`padding: 24px` ->
+ * `padding: '24px'`). Unitless numbers (`opacity: 1`, `zIndex: 10`) are valid and left alone.
+ */
+export function quoteUnitfulStyleValues(source: string): string {
+  return source.replace(UNITFUL_STYLE_VALUE, (_m, pre, value, post) => `${pre}'${value}'${post}`);
+}
+
+/**
+ * Wraps raw CSS written as the children of a JSX `<style>` element in a template literal
+ * (`<style>.x{}</style>` -> `` <style>{`.x{}`}</style> ``). Left untouched when the children
+ * are already a `{...}` expression container, so a correctly-authored style block is a no-op.
+ */
+export function wrapBareStyleTagCss(source: string): string {
+  return source.replace(/<style([^>]*)>([\s\S]*?)<\/style>/g, (match, attrs: string, body: string) => {
+    if (/^\s*\{/.test(body)) return match;
+    const escaped = body.replace(/`/g, "\\`").replace(/\$\{/g, "\\${");
+    return `<style${attrs}>{\`${escaped}\`}</style>`;
+  });
+}
+
+/**
+ * Deterministic repairs for the syntax mistakes real LLM codegen makes most often that
+ * Sucrase can't parse. Applied cumulatively and only ever *adopted* when the repaired source
+ * actually transpiles (see transpilePreviewComponent), so a repair that doesn't apply — or
+ * makes things worse — is discarded and never mounted. Order is cheapest/safest first.
+ */
+const SYNTAX_REPAIRS: readonly ((source: string) => string)[] = [
+  stripSurroundingProse,
+  quoteUnitfulStyleValues,
+  wrapBareStyleTagCss,
+];
+
+/**
+ * Transpiles the generated component, self-healing the common LLM syntax slips before giving
+ * up. It first transpiles as-is; on a syntax error it applies the deterministic repairs above
+ * cumulatively, adopting the result the moment Sucrase accepts it. Only when every repair
+ * still fails to parse does it return the original error — the signal PreviewFrame degrades to
+ * its read-only source view from, keeping that fallback a last resort rather than the norm.
+ */
+export function transpilePreviewComponent(source: string): TranspileResult {
+  const normalized = stripCodeFences(source);
+  if (!normalized.trim()) {
+    return { ok: false, error: "The generated code is empty." };
+  }
+
+  const firstAttempt = runSucrase(normalized);
+  if (firstAttempt.ok) return firstAttempt;
+
+  let candidate = normalized;
+  for (const repair of SYNTAX_REPAIRS) {
+    const repaired = repair(candidate);
+    if (repaired === candidate) continue;
+    candidate = repaired;
+    const attempt = runSucrase(candidate);
+    if (attempt.ok) return attempt;
+  }
+
+  return firstAttempt;
 }
 
 /** Neutralizes a closing script tag inside injected source so it can't break out of the
