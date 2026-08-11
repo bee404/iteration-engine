@@ -114,7 +114,15 @@ export const IMPLEMENTATION_REQUIREMENTS = [
     "wide desktop width.",
   "- Fonts: reference the design system's self-hosted font family by name; the pipeline guarantees " +
     "the @font-face is loaded, so you do not need to embed font bytes yourself.",
-  "- Output raw source only: no markdown code fences, no prose before or after the component.",
+  "- Output raw source only: no markdown code fences, no prose before or after the component. " +
+    "The response must be a single valid TSX file that parses on its own — the very first " +
+    "character is the first line of code and the very last is the final `}`.",
+  "- Syntax that must parse: this code is transpiled and mounted live, so it has to be " +
+    "syntactically valid TSX. In inline style objects, every CSS value that carries a unit must " +
+    "be a quoted string (`padding: '24px'`, `maxWidth: '480px'`) — never a bare `24px`; only " +
+    "unitless numbers may be unquoted (`opacity: 1`, `zIndex: 10`, `lineHeight: 1.5`). If you " +
+    "use a `<style>` block, put its CSS inside a template-literal child " +
+    "(`` <style>{`.card { color: ... }`}</style> ``), never as raw text between the tags.",
 ].join("\n");
 
 /**
