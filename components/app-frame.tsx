@@ -18,8 +18,9 @@ interface AppFrameProps {
  */
 export function AppFrame({ demoBanner, children }: AppFrameProps) {
   // Sound is a header affordance in both frames but the app ships no audio yet, so the toggle
-  // is a real, persisted UI state with no bound sound source — flagged for Design QA.
-  const [muted, setMuted] = useState(false);
+  // is a real UI state with no bound sound source. Frames show the volume-cross (muted) glyph,
+  // so the shell opens muted — flagged for Design QA.
+  const [muted, setMuted] = useState(true);
   const hasScreenshot = useRoundStore((s) => !!s.screenshotRef);
 
   return (
@@ -30,6 +31,7 @@ export function AppFrame({ demoBanner, children }: AppFrameProps) {
       <main className="app-shell">
         <header className="app-header">
           <Wordmark />
+          {/* Frame header holds the wordmark left and a single icon button right (DESIGN.md §header). */}
           <div className="header-actions">
             <button
               type="button"
@@ -41,9 +43,6 @@ export function AppFrame({ demoBanner, children }: AppFrameProps) {
             >
               {muted ? <SoundOffIcon /> : <SoundOnIcon />}
             </button>
-            <a className="help-link" href="mailto:hello@coqui.design">
-              Need help? Get in touch
-            </a>
           </div>
         </header>
 

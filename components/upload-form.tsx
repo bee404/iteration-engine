@@ -91,7 +91,7 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
   const canSubmit = !!screenshotRef && designGoal.trim().length > 0 && feedbackText.trim().length > 0;
 
   return (
-    <section className="round-intake">
+    <section className={`round-intake ${screenshotRef ? "" : "is-empty"}`}>
       <input
         ref={fileInputRef}
         type="file"
@@ -101,10 +101,10 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
         hidden
       />
 
-      {/* Stage */}
-      <div className="stage">
-        {screenshotRef ? (
-          <>
+      {screenshotRef ? (
+        <>
+          {/* Frame 2 — Stage: the uploaded screenshot in a bezel with a caption riding outside. */}
+          <div className="stage">
             <div className="stage-card">
               {/* eslint-disable-next-line @next/next/no-img-element -- local data URL, not an optimizable remote asset */}
               <img src={screenshotRef} alt="Uploaded screenshot" />
@@ -116,48 +116,16 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
                 {dimensions ? `${dimensions.width} × ${dimensions.height}` : "—"}
               </span>{" · viewport inferred"}
             </p>
-          </>
-        ) : (
-          <div className="dropzone-stage">
-            <button
-              type="button"
-              className={`add-image-glyph ${isDragging ? "is-dragging" : ""}`}
-              onClick={() => fileInputRef.current?.click()}
-              onDragOver={(e) => {
-                e.preventDefault();
-                setIsDragging(true);
-              }}
-              onDragLeave={() => setIsDragging(false)}
-              onDrop={handleDrop}
-              disabled={disabled}
-              aria-label="Add the screen you want to improve"
-            >
-              <AddImageIcon />
-            </button>
-            <h2 className="display add-image-heading">Add the screen you want to improve</h2>
           </div>
-        )}
-      </div>
 
-      {/* Brief panel */}
-      <form
-        className="brief-panel"
-        onSubmit={(event) => {
-          event.preventDefault();
-          if (canSubmit) onSubmit();
-        }}
-      >
-        {!screenshotRef ? (
-          <div className="upload-invite">
-            <button type="button" className="upload-cta" onClick={() => fileInputRef.current?.click()}>
-              Select image to upload
-            </button>
-            <p className="upload-hint">
-              also you can drop your image or <span className="keycap">⌘V</span> to paste
-            </p>
-          </div>
-        ) : (
-          <>
+          {/* Frame 2 — Brief panel */}
+          <form
+            className="brief-panel"
+            onSubmit={(event) => {
+              event.preventDefault();
+              if (canSubmit) onSubmit();
+            }}
+          >
             <h2 className="panel-heading">What should we do fix?</h2>
 
             <label className="field">
@@ -237,9 +205,33 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
                 {disabled ? "Synthesizing…" : "Synthesize"}
               </button>
             </div>
-          </>
-        )}
-      </form>
+          </form>
+        </>
+      ) : (
+        /* Frame 1 — the dashed upload card carries the heading, invitation, and keycap hint. */
+        <div className="dropzone-stage">
+          <h2 className="display add-image-heading">Add the screen you want to improve</h2>
+          <button
+            type="button"
+            className={`add-image-glyph ${isDragging ? "is-dragging" : ""}`}
+            onClick={() => fileInputRef.current?.click()}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setIsDragging(true);
+            }}
+            onDragLeave={() => setIsDragging(false)}
+            onDrop={handleDrop}
+            disabled={disabled}
+            aria-label="Add the screen you want to improve"
+          >
+            <AddImageIcon />
+            <span className="upload-cta">Select image to upload</span>
+            <span className="upload-hint">
+              also you can drop your image or <span className="keycap">⌘V</span> to paste
+            </span>
+          </button>
+        </div>
+      )}
     </section>
   );
 }
