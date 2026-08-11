@@ -22,6 +22,7 @@ Read the one file that matches your task, not all of them:
 | [`decisions.md`](./decisions.md) | *Why* the system is built the way it is — the durable, load-bearing decisions and their rationale (generation engine, token format, Sucrase, demo mode, 21st.dev shape, etc.). Read before changing a decision. |
 | [`roadmap-and-open-work.md`](./roadmap-and-open-work.md) | What is built vs. designed-but-not-built (the before/after visual diff), build-order dependencies, and the paused external UX iteration work. |
 | [`qa-conventions.md`](./qa-conventions.md) | The PR-review and design-QA pattern this project follows before anything merges. Read before opening a PR. |
+| [`../design-system.md`](../design-system.md) | Coquí's own visual identity, naming, brand assets, copy voice, and design history — distinct from the Vercel Geist system this hub's `architecture.md` covers, which grounds only *generated* code. Read before any UI/visual change to the app shell itself. |
 
 ## Ground truth precedence
 
@@ -30,7 +31,8 @@ primary source-of-truth docs win, in this order:
 
 1. **Code** on `main` — the actual shipped behavior.
 2. [`docs/decisions.md`](../decisions.md), [`docs/blueprint.md`](../blueprint.md),
-   [`docs/release-plan.md`](../release-plan.md) — the reconciled product source of truth.
+   [`docs/release-plan.md`](../release-plan.md), [`docs/design-system.md`](../design-system.md),
+   and the repo-root `DESIGN.md` — the reconciled product and visual source of truth.
 3. This knowledge base — a navigational synthesis layered on top of the above.
 
 If you find this hub drifting from code or the primary docs, correct it in the same PR that
@@ -38,12 +40,14 @@ surfaces the drift.
 
 ## One-paragraph orientation
 
-Iteration Engine is a personal, single-user design tool: a designer uploads a screenshot plus
-feedback, and the app produces a critique (signal separated from preference), 2–3
-rationale-backed directions, and on-demand per-direction code generation that live-mounts as an
-interactive React component. Rounds persist to Turso for version history. It is a Next.js app
-on Vercel, Zustand for client state, Claude Sonnet behind typed provider interfaces (with mock
-and fixture fallbacks), Sucrase for in-browser transpilation, and a design-system enforcement
-pipeline that grounds generated code in the Vercel Geist style. See `architecture.md` for
-detail.
+**Coquí** (renamed 2026-08-11 from "Iteration Engine" — see `docs/decisions.md` Decision 8; the
+repo slug and this hub's older prose still say the old name in places) is a personal, single-user
+design tool: a designer uploads a screenshot plus feedback, and the app produces a critique
+(signal separated from preference), 2–3 rationale-backed directions, and on-demand per-direction
+code generation that live-mounts as an interactive React component. Rounds persist to Turso for
+version history. It is a Next.js app on Vercel, Zustand for client state, Claude Sonnet behind
+typed provider interfaces (with mock and fixture fallbacks), Sucrase for in-browser
+transpilation, and a design-system enforcement pipeline that grounds *generated* code in the
+Vercel Geist style. See `architecture.md` for that detail, and `docs/design-system.md` for the
+app's own — unrelated — gold-accent visual identity.
 

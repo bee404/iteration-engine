@@ -57,6 +57,14 @@ cost and refuses persistence writes. Use it to exercise the full flow determinis
 PR touches the flow, note whether it was QA'd in demo mode, live, or both — and confirm demo
 mode still refuses writes if persistence is in scope.
 
+## Lean working path
+
+Build directly; skip the full Impeccable review chain (an external, local design-critique tool
+Bryan runs outside this repo) unless he explicitly asks for it. Adopted 2026-08-09, driven by
+token cost — the review apparatus cost several times more than the build itself. This does not
+lower the design-QA bar above; it only means a formal automated critique pass is opt-in, not a
+default gate.
+
 ## PR hygiene for this repo
 
 - Branch from `main`; never push to `main` directly. Use `--squash` to merge.

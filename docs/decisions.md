@@ -56,7 +56,7 @@ Reconciliation decisions recorded 2026-08-05. This is the source of truth for wh
 
 **Decision:** Do not evaluate or integrate Higgsfield for v1.
 
-**Rationale:** Unvetted by either discovery track; its proposed role (a generation layer) would duplicate the already-decided Claude Sonnet + ComfyUI pipeline with no demonstrated gap it fills. Consistent with the standing rule that a tool shouldn't drive the product without a specific, unmet need.
+**Rationale:** Unvetted by either discovery track; its proposed role (a generation layer) would duplicate the already-decided Claude Sonnet + ComfyUI pipeline with no demonstrated gap it fills. Consistent with the standing rule that a tool shouldn't drive the product without a specific, unmet need. If revisited: the recorded MCP endpoint is `https://mcp.higgsfield.ai/mcp`, last known status "needs authentication" (unconfirmed) — do not assume it is already authenticated.
 
 **Owner:** Bryan. **Date:** 2026-08-05.
 
@@ -67,6 +67,54 @@ Reconciliation decisions recorded 2026-08-05. This is the source of truth for wh
 **Rationale (Bryan, verbatim intent):** "Success for our V1 is going to be output that is coherent, so output that was respectful of the things I gave it. The established direction synthesized feedback and was able to create that visual output in a way that I could have sort of a before and after. From there, we can continue to critique and refine the iteration engine." This supersedes the earlier proposed criterion (2-real-projects / signal-vs-preference accuracy), which was too longitudinal for a v1 bar.
 
 **Owner:** Bryan. **Date:** 2026-08-05.
+
+### 8. Product renamed to Coquí
+
+**Decision:** The product is renamed from **Iteration Engine** to **Coquí**. Always written with the accent ("Coquí"). The former name is fully retired from product-facing surfaces. Repository/infrastructure identifiers (GitHub repo slug `iteration-engine`, `package.json` name) are not part of this decision and remain unrenamed for now — a separate follow-up if pursued.
+
+**Rationale:** The coquí is a Puerto Rican tree frog known for a loud, repeating two-note call. The product is itself a repeated call-and-response loop — feedback in, iteration out, loop again — which the name captures better than "Iteration Engine" did. See `docs/design-system.md` for the full naming rationale and the still-unexplained header sound icon this ties to.
+
+**Owner:** Bryan. **Date:** 2026-08-11.
+
+### 9. Visual design system: Figma "Coquí Visual Explore" adopted, replacing the prior press-proof direction
+
+**Decision:** The current, authoritative visual direction is the Figma file `qzgdMASkzEkxZpRL3918QD` ("Coquí Visual Explore") — a single gold accent, Owners Narrow display face over a Figtree body, and an atmospheric dot-grid ground. Full token spec lives in the repo-root `DESIGN.md`; narrative context and history in `docs/design-system.md`.
+
+**Rationale:** Four prior visual passes were explored (Geist wireframe, cream/ink, "press proof," Figtree/blue "Direction 3"). The press-proof pass passed a full finish review and was not rejected on quality, but the direction moved to the current gold system instead — it is parked, not dead, and could be revived. Only two of the eventual screen set (Add image, Set the brief) are designed against the current system today.
+
+**Owner:** Bryan. **Date:** 2026-08-11.
+
+### 10. Comparison interaction is a binary toggle, not a scrubber or split view
+
+**Decision:** The reference/iteration comparison control is a simple two-position toggle (`Source` / `Iteration`) rendered into one fixed, unmoving viewport box. There is no drag-to-wipe scrubber, no `Before / Split / After` segmented control, no draggable divider, no side-by-side view, and no thumbnail strip or timeline row.
+
+**Rationale:** A drag-to-wipe scrubber was explicitly considered and removed before 2026-08-08. Perfect registration — everything a round produces renders into one identical box — is the product's actual differentiator; a scrubber or split view breaks that property by implying continuous, spatial comparison rather than a discrete toggle between two aligned layers. **This supersedes** the draft `Before / Split / After` + draggable-divider + highlight-toggle design described in the "BeforeAfter Visual Diff" feature blueprint and mirrored in `docs/knowledge-base/roadmap-and-open-work.md` prior to this decision being recorded — that draft is now historical, not the build target. `roadmap-and-open-work.md` has been updated accordingly.
+
+**Owner:** Bryan. **Date:** pre-2026-08-08 (reaffirmed 2026-08-11).
+
+### 11. Primary CTA renamed "Synthesize"
+
+**Decision:** The primary commit action across a round is labeled **"Synthesize"**, replacing the earlier "Interpret feedback."
+
+**Rationale:** Settled in the current Figma frames; carries the same commit semantics as before, just renamed.
+
+**Owner:** Bryan. **Date:** 2026-08-11.
+
+### 12. Lineage is append-only; no branching, forking, merging, or version-graph UI
+
+**Decision:** History is a single ordered chain per screen, readable and permanent, never editable. A past selection cannot be changed and propagated forward — starting a different path means starting a new chain from that node, leaving the original chain intact. Looking at an unselected direction (including generating its code to inspect it) is non-destructive and commits to nothing. The product never exposes branching, forking, merging, or a version graph, even though the underlying data retains every unselected direction.
+
+**Rationale:** Confirms and sharpens the standing "convergence over exploration" position (Decision 1): the product converges on one answer per round, and its history should read the same way. A lineage/chain browsing view for this history has not been designed yet — see `docs/knowledge-base/roadmap-and-open-work.md`.
+
+**Owner:** Bryan. **Date:** pre-2026-08-08.
+
+### 13. Desktop-only for now; responsive is deferred, not rejected
+
+**Decision:** Responsive/adaptive layout work is explicitly stopped for the current build. The design targets a desktop viewport (~1241px) only.
+
+**Rationale:** Keeps the current design push scoped to one viewport while the visual direction and remaining screens are still being defined. Known future requirement, not an accepted permanent constraint — revisit once the design is stable. Note this also leaves open how the iteration preview's hover-driven interactivity should translate to touch, whenever responsive work resumes.
+
+**Owner:** Bryan. **Date:** 2026-08-11.
 
 ## Carried forward unchanged (not in conflict, no new decision needed)
 

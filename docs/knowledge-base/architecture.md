@@ -126,11 +126,19 @@ API calls and zero Turso writes:
   requests** — no CDN.
 - Robust fallbacks: if transpile fails, or if the component compiles but throws at mount (the
   iframe reports mount errors back over `postMessage` across its opaque origin), it falls back to
-  the read-only source view with a notice — **never a blank frame**.
+  the read-only source view with a notice — **never a blank frame**. The specified notice copy is
+  "This component compiled but failed to mount — showing the source instead," followed by the raw
+  runtime error (e.g. `Uncaught TypeError: Cannot read properties of undefined (reading
+  'Component')`) — see `docs/design-system.md` for the full copy table.
 - This is why generated components are constrained to a single self-contained file with no
   imports (see `decisions.md`): it is exactly the shape Sucrase can transpile without a bundler.
 
 ## Design-system enforcement pipeline — `lib/design-systems/`, `lib/providers/codegen/postprocess.ts`
+
+> Not to be confused with Coquí's own application UI (the upload screen, brief panel, header,
+> etc.), which follows a *different* design system — the gold-accent Figma direction documented
+> in `docs/design-system.md` and the repo-root `DESIGN.md`. What follows here grounds only the
+> code this tool *generates* as a direction's prototype.
 
 Generated code is grounded in one hardcoded design system (**Vercel Geist**,
 `lib/design-systems/vercel-geist.ts`) via two cooperating layers:
