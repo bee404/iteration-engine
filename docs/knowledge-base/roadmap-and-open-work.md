@@ -43,18 +43,31 @@ Each stage is "worthless without the one before it":
    can build directly on this.
 3. **Compare** — the unified comparison view itself. **Not built.** This is the remaining work.
 
-### Comparison view states still to build (from the blueprint)
+### Comparison view states still to build (superseded control model — see below)
 
-- Unified comparison frame at best-fit scale (single frame, not two shrunk side-by-side).
-- Controls: **Before / Split / After** segmented control, draggable divider (`clip-path` + range
-  input), **Highlight on/off** toggle, **Scale: fit**.
+> **Superseded 2026-08-11 (Decision 10, `docs/decisions.md`).** The blueprint this section was
+> drawn from specified a `Before / Split / After` segmented control with a draggable divider and
+> a highlight toggle. Both later-recovered context packets independently confirm the actual
+> product decision is a **binary `Source` / `Iteration` toggle** in one fixed viewport box, with
+> no scrubber, no split view, and no drag gesture — that decision predates this blueprint
+> (pre-2026-08-08) and wins. The bullets below are kept as a historical record of the drafted
+> design, not the build target. Rebuild this section's control model against Decision 10 before
+> implementing.
+
+- Unified comparison frame at best-fit scale (single frame, not two shrunk side-by-side) — **still applies** to the binary-toggle model.
+- ~~Controls: **Before / Split / After** segmented control, draggable divider (`clip-path` + range input), **Highlight on/off** toggle, **Scale: fit**.~~ Replace with: a two-position `Source` / `Iteration` toggle, nothing else.
 - Pixel-diff region highlight (rasterize both frames, diff `ImageData` client-side, zero LLM
   cost — chosen over asking the model to self-report a bounding box, "grading its own homework").
+  Still a candidate, independent of the control-model change above.
 - Off-happy-path states: streaming/partial-generation indicator (partial-height, contextual
   status text — *not* full raw code), generation-failed entry guard, legacy-round fallback (no
   captured width → default width, "scale approximate"), and the **whole-frame / rasterization-
   unreliable fallback** — surface the direction's own `rationale` + `suggestedChanges` rather
   than a bare "substantially restructured" label.
+- **New, from the binary-toggle decision:** if the selected direction's code compiles but fails
+  to mount, the iteration layer is source text, which cannot be stacked against an image in the
+  fixed box — what the toggle does in that state is undesigned (see `docs/blueprint.md` Open
+  questions).
 
 ### Data-model prerequisites for the diff
 
@@ -76,6 +89,29 @@ Each stage is "worthless without the one before it":
 - **ComfyUI** optional local visual pre-iteration / asset generation — decided shape, not in the
   core loop.
 - **Project management UI** — single implicit project today; no switcher.
+- **Lineage/chain view** — a way to browse a chain's full history is a candidate signature
+  interaction but has **not been designed yet**. Constraints on any future attempt (Decision 12,
+  `decisions.md`): no branching UI, nothing implying history is editable, no drag scrubber, and
+  not a list of thumbnails or a timeline row.
+- **Critique, Directions, and Compare screens against the current gold visual system** — the
+  Figma redesign (`docs/design-system.md`) only covers Add-image and Set-the-brief today. The
+  rest of the flow still needs a pass in the current direction.
+
+## Open product questions
+
+Unresolved product-behavior questions surfaced during the 2026-08-11 context-packet review —
+flag rather than guess when implementing adjacent work:
+
+- Can the critique be regenerated after the fact, and does that invalidate directions already
+  generated from it?
+- Is there a retry path after a code-generation mount failure, or must the person pick a
+  different direction entirely?
+- Can a person move an item between the critique's real-problems and taste piles, or dismiss one,
+  before directions are generated from it?
+- Where does the lineage/chain view live in the interface, and can a person compare any two
+  nodes in a chain or only adjacent ones? (See the Lineage/chain view item above.)
+- What replaces the generated component's hover-driven interactivity on touch, once responsive
+  work resumes (Decision 13, `decisions.md`)?
 
 ## Paused: external front-end / UX iteration
 

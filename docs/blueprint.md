@@ -6,7 +6,9 @@ Define the agreed product direction after the discovery differences and conseque
 
 ## Status
 
-Agreed 2026-08-05. This is the current source of truth for what Iteration Engine is. See `docs/decisions.md` for the rationale behind each choice and `docs/release-plan.md` for how it ships.
+Agreed 2026-08-05. This is the current source of truth for what the product is. See `docs/decisions.md` for the rationale behind each choice and `docs/release-plan.md` for how it ships.
+
+**Naming note (2026-08-11):** the product was renamed **Coquí** (formerly "Iteration Engine") — see Decision 8 in `docs/decisions.md`. This blueprint predates the rename and uses the old name in places below; the product referred to throughout is the same product. Visual identity, brand, and copy voice live in `docs/design-system.md`.
 
 ## Blueprint
 
@@ -26,6 +28,20 @@ Bryan only. Internal, not stakeholder-facing — Bryan takes the tool's output t
 - Code/prototype generation is an on-demand fidelity step, not a mandatory pipeline stage.
 - The tool is modular and agnostic: not tied to any specific product, brand, or technology.
 - Code is the source of truth for the design system; Figma mirrors it, not the reverse.
+- **Convergence over exploration.** Every surface guides toward one answer per round — this is the load-bearing positioning call, not up for redesign. There is no branching, forking, merging, or version graph in the product (see Decision 12); a person can look at an unselected direction without committing to it.
+- **Perfect registration is the payoff.** Everything a round produces — the original screenshot and every later iteration — renders into one identical, fixed viewport box, inferred once per chain (not once per round). This is what makes the before/after comparison trustworthy: nothing shifts under the eye between reference and iteration.
+- **Every judgment is cited.** Critique items state their reasoning; directions additionally point to a real named external pattern (21st.dev), not an invented layout.
+- **Failures degrade, they never disappear.** Code that compiles but fails to mount falls back to source plus the raw runtime error — never a blank frame or a generic error state.
+- **History is a stack of aligned layers**, not a changelog, thumbnail strip, or timeline row — those forms discard registration, the one property this product is built around.
+
+### Terminology
+
+Use these words consistently, in this product-specific sense, across docs and UI copy: **reference**
+(the screenshot or prior iteration a round starts from), **viewport box** (the fixed, inferred
+render target every visual in a chain shares), **goal**, **feedback**, **critique**, **real
+problems** (critique's signal pile), **taste** (critique's preference pile), **direction**,
+**grounding** (the external pattern a direction cites), **iteration**, **round**, **lineage**,
+**chain**.
 
 ### Core workflow
 
@@ -36,6 +52,16 @@ Bryan only. Internal, not stakeholder-facing — Bryan takes the tool's output t
 5. Bryan reviews the critique and directions against the original. For any direction — zero, one, or several, at any point, whether or not it's been chosen — Bryan can request full code/prototype generation (Claude Sonnet primary, GPT-4o fallback) as an on-demand fidelity step.
 6. Any generated code streams live via SSE to a sandboxed preview iframe. Bryan interacts with it and either requests more changes (loop back to step 3) or approves it.
 7. On approval, the round — critique, directions, rationale, any generated code, and the feedback that drove it — is saved to Turso, including a comparison against the original and against prior rounds. Bryan can export any approved prototype as a downloadable bundle.
+
+### Facts that constrain the workflow's design
+
+- **Round one and round N are structurally different.** Round one has a file picker; every later round in the same chain does not — the reference is already in the system (the prior iteration).
+- **The viewport box is inferred once per chain**, not once per round — see the Perfect registration principle above.
+- **The feedback field is the heaviest typing burden and the least predictable in length.** Design for pasted Slack threads and comment dumps, not just short one-line notes.
+- **Three model calls sit on the critical path** (critique, directions, code generation), and the longest of them lands immediately after the one required decision per round.
+- **Only one decision is required per round: which direction.** Everything else is optional or is reading.
+- **The directions stage is the densest moment in the flow**, by a wide margin — give it the most visual priority.
+- **Code generation has three outcomes, not two:** fails outright; compiles and mounts; or compiles but fails to mount, in which case the tool degrades to the source view plus the raw runtime error (see the Failures-degrade principle above).
 
 ### Input model
 
@@ -80,3 +106,11 @@ V1 succeeds when a round's output is coherent: respectful of the inputs Bryan ga
 - Exact UI mechanism for triggering on-demand code generation per direction (build-time detail).
 - Whether a paid 21st.dev tier is needed once real usage against the free tier's 2/day code-retrieval cap is known.
 - How success criteria evolve once the tool is used on real Obsidian53 projects.
+- Can a person see or correct the inferred viewport box if the tool measures it wrong? Everything downstream (comparison, registration) depends on it.
+- Does a later round in a chain inherit the goal, reviewer context, and constraints from the round before it, or re-ask each time?
+- Can a person move an item between the real-problems and taste piles, or dismiss one, before directions are generated from it?
+- Can the critique be regenerated after the fact? Does that invalidate the directions already generated from it?
+- Is there a retry path after a code-generation mount failure, or must the person pick a different direction entirely?
+- If the selected direction fails to mount, the iteration layer is source code, which cannot be stacked against an image in the fixed viewport box — what does the comparison toggle do in that state? Not yet designed.
+- What does "Save and export" actually produce for the person — source, a rendered file, a link, or several of these?
+- Can a person compare any two lineage nodes in a chain, or only adjacent ones? Where does the lineage/chain view live in the interface? Not yet designed — see `docs/knowledge-base/roadmap-and-open-work.md`.
