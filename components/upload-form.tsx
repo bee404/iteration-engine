@@ -126,7 +126,7 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
               if (canSubmit) onSubmit();
             }}
           >
-            <h2 className="panel-heading">What should we do fix?</h2>
+            <h2 className="panel-heading">What should we fix?</h2>
 
             <label className="field">
               <span className="field-label-row">
