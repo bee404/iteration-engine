@@ -63,8 +63,11 @@ export function RoundHistory({ refreshKey }: RoundHistoryProps) {
   if (!rounds || rounds.length === 0) return null;
 
   return (
-    <section className="card">
-      <h2>History</h2>
+    <section className="panel">
+      <div className="panel-title">
+        <span className="panel-step">Step 4</span>
+        <h2 className="display">History</h2>
+      </div>
 
       <ul className="round-history-list">
         {rounds.slice(0, MAX_VISIBLE_ROUNDS).map((round) => (

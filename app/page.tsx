@@ -1,3 +1,4 @@
+import { AppFrame } from "@/components/app-frame";
 import { RoundWorkspace } from "@/components/round-workspace";
 import { isDemoMode } from "@/lib/demo-mode";
 import { getActiveFixture } from "@/lib/fixtures/examples";
@@ -24,13 +25,9 @@ function DemoModeBanner() {
 export default function HomePage() {
   const demoMode = isDemoMode();
   return (
-    <main className="page">
-      {demoMode && <DemoModeBanner />}
-      <header className="page-header">
-        <h1>Iteration Engine</h1>
-        <p>Screenshot + feedback in. Critique and rationale-backed directions out. Code generation is optional, per direction.</p>
-      </header>
+    <AppFrame demoBanner={demoMode ? <DemoModeBanner /> : null}>
       <RoundWorkspace />
-    </main>
+    </AppFrame>
   );
 }
+
