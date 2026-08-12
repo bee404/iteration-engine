@@ -20,7 +20,7 @@ The operating sequence is:
 
 ## Status
 
-Discovery reconciliation was agreed on 2026-08-05. The current V1 blueprint, decisions, and release plan are approved and are the source of truth. The Next.js application scaffold is in progress; real provider integrations and end-to-end validation remain ahead.
+Discovery reconciliation was agreed on 2026-08-05. The current V1 blueprint, decisions, and release plan are approved and are the source of truth. The full core loop is shipped on `main`: upload with natural-dimension capture, Claude Sonnet critique and directions, per-direction code generation streamed over SSE, live-mount preview in a sandboxed iframe, Turso round persistence with history, and DEMO_MODE fixture replay. See `docs/knowledge-base/architecture.md` for what's built and `docs/knowledge-base/roadmap-and-open-work.md` for what's designed but not yet built — principally the before/after visual diff.
 
 ## Repository map
 

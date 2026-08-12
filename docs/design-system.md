@@ -58,6 +58,15 @@ Only the current pass's *outputs* (this file, `DESIGN.md`, the Figma file) are c
 | 4 — "Direction 3" minimal product-tool | Figtree, blue accent, canvas-to-card transition, expand-to-modal feedback field | Superseded by the Figma move — established behaviors below still apply |
 | 5 — Figma "Coquí Visual Explore" | Gold accent, Owners Narrow + Figtree, dot-grid atmosphere | **Current** |
 
+### Typography decision: Inter → Figtree
+
+Pass 4 was originally set in Inter. On 2026-08-10 the body font was moved to **Figtree**;
+**Proxima Nova was evaluated and rejected because it is not freely licensed.** Figtree carried
+forward unchanged into the current Figma pass and remains the body face in `DESIGN.md` today —
+only the *display* face changed again after that, when the move into Figma introduced Owners
+Narrow for headings (see the licensing question for Owners Narrow in Open design questions
+below).
+
 ### Behaviors that must carry forward regardless of visual pass
 
 Established in Pass 4 as explicit requirements and never revisited or rejected — preserve these
@@ -93,6 +102,21 @@ Findings worth not repeating when the Critique/Directions/Compare screens are ev
 Pass 3 ("Press proof") solved the Pass 2 Compare-screen payoff problem: the live proof rendered
 over a halftone-screened render of the *old* screen, with a lifted corner proving two layers
 exist. Worth stealing the idea even though the pass itself is parked.
+
+### Design-drift detector findings against Pass 4
+
+A design-drift detector run against the Pass 4 build (`project/coqui-direction-03/setup.html`
+— outside this repository, see the note at the top of "Visual direction history" above) flagged
+Pass-4 leftover values not present in the gold system: colors `#d3d7e0` / `#ccd1dc` / `#d8dce4`,
+radii `5px` / `99px`, and type sizes `14px` / `9px`. The detector's conclusion: **the code, not
+the design system, needs to change** — i.e. the drift was in the Pass 4 build, not in the
+documented gold system.
+
+**Verified against this repository (2026-08-12):** none of those six values appear anywhere in
+`app/`, `lib/`, `docs/`, or `DESIGN.md`. The flagged file never lived in this repo — it's one of
+the `project/...` paths that only ever existed in Bryan's local design-exploration environment.
+There is no outstanding code change required here; recorded so the punch-list isn't lost if that
+local build is ever ported into or referenced from this repository again.
 
 ## Brand assets
 
