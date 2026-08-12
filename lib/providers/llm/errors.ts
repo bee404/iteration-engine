@@ -33,3 +33,36 @@ export const CRITIQUE_ERROR_STATUS: Record<CritiqueErrorCode, number> = {
   internal_error: 500,
 };
 
+export type DirectionsErrorCode = "model_error" | "unparseable_response" | "internal_error";
+
+/**
+ * Typed failure mode for real (non-mock) directions generation, mirroring
+ * CritiqueGenerationError so the /api/directions route can respond with a typed JSON error
+ * instead of letting an unhandled exception become a bare 502. There is no "invalid_screenshot"
+ * code here: directions are generated from the already-produced critique and text inputs, not
+ * from image bytes, so that failure mode can't occur on this path.
+ *  - "model_error": the upstream Anthropic call itself failed (network, auth, rate limit).
+ *  - "unparseable_response": the model responded but the content didn't map onto the typed
+ *    Direction[] shape (or didn't yield the required number of distinct directions), even
+ *    after a retry.
+ *  - "internal_error": anything else — provider misconfiguration or an unanticipated bug. The
+ *    route handler wraps any error that isn't already one of the codes above in this so an
+ *    unexpected exception still comes back as a typed JSON error instead of an unhandled crash.
+ */
+export class DirectionsGenerationError extends Error {
+  readonly code: DirectionsErrorCode;
+
+  constructor(code: DirectionsErrorCode, message: string) {
+    super(message);
+    this.name = "DirectionsGenerationError";
+    this.code = code;
+  }
+}
+
+/** HTTP status the /api/directions route maps each typed error code to. */
+export const DIRECTIONS_ERROR_STATUS: Record<DirectionsErrorCode, number> = {
+  model_error: 502,
+  unparseable_response: 502,
+  internal_error: 500,
+};
+

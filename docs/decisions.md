@@ -24,6 +24,8 @@ Reconciliation decisions recorded 2026-08-05. This is the source of truth for wh
 
 **Rationale:** Enough to compare real alternatives without overwhelming a single review session or blowing up generation cost. Bryan confirmed this as a target, not a hard cap — exact number may flex during build.
 
+**Update (2026-08-11):** Directions generation is now live on real Claude Sonnet, no longer mock-only. Earlier in the build `ClaudeLLMProvider.generateDirections` deliberately delegated to `MockLLMProvider` while only critique was wired to Claude — a documented scope limitation. That is now resolved: `generateDirections` calls Claude Sonnet directly via a forced `submit_directions` tool call, validated onto the typed `Direction[]` shape with the same retry/typed-error handling as critique, plus a distinctness guard. The mock's three canned options shared one identical rationale and suggestedChanges body, so the three "directions" read as the same idea under different titles; the live provider produces genuinely distinct approaches. The `ANTHROPIC_API_KEY`-unset mock fallback and `DEMO_MODE`/`FixtureLLMProvider` replay are unchanged. **Owner:** Bryan (approved after demo). **Date:** 2026-08-11.
+
 **Owner:** Bryan. **Date:** 2026-08-05.
 
 ### 3. Code/prototype generation is optional and on-demand, never a required pipeline stage

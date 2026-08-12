@@ -12,7 +12,8 @@
     "build:preview-runtime": "node scripts/build-preview-runtime.mjs",
     "prebuild": "npm run build:preview-runtime",
     "db:migrate": "tsx lib/db/migrate.ts",
-    "verify:codegen": "tsx scripts/verify-codegen-postprocess.ts"
+    "verify:codegen": "tsx scripts/verify-codegen-postprocess.ts",
+    "verify:directions": "tsx scripts/verify-directions.ts"
   },
   "dependencies": {
     "@libsql/client": "0.17.4",
