@@ -8,7 +8,7 @@ Define the agreed product direction after the discovery differences and conseque
 
 Agreed 2026-08-05. This is the current source of truth for what the product is. See `docs/decisions.md` for the rationale behind each choice and `docs/release-plan.md` for how it ships.
 
-**Naming note (2026-08-11):** the product was renamed **Coquí** (formerly "Iteration Engine") — see Decision 8 in `docs/decisions.md`. This blueprint predates the rename and uses the old name in places below; the product referred to throughout is the same product. Visual identity, brand, and copy voice live in `docs/design-system.md`.
+**Naming note (2026-08-11):** the product was renamed **Coquí** (formerly "Iteration Engine") — see Decision 8 in `docs/decisions.md`. Historical discovery snapshots retain the old name; current product documentation and surfaces use Coquí. Visual identity, brand, and copy voice live in `docs/design-system.md`.
 
 ## Blueprint
 
@@ -27,9 +27,9 @@ Bryan only. Internal, not stakeholder-facing — Bryan takes the tool's output t
 - Vague feedback is flagged and clarified before generation — never silently guessed at.
 - Code/prototype generation is an on-demand fidelity step, not a mandatory pipeline stage.
 - The tool is modular and agnostic: not tied to any specific product, brand, or technology.
-- Code is the source of truth for the design system; Figma mirrors it, not the reverse.
+- For design systems supplied to Coquí to constrain generated prototypes, code and tokens are the source of truth and Figma mirrors them. For Coquí's own application shell, root `DESIGN.md` is authoritative and the current Figma file is the visual reference. Do not conflate the two systems.
 - **Convergence over exploration.** Every surface guides toward one answer per round — this is the load-bearing positioning call, not up for redesign. There is no branching, forking, merging, or version graph in the product (see Decision 12); a person can look at an unselected direction without committing to it.
-- **Perfect registration is the payoff.** Everything a round produces — the original screenshot and every later iteration — renders into one identical, fixed viewport box, inferred once per chain (not once per round). This is what makes the before/after comparison trustworthy: nothing shifts under the eye between reference and iteration.
+- **Perfect registration is the payoff.** Everything a round produces — the original screenshot and every later iteration — renders into one identical, fixed viewport box, inferred once per chain (not once per round). This is what makes the `Source` / `Iteration` comparison trustworthy: nothing shifts under the eye between reference and iteration.
 - **Every judgment is cited.** Critique items state their reasoning; directions additionally point to a real named external pattern (21st.dev), not an invented layout.
 - **Failures degrade, they never disappear.** Code that compiles but fails to mount falls back to source plus the raw runtime error — never a blank frame or a generic error state.
 - **History is a stack of aligned layers**, not a changelog, thumbnail strip, or timeline row — those forms discard registration, the one property this product is built around.
@@ -49,9 +49,9 @@ problems** (critique's signal pile), **taste** (critique's preference pile), **d
 2. The system produces a concise critique of the current design: it separates signal (real problems) from preference (taste), grounded in the stated goal and feedback.
 3. If feedback contains vague or ambiguous portions the critique can't resolve on its own, the system flags them. Bryan clarifies in text, or — if ComfyUI is running locally — reviews 2-3 auto-generated visual style variations (img2img, denoise 0.5, ControlNet-preserved layout) to pick a direction before proceeding.
 4. The system generates 2-3 meaningfully different iteration directions. Each includes a rationale, tradeoffs, and suggested design changes, and — when relevant — a reference to a comparable layout or pattern pulled live from 21st.dev to ground the direction in a known solution rather than inventing from scratch.
-5. Bryan reviews the critique and directions against the original. For any direction — zero, one, or several, at any point, whether or not it's been chosen — Bryan can request full code/prototype generation (Claude Sonnet primary, GPT-4o fallback) as an on-demand fidelity step.
+5. Bryan reviews the critique and directions against the round's reference. For any direction — zero, one, or several, at any point, whether or not it's been chosen — Bryan can request full code/prototype generation (Claude Sonnet primary, GPT-4o fallback) as an on-demand fidelity step.
 6. Any generated code streams live via SSE to a sandboxed preview iframe. Bryan interacts with it and either requests more changes (loop back to step 3) or approves it.
-7. On approval, the round — critique, directions, rationale, any generated code, and the feedback that drove it — is saved to Turso, including a comparison against the original and against prior rounds. Bryan can export any approved prototype as a downloadable bundle.
+7. On approval, the round — critique, directions, rationale, any generated code, and the feedback that drove it — is saved to Turso and linked to its direct source in the ordered chain. Bryan can compare the approved iteration with that source and export the prototype as a downloadable source bundle.
 
 ### Facts that constrain the workflow's design
 
@@ -70,7 +70,7 @@ problems** (critique's signal pile), **taste** (critique's preference pile), **d
 - Raw feedback — a mix of vague and specific; vague portions are flagged before generation.
 - Optional reviewer perspective/context — who gave the feedback and from what angle (new, explicit field).
 - Optional additional references, requirements, or constraints.
-- Design tokens (W3C DTCG JSON, compiled to a compressed JSON index) and a condensed style guide — code remains the source of truth for the design system.
+- Design tokens (W3C DTCG JSON, compiled to a compressed JSON index) and a condensed style guide for the product being iterated — its code and tokens remain the source of truth. This input system is separate from Coquí's own UI tokens in root `DESIGN.md`.
 - Optional flowchart screenshot for multi-screen workflows, read by the vision LLM.
 
 ### Output model
@@ -78,7 +78,7 @@ problems** (critique's signal pile), **taste** (critique's preference pile), **d
 - A concise critique of the current design (signal vs. preference).
 - 2-3 directions, each with rationale, tradeoffs, and suggested changes, optionally grounded in a 21st.dev pattern reference.
 - Optional, on-demand full code/prototype generation for any direction, streamed live to a sandboxed preview.
-- A comparison view spanning two axes: multiple directions against the original within a round, and versions across rounds over time.
+- A fixed-box comparison between a generated iteration and its direct source, plus an ordered lineage for browsing rounds over time. No arbitrary node-to-node comparison or branching UI.
 - An approved-iteration record (critique + directions + any code + driving feedback) persisted in Turso; approved prototypes are exportable as a downloadable bundle.
 
 ### Technical architecture
@@ -99,18 +99,17 @@ Single-screen rounds only. The data model and generation endpoints are designed 
 
 ### Success criteria
 
-V1 succeeds when a round's output is coherent: respectful of the inputs Bryan gave it, synthesizing feedback into an established direction, producing a visual output Bryan can review as a clear before/after comparison against the original. Refinement continues iteratively past this bar — see `docs/decisions.md`, Decision 7.
+V1 succeeds when a round's output is coherent: respectful of the inputs Bryan gave it, synthesizing feedback into an established direction, and producing a visual output Bryan can review as a clear `Source` / `Iteration` comparison against that round's direct source. Refinement continues iteratively past this bar — see `docs/decisions.md`, Decision 7.
 
-### Open questions
+### Resolved workflow details
 
-- Exact UI mechanism for triggering on-demand code generation per direction (build-time detail).
-- Whether a paid 21st.dev tier is needed once real usage against the free tier's 2/day code-retrieval cap is known.
-- How success criteria evolve once the tool is used on real Obsidian53 projects.
-- Can a person see or correct the inferred viewport box if the tool measures it wrong? Everything downstream (comparison, registration) depends on it.
-- Does a later round in a chain inherit the goal, reviewer context, and constraints from the round before it, or re-ask each time?
-- Can a person move an item between the real-problems and taste piles, or dismiss one, before directions are generated from it?
-- Can the critique be regenerated after the fact? Does that invalidate the directions already generated from it?
-- Is there a retry path after a code-generation mount failure, or must the person pick a different direction entirely?
-- If the selected direction fails to mount, the iteration layer is source code, which cannot be stacked against an image in the fixed viewport box — what does the comparison toggle do in that state? Not yet designed.
-- What does "Save and export" actually produce for the person — source, a rendered file, a link, or several of these?
-- Can a person compare any two lineage nodes in a chain, or only adjacent ones? Where does the lineage/chain view live in the interface? Not yet designed — see `docs/knowledge-base/roadmap-and-open-work.md`.
+- Each direction owns its `Generate code (optional)` action and generated-code preview.
+- Use the free 21st.dev tier until real usage reaches its retrieval limit; only then consider a paid tier.
+- The v1 success bar remains per-round coherence. A longitudinal metric is not required before real usage provides evidence for one.
+- Show the inferred viewport dimensions before the first synthesis. Bryan can correct them before committing the first iteration; the viewport box then locks for the chain.
+- A later round uses the prior iteration as its reference, inherits goal, reviewer context, and constraints as editable defaults, and requires fresh feedback.
+- Critique items are read-only. Regeneration is allowed only before directions exist; after that, changed feedback starts a new immutable round.
+- Code generation can be retried for the same direction after failure.
+- On a compile-success/mount-failure result, `Iteration` shows the generated source and exact runtime error inside the fixed viewport box. `Source` still shows the visual reference.
+- `Save and export` persists the approved round and downloads the approved prototype as a source bundle. Persistence is shipped; bundle download remains implementation work.
+- Comparison is adjacent by design: each iteration against its direct source. The lineage view may browse the full chain but does not become an arbitrary node-to-node comparison or branching interface.

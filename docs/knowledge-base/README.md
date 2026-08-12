@@ -1,4 +1,4 @@
-# Iteration Engine — Knowledge Base
+# Coquí — Knowledge Base
 
 A single, token-conservative reference hub for **any** AI coding agent working on this
 repository (Obvious, Codex, Claude Code, or otherwise). It is plain markdown committed into
@@ -8,7 +8,7 @@ credentials.
 ## What this is (and is not)
 
 - **Is:** a distilled synthesis of the durable decisions, shipped architecture, and open work
-  for Iteration Engine. Conclusions, not research trails.
+  for Coquí. Conclusions, not research trails.
 - **Is not:** a raw dump of every research doc. The original research artifacts live in the
   Obvious project; this hub captures only what a coding agent needs to make correct changes.
 
@@ -20,7 +20,7 @@ Read the one file that matches your task, not all of them:
 | --- | --- |
 | [`architecture.md`](./architecture.md) | How the shipped system actually works — pipeline stages, provider interfaces, data model, persistence, demo mode, live-mount preview, design-system enforcement. Start here for any code change. |
 | [`decisions.md`](./decisions.md) | *Why* the system is built the way it is — the durable, load-bearing decisions and their rationale (generation engine, token format, Sucrase, demo mode, 21st.dev shape, etc.). Read before changing a decision. |
-| [`roadmap-and-open-work.md`](./roadmap-and-open-work.md) | What is built vs. designed-but-not-built (the before/after visual diff), build-order dependencies, and the paused external UX iteration work. |
+| [`roadmap-and-open-work.md`](./roadmap-and-open-work.md) | What is built vs. designed-but-not-built (the fixed-box `Source` / `Iteration` comparison), build-order dependencies, and the paused external UX iteration work. |
 | [`qa-conventions.md`](./qa-conventions.md) | The PR-review and design-QA pattern this project follows before anything merges. Read before opening a PR. |
 | [`../design-system.md`](../design-system.md) | Coquí's own visual identity, naming, brand assets, copy voice, and design history — distinct from the Vercel Geist system this hub's `architecture.md` covers, which grounds only *generated* code. Read before any UI/visual change to the app shell itself. |
 
@@ -50,4 +50,3 @@ typed provider interfaces (with mock and fixture fallbacks), Sucrase for in-brow
 transpilation, and a design-system enforcement pipeline that grounds *generated* code in the
 Vercel Geist style. See `architecture.md` for that detail, and `docs/design-system.md` for the
 app's own — unrelated — gold-accent visual identity.
-

@@ -29,6 +29,6 @@ Classification legend: **Aligned** · **Additive** · **Conflicting** · **Exist
 | Orchestration | Requires a product decision | Resolved: standalone app, no runtime dependency on Obvious (Decision 4). |
 | Technical architecture | Existing more specific | Existing stack carries forward as the default (Next.js/Vercel, Zustand, Turso, Claude Sonnet + GPT-4o fallback, optional ComfyUI). |
 | Release scope | Requires a product decision | Resolved in `release-plan.md`, derived from Decisions 1-7. |
-| Success criteria | Unsupported assumption (both tracks) | Resolved: coherent, input-respectful output with a before/after comparison (Decision 7). |
+| Success criteria | Unsupported assumption (both tracks) | Resolved: coherent, input-respectful output with a `Source` / `Iteration` comparison against the round's direct source (Decision 7). |
 
 See `docs/decisions.md` for the full rationale, owner, and date behind each resolution.

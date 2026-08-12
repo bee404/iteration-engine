@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Record consequential product decisions, their rationale, supporting evidence, owner, date, and any questions that remain open.
+Record consequential product decisions, their rationale, supporting evidence, owner, date, and implementation constraints.
 
 ## Status
 
@@ -12,7 +12,7 @@ Reconciliation decisions recorded 2026-08-05. This is the source of truth for wh
 
 ### 1. Product center of gravity: judgment-first, not code-first
 
-**Decision:** Iteration Engine is a critique-and-direction decision-support tool. A round produces a critique plus several rationale-backed directions; code/prototype generation is a separate, optional step (see Decision 3), not the product's primary output.
+**Decision:** Coquí is a critique-and-direction decision-support tool. A round produces a critique plus several rationale-backed directions; code/prototype generation is a separate, optional step (see Decision 3), not the product's primary output.
 
 **Rationale:** The original blueprint's one-regenerated-prototype-per-round model risked producing exactly the "shallow visual variation" the external discovery warns against — a new look each round with no comparison of genuinely different decisions. The judgment-first framing keeps Bryan choosing between real alternatives before any code is spent.
 
@@ -64,7 +64,7 @@ Reconciliation decisions recorded 2026-08-05. This is the source of truth for wh
 
 ### 7. V1 success criteria
 
-**Decision:** V1 is successful when its output is coherent: respectful of the inputs Bryan gave it (screenshot, feedback, stated design goal), synthesizes that feedback into an established direction, and produces a visual output Bryan can review as a clear before/after comparison against the original. This is a per-round quality bar, not a multi-project longitudinal metric. Refinement of the tool continues iteratively past this bar.
+**Decision:** V1 is successful when its output is coherent: respectful of the inputs Bryan gave it (reference, feedback, stated design goal), synthesizes that feedback into an established direction, and produces a visual output Bryan can review as a clear `Source` / `Iteration` comparison against the round's direct source. This is a per-round quality bar, not a multi-project longitudinal metric. Refinement of the tool continues iteratively past this bar.
 
 **Rationale (Bryan, verbatim intent):** "Success for our V1 is going to be output that is coherent, so output that was respectful of the things I gave it. The established direction synthesized feedback and was able to create that visual output in a way that I could have sort of a before and after. From there, we can continue to critique and refine the iteration engine." This supersedes the earlier proposed criterion (2-real-projects / signal-vs-preference accuracy), which was too longitudinal for a v1 bar.
 
@@ -74,7 +74,7 @@ Reconciliation decisions recorded 2026-08-05. This is the source of truth for wh
 
 **Decision:** The product is renamed from **Iteration Engine** to **Coquí**. Always written with the accent ("Coquí"). The former name is fully retired from product-facing surfaces. Repository/infrastructure identifiers (GitHub repo slug `iteration-engine`, `package.json` name) are not part of this decision and remain unrenamed for now — a separate follow-up if pursued.
 
-**Rationale:** The coquí is a Puerto Rican tree frog known for a loud, repeating two-note call. The product is itself a repeated call-and-response loop — feedback in, iteration out, loop again — which the name captures better than "Iteration Engine" did. See `docs/design-system.md` for the full naming rationale and the still-unexplained header sound icon this ties to.
+**Rationale:** The coquí is a Puerto Rican tree frog known for a loud, repeating two-note call. The product is itself a repeated call-and-response loop — feedback in, iteration out, loop again — which the name captures better than "Iteration Engine" did. See `docs/design-system.md` for the full naming rationale and the header sound behavior recorded in Decision 15.
 
 **Owner:** Bryan. **Date:** 2026-08-11.
 
@@ -118,15 +118,39 @@ Reconciliation decisions recorded 2026-08-05. This is the source of truth for wh
 
 **Owner:** Bryan. **Date:** 2026-08-11.
 
+### 14. Round mutability, comparison failure, lineage comparison, and export are resolved
+
+**Decision:** The first round infers a viewport box and shows its dimensions before synthesis. Bryan may correct that measurement before the first iteration is committed; after that, the box is locked for the chain. Later rounds inherit the prior goal, reviewer context, and constraints as editable defaults, require fresh feedback, and use the prior iteration as their reference.
+
+Critique items are read-only evidence. A critique may be regenerated before directions are produced; after directions exist, the round is immutable and any changed feedback starts a new round. Code generation remains available for every direction and may be retried locally after failure.
+
+The comparison always shows an iteration against its direct source in the chain; it is not an arbitrary node-to-node comparison tool. If generated code compiles but fails to mount, the `Iteration` layer shows the generated source and exact runtime error inside the same fixed viewport box, while `Source` continues to show the visual reference. The round remains usable.
+
+`Save and export` is one committing action meaning "this code works for me." Save persists the approved round and its lineage record to Turso; export downloads the approved prototype as a source bundle. The current code implements persistence but not the download yet.
+
+**Rationale:** These choices complete the immutable convergence model without introducing hidden edits, alternate histories, or a second comparison system. They also reconcile the product-facing commit semantics with the existing persistence implementation and the release-plan target.
+
+**Owner:** Bryan. **Date:** 2026-08-11.
+
+### 15. Header identity and progress behavior are resolved
+
+**Decision:** The current header uses the Coquí wordmark and no stepper. The removed stepper stays removed; progress should be communicated by the active screen and its content rather than a persistent four-stage control. The header sound control plays and mutes the coquí call, defaults to muted, and must have explicit accessible labels for both states. It remains visually present but functionally disabled until the call audio is available.
+
+The silhouette `coqui-mark.svg` is retained for favicon, app-icon, and other small-scale identity uses; it does not replace the wordmark in the header. Owners Narrow remains the approved display face. A licensed webfont is a delivery prerequisite, not an invitation to silently substitute a different visual direction.
+
+**Rationale:** This follows the latest Figma frames and gives each previously ambiguous brand element one job. It also prevents agents from restoring superseded navigation or treating a missing font license as permission to redesign the typography.
+
+**Owner:** Bryan. **Date:** 2026-08-11.
+
 ## Carried forward unchanged (not in conflict, no new decision needed)
 
 - Input model: screenshot(s), feedback text, design tokens (W3C DTCG JSON), condensed style guide, optional flowchart screenshot — extended with "design goal" and "reviewer perspective/context" as explicit fields (external discovery, additive).
-- Comparison workflow: both axes kept — version history across rounds over time, and comparing multiple directions within a single round.
+- Comparison workflow: a generated iteration is compared with its direct source inside a round; the ordered chain preserves history across rounds without arbitrary node-to-node comparison.
 - Technical architecture: Next.js/Vercel Hobby, Zustand, Turso, Claude Sonnet primary / GPT-4o fallback, ComfyUI optional local service for visual pre-iteration and asset generation.
 - Human control: the designer approves, judges quality, and decides what advances; AI never finalizes. Strongest point of agreement across both discovery tracks.
 
-## Open questions carried into the blueprint
+## Implementation guidance carried forward
 
-- Exact UI mechanism for triggering on-demand code generation per direction — implementation detail, resolved during build.
-- Whether a paid 21st.dev tier is needed once real usage patterns against the 2/day free-tier code-retrieval cap are known.
-- Success criteria will evolve past the v1 bar as Bryan uses the tool on real projects; no longitudinal metric is locked in yet.
+- On-demand code generation is triggered by the per-direction `Generate code (optional)` action and opens that direction's generated-code preview.
+- Start with the free 21st.dev tier. Revisit payment only if real usage hits its code-retrieval limit.
+- V1 uses the per-round coherence bar in Decision 7. No longitudinal metric is required before real usage supplies evidence for one.
