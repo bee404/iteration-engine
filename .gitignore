@@ -26,3 +26,6 @@ npm-debug.log*
 *.pem
 .vercel
 next-env.d.ts
+
+# repro harness output (scripts/repro-live-preview.ts)
+.repro/

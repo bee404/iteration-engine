@@ -1,0 +1,447 @@
+```typescript
+import React, { useState } from 'react';
+
+interface Step {
+  id: string;
+  title: string;
+  description: string;
+  completed: boolean;
+}
+
+const WorkspaceOnboarding: React.FC = () => {
+  const [steps, setSteps] = useState<Step[]>([
+    {
+      id: 'invite',
+      title: 'Invite teammates',
+      description: 'Add team members to collaborate on your workspace',
+      completed: false,
+    },
+    {
+      id: 'connect',
+      title: 'Connect to your data warehouse',
+      description: 'Link your data sources to start building',
+      completed: false,
+    },
+    {
+      id: 'destinations',
+      title: 'Add destinations',
+      description: 'Configure where your data flows',
+      completed: false,
+    },
+  ]);
+
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [inviteEmail, setInviteEmail] = useState('');
+
+  const completeStep = (id: string) => {
+    setSteps(steps.map(step => 
+      step.id === id ? { ...step, completed: true } : step
+    ));
+  };
+
+  const handleInvite = () => {
+    if (inviteEmail.trim()) {
+      completeStep('invite');
+      setShowInviteModal(false);
+      setInviteEmail('');
+    }
+  };
+
+  const currentStepIndex = steps.findIndex(step => !step.completed);
+  const completedCount = steps.filter(step => step.completed).length;
+
+  return (
+    <>
+      <style>{`
+        @media (max-width: 768px) {
+          .layout-container {
+            flex-direction: column !important;
+          }
+          .main-column {
+            width: 100% !important;
+            max-width: 100% !important;
+          }
+          .help-rail {
+            width: 100% !important;
+            margin-top: 24px !important;
+          }
+        }
+      `}</style>
+      
+      <div style={{
+        minHeight: '100vh',
+        background: '#fafafa',
+        padding: '64px 24px',
+      }}>
+        <div style={{
+          maxWidth: '1200px',
+          margin: '0 auto',
+        }}>
+          <div style={{
+            marginBottom: '48px',
+          }}>
+            <h1 style={{
+              fontFamily: 'Geist, Arial, sans-serif',
+              fontSize: '48px',
+              lineHeight: '48px',
+              fontWeight: 600,
+              letterSpacing: '-2.4px',
+              color: '#171717',
+              margin: '0 0 16px 0',
+            }}>
+              Welcome to your workspace
+            </h1>
+            <p style={{
+              fontFamily: 'Geist, Arial, sans-serif',
+              fontSize: '16px',
+              lineHeight: '24px',
+              fontWeight: 400,
+              letterSpacing: 0,
+              color: '#4d4d4d',
+              margin: 0,
+            }}>
+              Complete these steps to get started
+            </p>
+          </div>
+
+          <div className="layout-container" style={{
+            display: 'flex',
+            gap: '32px',
+            alignItems: 'flex-start',
+          }}>
+            <div className="main-column" style={{
+              flex: 1,
+              maxWidth: '720px',
+            }}>
+              <div style={{
+                marginBottom: '24px',
+              }}>
+                <div style={{
+                  fontFamily: 'Geist, Arial, sans-serif',
+                  fontSize: '14px',
+                  lineHeight: '20px',
+                  fontWeight: 400,
+                  letterSpacing: 0,
+                  color: '#8f8f8f',
+                }}>
+                  {completedCount} of {steps.length} completed
+                </div>
+              </div>
+
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+              }}>
+                {steps.map((step, index) => {
+                  const isNext = index === currentStepIndex;
+                  const isLocked = index > currentStepIndex;
+
+                  return (
+                    <div
+                      key={step.id}
+                      style={{
+                        background: '#ffffff',
+                        border: isNext ? '2px solid #171717' : '1px solid #ebebeb',
+                        borderRadius: '12px',
+                        padding: isNext ? '23px' : '24px',
+                        opacity: isLocked ? 0.5 : 1,
+                        pointerEvents: isLocked ? 'none' : 'auto',
+                      }}
+                    >
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '16px',
+                      }}>
+                        <div style={{
+                          flexShrink: 0,
+                          width: '24px',
+                          height: '24px',
+                          marginTop: '2px',
+                        }}>
+                          {step.completed ? (
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <circle cx="12" cy="12" r="11" stroke="#171717" strokeWidth="1.5" fill="#171717"/>
+                              <path d="M7 12l3 3 7-7" stroke="#ffffff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          ) : (
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <circle cx="12" cy="12" r="11" stroke={isLocked ? '#ebebeb' : '#171717'} strokeWidth="1.5"/>
+                              <text
+                                x="12"
+                                y="12"
+                                textAnchor="middle"
+                                dominantBaseline="central"
+                                style={{
+                                  fontFamily: 'Geist, Arial, sans-serif',
+                                  fontSize: '12px',
+                                  fontWeight: 600,
+                                  fill: isLocked ? '#a1a1a1' : '#171717',
+                                }}
+                              >
+                                {index + 1}
+                              </text>
+                            </svg>
+                          )}
+                        </div>
+
+                        <div style={{ flex: 1 }}>
+                          <h3 style={{
+                            fontFamily: 'Geist, Arial, sans-serif',
+                            fontSize: '20px',
+                            lineHeight: '28px',
+                            fontWeight: 600,
+                            letterSpacing: '-0.4px',
+                            color: '#171717',
+                            margin: '0 0 8px 0',
+                          }}>
+                            {step.title}
+                          </h3>
+                          <p style={{
+                            fontFamily: 'Geist, Arial, sans-serif',
+                            fontSize: '14px',
+                            lineHeight: '20px',
+                            fontWeight: 400,
+                            letterSpacing: 0,
+                            color: '#4d4d4d',
+                            margin: '0 0 16px 0',
+                          }}>
+                            {step.description}
+                          </p>
+
+                          {!step.completed && !isLocked && (
+                            <div style={{
+                              display: 'flex',
+                              gap: '8px',
+                            }}>
+                              <button
+                                onClick={() => {
+                                  if (step.id === 'invite') {
+                                    setShowInviteModal(true);
+                                  } else {
+                                    completeStep(step.id);
+                                  }
+                                }}
+                                style={{
+                                  background: '#171717',
+                                  color: '#ffffff',
+                                  fontFamily: 'Geist, Arial, sans-serif',
+                                  fontSize: '14px',
+                                  lineHeight: '20px',
+                                  fontWeight: 500,
+                                  letterSpacing: 0,
+                                  border: 'none',
+                                  borderRadius: '6px',
+                                  padding: '8px 12px',
+                                  cursor: 'pointer',
+                                  height: '36px',
+                                }}
+                              >
+                                {step.id === 'invite' ? 'Invite teammates' : 
+                                 step.id === 'connect' ? 'Connect warehouse' : 
+                                 'Add destinations'}
+                              </button>
+                              {step.id === 'invite' && (
+                                <button
+                                  onClick={() => completeStep(step.id)}
+                                  style={{
+                                    background: '#ffffff',
+                                    color: '#171717',
+                                    fontFamily: 'Geist, Arial, sans-serif',
+                                    fontSize: '14px',
+                                    lineHeight: '20px',
+                                    fontWeight: 500,
+                                    letterSpacing: 0,
+                                    border: '1px solid #ebebeb',
+                                    borderRadius: '6px',
+                                    padding: '8px 12px',
+                                    cursor: 'pointer',
+                                    height: '36px',
+                                  }}
+                                >
+                                  Skip for now
+                                </button>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="help-rail" style={{
+              width: '320px',
+              flexShrink: 0,
+            }}>
+              <div style={{
+                background: '#ffffff',
+                border: '1px solid #ebebeb',
+                borderRadius: '12px',
+                padding: '20px',
+              }}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '12px',
+                  marginBottom: '12px',
+                }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0, marginTop: '2px' }}>
+                    <circle cx="12" cy="12" r="10" stroke="#8f8f8f" strokeWidth="1.5"/>
+                    <path d="M12 16v-4M12 8h.01" stroke="#8f8f8f" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <h4 style={{
+                    fontFamily: 'Geist, Arial, sans-serif',
+                    fontSize: '14px',
+                    lineHeight: '20px',
+                    fontWeight: 500,
+                    letterSpacing: '-0.28px',
+                    color: '#171717',
+                    margin: 0,
+                  }}>
+                    Need help setting up?
+                  </h4>
+                </div>
+                <p style={{
+                  fontFamily: 'Geist, Arial, sans-serif',
+                  fontSize: '14px',
+                  lineHeight: '20px',
+                  fontWeight: 400,
+                  letterSpacing: 0,
+                  color: '#4d4d4d',
+                  margin: '0 0 16px 0',
+                }}>
+                  Our team is here to help you get started with your workspace setup.
+                </p>
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '8px',
+                }}>
+                  <button
+                    style={{
+                      background: '#ffffff',
+                      color: '#171717',
+                      fontFamily: 'Geist, Arial, sans-serif',
+                      fontSize: '14px',
+                      lineHeight: '20px',
+                      fontWeight: 500,
+                      letterSpacing: 0,
+                      border: '1px solid #ebebeb',
+                      borderRadius: '6px',
+                      padding: '8px 12px',
+                      cursor: 'pointer',
+                      height: '36px',
+                      textAlign: 'left',
+                    }}
+                  >
+                    View documentation
+                  </button>
+                  <button
+                    style={{
+                      background: '#ffffff',
+                      color: '#171717',
+                      fontFamily: 'Geist, Arial, sans-serif',
+                      fontSize: '14px',
+                      lineHeight: '20px',
+                      fontWeight: 500,
+                      letterSpacing: 0,
+                      border: '1px solid #ebebeb',
+                      borderRadius: '6px',
+                      padding: '8px 12px',
+                      cursor: 'pointer',
+                      height: '36px',
+                      textAlign: 'left',
+                    }}
+                  >
+                    Contact support
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {showInviteModal && (
+          <div style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0, 0, 0, 0.4)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '24px',
+            zIndex: 1000,
+          }}>
+            <div style={{
+              background: '#ffffff',
+              border: '1px solid #ebebeb',
+              borderRadius: '12px',
+              padding: '32px',
+              maxWidth: '480px',
+              width: '100%',
+            }}>
+              <h3 style={{
+                fontFamily: 'Geist, Arial, sans-serif',
+                fontSize: '20px',
+                lineHeight: '28px',
+                fontWeight: 600,
+                letterSpacing: '-0.4px',
+                color: '#171717',
+                margin: '0 0 8px 0',
+              }}>
+                Invite teammates
+              </h3>
+              <p style={{
+                fontFamily: 'Geist, Arial, sans-serif',
+                fontSize: '14px',
+                lineHeight: '20px',
+                fontWeight: 400,
+                letterSpacing: 0,
+                color: '#4d4d4d',
+                margin: '0 0 24px 0',
+              }}>
+                Enter email addresses to invite team members to your workspace.
+              </p>
+              <input
+                type="email"
+                value={inviteEmail}
+                onChange={(e) => setInviteEmail(e.target.value)}
+                placeholder="colleague@company.com"
+                style={{
+                  width: '100%',
+                  background: '#ffffff',
+                  color: '#171717',
+                  fontFamily: 'Geist, Arial, sans-serif',
+                  fontSize: '14px',
+                  lineHeight: '20px',
+                  fontWeight: 400,
+                  letterSpacing: 0,
+                  border: '1px solid #ebebeb',
+                  borderRadius: '6px',
+                  padding: '8px 12px',
+                  marginBottom: '24px',
+                  boxSizing: 'border-box',
+                }}
+              />
+              <div style={{
+                display: 'flex',
+                gap: '8px',
+                justifyContent: 'flex-end',
+              }}>
+                <button
+                  onClick={() => {
+                    setShowInviteModal(false);
+                    setInviteEmail('');
+                  }}
+                  style={{
+                    background: '#ffffff',
+                    color: '#171717',
+                    fontFamily: 'Geist, Arial, sans-serif',
+                    fontSize: '

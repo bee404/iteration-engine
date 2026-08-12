@@ -1,4 +1,6 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { test } from "node:test";
 import {
   buildPreviewDocument,
@@ -36,6 +38,24 @@ test("transpilePreviewComponent strips TS/JSX and reports the component name", (
 
 test("transpilePreviewComponent surfaces a syntax error instead of throwing", () => {
   const result = transpilePreviewComponent("export default function App() { return <div>;");
+  assert.equal(result.ok, false);
+});
+
+// Regression for the live-preview fallback Bryan still saw after PR #13: the failing rounds
+// were not a syntax slip the repair stage could quote/wrap away, they were Claude output
+// truncated mid-file at the token ceiling (an unterminated string). The pre-mount repair
+// cannot heal a genuinely incomplete file — there is no closing half to fix — which is why the
+// real fix lives upstream in claude-provider.ts (raise the ceiling + detect stop_reason
+// "max_tokens"). This asserts the honest contract: truncated source stays unrenderable here,
+// so the repair stage never pretends to salvage it. The sample is the exact captured raw TSX.
+test("transpilePreviewComponent cannot repair truncated (max_tokens) output and reports failure", () => {
+  // Resolved from the repo root (process.cwd()); import.meta.dirname is undefined under tsx's
+  // CJS transform and the test runner always runs from the repo root.
+  const truncated = readFileSync(
+    join(process.cwd(), "lib", "providers", "codegen", "__fixtures__", "truncated-max-tokens.raw.txt"),
+    "utf-8",
+  );
+  const result = transpilePreviewComponent(truncated);
   assert.equal(result.ok, false);
 });
 

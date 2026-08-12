@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "node --import tsx --test lib/**/*.test.ts",
+    "test": "node --import tsx --test $(find lib -name '*.test.ts')",
     "build:preview-runtime": "node scripts/build-preview-runtime.mjs",
     "prebuild": "npm run build:preview-runtime",
     "db:migrate": "tsx lib/db/migrate.ts",
