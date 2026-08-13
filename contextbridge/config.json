@@ -1,0 +1,30 @@
+{
+  "project": "Coquí",
+  "scope": "github",
+  "max_excerpt_chars": 900,
+  "paths": [
+    "README.md",
+    "DESIGN.md",
+    "docs/decisions.md",
+    "docs/blueprint.md",
+    "docs/design-system.md",
+    "docs/release-plan.md",
+    "docs/discovery-diff.md",
+    "docs/knowledge-base/README.md",
+    "docs/knowledge-base/architecture.md",
+    "docs/knowledge-base/roadmap-and-open-work.md",
+    "docs/knowledge-base/qa-conventions.md",
+    "contextbridge/OPERATING-AGREEMENT.md",
+    "package.json"
+  ],
+  "directories": [
+    "app",
+    "components",
+    "lib",
+    "store",
+    "public/brand"
+  ],
+  "supplemental_packets": [
+    "contextbridge/inbox/local-latest.json"
+  ]
+}

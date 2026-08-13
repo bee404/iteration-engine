@@ -1,0 +1,1087 @@
+{
+  "v": 1,
+  "project": "Coquí",
+  "packet_id": "cb_20260813024145165_github",
+  "base_packet": null,
+  "mode": "checkpoint",
+  "scope": "github",
+  "generated_at": "2026-08-13T02:41:45.165Z",
+  "changed": true,
+  "manifest_sha": "2065211324920453",
+  "sources": [
+    {
+      "id": "DESIGN.md",
+      "file": "DESIGN.md",
+      "sha256": "a35f25a47cc82e4b0a20c4e9d56af80bd627c90ad5cd26ab7d2e87e65a28ce27",
+      "bytes": 14665
+    },
+    {
+      "id": "README.md",
+      "file": "README.md",
+      "sha256": "8169aa13dec1b61919404f298bd2c5a4eb0f43456bb40f272db0c73cfe23d4b5",
+      "bytes": 4135
+    },
+    {
+      "id": "app/api/critique/route.ts",
+      "file": "app/api/critique/route.ts",
+      "sha256": "46bab165d87f5c9d3f2fc4e3299a4e368fa26d955ae3270b501ce4833e6a1fb5",
+      "bytes": 2620
+    },
+    {
+      "id": "app/api/directions/route.ts",
+      "file": "app/api/directions/route.ts",
+      "sha256": "f3ba0a4d8fb74c8efae180695f57363a6d7e2f7e8f96df3587701b4c59737005",
+      "bytes": 2631
+    },
+    {
+      "id": "app/api/generate/route.ts",
+      "file": "app/api/generate/route.ts",
+      "sha256": "adb6a525a723bfec61e1d2e7e5a53871114ae09359d060c2f7b9597309a310d2",
+      "bytes": 4130
+    },
+    {
+      "id": "app/api/projects/[id]/route.ts",
+      "file": "app/api/projects/[id]/route.ts",
+      "sha256": "565c9fe843c0f8f6287bdc7b61d83ad8bbd74efa554ff9a2e2c3fed8c67ca15c",
+      "bytes": 405
+    },
+    {
+      "id": "app/api/projects/route.ts",
+      "file": "app/api/projects/route.ts",
+      "sha256": "989774ad5263dba169041404d9c91671b27a6371f8ab3dd15bd7287de3a9732b",
+      "bytes": 908
+    },
+    {
+      "id": "app/api/rounds/[id]/route.ts",
+      "file": "app/api/rounds/[id]/route.ts",
+      "sha256": "97c2a8ab3f6ce50d86a1a259b2513647c2c9b49693618618a552f4daf138ca5a",
+      "bytes": 1247
+    },
+    {
+      "id": "app/api/rounds/route.ts",
+      "file": "app/api/rounds/route.ts",
+      "sha256": "a6f17614e220d9b8f2c559af6993b9d5c3171938f0e03ea9162509fd9d0c0505",
+      "bytes": 2687
+    },
+    {
+      "id": "app/globals.css",
+      "file": "app/globals.css",
+      "sha256": "de6b36c29d949512c545863b28c9e3c506cc78689148ff6699b583a2490ac4b1",
+      "bytes": 21613
+    },
+    {
+      "id": "app/icon.png",
+      "file": "app/icon.png",
+      "sha256": "18eb00ba9383593f338e6a5ec79ff4974464b6178116153e745241fedb729eed",
+      "bytes": 5451
+    },
+    {
+      "id": "app/layout.tsx",
+      "file": "app/layout.tsx",
+      "sha256": "e73e8484458197def8445e3acda00133ec4ed974b028179d1726b8a461abe3c7",
+      "bytes": 1179
+    },
+    {
+      "id": "app/page.tsx",
+      "file": "app/page.tsx",
+      "sha256": "6cdd5c026befc596d4252b9324fd329c8f5fc6bbf2fb5596733afa49dcc10428",
+      "bytes": 1158
+    },
+    {
+      "id": "components/app-frame.tsx",
+      "file": "components/app-frame.tsx",
+      "sha256": "b1d28c832ba58c02c059e5e97ac25d119fbd8b0f717f3435c802ad52dab951bb",
+      "bytes": 2001
+    },
+    {
+      "id": "components/code-sheet.tsx",
+      "file": "components/code-sheet.tsx",
+      "sha256": "262a88f163ba81be5c6634041bfcd25e9dc5670784acd8916663beabe6fb0c01",
+      "bytes": 5887
+    },
+    {
+      "id": "components/coqui-marks.tsx",
+      "file": "components/coqui-marks.tsx",
+      "sha256": "325f41886d649ecf0edfa45fc0d9d27be4807ffc2aeca5e0a96525cba2929ce5",
+      "bytes": 2643
+    },
+    {
+      "id": "components/critique-display.tsx",
+      "file": "components/critique-display.tsx",
+      "sha256": "38047b2b3bef3e59795c3f2ccf7e726ec7e86df97d93b56a94d26edaf6bd0a7f",
+      "bytes": 1853
+    },
+    {
+      "id": "components/direction-card.tsx",
+      "file": "components/direction-card.tsx",
+      "sha256": "03396f90ce88d3f07e0804038e3b6661658e8de7527c40e5bc467ac864ac20f2",
+      "bytes": 6165
+    },
+    {
+      "id": "components/directions-comparison.tsx",
+      "file": "components/directions-comparison.tsx",
+      "sha256": "526e1c9bbcb0b229a92c285128c566de3a9e2cf0cbf1684f627148c16fe32bc6",
+      "bytes": 1609
+    },
+    {
+      "id": "components/preview-frame.tsx",
+      "file": "components/preview-frame.tsx",
+      "sha256": "6a8f522a4fb34f8f9641f12e188d198255fa929f30cf58aa80fbf24a08d735e9",
+      "bytes": 4528
+    },
+    {
+      "id": "components/round-history.tsx",
+      "file": "components/round-history.tsx",
+      "sha256": "4730f6040d8f2d990e3d12478d56e054c786952ba2bae5ea69c3501e61150931",
+      "bytes": 3416
+    },
+    {
+      "id": "components/round-workspace.tsx",
+      "file": "components/round-workspace.tsx",
+      "sha256": "f9abb17db081c788767ab8d793915c3e5f2d7c3178e101b9fc99dc35f31edaef",
+      "bytes": 7055
+    },
+    {
+      "id": "components/upload-form.tsx",
+      "file": "components/upload-form.tsx",
+      "sha256": "67106535d20cc257f23838cd79c0fdf65e10fed7255856d58edcd71c1536b2b9",
+      "bytes": 9459
+    },
+    {
+      "id": "contextbridge/OPERATING-AGREEMENT.md",
+      "file": "contextbridge/OPERATING-AGREEMENT.md",
+      "sha256": "fc8d397ab5b52e445a63de17bc85a0a551adad5de2cd21b0f2ec70d9affbaeb9",
+      "bytes": 2591
+    },
+    {
+      "id": "docs/blueprint.md",
+      "file": "docs/blueprint.md",
+      "sha256": "cd87f1c31d0b1c74135e16b3dd9d186cc2cb8713fb352a54914f21619af1fe8d",
+      "bytes": 11221
+    },
+    {
+      "id": "docs/decisions.md",
+      "file": "docs/decisions.md",
+      "sha256": "606f5ecad2fee70380faacb6298e448b0882f4229e8583cdd0197a77b4c091ba",
+      "bytes": 12500
+    },
+    {
+      "id": "docs/design-system.md",
+      "file": "docs/design-system.md",
+      "sha256": "61c569be19b086a69b18caeb60361574c9c95ec8c28a1a2140f3b1817a1851ee",
+      "bytes": 11849
+    },
+    {
+      "id": "docs/discovery-diff.md",
+      "file": "docs/discovery-diff.md",
+      "sha256": "cee59b939e189139f22d75c2ff4867d97ae9a5bf228808b38a000bac0b22a66c",
+      "bytes": 2749
+    },
+    {
+      "id": "docs/knowledge-base/README.md",
+      "file": "docs/knowledge-base/README.md",
+      "sha256": "f8e113f74f56e66a615cf5598aad38d8cd41a94384e974f508d02a902ca2a669",
+      "bytes": 3620
+    },
+    {
+      "id": "docs/knowledge-base/architecture.md",
+      "file": "docs/knowledge-base/architecture.md",
+      "sha256": "824c198c76594d915e25beea47a755709c958b63f3da31b5bf93554dbd846b29",
+      "bytes": 10800
+    },
+    {
+      "id": "docs/knowledge-base/qa-conventions.md",
+      "file": "docs/knowledge-base/qa-conventions.md",
+      "sha256": "8320222245938ab2f98f260e59a3b8297fb4d17c9090e1b69337b61a3e9af39c",
+      "bytes": 4205
+    },
+    {
+      "id": "docs/knowledge-base/roadmap-and-open-work.md",
+      "file": "docs/knowledge-base/roadmap-and-open-work.md",
+      "sha256": "b5b3a37d17bb671e364d73f74c9c8b9647165ffd234ea1969c3c170b7e10b24c",
+      "bytes": 7824
+    },
+    {
+      "id": "docs/release-plan.md",
+      "file": "docs/release-plan.md",
+      "sha256": "286fa3f15d4c1fe65f33fbef8d969fcda8456e5d70dc1477c0a238af5a06edf1",
+      "bytes": 4032
+    },
+    {
+      "id": "lib/db/client.ts",
+      "file": "lib/db/client.ts",
+      "sha256": "6f9690bfe9b62b0366757038d3898897513a02b02b41ac60811f1e451071d5a0",
+      "bytes": 693
+    },
+    {
+      "id": "lib/db/migrate.ts",
+      "file": "lib/db/migrate.ts",
+      "sha256": "5e02a8bc9dfa8e94838a7cf850e94d6ee10a655cc86082663bcec0a052603eec",
+      "bytes": 527
+    },
+    {
+      "id": "lib/db/queries.ts",
+      "file": "lib/db/queries.ts",
+      "sha256": "6eaebd3adfb21016732efb2ac2af7357411972455af1eaedcd1adc197bc33042",
+      "bytes": 10042
+    },
+    {
+      "id": "lib/db/schema.sql",
+      "file": "lib/db/schema.sql",
+      "sha256": "a7805592fba8b6eded2f456f5a135ff935ec2d9ab263c9630c5e86c8cd438b29",
+      "bytes": 2749
+    },
+    {
+      "id": "lib/demo-mode.ts",
+      "file": "lib/demo-mode.ts",
+      "sha256": "9a365392d03dbd0e1c03766a3d9855ab25e354af145bf9bb3bda0420fa6165e7",
+      "bytes": 1490
+    },
+    {
+      "id": "lib/design-systems/assets/Favicon.png",
+      "file": "lib/design-systems/assets/Favicon.png",
+      "sha256": "18eb00ba9383593f338e6a5ec79ff4974464b6178116153e745241fedb729eed",
+      "bytes": 5451
+    },
+    {
+      "id": "lib/design-systems/assets/Geist-Variable.woff2",
+      "file": "lib/design-systems/assets/Geist-Variable.woff2",
+      "sha256": "a369fcf5628ea2aa4e1b9e2ec6a5b3624e365bda588e1f0f2f12b564f728fbb8",
+      "bytes": 69652
+    },
+    {
+      "id": "lib/design-systems/format.ts",
+      "file": "lib/design-systems/format.ts",
+      "sha256": "9ef2e3d6a8f3fe01ec1d8912ef638bc04c07933e72d216610dba331d9c893aa5",
+      "bytes": 2493
+    },
+    {
+      "id": "lib/design-systems/geist-font.ts",
+      "file": "lib/design-systems/geist-font.ts",
+      "sha256": "5b07d52aeae667a21558222e9c3a330c179fda3690c179462f76eead3aef9fad",
+      "bytes": 1813
+    },
+    {
+      "id": "lib/design-systems/index.ts",
+      "file": "lib/design-systems/index.ts",
+      "sha256": "8e7f79d2da304d684d0f874e7ed418800512d649abb8a4ef35ba0a848134f1f8",
+      "bytes": 1704
+    },
+    {
+      "id": "lib/design-systems/types.ts",
+      "file": "lib/design-systems/types.ts",
+      "sha256": "be671c4291e0e73ed1c2d7c074d4d6ff73c20615c89a461b97edde0e0488ad48",
+      "bytes": 2995
+    },
+    {
+      "id": "lib/design-systems/vercel-geist.ts",
+      "file": "lib/design-systems/vercel-geist.ts",
+      "sha256": "e87bf8c51b90ef3185dad8de04601c63fdeb234cdc34e3f798bb70ba7d137777",
+      "bytes": 10882
+    },
+    {
+      "id": "lib/fixtures/data/hightouch-onboarding.code.ts",
+      "file": "lib/fixtures/data/hightouch-onboarding.code.ts",
+      "sha256": "d246dee982a25e7093567fa465668cb35f959476d363a67871b64bbd5ab48fb5",
+      "bytes": 10631
+    },
+    {
+      "id": "lib/fixtures/examples.ts",
+      "file": "lib/fixtures/examples.ts",
+      "sha256": "7e28ef85f0894df00747ba7e00c898a039317adf4ed0e1a52352f237d0c63d38",
+      "bytes": 8195
+    },
+    {
+      "id": "lib/fixtures/types.ts",
+      "file": "lib/fixtures/types.ts",
+      "sha256": "9d28db6869438c4c2ade11dda29ccd72b50d08cf9d5728859eac9de7e10b28d9",
+      "bytes": 1658
+    },
+    {
+      "id": "lib/image-dimensions.ts",
+      "file": "lib/image-dimensions.ts",
+      "sha256": "595827fc316137bd56a35a9869d69c4dd1fea7abdb9acddecfa2524a4590b78f",
+      "bytes": 735
+    },
+    {
+      "id": "lib/persist-round.ts",
+      "file": "lib/persist-round.ts",
+      "sha256": "555ff563cb5ec318b893aa5033bc47564d48f4374a0fca1bd48b985dddc6c3e6",
+      "bytes": 5375
+    },
+    {
+      "id": "lib/preview/build-preview-document.test.ts",
+      "file": "lib/preview/build-preview-document.test.ts",
+      "sha256": "087dd858997b1ea00051ce87cb3b13c0e75e2327967aa86fbb962fc1dc398c0c",
+      "bytes": 5076
+    },
+    {
+      "id": "lib/preview/build-preview-document.ts",
+      "file": "lib/preview/build-preview-document.ts",
+      "sha256": "56dfa0a011384960f51a325ba54c8caf7dac797edcac85dffd68577e6d6c8534",
+      "bytes": 11368
+    },
+    {
+      "id": "lib/preview/react-runtime.generated.ts",
+      "file": "lib/preview/react-runtime.generated.ts",
+      "sha256": "272d0c8ff67e204f9c8252b83bfb7b0b6f897e2417817cd771bbc3825fe0eb45",
+      "bytes": 197573
+    },
+    {
+      "id": "lib/providers/codegen/__fixtures__/hightouch-onboarding.raw.txt",
+      "file": "lib/providers/codegen/__fixtures__/hightouch-onboarding.raw.txt",
+      "sha256": "4f4df4553bb43c5bb6b3e846e99eb3d47c9a8cf64852dc95df050d5b537f8c25",
+      "bytes": 9759
+    },
+    {
+      "id": "lib/providers/codegen/claude-provider.ts",
+      "file": "lib/providers/codegen/claude-provider.ts",
+      "sha256": "28d9364db47d87db629318e4eb1506668aa7b466da7008eaf8337281f91d2dfc",
+      "bytes": 13752
+    },
+    {
+      "id": "lib/providers/codegen/errors.ts",
+      "file": "lib/providers/codegen/errors.ts",
+      "sha256": "776cb3ef78a83c2e4d9256699c30a837f6ceaefef71460aa13a5b5f29ed06da1",
+      "bytes": 1342
+    },
+    {
+      "id": "lib/providers/codegen/fixture-provider.ts",
+      "file": "lib/providers/codegen/fixture-provider.ts",
+      "sha256": "cf7db499bf69d7951b80c2b1c53d3549d7708b6b5a0ec4c902921abf818d0dc9",
+      "bytes": 1969
+    },
+    {
+      "id": "lib/providers/codegen/index.ts",
+      "file": "lib/providers/codegen/index.ts",
+      "sha256": "bf6a0e903ee567e6b50eb53fb9f4bf0fbafc54f20afce84bed945222d1624006",
+      "bytes": 1617
+    },
+    {
+      "id": "lib/providers/codegen/mock-provider.ts",
+      "file": "lib/providers/codegen/mock-provider.ts",
+      "sha256": "ad198e36c18f2358b983adbe80bd8d29e9fd3e29f109ae514331d2950715b100",
+      "bytes": 1497
+    },
+    {
+      "id": "lib/providers/codegen/postprocess.ts",
+      "file": "lib/providers/codegen/postprocess.ts",
+      "sha256": "dd3946a4e0afb87a82564832700be2b754a9f17ca1818e38c4e61ea55a414bb9",
+      "bytes": 7284
+    },
+    {
+      "id": "lib/providers/codegen/types.ts",
+      "file": "lib/providers/codegen/types.ts",
+      "sha256": "a7ca5c5208956f24f93b691c624b225484d0ea5671cb4660e0f5843a09fc367d",
+      "bytes": 920
+    },
+    {
+      "id": "lib/providers/llm/claude-provider.ts",
+      "file": "lib/providers/llm/claude-provider.ts",
+      "sha256": "c9e5094889d0fc6a099ec9b79cd19a7f3670058b9efa930038bf9ebfcf02d683",
+      "bytes": 23354
+    },
+    {
+      "id": "lib/providers/llm/errors.ts",
+      "file": "lib/providers/llm/errors.ts",
+      "sha256": "5960559a80865eb883cb86313b81b07ffa72187b596b91a501813432e79d9454",
+      "bytes": 3271
+    },
+    {
+      "id": "lib/providers/llm/fixture-provider.ts",
+      "file": "lib/providers/llm/fixture-provider.ts",
+      "sha256": "4d9acb56fa611092bd891d0b5feda94f8a13703e3be05622933e8494b0f7b676",
+      "bytes": 1083
+    },
+    {
+      "id": "lib/providers/llm/index.ts",
+      "file": "lib/providers/llm/index.ts",
+      "sha256": "bf8e84a3db33b95724a2fc0a7069b349b84eae2bca1db0b1358e4b77305adb7f",
+      "bytes": 2021
+    },
+    {
+      "id": "lib/providers/llm/mock-provider.ts",
+      "file": "lib/providers/llm/mock-provider.ts",
+      "sha256": "f14d7cc8f28bb4f39b6ba886a84779129c5fc182e7b19ffcaa43fa596b67317c",
+      "bytes": 3017
+    },
+    {
+      "id": "lib/providers/llm/types.ts",
+      "file": "lib/providers/llm/types.ts",
+      "sha256": "5198f6ddfb639e50da846b3c9415e90b1d7f8e06c3e99d34fbdc4fc9cd9c5120",
+      "bytes": 1131
+    },
+    {
+      "id": "lib/providers/patterns/index.ts",
+      "file": "lib/providers/patterns/index.ts",
+      "sha256": "1a338df31612363a4feadc605c4fc7169141017511883f300c70537a53065c7c",
+      "bytes": 493
+    },
+    {
+      "id": "lib/providers/patterns/mock-provider.ts",
+      "file": "lib/providers/patterns/mock-provider.ts",
+      "sha256": "cca74448cafb4c500a5125071675a3455b3df3ccc48e565264e6e94f52ffc605",
+      "bytes": 1644
+    },
+    {
+      "id": "lib/providers/patterns/types.ts",
+      "file": "lib/providers/patterns/types.ts",
+      "sha256": "a7dda7c6f893168c6f9af7ab96ac9038156346228976afcf65d310819ddbc158",
+      "bytes": 801
+    },
+    {
+      "id": "lib/types.ts",
+      "file": "lib/types.ts",
+      "sha256": "bfadb73a7158a9d775522f4f62ccbd85de1dc004c16b5df496bfff902f35d0f9",
+      "bytes": 2909
+    },
+    {
+      "id": "package.json",
+      "file": "package.json",
+      "sha256": "66dbf9f0c3708515fd17486a6b55aca99d6d104cb422df37f9fb6bd6cb6a8e4f",
+      "bytes": 1350
+    },
+    {
+      "id": "store/round-store.ts",
+      "file": "store/round-store.ts",
+      "sha256": "da1768f6a7bca0d1d102962a0e5765b9eddfd361a1331c43175902610e1643d7",
+      "bytes": 5777
+    }
+  ],
+  "source_changes": {
+    "added": [
+      "DESIGN.md",
+      "README.md",
+      "app/api/critique/route.ts",
+      "app/api/directions/route.ts",
+      "app/api/generate/route.ts",
+      "app/api/projects/[id]/route.ts",
+      "app/api/projects/route.ts",
+      "app/api/rounds/[id]/route.ts",
+      "app/api/rounds/route.ts",
+      "app/globals.css",
+      "app/icon.png",
+      "app/layout.tsx",
+      "app/page.tsx",
+      "components/app-frame.tsx",
+      "components/code-sheet.tsx",
+      "components/coqui-marks.tsx",
+      "components/critique-display.tsx",
+      "components/direction-card.tsx",
+      "components/directions-comparison.tsx",
+      "components/preview-frame.tsx",
+      "components/round-history.tsx",
+      "components/round-workspace.tsx",
+      "components/upload-form.tsx",
+      "contextbridge/OPERATING-AGREEMENT.md",
+      "docs/blueprint.md",
+      "docs/decisions.md",
+      "docs/design-system.md",
+      "docs/discovery-diff.md",
+      "docs/knowledge-base/README.md",
+      "docs/knowledge-base/architecture.md",
+      "docs/knowledge-base/qa-conventions.md",
+      "docs/knowledge-base/roadmap-and-open-work.md",
+      "docs/release-plan.md",
+      "lib/db/client.ts",
+      "lib/db/migrate.ts",
+      "lib/db/queries.ts",
+      "lib/db/schema.sql",
+      "lib/demo-mode.ts",
+      "lib/design-systems/assets/Favicon.png",
+      "lib/design-systems/assets/Geist-Variable.woff2",
+      "lib/design-systems/format.ts",
+      "lib/design-systems/geist-font.ts",
+      "lib/design-systems/index.ts",
+      "lib/design-systems/types.ts",
+      "lib/design-systems/vercel-geist.ts",
+      "lib/fixtures/data/hightouch-onboarding.code.ts",
+      "lib/fixtures/examples.ts",
+      "lib/fixtures/types.ts",
+      "lib/image-dimensions.ts",
+      "lib/persist-round.ts",
+      "lib/preview/build-preview-document.test.ts",
+      "lib/preview/build-preview-document.ts",
+      "lib/preview/react-runtime.generated.ts",
+      "lib/providers/codegen/__fixtures__/hightouch-onboarding.raw.txt",
+      "lib/providers/codegen/claude-provider.ts",
+      "lib/providers/codegen/errors.ts",
+      "lib/providers/codegen/fixture-provider.ts",
+      "lib/providers/codegen/index.ts",
+      "lib/providers/codegen/mock-provider.ts",
+      "lib/providers/codegen/postprocess.ts",
+      "lib/providers/codegen/types.ts",
+      "lib/providers/llm/claude-provider.ts",
+      "lib/providers/llm/errors.ts",
+      "lib/providers/llm/fixture-provider.ts",
+      "lib/providers/llm/index.ts",
+      "lib/providers/llm/mock-provider.ts",
+      "lib/providers/llm/types.ts",
+      "lib/providers/patterns/index.ts",
+      "lib/providers/patterns/mock-provider.ts",
+      "lib/providers/patterns/types.ts",
+      "lib/types.ts",
+      "package.json",
+      "store/round-store.ts"
+    ],
+    "removed": [],
+    "updated": []
+  },
+  "facts": [
+    {
+      "id": "contextbridge/OPERATING-AGREEMENT.md::coqu_contextbridge_operating_agreement",
+      "source": "contextbridge/OPERATING-AGREEMENT.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Coquí ContextBridge Operating Agreement",
+      "text": "# Coquí ContextBridge Operating Agreement",
+      "evidence": {
+        "file": "contextbridge/OPERATING-AGREEMENT.md",
+        "sha256": "fc8d397ab5b52e445a63de17bc85a0a551adad5de2cd21b0f2ec70d9affbaeb9",
+        "line_start": 1,
+        "line_end": 2,
+        "truncated": false
+      }
+    },
+    {
+      "id": "contextbridge/OPERATING-AGREEMENT.md::purpose",
+      "source": "contextbridge/OPERATING-AGREEMENT.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Purpose",
+      "text": "## Purpose ContextBridge is the shared context handoff for Coquí tools. It is a compact, evidence-backed ledger that lets Obvi, Codex, ChatGPT, and future tools recover the current project state without importing every workspace or conversation. This is shared context, not a shared live brain. The bridge exists to reduce repeated explanation, token use, and context drift while keeping project decisions inspectable and human-controlled.",
+      "evidence": {
+        "file": "contextbridge/OPERATING-AGREEMENT.md",
+        "sha256": "fc8d397ab5b52e445a63de17bc85a0a551adad5de2cd21b0f2ec70d9affbaeb9",
+        "line_start": 3,
+        "line_end": 8,
+        "truncated": false
+      }
+    },
+    {
+      "id": "DESIGN.md::open_questions",
+      "source": "DESIGN.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Open questions",
+      "text": "## Open questions 1. **Owners Narrow is a commercial typeface** (Frere-Jones). It needs a license for both design and web use, and has no free substitute with the same character. Confirm licensing before Obvious builds against it, or nominate a fallback. 2. **The header lost its stepper.** Both frames show only wordmark + sound icon, so a person has no visible position in the four-station flow. Intentional, or not yet designed? 3. **The sound icon is `volume-cross` (muted).** Presumably a coquí call toggle, defaulting to off. Confirm the behavior and its on-state. 4. **Panel heading copy reads \"What should we do fix?\"** — appears to be a typo for \"What should we fix?\". Preserved verbatim here; flagging rather than silently correcting. 5. **Primary action is labeled \"Synthesize\"**, replacing \"Interpret feedback\". Confirm this is the settled verb, since it renames a core step in the workf…",
+      "evidence": {
+        "file": "DESIGN.md",
+        "sha256": "a35f25a47cc82e4b0a20c4e9d56af80bd627c90ad5cd26ab7d2e87e65a28ce27",
+        "line_start": 313,
+        "line_end": 321,
+        "truncated": true
+      }
+    },
+    {
+      "id": "docs/blueprint.md::blueprint",
+      "source": "docs/blueprint.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Blueprint",
+      "text": "## Blueprint",
+      "evidence": {
+        "file": "docs/blueprint.md",
+        "sha256": "cd87f1c31d0b1c74135e16b3dd9d186cc2cb8713fb352a54914f21619af1fe8d",
+        "line_start": 13,
+        "line_end": 14,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/blueprint.md::open_questions",
+      "source": "docs/blueprint.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Open questions",
+      "text": "### Open questions - Exact UI mechanism for triggering on-demand code generation per direction (build-time detail). - Whether a paid 21st.dev tier is needed once real usage against the free tier's 2/day code-retrieval cap is known. - How success criteria evolve once the tool is used on real Obsidian53 projects. - Can a person see or correct the inferred viewport box if the tool measures it wrong? Everything downstream (comparison, registration) depends on it. - Does a later round in a chain inherit the goal, reviewer context, and constraints from the round before it, or re-ask each time? - Can a person move an item between the real-problems and taste piles, or dismiss one, before directions are generated from it? - Can the critique be regenerated after the fact? Does that invalidate the directions already generated from it? - Is there a retry path after a code-generation mount failure,…",
+      "evidence": {
+        "file": "docs/blueprint.md",
+        "sha256": "cd87f1c31d0b1c74135e16b3dd9d186cc2cb8713fb352a54914f21619af1fe8d",
+        "line_start": 104,
+        "line_end": 117,
+        "truncated": true
+      }
+    },
+    {
+      "id": "docs/blueprint.md::product_blueprint",
+      "source": "docs/blueprint.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Product Blueprint",
+      "text": "# Product Blueprint",
+      "evidence": {
+        "file": "docs/blueprint.md",
+        "sha256": "cd87f1c31d0b1c74135e16b3dd9d186cc2cb8713fb352a54914f21619af1fe8d",
+        "line_start": 1,
+        "line_end": 2,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/blueprint.md::product_principles",
+      "source": "docs/blueprint.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Product principles",
+      "text": "### Product principles - The designer remains responsible for selecting directions, evaluating quality, applying taste, and deciding what advances. AI is never the final decision-maker. - The system should avoid producing shallow visual variation that looks different but doesn't represent a genuinely different design decision. - Vague feedback is flagged and clarified before generation — never silently guessed at. - Code/prototype generation is an on-demand fidelity step, not a mandatory pipeline stage. - The tool is modular and agnostic: not tied to any specific product, brand, or technology. - Code is the source of truth for the design system; Figma mirrors it, not the reverse. - **Convergence over exploration.** Every surface guides toward one answer per round — this is the load-bearing positioning call, not up for redesign. There is no branching, forking, merging, or version graph i…",
+      "evidence": {
+        "file": "docs/blueprint.md",
+        "sha256": "cd87f1c31d0b1c74135e16b3dd9d186cc2cb8713fb352a54914f21619af1fe8d",
+        "line_start": 23,
+        "line_end": 36,
+        "truncated": true
+      }
+    },
+    {
+      "id": "docs/blueprint.md::purpose",
+      "source": "docs/blueprint.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Purpose",
+      "text": "## Purpose Define the agreed product direction after the discovery differences and consequential product decisions were resolved.",
+      "evidence": {
+        "file": "docs/blueprint.md",
+        "sha256": "cd87f1c31d0b1c74135e16b3dd9d186cc2cb8713fb352a54914f21619af1fe8d",
+        "line_start": 3,
+        "line_end": 6,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/blueprint.md::status",
+      "source": "docs/blueprint.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Status",
+      "text": "## Status Agreed 2026-08-05. This is the current source of truth for what the product is. See `docs/decisions.md` for the rationale behind each choice and `docs/release-plan.md` for how it ships. **Naming note (2026-08-11):** the product was renamed **Coquí** (formerly \"Iteration Engine\") — see Decision 8 in `docs/decisions.md`. This blueprint predates the rename and uses the old name in places below; the product referred to throughout is the same product. Visual identity, brand, and copy voice live in `docs/design-system.md`.",
+      "evidence": {
+        "file": "docs/blueprint.md",
+        "sha256": "cd87f1c31d0b1c74135e16b3dd9d186cc2cb8713fb352a54914f21619af1fe8d",
+        "line_start": 7,
+        "line_end": 12,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/blueprint.md::technical_architecture",
+      "source": "docs/blueprint.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Technical architecture",
+      "text": "### Technical architecture - **App**: Next.js, deployed to Vercel Hobby (free tier covers expected usage; 60s function timeout is sufficient for Claude Sonnet calls). - **State**: Zustand. - **Persistence**: Turso (SQLite on the edge) — iteration history, directions, critiques, project configs, generated code snapshots. - **Critique and direction generation**: Claude Sonnet (primary), GPT-4o as fallback on validation failure. - **Pattern grounding**: live MCP queries to 21st.dev (`https://21st.dev/api/mcp`) under Bryan's own API key, at generation time only — no local mirror of their taxonomy, per their Terms of Service. - **Visual pre-iteration / asset generation**: ComfyUI, running locally on Bryan's machine (port 8188), optional, health-checked via `GET /system_stats`; the system degrades to LLM-only when it's not running. - **Preview**: sandboxed iframe within the Next.js app, SSE s…",
+      "evidence": {
+        "file": "docs/blueprint.md",
+        "sha256": "cd87f1c31d0b1c74135e16b3dd9d186cc2cb8713fb352a54914f21619af1fe8d",
+        "line_start": 84,
+        "line_end": 95,
+        "truncated": true
+      }
+    },
+    {
+      "id": "docs/decisions.md::1_product_center_of_gravity_judgment_first_not_code_first",
+      "source": "docs/decisions.md",
+      "kind": "verbatim_excerpt",
+      "heading": "1. Product center of gravity: judgment-first, not code-first",
+      "text": "### 1. Product center of gravity: judgment-first, not code-first **Decision:** Iteration Engine is a critique-and-direction decision-support tool. A round produces a critique plus several rationale-backed directions; code/prototype generation is a separate, optional step (see Decision 3), not the product's primary output. **Rationale:** The original blueprint's one-regenerated-prototype-per-round model risked producing exactly the \"shallow visual variation\" the external discovery warns against — a new look each round with no comparison of genuinely different decisions. The judgment-first framing keeps Bryan choosing between real alternatives before any code is spent. **Owner:** Bryan. **Date:** 2026-08-05.",
+      "evidence": {
+        "file": "docs/decisions.md",
+        "sha256": "606f5ecad2fee70380faacb6298e448b0882f4229e8583cdd0197a77b4c091ba",
+        "line_start": 13,
+        "line_end": 20,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/decisions.md::12_lineage_is_append_only_no_branching_forking_merging_or_version_graph_ui",
+      "source": "docs/decisions.md",
+      "kind": "verbatim_excerpt",
+      "heading": "12. Lineage is append-only; no branching, forking, merging, or version-graph UI",
+      "text": "### 12. Lineage is append-only; no branching, forking, merging, or version-graph UI **Decision:** History is a single ordered chain per screen, readable and permanent, never editable. A past selection cannot be changed and propagated forward — starting a different path means starting a new chain from that node, leaving the original chain intact. Looking at an unselected direction (including generating its code to inspect it) is non-destructive and commits to nothing. The product never exposes branching, forking, merging, or a version graph, even though the underlying data retains every unselected direction. **Rationale:** Confirms and sharpens the standing \"convergence over exploration\" position (Decision 1): the product converges on one answer per round, and its history should read the same way. A lineage/chain browsing view for this history has not been designed yet — see `docs/knowle…",
+      "evidence": {
+        "file": "docs/decisions.md",
+        "sha256": "606f5ecad2fee70380faacb6298e448b0882f4229e8583cdd0197a77b4c091ba",
+        "line_start": 105,
+        "line_end": 112,
+        "truncated": true
+      }
+    },
+    {
+      "id": "docs/decisions.md::8_product_renamed_to_coqu",
+      "source": "docs/decisions.md",
+      "kind": "verbatim_excerpt",
+      "heading": "8. Product renamed to Coquí",
+      "text": "### 8. Product renamed to Coquí **Decision:** The product is renamed from **Iteration Engine** to **Coquí**. Always written with the accent (\"Coquí\"). The former name is fully retired from product-facing surfaces. Repository/infrastructure identifiers (GitHub repo slug `iteration-engine`, `package.json` name) are not part of this decision and remain unrenamed for now — a separate follow-up if pursued. **Rationale:** The coquí is a Puerto Rican tree frog known for a loud, repeating two-note call. The product is itself a repeated call-and-response loop — feedback in, iteration out, loop again — which the name captures better than \"Iteration Engine\" did. See `docs/design-system.md` for the full naming rationale and the still-unexplained header sound icon this ties to. **Owner:** Bryan. **Date:** 2026-08-11.",
+      "evidence": {
+        "file": "docs/decisions.md",
+        "sha256": "606f5ecad2fee70380faacb6298e448b0882f4229e8583cdd0197a77b4c091ba",
+        "line_start": 73,
+        "line_end": 80,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/decisions.md::carried_forward_unchanged_not_in_conflict_no_new_decision_needed",
+      "source": "docs/decisions.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Carried forward unchanged (not in conflict, no new decision needed)",
+      "text": "## Carried forward unchanged (not in conflict, no new decision needed) - Input model: screenshot(s), feedback text, design tokens (W3C DTCG JSON), condensed style guide, optional flowchart screenshot — extended with \"design goal\" and \"reviewer perspective/context\" as explicit fields (external discovery, additive). - Comparison workflow: both axes kept — version history across rounds over time, and comparing multiple directions within a single round. - Technical architecture: Next.js/Vercel Hobby, Zustand, Turso, Claude Sonnet primary / GPT-4o fallback, ComfyUI optional local service for visual pre-iteration and asset generation. - Human control: the designer approves, judges quality, and decides what advances; AI never finalizes. Strongest point of agreement across both discovery tracks.",
+      "evidence": {
+        "file": "docs/decisions.md",
+        "sha256": "606f5ecad2fee70380faacb6298e448b0882f4229e8583cdd0197a77b4c091ba",
+        "line_start": 121,
+        "line_end": 127,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/decisions.md::decision_log",
+      "source": "docs/decisions.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Decision Log",
+      "text": "# Decision Log",
+      "evidence": {
+        "file": "docs/decisions.md",
+        "sha256": "606f5ecad2fee70380faacb6298e448b0882f4229e8583cdd0197a77b4c091ba",
+        "line_start": 1,
+        "line_end": 2,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/decisions.md::decisions",
+      "source": "docs/decisions.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Decisions",
+      "text": "## Decisions",
+      "evidence": {
+        "file": "docs/decisions.md",
+        "sha256": "606f5ecad2fee70380faacb6298e448b0882f4229e8583cdd0197a77b4c091ba",
+        "line_start": 11,
+        "line_end": 12,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/decisions.md::open_questions_carried_into_the_blueprint",
+      "source": "docs/decisions.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Open questions carried into the blueprint",
+      "text": "## Open questions carried into the blueprint - Exact UI mechanism for triggering on-demand code generation per direction — implementation detail, resolved during build. - Whether a paid 21st.dev tier is needed once real usage patterns against the 2/day free-tier code-retrieval cap are known. - Success criteria will evolve past the v1 bar as Bryan uses the tool on real projects; no longitudinal metric is locked in yet.",
+      "evidence": {
+        "file": "docs/decisions.md",
+        "sha256": "606f5ecad2fee70380faacb6298e448b0882f4229e8583cdd0197a77b4c091ba",
+        "line_start": 128,
+        "line_end": 133,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/decisions.md::purpose",
+      "source": "docs/decisions.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Purpose",
+      "text": "## Purpose Record consequential product decisions, their rationale, supporting evidence, owner, date, and any questions that remain open.",
+      "evidence": {
+        "file": "docs/decisions.md",
+        "sha256": "606f5ecad2fee70380faacb6298e448b0882f4229e8583cdd0197a77b4c091ba",
+        "line_start": 3,
+        "line_end": 6,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/decisions.md::status",
+      "source": "docs/decisions.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Status",
+      "text": "## Status Reconciliation decisions recorded 2026-08-05. This is the source of truth for what was decided and why; `blueprint.md` is the resulting product shape.",
+      "evidence": {
+        "file": "docs/decisions.md",
+        "sha256": "606f5ecad2fee70380faacb6298e448b0882f4229e8583cdd0197a77b4c091ba",
+        "line_start": 7,
+        "line_end": 10,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/design-system.md::established_copy_figma_current",
+      "source": "docs/design-system.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Established copy (Figma, current)",
+      "text": "### Established copy (Figma, current) | Surface | Copy | |---|---| | Upload heading | \"Add the screen you want to improve\" | | Dropzone action | \"Select image to upload\" | | Dropzone helper | \"also you can drop your image or ⌘ V to paste\" | | Stage placeholder | \"This is where the resized image should be displayed after upload.\" | | Stage caption | `[image-name.filetype]` · `1280 × 832 · viewport inferred` | | Rail heading | \"What should we do fix?\" — typo for \"What should we fix?\", not yet corrected in Figma | | Field labels | \"Goal\", \"Feedback, as received\", \"Reviewer context\", \"Constraints\" | | Required marker | \"Required\" (optional fields carry no marker at all) | | Placeholders | \"Who gave this, and through what lens?\" / \"What must not change?\" | | Primary CTA | **\"Synthesize\"** (renamed from \"Interpret feedback\" — see `decisions.md`) | | Mount-failure fallback | \"This component co…",
+      "evidence": {
+        "file": "docs/design-system.md",
+        "sha256": "61c569be19b086a69b18caeb60361574c9c95ec8c28a1a2140f3b1817a1851ee",
+        "line_start": 143,
+        "line_end": 158,
+        "truncated": true
+      }
+    },
+    {
+      "id": "docs/design-system.md::purpose",
+      "source": "docs/design-system.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Purpose",
+      "text": "## Purpose The visual identity, naming, brand assets, copy voice, and design history for **Coquí's own application UI** (the upload screen, brief panel, header, etc.). This is a different thing from the Vercel Geist system enforced on *generated preview code* — see the disambiguation note below.",
+      "evidence": {
+        "file": "docs/design-system.md",
+        "sha256": "61c569be19b086a69b18caeb60361574c9c95ec8c28a1a2140f3b1817a1851ee",
+        "line_start": 3,
+        "line_end": 9,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/design-system.md::status",
+      "source": "docs/design-system.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Status",
+      "text": "## Status Current, authoritative visual direction: the Figma file **\"Coquí Visual Explore\"** (`qzgdMASkzEkxZpRL3918QD`), frames `18:95` (\"01 - add image\") and `2:3` (\"02 - set brief\"), extracted 2026-08-11. The literal design tokens (colors, type, radii, spacing, elevation, component specs) are committed at the repo root in **`DESIGN.md`** — that file is the machine-parseable source of truth for tokens; this file is the narrative context, decisions, and history around it that don't belong in a token spec. Only two of an eventual five-ish screens (Add image, Set the brief) are designed in this direction today. Critique, Directions, and Compare have not been designed against the gold system — see `docs/knowledge-base/roadmap-and-open-work.md`.",
+      "evidence": {
+        "file": "docs/design-system.md",
+        "sha256": "61c569be19b086a69b18caeb60361574c9c95ec8c28a1a2140f3b1817a1851ee",
+        "line_start": 10,
+        "line_end": 22,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/design-system.md::typography_decision_inter_figtree",
+      "source": "docs/design-system.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Typography decision: Inter → Figtree",
+      "text": "### Typography decision: Inter → Figtree Pass 4 was originally set in Inter. On 2026-08-10 the body font was moved to **Figtree**; **Proxima Nova was evaluated and rejected because it is not freely licensed.** Figtree carried forward unchanged into the current Figma pass and remains the body face in `DESIGN.md` today — only the *display* face changed again after that, when the move into Figma introduced Owners Narrow for headings (see the licensing question for Owners Narrow in Open design questions below).",
+      "evidence": {
+        "file": "docs/design-system.md",
+        "sha256": "61c569be19b086a69b18caeb60361574c9c95ec8c28a1a2140f3b1817a1851ee",
+        "line_start": 61,
+        "line_end": 69,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/discovery-diff.md::purpose",
+      "source": "docs/discovery-diff.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Purpose",
+      "text": "## Purpose Compare the existing Obvious discovery with the external discovery without silently merging them.",
+      "evidence": {
+        "file": "docs/discovery-diff.md",
+        "sha256": "cee59b939e189139f22d75c2ff4867d97ae9a5bf228808b38a000bac0b22a66c",
+        "line_start": 3,
+        "line_end": 6,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/discovery-diff.md::status",
+      "source": "docs/discovery-diff.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Status",
+      "text": "## Status Complete. All consequential differences were resolved with Bryan; see `decisions.md`.",
+      "evidence": {
+        "file": "docs/discovery-diff.md",
+        "sha256": "cee59b939e189139f22d75c2ff4867d97ae9a5bf228808b38a000bac0b22a66c",
+        "line_start": 7,
+        "line_end": 10,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/knowledge-base/architecture.md::architecture_the_shipped_system",
+      "source": "docs/knowledge-base/architecture.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Architecture — The Shipped System",
+      "text": "# Architecture — The Shipped System This describes what is **actually on `main`** as of the full-stack merge (`6e2fae8`, PRs #2–#9 all merged). Where a claim in an older research doc is now outdated by shipped code, this file reflects the code. Paths are repo-relative.",
+      "evidence": {
+        "file": "docs/knowledge-base/architecture.md",
+        "sha256": "824c198c76594d915e25beea47a755709c958b63f3da31b5bf93554dbd846b29",
+        "line_start": 1,
+        "line_end": 6,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/knowledge-base/architecture.md::stack",
+      "source": "docs/knowledge-base/architecture.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Stack",
+      "text": "## Stack - **Next.js 16** (App Router) + **React 19**, deployed on **Vercel**. TypeScript throughout. - **Zustand 5** for client round state (`store/round-store.ts`). - **Turso / libSQL** (`@libsql/client`) for round-history persistence. - **Sucrase** for in-browser TSX transpilation of generated components. - **@vercel/analytics** for usage tracking. - **Claude Sonnet** (Anthropic) for critique, directions, and code generation, behind typed provider interfaces with mock + fixture fallbacks. Note: React is used two ways — the app itself (Next.js/React) and a separately vendored React runtime inlined into the preview iframe (see Live-mount preview below). There is no separate Vite app in this repo; the standalone Vite prototype Bryan saw earlier lived outside this pipeline.",
+      "evidence": {
+        "file": "docs/knowledge-base/architecture.md",
+        "sha256": "824c198c76594d915e25beea47a755709c958b63f3da31b5bf93554dbd846b29",
+        "line_start": 7,
+        "line_end": 21,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/knowledge-base/roadmap-and-open-work.md::build_order_dependencies_the_blueprint_s_3_stage_chain",
+      "source": "docs/knowledge-base/roadmap-and-open-work.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Build-order dependencies (the blueprint's 3-stage chain)",
+      "text": "### Build-order dependencies (the blueprint's 3-stage chain) Each stage is \"worthless without the one before it\": 1. **Capture (content-width autocrop)** — detect the real content width of the screenshot so the generated component can be scaled to the same viewport. **Partially in place:** natural dimensions are now captured (`screenshotDimensions`), but the *content-width autocrop* (canvas pixel-scan to trim chrome/letterboxing, with a confidence flag) is not yet built. 2. **Live-render (Sucrase mount)** — mount the generated component as real UI rather than text. **DONE** — shipped in PR #7 (`components/preview-frame.tsx`, `lib/preview/`). The visual diff can build directly on this. 3. **Compare** — the unified comparison view itself. **Not built.** This is the remaining work.",
+      "evidence": {
+        "file": "docs/knowledge-base/roadmap-and-open-work.md",
+        "sha256": "b5b3a37d17bb671e364d73f74c9c8b9647165ffd234ea1969c3c170b7e10b24c",
+        "line_start": 33,
+        "line_end": 45,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/knowledge-base/roadmap-and-open-work.md::open_product_questions",
+      "source": "docs/knowledge-base/roadmap-and-open-work.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Open product questions",
+      "text": "## Open product questions Unresolved product-behavior questions surfaced during the 2026-08-11 context-packet review — flag rather than guess when implementing adjacent work: - Can the critique be regenerated after the fact, and does that invalidate directions already generated from it? - Is there a retry path after a code-generation mount failure, or must the person pick a different direction entirely? - Can a person move an item between the critique's real-problems and taste piles, or dismiss one, before directions are generated from it? - Where does the lineage/chain view live in the interface, and can a person compare any two nodes in a chain or only adjacent ones? (See the Lineage/chain view item above.) - What replaces the generated component's hover-driven interactivity on touch, once responsive work resumes (Decision 13, `decisions.md`)?",
+      "evidence": {
+        "file": "docs/knowledge-base/roadmap-and-open-work.md",
+        "sha256": "b5b3a37d17bb671e364d73f74c9c8b9647165ffd234ea1969c3c170b7e10b24c",
+        "line_start": 100,
+        "line_end": 115,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/knowledge-base/roadmap-and-open-work.md::roadmap_open_work",
+      "source": "docs/knowledge-base/roadmap-and-open-work.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Roadmap & Open Work",
+      "text": "# Roadmap & Open Work What is built vs. designed-but-not-built, and what's paused. Grounded in `main` as of the full-stack merge (PRs #2–#9), not in older doc claims.",
+      "evidence": {
+        "file": "docs/knowledge-base/roadmap-and-open-work.md",
+        "sha256": "b5b3a37d17bb671e364d73f74c9c8b9647165ffd234ea1969c3c170b7e10b24c",
+        "line_start": 1,
+        "line_end": 5,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/release-plan.md::next_decision_point",
+      "source": "docs/release-plan.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Next decision point",
+      "text": "### Next decision point Once v1 has run on at least one real project, revisit: whether the 2-3 directions target needs to flex, whether a paid 21st.dev tier is warranted, and how the success bar should evolve for v2.",
+      "evidence": {
+        "file": "docs/release-plan.md",
+        "sha256": "286fa3f15d4c1fe65f33fbef8d969fcda8456e5d70dc1477c0a238af5a06edf1",
+        "line_start": 55,
+        "line_end": 58,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/release-plan.md::purpose",
+      "source": "docs/release-plan.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Purpose",
+      "text": "## Purpose Define an achievable release shape, sequencing, validation approach, and delivery constraints derived from the approved product blueprint.",
+      "evidence": {
+        "file": "docs/release-plan.md",
+        "sha256": "286fa3f15d4c1fe65f33fbef8d969fcda8456e5d70dc1477c0a238af5a06edf1",
+        "line_start": 3,
+        "line_end": 6,
+        "truncated": false
+      }
+    },
+    {
+      "id": "docs/release-plan.md::status",
+      "source": "docs/release-plan.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Status",
+      "text": "## Status Agreed 2026-08-05, derived from `docs/blueprint.md` and `docs/decisions.md`.",
+      "evidence": {
+        "file": "docs/release-plan.md",
+        "sha256": "286fa3f15d4c1fe65f33fbef8d969fcda8456e5d70dc1477c0a238af5a06edf1",
+        "line_start": 7,
+        "line_end": 10,
+        "truncated": false
+      }
+    },
+    {
+      "id": "README.md::current_operating_model",
+      "source": "README.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Current operating model",
+      "text": "## Current operating model Obvious is the conductor for planning and building the first release, but the shipped product is a standalone application. Product decisions belong in this repository, not only in an external tool or conversation. The operating sequence is: 1. Keep the agreed product decisions in `docs/decisions.md`. 2. Keep the resulting product shape in `docs/blueprint.md`. 3. Keep release boundaries and validation in `docs/release-plan.md`. 4. Update those documents when product decisions change, then align implementation with them. 5. Use `docs/discovery-diff.md` and the two discovery records as supporting context, not as a substitute for the current blueprint.",
+      "evidence": {
+        "file": "README.md",
+        "sha256": "8169aa13dec1b61919404f298bd2c5a4eb0f43456bb40f272db0c73cfe23d4b5",
+        "line_start": 9,
+        "line_end": 20,
+        "truncated": false
+      }
+    },
+    {
+      "id": "README.md::repository_purpose",
+      "source": "README.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Repository purpose",
+      "text": "## Repository purpose This repository is the source of truth for Iteration Engine's product definition and implementation. It began as a neutral workspace for reconciling two discovery tracks: the work developed inside Obvious and the supporting discovery developed outside it. That reconciliation is now recorded in the decision log, blueprint, and release plan.",
+      "evidence": {
+        "file": "README.md",
+        "sha256": "8169aa13dec1b61919404f298bd2c5a4eb0f43456bb40f272db0c73cfe23d4b5",
+        "line_start": 5,
+        "line_end": 8,
+        "truncated": false
+      }
+    },
+    {
+      "id": "README.md::status",
+      "source": "README.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Status",
+      "text": "## Status Discovery reconciliation was agreed on 2026-08-05. The current V1 blueprint, decisions, and release plan are approved and are the source of truth. The full core loop is shipped on `main`: upload with natural-dimension capture, Claude Sonnet critique and directions, per-direction code generation streamed over SSE, live-mount preview in a sandboxed iframe, Turso round persistence with history, and DEMO_MODE fixture replay. See `docs/knowledge-base/architecture.md` for what's built and `docs/knowledge-base/roadmap-and-open-work.md` for what's designed but not yet built — principally the before/after visual diff.",
+      "evidence": {
+        "file": "README.md",
+        "sha256": "8169aa13dec1b61919404f298bd2c5a4eb0f43456bb40f272db0c73cfe23d4b5",
+        "line_start": 21,
+        "line_end": 24,
+        "truncated": false
+      }
+    }
+  ],
+  "fact_count": 36,
+  "conflicts": [],
+  "decisions": [
+    {
+      "id": "docs/decisions.md::8_product_renamed_to_coqu",
+      "v": "### 8. Product renamed to Coquí **Decision:** The product is renamed from **Iteration Engine** to **Coquí**. Always written with the accent (\"Coquí\"). The former name is fully retired from product-facing surfaces. Repository/infrastructure identifiers (GitHub repo slug `iteration-engine`, `package.json` name) are not part of this decision and remain unrenam…",
+      "e": {
+        "f": "docs/decisions.md",
+        "l": "73-80",
+        "h": "606f5ecad2fe"
+      }
+    }
+  ],
+  "open_questions": [
+    {
+      "id": "DESIGN.md::open_questions",
+      "v": "## Open questions 1. **Owners Narrow is a commercial typeface** (Frere-Jones). It needs a license for both design and web use, and has no free substitute with the same character. Confirm licensing before Obvious builds against it, or nominate a fallback. 2. **The header lost its stepper.** Both frames show only wordmark + sound icon, so a person has no visi…",
+      "e": {
+        "f": "DESIGN.md",
+        "l": "313-321",
+        "h": "a35f25a47cc8"
+      }
+    },
+    {
+      "id": "docs/blueprint.md::open_questions",
+      "v": "### Open questions - Exact UI mechanism for triggering on-demand code generation per direction (build-time detail). - Whether a paid 21st.dev tier is needed once real usage against the free tier's 2/day code-retrieval cap is known. - How success criteria evolve once the tool is used on real Obsidian53 projects. - Can a person see or correct the inferred vie…",
+      "e": {
+        "f": "docs/blueprint.md",
+        "l": "104-117",
+        "h": "cd87f1c31d0b"
+      }
+    },
+    {
+      "id": "docs/decisions.md::open_questions_carried_into_the_blueprint",
+      "v": "## Open questions carried into the blueprint - Exact UI mechanism for triggering on-demand code generation per direction — implementation detail, resolved during build. - Whether a paid 21st.dev tier is needed once real usage patterns against the 2/day free-tier code-retrieval cap are known. - Success criteria will evolve past the v1 bar as Bryan uses the t…",
+      "e": {
+        "f": "docs/decisions.md",
+        "l": "128-133",
+        "h": "606f5ecad2fe"
+      }
+    }
+  ],
+  "missing_sources": [],
+  "supplemental": [],
+  "stats": {
+    "source_count": 73,
+    "fact_count": 36,
+    "added": 36,
+    "removed": 0,
+    "updated": 0
+  }
+}
