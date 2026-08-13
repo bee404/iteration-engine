@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Coquí mark final — calling posture, facing left. Two colors.
+       Identity: raised head, inflated vocal sac under the chin (the "co-quí"),
+       eye dome, diagonal back to a folded haunch, toe discs. -->
+  <g fill="#000">
+    <!-- body: blunt raised snout → back diagonal → haunch → foot → chest -->
+    <path d="M12 26
+      C 18 18 26 16 32 20
+      C 46 28 60 40 72 50
+      C 80 57 85 65 85 73
+      C 85 81 79 87 71 87
+      L 45 87
+      C 41 87 41 80 45 80
+      L 61 80
+      C 56 75 50 71 44 69
+      C 40 68 38 71 38 75
+      L 38 87 L 27 87 L 27 77
+      C 25 71 24 65 23 59
+      C 22 51 20 45 18 40
+      C 15 35 12 31 12 26 Z"/>
+    <!-- vocal sac -->
+    <circle cx="21" cy="55" r="13.5"/>
+    <!-- eye dome -->
+    <circle cx="29" cy="20.5" r="8.5"/>
+    <!-- toe discs: hind, then two front -->
+    <circle cx="43" cy="84" r="4.5"/>
+    <circle cx="23" cy="88" r="4.2"/>
+    <circle cx="34" cy="89" r="4.2"/>
+  </g>
+  <!-- eye -->
+  <circle cx="29" cy="20.5" r="5.2" fill="#fff"/>
+  <circle cx="30.2" cy="21.7" r="2.7" fill="#000"/>
+</svg>

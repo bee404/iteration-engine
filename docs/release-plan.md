@@ -6,13 +6,19 @@ Define an achievable release shape, sequencing, validation approach, and deliver
 
 ## Status
 
-Agreed 2026-08-05, derived from `docs/blueprint.md` and `docs/decisions.md`.
+Agreed 2026-08-05, reconciled with the shipped system and cross-tool context packets on 2026-08-11. Derived from `docs/blueprint.md`, `docs/decisions.md`, and the implementation status in `docs/knowledge-base/roadmap-and-open-work.md`.
+
+### Implementation status as of 2026-08-11
+
+Shipped: screenshot intake and natural-dimension capture; real Claude critique and direction generation; per-direction streamed code generation; live-mount preview with source fallback; Turso round persistence and history; and fixture-backed `DEMO_MODE`.
+
+Remaining for V1: infer and lock the actual interface viewport; build the binary `Source` / `Iteration` comparison in that fixed box; add downloadable source-bundle export to the committing action; wire live 21st.dev grounding and the intended GPT-4o validation fallback; and validate the complete loop against a real project. Optional ComfyUI clarification remains a graceful enhancement, not a blocker for the core comparison loop.
 
 ## Plan
 
 ### What v1 must prove
 
-Per Bryan's own guidance for this reconciliation: don't optimize solely for a demo, and don't shrink scope before knowing what the release needs to prove. V1's job is to prove the judgment-first loop actually works end-to-end on a real screen: critique that separates signal from preference, 2-3 directions that are genuinely different (not shallow variation), and a coherent before/after comparison Bryan can act on. Everything else is secondary to that loop.
+Per Bryan's own guidance for this reconciliation: don't optimize solely for a demo, and don't shrink scope before knowing what the release needs to prove. V1's job is to prove the judgment-first loop actually works end-to-end on a real screen: critique that separates signal from preference, 2-3 directions that are genuinely different (not shallow variation), and a coherent `Source` / `Iteration` comparison Bryan can act on. Everything else is secondary to that loop.
 
 ### In scope for v1
 
@@ -22,7 +28,7 @@ Per Bryan's own guidance for this reconciliation: don't optimize solely for a de
 - Live 21st.dev MCP queries for pattern grounding on direction generation.
 - Vague-feedback flagging and clarification (text-based; ComfyUI visual clarification if available locally).
 - On-demand code/prototype generation for any direction (Claude Sonnet primary, GPT-4o fallback), streamed via SSE to a sandboxed preview iframe.
-- Before/after comparison view (original vs. selected direction's output).
+- Fixed-box `Source` / `Iteration` comparison (the generated iteration against its direct source).
 - Turso persistence of rounds (critique, directions, any generated code, driving feedback).
 - Approved-prototype export as a downloadable bundle.
 
@@ -36,15 +42,16 @@ Per Bryan's own guidance for this reconciliation: don't optimize solely for a de
 
 ### Validation approach
 
-Validated against Decision 7's success bar: run v1 on at least one real Obsidian53 screen. Success is judged qualitatively by Bryan — is the critique respectful of what he gave it, is at least one direction genuinely different and worth pursuing, and does the before/after comparison give him something actionable to take to stakeholders. This is a per-round bar, not a statistical one; it's expected to get sharper as Bryan uses the tool more.
+Validated against Decision 7's success bar: run v1 on at least one real Obsidian53 screen. Success is judged qualitatively by Bryan — is the critique respectful of what he gave it, is at least one direction genuinely different and worth pursuing, and does the `Source` / `Iteration` comparison give him something actionable to take to stakeholders. This is a per-round bar, not a statistical one; it's expected to get sharper as Bryan uses the tool more.
 
-### Sequencing
+### Remaining sequence
 
-1. Input capture + critique generation (Claude Sonnet), no directions yet — validates the signal-vs-preference separation in isolation.
-2. Direction generation (2-3 directions, rationale, tradeoffs) layered on top, with live 21st.dev grounding.
-3. On-demand code generation for a chosen direction, streamed to the sandboxed preview.
-4. Turso persistence + before/after comparison view.
-5. Vague-feedback flagging and the ComfyUI-based visual clarification path (can land after the core loop is proven, since it only affects the harder subset of feedback).
+1. Complete viewport inference and correction, then lock the viewport box for the chain.
+2. Build the fixed-box comparison using only the binary `Source` / `Iteration` toggle, including the generated-source fallback for mount failures.
+3. Complete the single committing action: persist the approved round and download its source bundle.
+4. Replace the mock pattern provider with live 21st.dev grounding and wire GPT-4o as the validation fallback.
+5. Run the complete V1 loop on at least one real project and evaluate it against Decision 7's coherence bar.
+6. Add ComfyUI-based visual clarification only if it materially improves ambiguous-feedback cases after the core loop is proven.
 
 ### Risks
 

@@ -301,7 +301,7 @@ Not specified in these frames. The established behavior — a flat white canvas 
 
 ## Assets
 
-Downloaded from the source frames into `project/brand/` (Figma asset URLs expire in 7 days):
+Stored from the source-frame exports under `public/brand/`; use these repository copies rather than expiring Figma asset URLs:
 
 - `coqui-wordmark.svg` — the Coquí logotype, 55.7 × 25.9
 - `coqui-illustration.svg` — engraved frog-and-goose empty-state illustration, 150 × 178
@@ -310,11 +310,12 @@ Downloaded from the source frames into `project/brand/` (Figma asset URLs expire
 - `bg-sky-ambient.svg` — the top gradient band
 - `coqui-mark.svg` — two-color silhouette mark, for favicon and small-scale use (authored separately)
 
-## Open questions
+## Resolved implementation guidance
 
-1. **Owners Narrow is a commercial typeface** (Frere-Jones). It needs a license for both design and web use, and has no free substitute with the same character. Confirm licensing before Obvious builds against it, or nominate a fallback.
-2. **The header lost its stepper.** Both frames show only wordmark + sound icon, so a person has no visible position in the four-station flow. Intentional, or not yet designed?
-3. **The sound icon is `volume-cross` (muted).** Presumably a coquí call toggle, defaulting to off. Confirm the behavior and its on-state.
-4. **Panel heading copy reads "What should we do fix?"** — appears to be a typo for "What should we fix?". Preserved verbatim here; flagging rather than silently correcting.
-5. **Primary action is labeled "Synthesize"**, replacing "Interpret feedback". Confirm this is the settled verb, since it renames a core step in the workflow vocabulary.
-6. **No hover, focus, disabled, loading, or error states** appear in either frame. These need specifying before build.
+1. **Owners Narrow is the approved display face.** It is a commercial Frere-Jones typeface. Supply a licensed design/web asset before production implementation; do not silently replace it with a different visual direction. The generic `sans-serif` entry in the token is a technical fallback only.
+2. **The header has no stepper by design.** Do not restore the removed four-stage control. Each screen communicates its own place in the workflow through its content.
+3. **The sound icon controls the coquí call.** It defaults to muted (`volume-cross`), toggles between play and mute states, and requires accessible `Play coquí call` / `Mute coquí call` labels. Keep the control disabled until the call audio asset is available.
+4. **The wordmark and silhouette have separate jobs.** Use `coqui-wordmark.svg` in the header. Reserve `coqui-mark.svg` for favicon, app-icon, and other small-scale identity uses.
+5. **The canonical panel heading is "What should we fix?"** This corrects the typo in the source Figma frame; do not reproduce "What should we do fix?" in implementation.
+6. **The primary action is labeled "Synthesize".** This is the settled replacement for "Interpret feedback" across the workflow.
+7. **Missing interaction states extend this system rather than reopen it.** Derive hover, focus, disabled, loading, and error states from the existing neutral, ink, line, and gold tokens. Preserve keyboard visibility, contrast, and reduced-motion behavior without introducing another accent.
