@@ -3,22 +3,35 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { GeneratedCodeStatus } from "@/lib/types";
 import { buildPreviewDocument, transpilePreviewComponent } from "@/lib/preview/build-preview-document";
+import { errorFallbackNotice, PREVIEW_FALLBACK_PREFIX } from "@/lib/preview/preview-fallback";
 import { REACT_RUNTIME_SOURCE } from "@/lib/preview/react-runtime.generated";
 
 interface PreviewFrameProps {
   code: string;
   language: string;
   status: GeneratedCodeStatus;
+  /** Populated when status is "error": the typed codegen failure (e.g. a truncated_response
+   * from hitting the output-token ceiling). Threaded through so the error path shows the same
+   * explicit fallback banner as a transpile/mount failure instead of a bannerless source view. */
+  error?: string;
 }
 
 /**
  * Renders a direction's generated code. Once generation is complete it transpiles the TSX
  * with Sucrase and mounts it as a live, interactive component inside a sandboxed iframe.
- * While the code is still streaming (or after a codegen error) it shows the accumulated
- * source as read-only text, and if the completed code fails to transpile or throws at mount
- * it falls back to that same source view with a notice — never a blank frame.
+ * While the code is still streaming it shows the accumulated source as read-only text. If the
+ * generation errors, or the completed code fails to transpile or throws at mount, it falls back
+ * to that same source view with an explicit banner explaining why — never a blank frame and
+ * never a bannerless "silent stall".
  */
-export function PreviewFrame({ code, language, status }: PreviewFrameProps) {
+export function PreviewFrame({ code, language, status, error }: PreviewFrameProps) {
+  // A failed generation (most commonly a truncated_response from exceeding the token ceiling)
+  // still has partial source worth showing, but it must come with the fallback banner — the
+  // silent stall PR #16 QA caught was exactly this path rendering source with no signal.
+  const errorNotice = errorFallbackNotice(status, error);
+  if (errorNotice) {
+    return <SourceView code={code} language={language} notice={errorNotice} />;
+  }
   if (status !== "complete") {
     return <SourceView code={code} language={language} />;
   }
@@ -69,7 +82,7 @@ function LiveMount({ code, language }: { code: string; language: string }) {
       <SourceView
         code={code}
         language={language}
-        notice={`Couldn't render this as live UI — showing the source instead. ${transpiled.error}`}
+        notice={`${PREVIEW_FALLBACK_PREFIX} ${transpiled.error}`}
       />
     );
   }

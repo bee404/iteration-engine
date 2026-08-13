@@ -59,6 +59,25 @@ test("transpilePreviewComponent cannot repair truncated (max_tokens) output and 
   assert.equal(result.ok, false);
 });
 
+// Regression for the PR #16 QA Round 3 failure (checkout flow): Claude emitted an object-literal
+// in JSX child position — `<div>{count: 5}</div>` — which Sucrase's transformer rejects at the
+// child-processing stage with the exact message "Unexpected token when processing JSX children."
+// This is not a mechanical slip the repair stage can safely rewrite (the model's intent — text,
+// a style object, or a typo — is unrecoverable), so the fix lives in the generation prompt while
+// the pre-mount contract stays honest: the pattern degrades to a real, specific error the
+// fallback banner surfaces, never a silent bad mount. That deterministic contract is asserted
+// here so a future "helpful" repair that swallows the error into a wrong render fails this test.
+test("transpilePreviewComponent reports the JSX-children error for an object-literal child (no silent salvage)", () => {
+  const result = transpilePreviewComponent(
+    "export default function Checkout() {\n  return <div>{count: 5}</div>;\n}\n",
+  );
+  assert.equal(result.ok, false);
+  assert.ok(
+    !result.ok && /processing JSX children/.test(result.error),
+    `expected the JSX-children error, got: ${result.ok ? "ok" : result.error}`,
+  );
+});
+
 // Real Claude output occasionally emits TSX that Sucrase can't parse (all producing the
 // live-demo error "Unexpected token, expected ';'"). transpilePreviewComponent must repair
 // these deterministically and still mount, so the read-only fallback stays a last resort.

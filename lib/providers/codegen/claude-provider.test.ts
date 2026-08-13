@@ -106,3 +106,24 @@ test("streamCode completes normally when the stream stops with end_turn", async 
   }
 });
 
+
+
+// Regression for the PR #16 QA silent stall on dense, full-page directions (checkout, dense
+// tables, settings, CRM detail): reproduced directly, these reliably produced ~30k characters
+// and truncated at the 8192 ceiling. The ceiling was raised to 16384 so they now complete and
+// mount. This pins the request's max_tokens so a future edit that lowers it — reopening the
+// truncation — fails here rather than silently in production.
+test("streamCode requests the raised 16384-token ceiling so dense pages don't truncate", async () => {
+  const originalFetch = globalThis.fetch;
+  let sentMaxTokens: unknown;
+  globalThis.fetch = (async (_url: string, init?: RequestInit) => {
+    sentMaxTokens = JSON.parse(String(init?.body)).max_tokens;
+    return anthropicStreamResponse("const App = () => <div/>;\nexport default App;\n", "end_turn");
+  }) as typeof fetch;
+  try {
+    await collect(new ClaudeCodeGenProvider("test-key"));
+    assert.equal(sentMaxTokens, 16384);
+  } finally {
+    globalThis.fetch = originalFetch;
+  }
+});
