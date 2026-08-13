@@ -2,6 +2,8 @@ name: Coquí ContextBridge
 
 on:
   push:
+    branches:
+      - "main"
     paths:
       - "README.md"
       - "PRODUCT.md"
