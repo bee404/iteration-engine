@@ -107,9 +107,9 @@ V1 succeeds when a round's output is coherent: respectful of the inputs Bryan ga
 - Use the free 21st.dev tier until real usage reaches its retrieval limit; only then consider a paid tier.
 - The v1 success bar remains per-round coherence. A longitudinal metric is not required before real usage provides evidence for one.
 - Show the inferred viewport dimensions before the first synthesis. Bryan can correct them before committing the first iteration; the viewport box then locks for the chain.
-- A later round uses the prior iteration as its reference, inherits goal, reviewer context, and constraints as editable defaults, and requires fresh feedback.
+- A later round uses the prior iteration as its reference and requires fresh feedback. Whether it also inherits the prior goal, reviewer context, and constraints as editable defaults is deferred (see `docs/decisions.md`, Decision 14, and `docs/knowledge-base/roadmap-and-open-work.md`).
 - Critique items are read-only. Regeneration is allowed only before directions exist; after that, changed feedback starts a new immutable round.
 - Code generation can be retried for the same direction after failure.
 - On a compile-success/mount-failure result, `Iteration` shows the generated source and exact runtime error inside the fixed viewport box. `Source` still shows the visual reference.
-- `Save and export` persists the approved round and downloads the approved prototype as a source bundle. Persistence is shipped; bundle download remains implementation work.
+- `Save` and `Export` are two separate actions, not one combined action: Save (primary CTA) persists the approved round; Export (secondary CTA) downloads the approved prototype as a source bundle. Persistence is shipped; export/download and the final CTA treatment remain in progress.
 - Comparison is adjacent by design: each iteration against its direct source. The lineage view may browse the full chain but does not become an arbitrary node-to-node comparison or branching interface.

@@ -120,15 +120,15 @@ Reconciliation decisions recorded 2026-08-05. This is the source of truth for wh
 
 ### 14. Round mutability, comparison failure, lineage comparison, and export are resolved
 
-**Decision:** The first round infers a viewport box and shows its dimensions before synthesis. Bryan may correct that measurement before the first iteration is committed; after that, the box is locked for the chain. Later rounds inherit the prior goal, reviewer context, and constraints as editable defaults, require fresh feedback, and use the prior iteration as their reference.
+**Decision:** The first round infers a viewport box and shows its dimensions before synthesis. Bryan may correct that measurement before the first iteration is committed; after that, the box is locked for the chain. Later rounds require fresh feedback and use the prior iteration as their reference. Whether later rounds also inherit the prior goal, reviewer context, or constraints as editable defaults is explicitly deferred — not a V1 decision (see `docs/knowledge-base/roadmap-and-open-work.md`); it's flagged as a possible macro/historical feature (patterns mined across a project's round history) rather than a micro per-round convenience, worth scoping on its own later.
 
 Critique items are read-only evidence. A critique may be regenerated before directions are produced; after directions exist, the round is immutable and any changed feedback starts a new round. Code generation remains available for every direction and may be retried locally after failure.
 
 The comparison always shows an iteration against its direct source in the chain; it is not an arbitrary node-to-node comparison tool. If generated code compiles but fails to mount, the `Iteration` layer shows the generated source and exact runtime error inside the same fixed viewport box, while `Source` continues to show the visual reference. The round remains usable.
 
-`Save and export` is one committing action meaning "this code works for me." Save persists the approved round and its lineage record to Turso; export downloads the approved prototype as a source bundle. The current code implements persistence but not the download yet.
+`Save` and `Export` are two separate actions, not one combined action: Save is the primary CTA and persists the approved round and its lineage record to Turso; Export is the secondary CTA and downloads the approved prototype as a source bundle. The current code implements persistence (Save) but not the export download yet, and the frontend's primary/secondary CTA treatment is still in progress.
 
-**Rationale:** These choices complete the immutable convergence model without introducing hidden edits, alternate histories, or a second comparison system. They also reconcile the product-facing commit semantics with the existing persistence implementation and the release-plan target.
+**Rationale:** These choices complete the immutable convergence model without introducing hidden edits, alternate histories, or a second comparison system. They also reconcile the product-facing commit semantics with the existing persistence implementation and the release-plan target. Round-to-round inheritance and the final Save/Export CTA treatment are deliberately left open rather than locked in here — both need their own scoping pass.
 
 **Owner:** Bryan. **Date:** 2026-08-11.
 

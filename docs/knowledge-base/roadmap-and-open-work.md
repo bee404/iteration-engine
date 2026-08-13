@@ -47,7 +47,10 @@ Each stage is "worthless without the one before it":
 - One fixed viewport box at best-fit scale. The reference screenshot and generated iteration
   occupy identical dimensions, scale, and coordinates.
 - One two-position `Source` / `Iteration` toggle. No scrubber, split view, draggable divider,
-  highlight toggle, pixel-diff overlay, thumbnail strip, or additional comparison control.
+  highlight toggle, thumbnail strip, or additional comparison control.
+- Pixel-diff region highlight (rasterize both frames, diff `ImageData` client-side, zero LLM
+  cost — chosen over asking the model to self-report a bounding box, "grading its own homework").
+  Still a candidate, independent of the control-model decision above — not ruled out.
 - Off-happy-path states: streaming/partial-generation indicator with contextual status text,
   generation-failed entry guard, and a legacy-round fallback when no captured width exists
   (`scale approximate`).
@@ -58,8 +61,13 @@ Each stage is "worthless without the one before it":
 
 - **Content-width autocrop** field + confidence flag not yet on the model (only raw natural
   dimensions are).
+- **No region/bounding-box concept** exists on `Critique`/`Direction` — feedback doesn't know
+  which screen region it targets. The pixel-diff candidate above works around this with
+  client-side rasterized diffing rather than model-reported coordinates.
 - A user-corrected viewport value and a chain-level locked viewport are not yet modeled.
 - Mount-success versus mount-failure needs an explicit comparison-layer state.
+- Locked note: if pixel-diff rasterization proves harder than expected, report effort back to
+  Bryan for a call — it's a bounded spike, not an open-ended effort, and not a silent-fallback ship.
 
 ## Other planned-but-not-wired work
 
@@ -75,6 +83,10 @@ Each stage is "worthless without the one before it":
   interaction but has **not been designed yet**. Constraints on any future attempt (Decision 12,
   `decisions.md`): no branching UI, nothing implying history is editable, no drag scrubber, and
   not a list of thumbnails or a timeline row.
+- **Round-to-round inheritance of goal/context/constraints** — deferred, not a V1 decision.
+  Bryan flagged this as a potential macro/historical feature (patterns mined across a project's
+  round history) rather than a micro per-round convenience, and wants it scoped on its own later
+  rather than decided as a side effect of this doc consolidation.
 - **Critique, Directions, and Compare screens against the current gold visual system** — the
   Figma redesign (`docs/design-system.md`) only covers Add-image and Set-the-brief today. The
   rest of the flow still needs a pass in the current direction.
@@ -88,12 +100,14 @@ Each stage is "worthless without the one before it":
   new round once directions exist.
 - The lineage view may browse the ordered chain, but comparison remains adjacent: each iteration
   against its direct source. The lineage browsing surface itself has not been designed.
-- Later rounds inherit goal, reviewer context, and constraints as editable defaults and require
-  fresh feedback. That inheritance is not yet represented in the current single-round reset flow.
+- Later rounds require fresh feedback and use the prior iteration as their reference. Whether
+  later rounds also inherit the prior goal, reviewer context, or constraints as editable defaults
+  is explicitly deferred, not decided for V1 — see "Other planned-but-not-wired work" below.
 - Responsive and touch behavior remains deferred under Decision 13; it is not a blocker or an
   open design input for the current desktop build.
-- `Save and export` persists to Turso and downloads a source bundle. Persistence is shipped;
-  bundle creation and download are not.
+- `Save` and `Export` are two separate actions (primary CTA: Save, secondary CTA: Export), not
+  one combined action. Persistence (Save) is shipped; export/download and the final CTA treatment
+  are still in progress on the frontend.
 - The coquí-call control defaults to muted and remains disabled until an audio asset is supplied.
 
 ## Paused: external front-end / UX iteration
