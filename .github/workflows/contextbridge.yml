@@ -1,0 +1,60 @@
+name: Coquí ContextBridge
+
+on:
+  push:
+    paths:
+      - "README.md"
+      - "PRODUCT.md"
+      - "DESIGN.md"
+      - "docs/**"
+      - "app/**"
+      - "components/**"
+      - "lib/**"
+      - "store/**"
+      - "public/brand/**"
+      - "contextbridge/inbox/**"
+      - "contextbridge/config.json"
+      - "contextbridge/local-sources.json"
+      - "contextbridge/OPERATING-AGREEMENT.md"
+      - "scripts/contextbridge/**"
+      - ".github/workflows/contextbridge.yml"
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: coqui-contextbridge
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Coquí
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Scan and publish compact packet
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: node scripts/contextbridge/sync.mjs --scope github --publish
+
+      - name: Commit durable packet state
+        if: success()
+        run: |
+          if [ -z "$(git status --porcelain -- contextbridge/state.json contextbridge/latest.json contextbridge/history)" ]; then
+            echo "No ContextBridge state change."
+            exit 0
+          fi
+          git config user.name "coqui-contextbridge[bot]"
+          git config user.email "coqui-contextbridge[bot]@users.noreply.github.com"
+          git add contextbridge/state.json contextbridge/latest.json contextbridge/history
+          git commit -m "chore: update Coquí context packet [skip ci]"
+          git push

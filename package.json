@@ -10,6 +10,8 @@
     "lint": "eslint .",
     "test": "node --import tsx --test lib/**/*.test.ts",
     "build:preview-runtime": "node scripts/build-preview-runtime.mjs",
+    "contextbridge:sync": "node scripts/contextbridge/sync.mjs --scope github",
+    "contextbridge:stage-local": "node scripts/contextbridge/stage-local.mjs",
     "prebuild": "npm run build:preview-runtime",
     "db:migrate": "tsx lib/db/migrate.ts",
     "verify:codegen": "tsx scripts/verify-codegen-postprocess.ts",

@@ -1,0 +1,23 @@
+{
+  "project": "Coquí",
+  "scope": "local-supplemental",
+  "max_excerpt_chars": 900,
+  "paths": [
+    "documentation/iteration-engine-neutral-workflow-payload.md",
+    "documentation/google-stitch-four-screen-prompt.md",
+    "iteration-engine.html",
+    "visual development/ClDesign/02 Base + fitrst pass/iteration-engine-workflow-screens/PRODUCT.md",
+    "visual development/ClDesign/02 Base + fitrst pass/iteration-engine-workflow-screens/README.md",
+    "visual development/ClDesign/02 Base + fitrst pass/iteration-engine-workflow-screens/project/uploads/iteration-engine-workflow-readout.md",
+    "visual development/ClDesign/02 Base + fitrst pass/iteration-engine-workflow-screens/project/uploads/DESIGN-vercel.md",
+    "visual development/ClDesign/02 Base + fitrst pass/iteration-engine-workflow-screens/project/coqui-direction-03/setup.html",
+    "visual development/ClDesign/02 Base + fitrst pass/iteration-engine-workflow-screens/project/press-proof/shared.css",
+    "visual development/ClDesign/02 Base + fitrst pass/iteration-engine-workflow-screens/project/press-proof/01-setup.html",
+    "visual development/ClDesign/02 Base + fitrst pass/iteration-engine-workflow-screens/project/press-proof/02-critique.html",
+    "visual development/ClDesign/02 Base + fitrst pass/iteration-engine-workflow-screens/project/press-proof/03-directions.html",
+    "visual development/ClDesign/02 Base + fitrst pass/iteration-engine-workflow-screens/project/press-proof/04-compare.html",
+    "visual development/ClDesign/02 Base + fitrst pass/iteration-engine-workflow-screens/project/brand/coqui-mark.svg",
+    "visual development/ClDesign/02 Base + fitrst pass/iteration-engine-workflow-screens/project/brand/coqui-wordmark.svg"
+  ],
+  "directories": []
+}
