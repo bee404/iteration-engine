@@ -27,13 +27,17 @@ const FOCUSABLE_SELECTOR =
   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 /**
- * Full-width bottom sheet for a direction's generated-code preview. Generated output is
- * itself a UI, so it gets the full viewport's height to breathe instead of being squeezed
- * into the direction card. Mounted only while open or animating closed, so the slide
- * transition can play in both directions; dismissible via the close button, a scrim click,
- * or Escape. Streaming/error rendering is untouched — this only changes where it's shown.
+ * Full-width bottom sheet for a direction's generated-code preview. A completed direction is
+ * itself a UI, so it gets the full viewport's height to breathe. While code is still streaming
+ * there's nothing useful to read yet, so the sheet collapses to a compact partial-height status
+ * panel instead of dumping raw source scrolling by; it expands to full height the instant the
+ * stream settles (complete or error). Mounted only while open or animating closed, so the slide
+ * transition can play in both directions; dismissible via the close button, a scrim click, or
+ * Escape.
  */
 export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerRef }: CodeSheetProps) {
+  // While streaming, collapse the sheet to a partial-height status panel (see body below).
+  const isStreaming = generated?.status === "streaming";
   const [isMounted, setIsMounted] = useState(isOpen);
   // The `.open` class drives the slide/fade. It must be applied one frame *after* the sheet
   // first paints in its closed position, or the CSS transition has no prior state to animate
@@ -114,7 +118,7 @@ export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerR
     >
       <div
         ref={sheetRef}
-        className={`code-sheet ${isActive ? "open" : ""}`}
+        className={`code-sheet ${isActive ? "open" : ""} ${isStreaming ? "is-streaming" : ""}`}
         role="dialog"
         aria-modal="true"
         aria-label={`Generated code for ${directionTitle}`}
@@ -138,10 +142,16 @@ export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerR
         </header>
 
         <div className="code-sheet-body">
-          {generated ? (
-            <PreviewFrame code={generated.code} language={generated.language} status={generated.status} />
-          ) : (
+          {!generated ? (
             <p className="code-status">Nothing generated yet.</p>
+          ) : isStreaming ? (
+            // No raw code dump while streaming — just a contextual status line at partial height.
+            <div className="code-sheet-streaming" role="status" aria-live="polite">
+              <span className="spinner" aria-hidden="true" />
+              <p>Generating component for “{directionTitle}”…</p>
+            </div>
+          ) : (
+            <PreviewFrame code={generated.code} language={generated.language} status={generated.status} />
           )}
         </div>
 

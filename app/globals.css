@@ -851,6 +851,27 @@ button {
   transform: translateY(0);
 }
 
+/* While streaming there's no useful code to read yet, so the sheet sits as a compact status
+   panel and snaps to full height once the stream settles. Height isn't transitioned (only the
+   slide transform is), so the expand is instant — no held partial state. */
+.code-sheet.is-streaming {
+  height: auto;
+  max-height: 42vh;
+}
+
+.code-sheet-streaming {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 4px 8px;
+  color: var(--ink-mute);
+  font-size: 14px;
+}
+
+.code-sheet-streaming p {
+  margin: 0;
+}
+
 .code-sheet-header {
   display: flex;
   align-items: flex-start;
