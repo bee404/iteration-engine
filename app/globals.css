@@ -3062,17 +3062,54 @@ body:has(.upload-page) {
 }
 
 /* ---------------------------------------------------------------------------
-   Directions step stub — finished-looking placeholder for the next step.
+   Directions step — three approaches presented for selection (step 04). Reuses
+   the direction-card / directions-grid pattern from the live workflow, on the
+   canonical enter-from-bottom step transition.
    --------------------------------------------------------------------------- */
-.directions-stub {
+.directions-body {
   display: flex;
   flex: 1;
   min-height: 0;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 16px;
-  padding: 24px;
+  gap: 28px;
+  padding: 32px 24px 24px;
+  overflow-y: auto;
+}
+
+.directions-header {
+  display: flex;
+  max-width: 640px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.directions-body .directions-grid {
+  width: 100%;
+  max-width: 1000px;
+}
+
+.directions-actions {
+  display: flex;
+  width: 100%;
+  max-width: 360px;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.directions-actions .feedback-synthesize {
+  width: 100%;
+}
+
+.directions-actions-note {
+  max-width: 320px;
+  margin: 0;
+  color: var(--ink-mute);
+  font-size: 11.5px;
+  line-height: 1.5;
   text-align: center;
 }
 
@@ -3102,20 +3139,7 @@ body:has(.upload-page) {
   line-height: 1.6;
 }
 
-.directions-badge {
-  margin-top: 4px;
-  padding: 5px 12px;
-  border-radius: 999px;
-  background: rgba(226, 181, 32, 0.16);
-  border: 1px solid rgba(226, 181, 32, 0.4);
-  color: var(--accent-text);
-  font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-}
-
 .directions-restart {
-  margin-top: 8px;
   color: var(--ink-mute);
   font-size: 12.5px;
   text-decoration: none;
