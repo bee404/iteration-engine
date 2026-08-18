@@ -89,91 +89,88 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
   }, [acceptFile]);
 
   return (
-    <main className="upload-page feedback-page">
+    <main className="upload-page">
       <div className="upload-dot-grid" aria-hidden="true" />
-      <div className="feedback-atmosphere" aria-hidden="true" />
+      <div className="upload-page-atmosphere" aria-hidden="true" />
       <StepHeader />
 
-      {/* Figma node 57:293 — the same two-panel "stage" shell as /feedback: heading on the left,
-          the bring-a-screen action living in the right "aside — the brief" panel. */}
-      <div className="feedback-body">
-        <section className="feedback-stage" aria-labelledby="upload-title">
-          <div className="upload-hero">
-            {previewUrl ? (
-              <figure className="feedback-reference upload-hero-figure">
-                <div className="feedback-reference-frame">
-                  {/* eslint-disable-next-line @next/next/no-img-element -- local object URL preview */}
-                  <img
-                    ref={previewRef}
-                    className="feedback-reference-img"
-                    src={previewUrl}
-                    alt={`Selected ${fileName ?? "screen"}`}
-                  />
-                </div>
-              </figure>
-            ) : (
-              <Image
-                className="upload-illustration"
-                src="/brand/coqui-illustration.svg"
-                alt="A frog carrying a framed picture"
-                width={150}
-                height={178}
-                priority
+      {/* Figma node 57:293 — one centered card (57:316 "Background+Shadow") holding the
+          illustration, heading, and dropzone stacked and centered. The "Aside - the brief"
+          layer name is a reused component label here, NOT a two-column split. */}
+      <section className="upload-stage" aria-labelledby="upload-title">
+        <div className={`upload-card ${isDragging ? "is-dragging" : ""}`}>
+          {previewUrl ? (
+            <div className="upload-preview-wrap">
+              {/* eslint-disable-next-line @next/next/no-img-element -- local object URL preview */}
+              <img
+                ref={previewRef}
+                className="upload-preview"
+                src={previewUrl}
+                alt={`Selected ${fileName ?? "screen"}`}
               />
-            )}
-            <h1 id="upload-title" className="upload-hero-title">
+            </div>
+          ) : (
+            <Image
+              className="upload-illustration"
+              src="/brand/coqui-illustration.svg"
+              alt="A frog riding a goose, carrying a framed picture"
+              width={200}
+              height={237}
+              priority
+            />
+          )}
+
+          <div className="upload-content">
+            <h1 id="upload-title">
               {previewUrl ? "Screen ready to improve" : "Add the screen you want to improve"}
             </h1>
-          </div>
-        </section>
-
-        <aside className="feedback-panel upload-aside" aria-label="Bring in a screen">
-          <button
-            className={`upload-dropzone ${isDragging ? "is-dragging" : ""}`}
-            type="button"
-            onClick={() => inputRef.current?.click()}
-            onDragEnter={(event) => {
-              event.preventDefault();
-              setIsDragging(true);
-            }}
-            onDragOver={(event) => event.preventDefault()}
-            onDragLeave={() => setIsDragging(false)}
-            onDrop={(event) => {
-              event.preventDefault();
-              setIsDragging(false);
-              acceptFile(event.dataTransfer.files[0]);
-            }}
-            aria-label={previewUrl ? "Choose a different image" : "Select image to upload"}
-          >
-            <span className="upload-dropzone-action">
-              {previewUrl ? "Choose a different image" : "Select image to upload"}
-            </span>
-            {!previewUrl && (
-              <span className="upload-dropzone-hint">
-                also you can drop your image or <kbd>⌘</kbd>
-                <kbd>V</kbd> to paste
-              </span>
-            )}
-          </button>
-          <input
-            ref={inputRef}
-            className="upload-file-input"
-            type="file"
-            accept="image/*"
-            onChange={(event) => acceptFile(event.target.files?.[0])}
-          />
-          {previewUrl && (
             <button
-              className="upload-proceed"
+              className="upload-dropzone"
               type="button"
-              onClick={proceedToFeedback}
-              disabled={isProceeding}
+              onClick={() => inputRef.current?.click()}
+              onDragEnter={(event) => {
+                event.preventDefault();
+                setIsDragging(true);
+              }}
+              onDragOver={(event) => event.preventDefault()}
+              onDragLeave={() => setIsDragging(false)}
+              onDrop={(event) => {
+                event.preventDefault();
+                setIsDragging(false);
+                acceptFile(event.dataTransfer.files[0]);
+              }}
+              aria-label={previewUrl ? "Choose a different image" : "Select image to upload"}
             >
-              {isProceeding ? "Opening brief\u2026" : "Continue to feedback"}
+              <span className="upload-dropzone-action">
+                {previewUrl ? "Choose a different image" : "Select image to upload"}
+              </span>
+              {!previewUrl && (
+                <span className="upload-dropzone-hint">
+                  also you can drop your image or <kbd>⌘</kbd>
+                  <kbd>V</kbd> to paste
+                </span>
+              )}
             </button>
-          )}
-        </aside>
-      </div>
+            <input
+              ref={inputRef}
+              className="upload-file-input"
+              type="file"
+              accept="image/*"
+              onChange={(event) => acceptFile(event.target.files?.[0])}
+            />
+            {previewUrl && (
+              <button
+                className="upload-proceed"
+                type="button"
+                onClick={proceedToFeedback}
+                disabled={isProceeding}
+              >
+                {isProceeding ? "Opening brief\u2026" : "Continue to feedback"}
+              </button>
+            )}
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
