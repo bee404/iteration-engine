@@ -1,13 +1,13 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260813054857389_github",
-  "base_packet": "cb_20260813024145165_github",
+  "packet_id": "cb_20260818020031802_github",
+  "base_packet": "cb_20260813054857389_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-13T05:48:57.389Z",
+  "generated_at": "2026-08-18T02:00:31.802Z",
   "changed": true,
-  "manifest_sha": "393f0727dafb8494",
+  "manifest_sha": "0d358675ba0b8f2f",
   "sources": [
     {
       "id": "DESIGN.md",
@@ -66,8 +66,8 @@
     {
       "id": "app/globals.css",
       "file": "app/globals.css",
-      "sha256": "de6b36c29d949512c545863b28c9e3c506cc78689148ff6699b583a2490ac4b1",
-      "bytes": 21613
+      "sha256": "59071401813cad66284eaf2fbdbf7af0bbc2402ae291ea400379d4f523c5efde",
+      "bytes": 22306
     },
     {
       "id": "app/icon.png",
@@ -96,8 +96,8 @@
     {
       "id": "components/code-sheet.tsx",
       "file": "components/code-sheet.tsx",
-      "sha256": "262a88f163ba81be5c6634041bfcd25e9dc5670784acd8916663beabe6fb0c01",
-      "bytes": 5887
+      "sha256": "975828dbbc4df57ce8fc289baf00a15567f6387e549a0bcc256db2e602925582",
+      "bytes": 10382
     },
     {
       "id": "components/coqui-marks.tsx",
@@ -126,8 +126,8 @@
     {
       "id": "components/preview-frame.tsx",
       "file": "components/preview-frame.tsx",
-      "sha256": "6a8f522a4fb34f8f9641f12e188d198255fa929f30cf58aa80fbf24a08d735e9",
-      "bytes": 4528
+      "sha256": "b717f9efe8fa352b3782762954261f0594f7c1833703607dbc3154353ad3a750",
+      "bytes": 6956
     },
     {
       "id": "components/round-history.tsx",
@@ -312,14 +312,14 @@
     {
       "id": "lib/preview/build-preview-document.test.ts",
       "file": "lib/preview/build-preview-document.test.ts",
-      "sha256": "087dd858997b1ea00051ce87cb3b13c0e75e2327967aa86fbb962fc1dc398c0c",
-      "bytes": 5076
+      "sha256": "bfe18dd4edff852530ea8f9598586ead1f3a54a2cacd065d7ee2495320920397",
+      "bytes": 7615
     },
     {
       "id": "lib/preview/build-preview-document.ts",
       "file": "lib/preview/build-preview-document.ts",
-      "sha256": "56dfa0a011384960f51a325ba54c8caf7dac797edcac85dffd68577e6d6c8534",
-      "bytes": 11368
+      "sha256": "288cda48534b081c291aa85ad262a91debe0086c6b6132abbc0277d07d33639c",
+      "bytes": 14249
     },
     {
       "id": "lib/preview/react-runtime.generated.ts",
@@ -485,25 +485,14 @@
     }
   ],
   "source_changes": {
-    "added": [
-      "public/brand/bg-sky-ambient.svg",
-      "public/brand/coqui-illustration.svg",
-      "public/brand/coqui-mark.svg",
-      "public/brand/coqui-wordmark.svg",
-      "public/brand/icon-expand.svg",
-      "public/brand/icon-volume-cross.svg"
-    ],
+    "added": [],
     "removed": [],
     "updated": [
-      "DESIGN.md",
-      "README.md",
-      "docs/blueprint.md",
-      "docs/decisions.md",
-      "docs/design-system.md",
-      "docs/discovery-diff.md",
-      "docs/knowledge-base/README.md",
-      "docs/knowledge-base/roadmap-and-open-work.md",
-      "docs/release-plan.md"
+      "app/globals.css",
+      "components/code-sheet.tsx",
+      "components/preview-frame.tsx",
+      "lib/preview/build-preview-document.test.ts",
+      "lib/preview/build-preview-document.ts"
     ]
   },
   "facts": [
@@ -1003,8 +992,8 @@
   "stats": {
     "source_count": 79,
     "fact_count": 34,
-    "added": 2,
-    "removed": 4,
-    "updated": 28
+    "added": 0,
+    "removed": 0,
+    "updated": 0
   }
 }
