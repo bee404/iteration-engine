@@ -1,8 +1,13 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { GeneratedCodeStatus } from "@/lib/types";
-import { buildPreviewDocument, transpilePreviewComponent } from "@/lib/preview/build-preview-document";
+import {
+  buildPreviewDocument,
+  buildStreamingSourceDocument,
+  nextStreamingSourceMessage,
+  transpilePreviewComponent,
+} from "@/lib/preview/build-preview-document";
 import { REACT_RUNTIME_SOURCE } from "@/lib/preview/react-runtime.generated";
 
 interface PreviewFrameProps {
@@ -14,15 +19,71 @@ interface PreviewFrameProps {
 /**
  * Renders a direction's generated code. Once generation is complete it transpiles the TSX
  * with Sucrase and mounts it as a live, interactive component inside a sandboxed iframe.
- * While the code is still streaming (or after a codegen error) it shows the accumulated
+ * While the code is still streaming it shows the accumulated source in a load-once iframe fed
+ * incrementally over postMessage (no per-token reload); after a codegen error it shows that
  * source as read-only text, and if the completed code fails to transpile or throws at mount
- * it falls back to that same source view with a notice — never a blank frame.
+ * it falls back to the same read-only source view with a notice — never a blank frame.
  */
 export function PreviewFrame({ code, language, status }: PreviewFrameProps) {
-  if (status !== "complete") {
+  // While streaming, the source is pushed into a load-once iframe token by token, so the pane
+  // never reloads mid-stream (the cause of the blank-frame QA captures). A settled codegen
+  // error keeps the plain read-only source view; a complete run mounts the live component.
+  if (status === "streaming") {
+    return <StreamingSourceView code={code} language={language} />;
+  }
+  if (status === "error") {
     return <SourceView code={code} language={language} />;
   }
   return <LiveMount code={code} language={language} />;
+}
+
+/**
+ * Streaming source view: the iframe document is a constant for the streaming session, so React
+ * never reassigns `srcDoc` and the frame loads exactly once. Each new token is posted in over
+ * postMessage as an incremental append into the already-loaded <pre>, replacing the old
+ * behavior of rebuilding and reassigning the whole srcDoc (a full iframe reload) per token.
+ */
+function StreamingSourceView({ code, language }: { code: string; language: string }) {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  // Stable for this mount's lifetime — this referential stability is what keeps the iframe from
+  // reloading as tokens arrive.
+  const srcDoc = useMemo(() => buildStreamingSourceDocument(), []);
+  // The document's message listener is only live after the iframe's single `load` fires; tokens
+  // that arrive before then are flushed on load.
+  const isReadyRef = useRef(false);
+  // What the iframe has already rendered, so each update posts only the newly streamed suffix.
+  const renderedRef = useRef("");
+
+  const pushUpdate = useCallback(() => {
+    const frame = iframeRef.current?.contentWindow;
+    if (!frame || !isReadyRef.current) return;
+    const message = nextStreamingSourceMessage(renderedRef.current, code);
+    if (!message) return;
+    frame.postMessage(message, "*");
+    renderedRef.current = code;
+  }, [code]);
+
+  // Fresh document: reset the rendered marker and flush everything streamed so far.
+  const handleLoad = useCallback(() => {
+    isReadyRef.current = true;
+    renderedRef.current = "";
+    pushUpdate();
+  }, [pushUpdate]);
+
+  useEffect(() => {
+    pushUpdate();
+  }, [pushUpdate]);
+
+  return (
+    <iframe
+      ref={iframeRef}
+      onLoad={handleLoad}
+      title={`Streaming ${language} source`}
+      className="preview-frame"
+      sandbox="allow-scripts"
+      srcDoc={srcDoc}
+    />
+  );
 }
 
 function LiveMount({ code, language }: { code: string; language: string }) {

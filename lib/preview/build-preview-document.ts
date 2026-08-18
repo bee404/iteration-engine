@@ -261,3 +261,64 @@ ${registration}
 </html>`;
 }
 
+/**
+ * Message posted into the streaming source iframe to update its content in place, without
+ * reloading the document. `append` adds only the newly streamed suffix (the token common
+ * case); `reset` replaces the whole buffer (the initial flush, or the wholesale swap when the
+ * post-processed finalize source arrives while still streaming) so the view can never drift.
+ */
+export type StreamingSourceMessage =
+  | { type: "preview-src-append"; chunk: string }
+  | { type: "preview-src-reset"; text: string };
+
+/**
+ * Computes the minimal in-place update to move the streaming source view from what it has
+ * already rendered (`rendered`) to the latest accumulated `code`. Returns null when there is
+ * nothing to do. Pure and DOM-free so the incremental protocol can be unit tested: a stream of
+ * N appended tokens yields N append messages and zero document rebuilds.
+ */
+export function nextStreamingSourceMessage(rendered: string, code: string): StreamingSourceMessage | null {
+  if (code === rendered) return null;
+  if (code.startsWith(rendered)) return { type: "preview-src-append", chunk: code.slice(rendered.length) };
+  return { type: "preview-src-reset", text: code };
+}
+
+/**
+ * Builds the srcDoc for the streaming source view. Unlike SourceView — which bakes the code
+ * into the document and therefore reloads the iframe on every token — this document is a
+ * constant for the whole streaming session: it loads once with an empty <pre> mount point and
+ * a listener that applies `preview-src-*` messages in place via textContent (never innerHTML,
+ * so streamed source can't inject markup). The parent posts one append per token, so the
+ * iframe fires a single `load` — removing the per-token document reload that produced the
+ * mid-stream blank-pane frames. Sandbox stays `allow-scripts` only (opaque origin, no parent
+ * DOM access), matching the boundary LiveMount already uses.
+ */
+export function buildStreamingSourceDocument(): string {
+  const bootstrap = `
+(function () {
+  var pre = document.getElementById("preview-src");
+  window.addEventListener("message", function (event) {
+    var data = event.data;
+    if (!pre || !data || typeof data !== "object") return;
+    if (data.type === "preview-src-reset") pre.textContent = typeof data.text === "string" ? data.text : "";
+    else if (data.type === "preview-src-append" && typeof data.chunk === "string") pre.textContent += data.chunk;
+  });
+})();
+`;
+
+  return `<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body { margin: 0; font-family: ui-monospace, monospace; background: #0b0d12; color: #d7dce2; }
+      pre { margin: 0; padding: 16px; white-space: pre-wrap; word-break: break-word; font-size: 13px; line-height: 1.5; }
+    </style>
+  </head>
+  <body>
+    <pre id="preview-src"></pre>
+    <script>${escapeScript(bootstrap)}<\/script>
+  </body>
+</html>`;
+}
+

@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   buildPreviewDocument,
+  buildStreamingSourceDocument,
   extractComponentName,
+  nextStreamingSourceMessage,
   quoteUnitfulStyleValues,
   stripCodeFences,
   stripSurroundingProse,
@@ -116,3 +118,58 @@ test("buildPreviewDocument inlines the runtime source and neutralizes closing sc
   assert.match(doc, /window\.__PREVIEW_COMPONENT__/);
 });
 
+
+
+test("nextStreamingSourceMessage appends only the newly streamed suffix", () => {
+  assert.deepEqual(nextStreamingSourceMessage("const a", "const app"), {
+    type: "preview-src-append",
+    chunk: "pp",
+  });
+  assert.deepEqual(nextStreamingSourceMessage("", "first"), {
+    type: "preview-src-append",
+    chunk: "first",
+  });
+});
+
+test("nextStreamingSourceMessage is a no-op when nothing new streamed", () => {
+  assert.equal(nextStreamingSourceMessage("same", "same"), null);
+});
+
+test("nextStreamingSourceMessage resets when the buffer is replaced wholesale", () => {
+  // The post-processed finalize source can diverge from the raw streamed buffer.
+  assert.deepEqual(nextStreamingSourceMessage("raw draft", "clean final"), {
+    type: "preview-src-reset",
+    text: "clean final",
+  });
+});
+
+test("streaming source doc is a constant fed incrementally — one document across a whole stream", () => {
+  // Simulate a multi-token stream and prove the source of the mid-stream blank-pane frames is
+  // gone: the srcDoc never changes across tokens (so the real iframe loads exactly once), and
+  // every token produces exactly one in-place append rather than a document rebuild.
+  const tokens = ["export ", "default ", "function ", "App() ", "{ return null; }"];
+  const docsSeen = new Set<string>();
+  const messageTypes: string[] = [];
+
+  let rendered = "";
+  let code = "";
+  for (const token of tokens) {
+    docsSeen.add(buildStreamingSourceDocument()); // what React would pass as srcDoc each render
+    code += token;
+    const message = nextStreamingSourceMessage(rendered, code);
+    assert.ok(message, "each token must yield an update");
+    messageTypes.push(message.type);
+    rendered = code;
+  }
+
+  assert.equal(docsSeen.size, 1, "the streaming document is constant — a single iframe load per session");
+  assert.deepEqual(messageTypes, tokens.map(() => "preview-src-append"), "every token is an in-place append, never a rebuild");
+  assert.equal(rendered, "export default function App() { return null; }");
+});
+
+test("streaming source document ships an empty mount point and never inlines token text", () => {
+  const doc = buildStreamingSourceDocument();
+  assert.match(doc, /<pre id="preview-src"><\/pre>/); // empty mount point, no baked-in code
+  assert.match(doc, /addEventListener\("message"/); // listener present for incremental updates
+  assert.match(doc, /textContent/); // updates via textContent, so streamed source can't inject markup
+});
