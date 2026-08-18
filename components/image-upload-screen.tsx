@@ -1,10 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { StepHeader } from "@/components/step-header";
 import { readImageDimensions } from "@/lib/image-dimensions";
 import { preprocessScreenshot } from "@/lib/screenshot-preprocess";
 import { useRoundImage } from "@/lib/stores/round-image";
@@ -89,93 +89,91 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
   }, [acceptFile]);
 
   return (
-    <main className="upload-page">
+    <main className="upload-page feedback-page">
       <div className="upload-dot-grid" aria-hidden="true" />
-      <div className="upload-page-atmosphere" aria-hidden="true" />
+      <div className="feedback-atmosphere" aria-hidden="true" />
+      <StepHeader />
 
-      <header className="upload-header">
-        <Link className="upload-wordmark" href="/" aria-label="Coquí home">
-          <Image src="/brand/coqui-wordmark.svg" alt="Coquí" width={56} height={26} priority />
-        </Link>
-        <div className="upload-header-actions">
-          <a className="upload-help-link" href="mailto:bryan@bryanlew.is">
-            Need help? <span className="upload-help-link-cta">Get in touch</span>
-          </a>
-          <button className="upload-sound-button" type="button" aria-label="Sound is muted" disabled>
-            <Image src="/brand/icon-volume-cross.svg" alt="" width={20} height={20} />
-          </button>
-        </div>
-      </header>
-
-      <section className="upload-stage" aria-labelledby="upload-title">
-        <div className={`upload-card ${isDragging ? "is-dragging" : ""}`}>
-          {previewUrl ? (
-            <div className="upload-preview-wrap">
-              {/* eslint-disable-next-line @next/next/no-img-element -- local object URL preview */}
-              <img
-                ref={previewRef}
-                className="upload-preview"
-                src={previewUrl}
-                alt={`Selected ${fileName ?? "screen"}`}
+      {/* Figma node 57:293 — the same two-panel "stage" shell as /feedback: heading on the left,
+          the bring-a-screen action living in the right "aside — the brief" panel. */}
+      <div className="feedback-body">
+        <section className="feedback-stage" aria-labelledby="upload-title">
+          <div className="upload-hero">
+            {previewUrl ? (
+              <figure className="feedback-reference upload-hero-figure">
+                <div className="feedback-reference-frame">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- local object URL preview */}
+                  <img
+                    ref={previewRef}
+                    className="feedback-reference-img"
+                    src={previewUrl}
+                    alt={`Selected ${fileName ?? "screen"}`}
+                  />
+                </div>
+              </figure>
+            ) : (
+              <Image
+                className="upload-illustration"
+                src="/brand/coqui-illustration.svg"
+                alt="A frog carrying a framed picture"
+                width={150}
+                height={178}
+                priority
               />
-            </div>
-          ) : (
-            <Image
-              className="upload-illustration"
-              src="/brand/coqui-illustration.svg"
-              alt="A frog carrying a framed picture"
-              width={150}
-              height={178}
-              priority
-            />
-          )}
-
-          <div className="upload-content">
-            <h1 id="upload-title">{previewUrl ? "Screen ready to improve" : "Add the screen you want to improve"}</h1>
-            <button
-              className="upload-dropzone"
-              type="button"
-              onClick={() => inputRef.current?.click()}
-              onDragEnter={(event) => {
-                event.preventDefault();
-                setIsDragging(true);
-              }}
-              onDragOver={(event) => event.preventDefault()}
-              onDragLeave={() => setIsDragging(false)}
-              onDrop={(event) => {
-                event.preventDefault();
-                setIsDragging(false);
-                acceptFile(event.dataTransfer.files[0]);
-              }}
-              aria-label={previewUrl ? "Choose a different image" : "Select image to upload"}
-            >
-              <span className="upload-dropzone-action">{previewUrl ? "Choose a different image" : "Select image to upload"}</span>
-              {!previewUrl && (
-                <span className="upload-dropzone-hint">
-                  also you can drop your image or <kbd>⌘</kbd><kbd>V</kbd> to paste
-                </span>
-              )}
-            </button>
-            <input
-              ref={inputRef}
-              className="upload-file-input"
-              type="file"
-              accept="image/*"
-              onChange={(event) => acceptFile(event.target.files?.[0])}
-            />
-            {previewUrl && (
-              <button
-                className="upload-proceed"
-                type="button"
-                onClick={proceedToFeedback}
-                disabled={isProceeding}
-              >
-                {isProceeding ? "Opening brief\u2026" : "Continue to feedback"}
-              </button>
             )}
+            <h1 id="upload-title" className="upload-hero-title">
+              {previewUrl ? "Screen ready to improve" : "Add the screen you want to improve"}
+            </h1>
           </div>
-        </div>
-      </section>
+        </section>
+
+        <aside className="feedback-panel upload-aside" aria-label="Bring in a screen">
+          <button
+            className={`upload-dropzone ${isDragging ? "is-dragging" : ""}`}
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            onDragEnter={(event) => {
+              event.preventDefault();
+              setIsDragging(true);
+            }}
+            onDragOver={(event) => event.preventDefault()}
+            onDragLeave={() => setIsDragging(false)}
+            onDrop={(event) => {
+              event.preventDefault();
+              setIsDragging(false);
+              acceptFile(event.dataTransfer.files[0]);
+            }}
+            aria-label={previewUrl ? "Choose a different image" : "Select image to upload"}
+          >
+            <span className="upload-dropzone-action">
+              {previewUrl ? "Choose a different image" : "Select image to upload"}
+            </span>
+            {!previewUrl && (
+              <span className="upload-dropzone-hint">
+                also you can drop your image or <kbd>⌘</kbd>
+                <kbd>V</kbd> to paste
+              </span>
+            )}
+          </button>
+          <input
+            ref={inputRef}
+            className="upload-file-input"
+            type="file"
+            accept="image/*"
+            onChange={(event) => acceptFile(event.target.files?.[0])}
+          />
+          {previewUrl && (
+            <button
+              className="upload-proceed"
+              type="button"
+              onClick={proceedToFeedback}
+              disabled={isProceeding}
+            >
+              {isProceeding ? "Opening brief\u2026" : "Continue to feedback"}
+            </button>
+          )}
+        </aside>
+      </div>
     </main>
   );
 }

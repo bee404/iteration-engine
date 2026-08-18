@@ -1292,6 +1292,47 @@ body:has(.upload-page) {
   white-space: nowrap;
 }
 
+/* Two-panel /upload (Figma node 57:293): left content column holds the illustration/preview and
+   the heading; the dropzone lives inside the shared "aside — the brief" panel on the right. */
+.upload-hero {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 22px;
+}
+
+.upload-hero-figure {
+  width: auto;
+  align-items: flex-start;
+}
+
+.upload-hero-title {
+  max-width: 14ch;
+  margin: 0;
+  color: var(--upload-display);
+  font-family: "Owners Narrow", "Arial Narrow", sans-serif;
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: 0.6px;
+  line-height: 1.12;
+  text-align: left;
+}
+
+.upload-aside {
+  justify-content: center;
+  gap: 14px;
+}
+
+.upload-aside .upload-dropzone {
+  width: 100%;
+}
+
+.upload-dropzone.is-dragging {
+  border-color: rgba(226, 181, 32, 0.6);
+  background: #fffdf5;
+}
+
 @media (max-width: 640px) {
   .upload-page {
     padding: 10px 12px 12px;
