@@ -2,9 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 
+import { ReferenceImage } from "@/components/reference-image";
+import { StepHeader } from "@/components/step-header";
 import { useRoundImage } from "@/lib/stores/round-image";
+import { useStepStage } from "@/lib/use-step-stage";
 
 type SynthesizeStatus = "idle" | "synthesizing" | "done";
 
@@ -17,8 +21,11 @@ const MORPH_MS = 520;
  * the brief panel slides in from the right. Reduced-motion and direct-load both fall back cleanly.
  */
 export function FeedbackScreen() {
+  const router = useRouter();
   const image = useRoundImage((state) => state.image);
   const clearTransition = useRoundImage((state) => state.clearTransition);
+  const setBrief = useRoundImage((state) => state.setBrief);
+  const stage = useStepStage();
   // Snapshot the origin rect once: the store's copy is cleared as soon as the entrance plays.
   const [origin] = useState(() => useRoundImage.getState().transitionOrigin);
 
@@ -31,7 +38,6 @@ export function FeedbackScreen() {
   const [reviewerContext, setReviewerContext] = useState("");
   const [constraints, setConstraints] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [status, setStatus] = useState<SynthesizeStatus>("idle");
 
   useLayoutEffect(() => {
@@ -92,47 +98,20 @@ export function FeedbackScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // While the lightbox is open, trap Escape and lock body scroll behind the blurred backdrop.
-  useEffect(() => {
-    if (!isLightboxOpen) return;
-    const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsLightboxOpen(false);
-    };
-    window.addEventListener("keydown", onKey);
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [isLightboxOpen]);
-
   const handleSynthesize = useCallback(() => {
     if (status !== "idle" || !goal.trim() || !feedback.trim()) return;
     setStatus("synthesizing");
+    // No backend yet: treat the click as a successful synthesis — persist the brief, then run the
+    // canonical exit-up transition before handing off to the synthesized-feedback step.
     window.setTimeout(() => {
-      setStatus("done");
-      window.setTimeout(() => setStatus("idle"), 1600);
-    }, 1500);
-  }, [feedback, goal, status]);
+      setBrief({ goal, feedback, reviewerContext, constraints });
+      stage.exit(() => router.push("/synthesized"));
+    }, 700);
+  }, [goal, feedback, reviewerContext, constraints, status, setBrief, stage, router]);
 
   const canSynthesize = goal.trim().length > 0 && feedback.trim().length > 0 && status === "idle";
 
-  const header = (
-    <header className="upload-header">
-      <Link className="upload-wordmark" href="/" aria-label="Coquí home">
-        <Image src="/brand/coqui-wordmark.svg" alt="Coquí" width={56} height={26} priority />
-      </Link>
-      <div className="upload-header-actions">
-        <a className="upload-help-link" href="mailto:bryan@bryanlew.is">
-          Need help? <span className="upload-help-link-cta">Get in touch</span>
-        </a>
-        <button className="upload-sound-button" type="button" aria-label="Sound is muted" disabled>
-          <Image src="/brand/icon-volume-cross.svg" alt="" width={20} height={20} />
-        </button>
-      </div>
-    </header>
-  );
+  const header = <StepHeader />;
 
   if (!image) {
     return (
@@ -151,44 +130,15 @@ export function FeedbackScreen() {
     );
   }
 
-  const dimensionLabel = image.dimensions
-    ? `${image.dimensions.width} × ${image.dimensions.height} · viewport inferred`
-    : "viewport inferred";
-
   return (
     <main className="upload-page feedback-page">
       <div className="upload-dot-grid" aria-hidden="true" />
       <div className="feedback-atmosphere" aria-hidden="true" />
       {header}
 
-      <div className="feedback-body">
+      <div className={`feedback-body ${stage.stageClass}`}>
         <section className="feedback-stage">
-          <figure className="feedback-reference">
-            {/* Layered "Background+Shadow" frame (Figma node 9:484). A future Pinpoint annotation
-                layer mounts inside this frame above the image; the zoom trigger stays underneath it. */}
-            <div className="feedback-reference-frame">
-              {/* eslint-disable-next-line @next/next/no-img-element -- carried data URL, dimensions unknown at build */}
-              <img
-                ref={referenceImgRef}
-                className={`feedback-reference-img ${phase !== "done" ? "is-hidden" : ""}`}
-                src={image.dataUrl}
-                alt={`Reference screen ${image.fileName}`}
-              />
-              <button
-                className="feedback-reference-open"
-                type="button"
-                onClick={() => setIsLightboxOpen(true)}
-                aria-label={`View ${image.fileName} at full size`}
-              >
-                <span className="feedback-reference-zoom" aria-hidden="true">
-                  <Image src="/brand/icon-expand.svg" alt="" width={14} height={14} />
-                </span>
-              </button>
-            </div>
-            <figcaption className="feedback-caption">
-              {image.fileName} · {dimensionLabel}
-            </figcaption>
-          </figure>
+          <ReferenceImage image={image} imgRef={referenceImgRef} hidden={phase !== "done"} />
         </section>
 
         <aside className={`feedback-panel ${hasEntrance && phase !== "done" ? "is-offstage" : ""}`}>
@@ -277,31 +227,6 @@ export function FeedbackScreen() {
           </div>
         </aside>
       </div>
-
-      {isLightboxOpen && (
-        <div
-          className="feedback-lightbox"
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${image.fileName} at full size`}
-        >
-          <div className="feedback-lightbox-scrim" onClick={() => setIsLightboxOpen(false)} />
-          <button
-            className="feedback-lightbox-close"
-            type="button"
-            onClick={() => setIsLightboxOpen(false)}
-            aria-label="Close full view"
-          >
-            <span aria-hidden="true">×</span>
-          </button>
-          {/* eslint-disable-next-line @next/next/no-img-element -- carried data URL, dimensions unknown at build */}
-          <img
-            className="feedback-lightbox-img"
-            src={image.dataUrl}
-            alt={`Reference screen ${image.fileName}`}
-          />
-        </div>
-      )}
 
       {isExpanded && (
         <div className="feedback-modal" role="dialog" aria-modal="true" aria-label="Feedback editor">
