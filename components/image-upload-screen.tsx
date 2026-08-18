@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { readImageDimensions } from "@/lib/image-dimensions";
+import { preprocessScreenshot } from "@/lib/screenshot-preprocess";
 import { useRoundImage } from "@/lib/stores/round-image";
 
 type ImageUploadScreenProps = {
@@ -52,8 +53,12 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
     if (!file || isProceeding) return;
     setIsProceeding(true);
     try {
-      const dataUrl = await readAsDataUrl(file);
-      const dimensions = await readImageDimensions(dataUrl);
+      const rawDataUrl = await readAsDataUrl(file);
+      // Strip browser/OS chrome and letterbox padding so the reference on /feedback is a clean UI.
+      const processed = await preprocessScreenshot(rawDataUrl);
+      const dataUrl = processed.dataUrl;
+      const dimensions =
+        processed.dimensions.width > 0 ? processed.dimensions : await readImageDimensions(dataUrl);
       const rect = previewRef.current?.getBoundingClientRect();
       const origin = rect
         ? { top: rect.top, left: rect.left, width: rect.width, height: rect.height }

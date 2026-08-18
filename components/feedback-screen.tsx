@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { useRoundImage } from "@/lib/stores/round-image";
 
@@ -31,6 +31,7 @@ export function FeedbackScreen() {
   const [reviewerContext, setReviewerContext] = useState("");
   const [constraints, setConstraints] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [status, setStatus] = useState<SynthesizeStatus>("idle");
 
   useLayoutEffect(() => {
@@ -91,6 +92,21 @@ export function FeedbackScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // While the lightbox is open, trap Escape and lock body scroll behind the blurred backdrop.
+  useEffect(() => {
+    if (!isLightboxOpen) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsLightboxOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [isLightboxOpen]);
+
   const handleSynthesize = useCallback(() => {
     if (status !== "idle" || !goal.trim() || !feedback.trim()) return;
     setStatus("synthesizing");
@@ -148,13 +164,27 @@ export function FeedbackScreen() {
       <div className="feedback-body">
         <section className="feedback-stage">
           <figure className="feedback-reference">
-            {/* eslint-disable-next-line @next/next/no-img-element -- carried data URL, dimensions unknown at build */}
-            <img
-              ref={referenceImgRef}
-              className={`feedback-reference-img ${phase !== "done" ? "is-hidden" : ""}`}
-              src={image.dataUrl}
-              alt={`Reference screen ${image.fileName}`}
-            />
+            {/* Layered "Background+Shadow" frame (Figma node 9:484). A future Pinpoint annotation
+                layer mounts inside this frame above the image; the zoom trigger stays underneath it. */}
+            <div className="feedback-reference-frame">
+              {/* eslint-disable-next-line @next/next/no-img-element -- carried data URL, dimensions unknown at build */}
+              <img
+                ref={referenceImgRef}
+                className={`feedback-reference-img ${phase !== "done" ? "is-hidden" : ""}`}
+                src={image.dataUrl}
+                alt={`Reference screen ${image.fileName}`}
+              />
+              <button
+                className="feedback-reference-open"
+                type="button"
+                onClick={() => setIsLightboxOpen(true)}
+                aria-label={`View ${image.fileName} at full size`}
+              >
+                <span className="feedback-reference-zoom" aria-hidden="true">
+                  <Image src="/brand/icon-expand.svg" alt="" width={14} height={14} />
+                </span>
+              </button>
+            </div>
             <figcaption className="feedback-caption">
               {image.fileName} · {dimensionLabel}
             </figcaption>
@@ -247,6 +277,31 @@ export function FeedbackScreen() {
           </div>
         </aside>
       </div>
+
+      {isLightboxOpen && (
+        <div
+          className="feedback-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${image.fileName} at full size`}
+        >
+          <div className="feedback-lightbox-scrim" onClick={() => setIsLightboxOpen(false)} />
+          <button
+            className="feedback-lightbox-close"
+            type="button"
+            onClick={() => setIsLightboxOpen(false)}
+            aria-label="Close full view"
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+          {/* eslint-disable-next-line @next/next/no-img-element -- carried data URL, dimensions unknown at build */}
+          <img
+            className="feedback-lightbox-img"
+            src={image.dataUrl}
+            alt={`Reference screen ${image.fileName}`}
+          />
+        </div>
+      )}
 
       {isExpanded && (
         <div className="feedback-modal" role="dialog" aria-modal="true" aria-label="Feedback editor">
