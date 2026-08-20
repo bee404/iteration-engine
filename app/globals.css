@@ -12,6 +12,10 @@
   --accent-grad-start: #f5cf4f;
   --accent-grad-end: #f8c105;
 
+  /* Outer-chrome frame gold — measured directly off the Figma export for node 132:3296, distinct
+     from --accent (the in-app button/focus gold) so the two can diverge without cross-talk. */
+  --chrome-border: #f5cf4f;
+
   /* Ink ladder — warm brown only for headings; everything else cool grey. */
   --display-ink: #372606;
   --ink: #10121a;
@@ -1021,7 +1025,7 @@ button {
 /* Route-level frame color for the upload surface — matches the persistent chrome border so any
    rubber-band overscroll shows gold, not the page background. */
 body:has(.app-chrome) {
-  background: var(--accent);
+  background: var(--chrome-border);
 }
 
 /* ---------------------------------------------------------------------------
@@ -1039,7 +1043,7 @@ body:has(.app-chrome) {
   z-index: 0;
   display: flex;
   padding: 16px;
-  border: 8px solid var(--accent);
+  border: 8px solid var(--chrome-border);
   border-radius: var(--r-shell);
   background: var(--ground);
   box-shadow: inset 0 1px 2px rgba(16, 18, 26, 0.08), inset 0 0 0 1px rgba(16, 18, 26, 0.04);
@@ -1052,8 +1056,10 @@ body:has(.app-chrome) {
   z-index: 0;
   pointer-events: none;
   content: "";
-  background-image: radial-gradient(circle at 1px 1px, rgba(40, 40, 40, 0.16) 1px, transparent 0);
-  background-size: 16px 16px;
+  /* Dot alpha tuned so the composited result over --ground (#f8f9fb) reads as ~#e9e9e9 —
+     matched to the reference export sample, not just eyeballed. */
+  background-image: radial-gradient(circle at 1px 1px, rgba(16, 18, 26, 0.075) 1px, transparent 0);
+  background-size: 20px 20px;
   mask-image: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.68) 52%, transparent 88%);
 }
 
@@ -1071,7 +1077,6 @@ body:has(.app-chrome) {
 
 .upload-page {
   --upload-ground: #f8f9fb;
-  --upload-frame: #e2b520;
   --upload-ink: #10121a;
   --upload-display: #372606;
   --upload-body: #404253;
