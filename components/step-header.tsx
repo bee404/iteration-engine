@@ -5,7 +5,7 @@ import Link from "next/link";
 export function StepHeader() {
   return (
     <header className="upload-header">
-      <Link className="upload-wordmark" href="/" aria-label="Coquí home">
+      <Link className="upload-wordmark" href="/upload" aria-label="Coquí home">
         <Image src="/brand/coqui-wordmark.svg" alt="Coquí" width={56} height={26} priority />
       </Link>
       <div className="upload-header-actions">

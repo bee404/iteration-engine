@@ -52,7 +52,7 @@ export default function WorkflowPage() {
   return (
     <main className="workflow-page">
       <header className="workflow-header">
-        <Link className="workflow-wordmark" href="/" aria-label="Back to Coquí workspace">
+        <Link className="workflow-wordmark" href="/upload" aria-label="Back to Coquí workspace">
           <Image src="/brand/coqui-wordmark.svg" alt="Coquí" width={56} height={26} priority />
         </Link>
         <button className="workflow-sound-button" type="button" aria-label="Play coquí call" disabled>
@@ -210,7 +210,7 @@ export default function WorkflowPage() {
 
       <footer className="workflow-footer">
         <span>One screen. One decision. One clearer next round.</span>
-        <Link href="/">Back to Coquí <span aria-hidden="true">↗</span></Link>
+        <Link href="/upload">Back to Coquí <span aria-hidden="true">↗</span></Link>
       </footer>
     </main>
   );
