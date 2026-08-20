@@ -1087,7 +1087,8 @@ body:has(.upload-page) {
 }
 
 .upload-header {
-  display: flex;
+  /* Bryan: hidden for now, not committed to current form, will redesign later. Keep markup intact. */
+  display: none;
   width: 100%;
   height: 52px;
   flex-shrink: 0;
@@ -1238,6 +1239,7 @@ body:has(.upload-page) {
   color: var(--upload-body);
   font: inherit;
   text-align: center;
+  cursor: pointer;
   transition: border-color 160ms ease, background-color 160ms ease;
 }
 
