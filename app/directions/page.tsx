@@ -1,6 +1,5 @@
-import { DirectionsScreen } from "@/components/directions-screen";
+import { DirectionsScreen } from "@/components/direction-selection-list";
 
 export default function DirectionsPage() {
   return <DirectionsScreen />;
 }
-

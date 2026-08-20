@@ -13,27 +13,43 @@ import { useStepStage } from "@/lib/use-step-stage";
 interface SelectionRowProps {
   direction: Direction;
   isSelected: boolean;
+  isExpanded: boolean;
   onSelect: () => void;
+  onExpand: () => void;
 }
 
 /**
  * One direction rendered as a full-width bordered row inside the shared list container (Figma
- * node 127:1400) — the alternate to `ApproachCard`'s floating-tile layout. Collapsed rows show a
- * single-line truncated description; expand to the full description plus a Details/Tradeoffs
- * two-column layout is driven off a single :hover selector in globals.css (see
- * .selection-list__*), the same always-in-sync-with-the-pointer convention `ApproachCard` uses,
- * so this never touches that component's markup or styles. Data bindings are identical: title,
- * rationale, suggestedChanges, tradeoffs, and patternReference all come from the same `Direction`
- * shape, so the two layouts render the exact same three directions for direct comparison.
+ * node 127:1400) — the primary step-04 layout, having replaced the earlier floating-tile
+ * `ApproachCard` grid. Exactly one row is expanded at a time (single-open accordion): clicking a
+ * row tells the parent to make it the expanded one via `onExpand`. Expansion is driven entirely
+ * by that parent-owned state (`.is-expanded`), never by `:hover`, so pointing at a row can no
+ * longer change which one is open. Data bindings are unchanged: title, rationale,
+ * suggestedChanges, tradeoffs, and patternReference all come from the same `Direction` shape.
  */
-function SelectionRow({ direction, isSelected, onSelect }: SelectionRowProps) {
+function SelectionRow({ direction, isSelected, isExpanded, onSelect, onExpand }: SelectionRowProps) {
   return (
-    <article className={`selection-list__row ${isSelected ? "is-selected" : ""}`}>
+    <article
+      className={`selection-list__row ${isSelected ? "is-selected" : ""} ${isExpanded ? "is-expanded" : ""}`}
+      role="button"
+      tabIndex={0}
+      aria-expanded={isExpanded}
+      onClick={onExpand}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onExpand();
+        }
+      }}
+    >
       <div className="selection-list__row-head">
         <h3 className="selection-list__title">{direction.title}</h3>
         <button
           type="button"
-          onClick={onSelect}
+          onClick={(event) => {
+            event.stopPropagation();
+            onSelect();
+          }}
           aria-pressed={isSelected}
           className="selection-list__select"
         >
@@ -66,6 +82,7 @@ function SelectionRow({ direction, isSelected, onSelect }: SelectionRowProps) {
             target="_blank"
             rel="noreferrer"
             className="selection-list__source"
+            onClick={(event) => event.stopPropagation()}
           >
             <PatternLinkIcon />
             Inspiration source
@@ -77,16 +94,20 @@ function SelectionRow({ direction, isSelected, onSelect }: SelectionRowProps) {
 }
 
 /**
- * Standalone comparison route for the alternate step-04 layout (Figma node 127:1400): the same
- * three `PREVIEW_DIRECTIONS`, laid out as one bordered row-list instead of `DirectionsScreen`'s
- * three-tile grid. Reachable at /directions-alt so it can be reviewed side-by-side with the live
- * /directions cards — it does not replace, import, or modify that route or `ApproachCard` in any
- * way. Reuses the same page chrome and step transition so only the direction layout differs.
+ * The fourth step (directions): three genuinely distinct approaches, each with its rationale,
+ * tradeoffs, and a 21st.dev component it's grounded in, presented as a single-column row-list
+ * (Figma node 127:1400) for the user to select one. Rows behave as a single-open accordion — the
+ * first row is expanded on load, and clicking any other (collapsed) row swaps the expansion over
+ * to it, so there is always exactly one row expanded, never zero and never more than one.
+ * Populated with canned data for this design-QA pass (real AI generation is out of scope), and
+ * arrives on the canonical enter-from-bottom step transition straight from /feedback — the
+ * /synthesized recap is no longer a stop in this path (see synthesized-screen.tsx).
  */
-export function DirectionsAltScreen() {
+export function DirectionsScreen() {
   const router = useRouter();
   const stage = useStepStage();
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [expandedId, setExpandedId] = useState<string | null>(PREVIEW_DIRECTIONS[0]?.id ?? null);
 
   const handleContinue = useCallback(() => {
     if (!selectedId) return;
@@ -103,11 +124,11 @@ export function DirectionsAltScreen() {
 
       <div className={`directions-body ${stage.stageClass}`}>
         <header className="directions-header">
-          <span className="directions-kicker">Step 04 · Alternate layout</span>
+          <span className="directions-kicker">Step 04</span>
           <h1 className="directions-title">Choose a direction</h1>
           <p className="directions-lede">
-            The same three approaches as /directions, laid out as a single row-list (Figma node
-            127:1400) instead of separate cards — for side-by-side comparison.
+            Three distinct takes on your brief — each names the decision it makes, the tradeoff it
+            accepts, and a real pattern it&apos;s grounded in. Pick the one worth carrying forward.
           </p>
         </header>
 
@@ -119,7 +140,9 @@ export function DirectionsAltScreen() {
                 key={direction.id}
                 direction={direction}
                 isSelected={selectedId === direction.id}
+                isExpanded={expandedId === direction.id}
                 onSelect={() => setSelectedId(direction.id)}
+                onExpand={() => setExpandedId(direction.id)}
               />
             ))}
           </div>
@@ -146,4 +169,3 @@ export function DirectionsAltScreen() {
     </main>
   );
 }
-

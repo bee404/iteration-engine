@@ -1,10 +1,11 @@
-import { DirectionsAltScreen } from "@/components/direction-selection-list";
+import { redirect } from "next/navigation";
 
 /**
- * Comparison route for the alternate step-04 row-list layout (Figma node 127:1400). Does not
- * replace /directions — both routes stay live so the two layouts can be reviewed side by side.
+ * The row-list layout that used to live here for side-by-side comparison (Figma node 127:1400)
+ * is now the primary step-04 screen at /directions. This route redirects rather than
+ * disappearing outright, so any existing links or bookmarks to /directions-alt still land on
+ * the live screen instead of a 404.
  */
 export default function DirectionsAltPage() {
-  return <DirectionsAltScreen />;
+  redirect("/directions");
 }
-

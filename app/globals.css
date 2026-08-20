@@ -3430,9 +3430,9 @@ body:has(.upload-page) {
 }
 
 /* ---------------------------------------------------------------------------
-   Alternate step-04 layout (Figma node 127:1400) — a single bordered row-list, coexisting
-   alongside .approach-card above for direct comparison at /directions-alt. Selectors below only
-   ever touch .selection-list*; nothing here is shared with or overrides .approach-card*.
+   Primary step-04 layout (Figma node 127:1400) — a single bordered row-list, replacing the
+   earlier .approach-card grid at /directions. Exactly one row is expanded at a time via the
+   .is-expanded class (set by DirectionsScreen's click-driven accordion state), never by :hover.
    --------------------------------------------------------------------------- */
 .selection-list {
   width: 100%;
@@ -3463,6 +3463,7 @@ body:has(.upload-page) {
   border: 1px solid var(--line);
   border-radius: var(--r-xl);
   padding: 20px 24px;
+  cursor: pointer;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -3470,6 +3471,11 @@ body:has(.upload-page) {
 .selection-list__row.is-selected {
   border-color: var(--ink-mute);
   box-shadow: var(--e-raised);
+}
+
+.selection-list__row:focus-visible {
+  outline: 2px solid rgba(226, 181, 32, 0.56);
+  outline-offset: 3px;
 }
 
 .selection-list__row-head {
@@ -3500,7 +3506,7 @@ body:has(.upload-page) {
   text-overflow: ellipsis;
 }
 
-.selection-list__row:hover .selection-list__description {
+.selection-list__row.is-expanded .selection-list__description {
   display: block;
   -webkit-line-clamp: initial;
   overflow: visible;
@@ -3517,7 +3523,7 @@ body:has(.upload-page) {
   transition: max-height 0.35s ease, opacity 0.3s ease, margin-top 0.35s ease;
 }
 
-.selection-list__row:hover .selection-list__details-grid {
+.selection-list__row.is-expanded .selection-list__details-grid {
   max-height: 280px;
   margin-top: 16px;
   opacity: 1;
