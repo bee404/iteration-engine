@@ -1,9 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState, type RefObject } from "react";
+import { useEffect, useState, type CSSProperties, type RefObject } from "react";
 
+import { toCssColor, type VerticalColorSplit } from "@/lib/screenshot-edge-colors";
+import { useScreenshotColorSplit } from "@/lib/use-screenshot-color-split";
 import type { RoundImage } from "@/lib/stores/round-image";
+
+/** The custom properties `.feedback-reference-frame.is-split` reads. */
+type SplitVars = CSSProperties &
+  Record<"--ref-split-leading" | "--ref-split-trailing" | "--ref-split-at", string>;
 
 interface ReferenceImageProps {
   image: RoundImage;
@@ -21,6 +27,7 @@ interface ReferenceImageProps {
  */
 export function ReferenceImage({ image, imgRef, hidden }: ReferenceImageProps) {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const colorSplit = useScreenshotColorSplit(image.dataUrl);
 
   // While the lightbox is open, trap Escape and lock body scroll behind the blurred backdrop.
   useEffect(() => {
@@ -45,7 +52,10 @@ export function ReferenceImage({ image, imgRef, hidden }: ReferenceImageProps) {
     <figure className="feedback-reference">
       {/* Layered "Background+Shadow" frame (Figma node 9:484). A future Pinpoint annotation layer
           mounts inside this frame above the image; the zoom trigger stays underneath it. */}
-      <div className="feedback-reference-frame">
+      <div
+        className={`feedback-reference-frame ${colorSplit ? "is-split" : ""}`}
+        style={splitVars(colorSplit)}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element -- carried data URL, dimensions unknown at build */}
         <img
           ref={imgRef}
@@ -94,5 +104,14 @@ export function ReferenceImage({ image, imgRef, hidden }: ReferenceImageProps) {
       )}
     </figure>
   );
+}
+
+function splitVars(split: VerticalColorSplit | null): SplitVars | undefined {
+  if (!split) return undefined;
+  return {
+    "--ref-split-leading": toCssColor(split.leading),
+    "--ref-split-trailing": toCssColor(split.trailing),
+    "--ref-split-at": String(split.boundary),
+  };
 }
 

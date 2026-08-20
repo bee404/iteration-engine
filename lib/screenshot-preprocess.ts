@@ -1,3 +1,4 @@
+import { analysisSize, decodeImage, rasterize } from "@/lib/screenshot-raster";
 import type { ImageDimensions } from "@/lib/types";
 
 export interface PreprocessedScreenshot {
@@ -35,18 +36,16 @@ export async function preprocessScreenshot(source: string): Promise<Preprocessed
   }
 
   try {
-    const image = await decode(source);
+    const image = await decodeImage(source);
     const naturalWidth = image.naturalWidth;
     const naturalHeight = image.naturalHeight;
     if (!naturalWidth || !naturalHeight) {
       return { dataUrl: source, dimensions: { width: 0, height: 0 }, cropped: false };
     }
 
-    const scale = Math.min(1, ANALYSIS_MAX / Math.max(naturalWidth, naturalHeight));
-    const aw = Math.max(1, Math.round(naturalWidth * scale));
-    const ah = Math.max(1, Math.round(naturalHeight * scale));
+    const { width: aw, height: ah } = analysisSize(naturalWidth, naturalHeight, ANALYSIS_MAX);
 
-    const analysis = drawTo(image, aw, ah);
+    const analysis = rasterize(image, aw, ah);
     if (!analysis) return fallback(source, naturalWidth, naturalHeight);
     const { data } = analysis;
 
@@ -81,25 +80,6 @@ export async function preprocessScreenshot(source: string): Promise<Preprocessed
   } catch {
     return { dataUrl: source, dimensions: { width: 0, height: 0 }, cropped: false };
   }
-}
-
-function decode(source: string): Promise<HTMLImageElement> {
-  return new Promise((resolve, reject) => {
-    const image = new Image();
-    image.onload = () => resolve(image);
-    image.onerror = () => reject(new Error("decode failed"));
-    image.src = source;
-  });
-}
-
-function drawTo(image: HTMLImageElement, w: number, h: number): ImageData | null {
-  const canvas = document.createElement("canvas");
-  canvas.width = w;
-  canvas.height = h;
-  const ctx = canvas.getContext("2d", { willReadFrequently: true });
-  if (!ctx) return null;
-  ctx.drawImage(image, 0, 0, w, h);
-  return ctx.getImageData(0, 0, w, h);
 }
 
 /** Counts trimmable lines inward from one edge, stopping at the first line with real detail. */

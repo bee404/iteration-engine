@@ -2489,10 +2489,11 @@ body:has(.upload-page) {
 /* Node 9:484 "Background+Shadow": a white card that cradles the screenshot behind a layered
    drop shadow, a hairline edge, and a rounded inner mat — not a bare image box. */
 .feedback-reference-frame {
+  --ref-pad: 28px;
   position: relative;
   align-self: center;
   max-width: 100%;
-  padding: 10px;
+  padding: var(--ref-pad);
   border-radius: 16px;
   background: #fff;
   box-shadow:
@@ -2500,6 +2501,26 @@ body:has(.upload-page) {
     0 6px 16px -6px rgba(16, 18, 26, 0.12),
     0 30px 60px -22px rgba(16, 18, 26, 0.22),
     inset 0 0 0 1px rgba(16, 18, 26, 0.06);
+}
+
+/* When the screenshot resolves into two flat colour zones, continue them across the whole frame so
+   its own colours appear to bleed outward into the inset space (Figma node 118:1234). Gradient stops
+   resolve against the padding box, so the boundary lands exactly where it sits on the image itself.
+   Set by ReferenceImage; absent whenever detection is inconclusive, leaving the neutral card. */
+.feedback-reference-frame.is-split {
+  --ref-split-x: calc(var(--ref-pad) + (100% - 2 * var(--ref-pad)) * var(--ref-split-at));
+  background-image: linear-gradient(
+    90deg,
+    var(--ref-split-leading) 0 var(--ref-split-x),
+    var(--ref-split-trailing) var(--ref-split-x) 100%
+  );
+}
+
+/* The mat's own edge would draw a visible seam straight through the bleed, so it steps aside. */
+.feedback-reference-frame.is-split .feedback-reference-img {
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .feedback-reference-img {
@@ -2887,6 +2908,10 @@ body:has(.upload-page) {
   .feedback-panel {
     width: min(420px, 100%);
     max-width: 100%;
+  }
+
+  .feedback-reference-frame {
+    --ref-pad: 16px;
   }
 
   .feedback-reference-img {
