@@ -1018,9 +1018,53 @@ button {
   }
 }
 
-/* Route-level frame color for the upload surface. */
-body:has(.upload-page) {
-  background: #e2b520;
+/* Route-level frame color for the upload surface — matches the persistent chrome border so any
+   rubber-band overscroll shows gold, not the page background. */
+body:has(.app-chrome) {
+  background: var(--accent);
+}
+
+/* ---------------------------------------------------------------------------
+   Persistent outer chrome (Figma node 132:3296, "Outer chrome") — the gold frame and dot-grid
+   ground for the whole Coquí app. Lives once at the (app) route-group layout level so it never
+   unmounts across step navigation (no white flash) and is pinned to the viewport via
+   position:fixed, so it can never be pushed out of view by in-page content growth (e.g. an
+   accordion row expanding on /directions). Everything a screen renders goes in
+   .app-chrome-content, which is the only thing that scrolls or resizes; the frame itself is
+   purely decorative and never moves.
+   --------------------------------------------------------------------------- */
+.app-chrome {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  padding: 16px;
+  border: 8px solid var(--accent);
+  border-radius: var(--r-shell);
+  background: var(--ground);
+  box-shadow: inset 0 1px 2px rgba(16, 18, 26, 0.08), inset 0 0 0 1px rgba(16, 18, 26, 0.04);
+  isolation: isolate;
+}
+
+.app-chrome-dot-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  content: "";
+  background-image: radial-gradient(circle at 1px 1px, rgba(40, 40, 40, 0.16) 1px, transparent 0);
+  background-size: 16px 16px;
+  mask-image: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.68) 52%, transparent 88%);
+}
+
+.app-chrome-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: calc(var(--r-shell) - 8px);
 }
 
 /* Coquí upload screen ----------------------------------------------------- */
@@ -1034,27 +1078,13 @@ body:has(.upload-page) {
   --upload-accent-text: #b28800;
   position: relative;
   display: flex;
-  min-height: 100vh;
+  flex: 1;
+  min-height: 0;
   flex-direction: column;
   overflow: hidden;
-  padding: 16px;
-  border: 8px solid var(--upload-frame);
-  border-radius: 24px;
-  background: var(--upload-ground);
   color: var(--upload-ink);
   font-family: Figtree, "Helvetica Neue", Arial, sans-serif;
   isolation: isolate;
-}
-
-.upload-dot-grid {
-  position: absolute;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-  content: "";
-  background-image: radial-gradient(circle at 1px 1px, rgba(40, 40, 40, 0.24) 1px, transparent 0);
-  background-size: 16px 16px;
-  mask-image: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.68) 52%, transparent 88%);
 }
 
 .upload-page::after {
@@ -1316,9 +1346,13 @@ body:has(.upload-page) {
 }
 
 @media (max-width: 640px) {
-  .upload-page {
-    padding: 10px 12px 12px;
+  .app-chrome {
+    padding: 10px;
     border-radius: 20px;
+  }
+
+  .app-chrome-content {
+    border-radius: 14px;
   }
 
   .upload-header {

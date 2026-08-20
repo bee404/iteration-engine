@@ -1,0 +1,19 @@
+import type { ReactNode } from "react";
+
+/**
+ * The persistent outer chrome for the whole Coquí app (Figma node 132:3296, "Outer chrome"):
+ * the gold border, its inner shadow, and the dot-grid ground. Rendered once by the (app) route
+ * group's layout, so it never unmounts across step navigation — eliminating the white flash on
+ * route transitions — and is pinned to the viewport (position:fixed in CSS), so it can never be
+ * pushed out of view by in-page content growth. Every screen renders into `.app-chrome-content`,
+ * the one thing that scrolls or resizes; the frame around it is static decoration.
+ */
+export function AppChrome({ children }: { children: ReactNode }) {
+  return (
+    <div className="app-chrome">
+      <div className="app-chrome-dot-grid" aria-hidden="true" />
+      <div className="app-chrome-content">{children}</div>
+    </div>
+  );
+}
+

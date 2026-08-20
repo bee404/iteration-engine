@@ -118,7 +118,6 @@ export function FeedbackScreen() {
   if (!image) {
     return (
       <main className="upload-page feedback-page">
-        <div className="upload-dot-grid" aria-hidden="true" />
         <div className="upload-page-atmosphere" aria-hidden="true" />
         {header}
         <section className="feedback-empty">
@@ -134,7 +133,6 @@ export function FeedbackScreen() {
 
   return (
     <main className="upload-page feedback-page">
-      <div className="upload-dot-grid" aria-hidden="true" />
       <div className="feedback-atmosphere" aria-hidden="true" />
       {header}
 

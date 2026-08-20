@@ -118,7 +118,6 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
 
   return (
     <main className="upload-page">
-      <div className="upload-dot-grid" aria-hidden="true" />
       <div className="upload-page-atmosphere" aria-hidden="true" />
       <StepHeader />
 

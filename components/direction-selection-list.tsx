@@ -118,7 +118,6 @@ export function DirectionsScreen() {
 
   return (
     <main className="upload-page feedback-page">
-      <div className="upload-dot-grid" aria-hidden="true" />
       <div className="feedback-atmosphere" aria-hidden="true" />
       <StepHeader />
 

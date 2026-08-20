@@ -38,7 +38,6 @@ export function SynthesizedScreen() {
   if (!image) {
     return (
       <main className="upload-page feedback-page">
-        <div className="upload-dot-grid" aria-hidden="true" />
         <div className="upload-page-atmosphere" aria-hidden="true" />
         <StepHeader />
         <section className="feedback-empty">
@@ -61,7 +60,6 @@ export function SynthesizedScreen() {
 
   return (
     <main className="upload-page feedback-page">
-      <div className="upload-dot-grid" aria-hidden="true" />
       <div className="feedback-atmosphere" aria-hidden="true" />
       <StepHeader />
 
