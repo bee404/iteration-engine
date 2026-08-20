@@ -3116,6 +3116,7 @@ body:has(.upload-page) {
 .directions-body .directions-grid {
   width: 100%;
   max-width: 1000px;
+  align-items: start;
 }
 
 .directions-actions {
@@ -3178,6 +3179,218 @@ body:has(.upload-page) {
   border-bottom-color: currentColor;
 }
 
+/* ---------------------------------------------------------------------------
+   Approach card — step-04 card redesign (Figma node 130:1896). Scoped entirely
+   under approach-card__* so the shared .direction-card pattern used by the live
+   workflow view (direction-card.tsx / directions-comparison.tsx) is untouched.
+
+   Three states, all CSS-driven off :hover — no extra component state:
+     default          — index badge, title, description, collapsed details
+                         preview (first bullet faintly visible), source pill,
+                         dark Select button.
+     hover            — card scales up subtly, Select button turns gold.
+     hover (expanded) — details list fully reveals, chevron flips, a Tradeoffs
+                         section fades in below it; card grows to fit.
+   --------------------------------------------------------------------------- */
+.approach-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface);
+  border-radius: var(--r-lg);
+  padding: 20px 20px 18px;
+  box-shadow: var(--e-card);
+  transform: scale(1);
+  transform-origin: top center;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.approach-card:hover {
+  transform: scale(1.025);
+  box-shadow: var(--e-panel);
+  z-index: 5;
+}
+
+.approach-card.is-selected {
+  box-shadow: var(--e-card), 0 0 0 2px var(--accent);
+}
+
+.approach-card.is-selected:hover {
+  box-shadow: var(--e-panel), 0 0 0 2px var(--accent);
+}
+
+.approach-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.approach-card__title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.25;
+  letter-spacing: 0.2px;
+  color: var(--display-ink);
+}
+
+.approach-card__index {
+  flex: none;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--accent-text);
+}
+
+.approach-card__description {
+  margin: 8px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink-body);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+}
+
+.approach-card__details {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.approach-card__details-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.approach-card__details-label,
+.approach-card__tradeoffs-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.approach-card__chevron {
+  flex: none;
+  color: var(--ink-mute);
+  transition: transform 0.2s ease;
+}
+
+.approach-card:hover .approach-card__chevron {
+  transform: rotate(180deg);
+}
+
+.approach-card__details-list {
+  position: relative;
+  margin: 8px 0 0;
+  padding-left: 16px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-body);
+  max-height: 20px;
+  opacity: 0.45;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 95%);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent 95%);
+  transition: max-height 0.35s ease, opacity 0.25s ease;
+}
+
+.approach-card__details-list li {
+  margin: 3px 0;
+}
+
+.approach-card:hover .approach-card__details-list {
+  max-height: 220px;
+  opacity: 1;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.approach-card__tradeoffs {
+  max-height: 0;
+  margin-top: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, opacity 0.3s ease, margin-top 0.35s ease;
+}
+
+.approach-card:hover .approach-card__tradeoffs {
+  max-height: 160px;
+  margin-top: 14px;
+  padding-top: 12px;
+  opacity: 1;
+  border-top: 1px solid var(--line-soft);
+}
+
+.approach-card__tradeoffs-text {
+  margin: 4px 0 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-body);
+}
+
+.approach-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.approach-card__source {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 8px;
+  border-radius: 999px;
+  background: var(--line-soft);
+  color: var(--ink-body);
+  font-size: 11.5px;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.approach-card__source:hover {
+  background: var(--line);
+  color: var(--ink);
+}
+
+.approach-card__select {
+  flex: none;
+  margin-left: auto;
+  height: 32px;
+  padding: 0 16px;
+  border: none;
+  border-radius: var(--r-md);
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.approach-card:hover .approach-card__select,
+.approach-card.is-selected .approach-card__select {
+  background: linear-gradient(90deg, var(--accent-grad-start), var(--accent-grad-end));
+  color: var(--ink);
+  text-shadow: 0 -1px 1px rgba(255, 255, 255, 0.4);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .step-stage {
     transition: none;
@@ -3187,6 +3400,18 @@ body:has(.upload-page) {
   .step-exit {
     transform: none;
     opacity: 1;
+  }
+
+  .approach-card,
+  .approach-card__chevron,
+  .approach-card__details-list,
+  .approach-card__tradeoffs,
+  .approach-card__select {
+    transition: none;
+  }
+
+  .approach-card:hover {
+    transform: none;
   }
 }
 

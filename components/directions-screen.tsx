@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 
+import { ChevronDownIcon, PatternLinkIcon } from "@/components/coqui-marks";
 import { StepHeader } from "@/components/step-header";
 import { PREVIEW_DIRECTIONS } from "@/lib/fixtures/preview-directions";
 import type { Direction } from "@/lib/types";
@@ -11,52 +12,73 @@ import { useStepStage } from "@/lib/use-step-stage";
 
 interface ApproachCardProps {
   direction: Direction;
+  /** Zero-based position in the set, rendered as the gold "01" / "02" / "03" index mark. */
+  index: number;
   isSelected: boolean;
   onSelect: () => void;
 }
 
 /**
- * One approach in the selection view. Reuses the established direction-card pattern
- * (explanation + tradeoffs + "Grounded in" 21st.dev link) but selection-only — the optional
- * code-generation action from the live workflow is out of scope for this canned design-QA pass.
+ * One approach in the selection view (Figma node 130:1896). All three of its states —
+ * default, hover-scaled, hover-expanded — are driven off a single :hover selector in
+ * globals.css (see .approach-card__*) rather than extra component state, so expand/collapse
+ * can never drift out of sync with the pointer. Data bindings are unchanged from the prior
+ * card: title, rationale, suggestedChanges, tradeoffs, patternReference, and the select
+ * interaction all come from the same `Direction` shape.
  */
-function ApproachCard({ direction, isSelected, onSelect }: ApproachCardProps) {
+function ApproachCard({ direction, index, isSelected, onSelect }: ApproachCardProps) {
+  const orderLabel = String(index + 1).padStart(2, "0");
+
   return (
-    <article className={`direction-card ${isSelected ? "selected" : ""}`}>
-      <header>
-        <h3>{direction.title}</h3>
+    <article className={`approach-card ${isSelected ? "is-selected" : ""}`}>
+      <div className="approach-card__head">
+        <h3 className="approach-card__title">{direction.title}</h3>
+        <span className="approach-card__index" aria-hidden="true">
+          {orderLabel}
+        </span>
+      </div>
+
+      <p className="approach-card__description">{direction.rationale}</p>
+
+      <div className="approach-card__details">
+        <div className="approach-card__details-toggle">
+          <span className="approach-card__details-label">Details</span>
+          <ChevronDownIcon className="approach-card__chevron" />
+        </div>
+        <ul className="approach-card__details-list">
+          {direction.suggestedChanges.map((change, i) => (
+            <li key={i}>{change}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="approach-card__tradeoffs">
+        <span className="approach-card__tradeoffs-label">Tradeoffs</span>
+        <p className="approach-card__tradeoffs-text">{direction.tradeoffs}</p>
+      </div>
+
+      <div className="approach-card__footer">
+        {direction.patternReference && (
+          <a
+            href={direction.patternReference.url}
+            target="_blank"
+            rel="noreferrer"
+            className="approach-card__source"
+          >
+            <PatternLinkIcon />
+            {direction.patternReference.name}
+          </a>
+        )}
+
         <button
           type="button"
           onClick={onSelect}
           aria-pressed={isSelected}
-          className={isSelected ? "selected-badge" : "select-button"}
+          className="approach-card__select"
         >
           {isSelected ? "Selected" : "Select"}
         </button>
-      </header>
-
-      <p className="rationale">{direction.rationale}</p>
-
-      <div className="tradeoffs">
-        <strong>Tradeoffs:</strong> {direction.tradeoffs}
       </div>
-
-      <ul className="change-list">
-        {direction.suggestedChanges.map((change, i) => (
-          <li key={i}>{change}</li>
-        ))}
-      </ul>
-
-      {direction.patternReference && (
-        <a
-          href={direction.patternReference.url}
-          target="_blank"
-          rel="noreferrer"
-          className="pattern-reference"
-        >
-          Grounded in: {direction.patternReference.name} ({direction.patternReference.source})
-        </a>
-      )}
     </article>
   );
 }
@@ -96,10 +118,11 @@ export function DirectionsScreen() {
         </header>
 
         <section className="directions-grid" aria-label="Iteration directions">
-          {PREVIEW_DIRECTIONS.map((direction) => (
+          {PREVIEW_DIRECTIONS.map((direction, index) => (
             <ApproachCard
               key={direction.id}
               direction={direction}
+              index={index}
               isSelected={selectedId === direction.id}
               onSelect={() => setSelectedId(direction.id)}
             />
