@@ -19,6 +19,11 @@ interface RecapRow {
  * read-only recap of the brief the user just wrote on the right (Figma node 49:197). It echoes the
  * user's actual input — not canned copy — carried through the round store, and hands off to the
  * directions step via the canonical step transition.
+ *
+ * Not part of the active round path: /feedback now advances straight to /directions, skipping this
+ * confirmation stop. The route and component are kept (unreachable via app navigation, but still
+ * directly loadable) because they share layout/styling work with /feedback — remove once nothing
+ * still depends on them.
  */
 export function SynthesizedScreen() {
   const router = useRouter();

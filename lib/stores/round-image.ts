@@ -28,7 +28,8 @@ export interface TransitionOrigin {
 
 interface RoundImageState {
   image: RoundImage | null;
-  /** The brief captured on /feedback, replayed read-only on the synthesized step and beyond. */
+  /** The brief captured on /feedback, read downstream by /directions (and by /synthesized, which
+   *  remains reachable directly but is no longer a stop in the normal round flow). */
   brief: RoundBrief | null;
   /** Set while a shared-element transition into /feedback is pending; cleared once it plays (or is skipped). */
   transitionOrigin: TransitionOrigin | null;

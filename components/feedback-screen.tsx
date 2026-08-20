@@ -101,11 +101,13 @@ export function FeedbackScreen() {
   const handleSynthesize = useCallback(() => {
     if (status !== "idle" || !goal.trim() || !feedback.trim()) return;
     setStatus("synthesizing");
-    // No backend yet: treat the click as a successful synthesis — persist the brief, then run the
-    // canonical exit-up transition before handing off to the synthesized-feedback step.
+    // No backend yet: treat the click as a successful synthesis — persist the brief (the data prep
+    // the three /directions cards read from), then run the canonical exit-up transition straight to
+    // /directions. The /synthesized recap is skipped entirely: it was an unnecessary confirmation
+    // stop between writing the brief and seeing the directions, not a required step in the chain.
     window.setTimeout(() => {
       setBrief({ goal, feedback, reviewerContext, constraints });
-      stage.exit(() => router.push("/synthesized"));
+      stage.exit(() => router.push("/directions"));
     }, 700);
   }, [goal, feedback, reviewerContext, constraints, status, setBrief, stage, router]);
 

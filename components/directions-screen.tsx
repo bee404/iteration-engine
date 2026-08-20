@@ -87,7 +87,8 @@ function ApproachCard({ direction, index, isSelected, onSelect }: ApproachCardPr
  * The fourth step (directions): three genuinely distinct approaches, each with its rationale,
  * tradeoffs, and a 21st.dev component it's grounded in, presented for the user to select one.
  * Populated with canned data for this design-QA pass (real AI generation is out of scope), and
- * arrives on the canonical enter-from-bottom step transition from /synthesized.
+ * arrives on the canonical enter-from-bottom step transition straight from /feedback — the
+ * /synthesized recap is no longer a stop in this path (see synthesized-screen.tsx).
  */
 export function DirectionsScreen() {
   const router = useRouter();
