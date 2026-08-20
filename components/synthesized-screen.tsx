@@ -65,24 +65,26 @@ export function SynthesizedScreen() {
           <ReferenceImage image={image} />
         </section>
 
-        <aside className="feedback-panel recap-panel">
+        <aside className="feedback-panel-wrap">
           <h1 className="feedback-title">What should we fix?</h1>
 
-          <dl className="recap-list">
-            {rows.map((row) => (
-              <div className="recap-row" key={row.label}>
-                <dt className="recap-label">{row.label}</dt>
-                <dd className={`recap-value ${row.value ? "" : "is-empty"}`}>
-                  {row.value || "Not provided"}
-                </dd>
-              </div>
-            ))}
-          </dl>
+          <div className="feedback-panel recap-panel">
+            <dl className="recap-list">
+              {rows.map((row) => (
+                <div className="recap-row" key={row.label}>
+                  <dt className="recap-label">{row.label}</dt>
+                  <dd className={`recap-value ${row.value ? "" : "is-empty"}`}>
+                    {row.value || "Not provided"}
+                  </dd>
+                </div>
+              ))}
+            </dl>
 
-          <div className="feedback-commit">
-            <button className="feedback-synthesize" type="button" onClick={handleContinue}>
-              View directions
-            </button>
+            <div className="feedback-commit">
+              <button className="feedback-synthesize" type="button" onClick={handleContinue}>
+                View directions
+              </button>
+            </div>
           </div>
         </aside>
       </div>

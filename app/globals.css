@@ -2477,12 +2477,13 @@ body:has(.upload-page) {
   justify-content: center;
 }
 
+/* Only the frame participates in this box's height: the caption is positioned out of flow
+   (below) so it never factors into the frame/form-panel centering pair in .feedback-body. */
 .feedback-reference {
+  position: relative;
   display: flex;
   width: 100%;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
+  justify-content: center;
   margin: 0;
 }
 
@@ -2582,9 +2583,11 @@ body:has(.upload-page) {
 }
 
 .feedback-caption {
-  align-self: flex-start;
+  position: absolute;
+  top: 100%;
+  left: 40px;
   max-width: 100%;
-  margin-left: 40px;
+  margin-top: 12px;
   overflow: hidden;
   color: var(--ink-body);
   font-size: 12.5px;
@@ -2595,29 +2598,43 @@ body:has(.upload-page) {
   opacity: 0.5;
 }
 
-.feedback-panel {
-  display: flex;
+/* Wraps the title + card as one animated unit, but only the card's own box height feeds the
+   frame/form centering pair below — the title is positioned out of flow (see .feedback-title) so
+   its height never skews where that shared center line lands. */
+.feedback-panel-wrap {
+  position: relative;
   width: var(--feedback-panel-w);
   flex-shrink: 0;
+  align-self: center;
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms ease;
+}
+
+.feedback-panel-wrap.is-offstage {
+  transform: translateX(72px);
+  opacity: 0;
+}
+
+.feedback-panel {
+  display: flex;
+  width: 100%;
   flex-direction: column;
   gap: 16px;
-  align-self: center;
   max-height: 100%;
   padding: 20px 20px 24px;
   border-radius: var(--r-xl);
   background: var(--surface);
   box-shadow: var(--e-panel);
   overflow-y: auto;
-  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1), opacity 420ms ease;
 }
 
-.feedback-panel.is-offstage {
-  transform: translateX(72px);
-  opacity: 0;
-}
-
+/* Sits directly above the card (matching its former inset position) but out of flow, so its
+   height doesn't count toward .feedback-panel-wrap's box used for the frame/form centering pair. */
 .feedback-title {
-  margin: 0 0 4px;
+  position: absolute;
+  right: 20px;
+  bottom: 100%;
+  left: 20px;
+  margin: 0 0 20px;
   color: var(--display-ink);
   font-family: "Owners Narrow", "Archivo Narrow", "Arial Narrow", sans-serif;
   font-size: 24px;
@@ -2905,7 +2922,7 @@ body:has(.upload-page) {
     padding-top: 16px;
   }
 
-  .feedback-panel {
+  .feedback-panel-wrap {
     width: min(420px, 100%);
     max-width: 100%;
   }
@@ -2998,7 +3015,7 @@ body:has(.upload-page) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .feedback-panel,
+  .feedback-panel-wrap,
   .feedback-reference-img,
   .feedback-reference-zoom,
   .upload-proceed,
@@ -3011,7 +3028,7 @@ body:has(.upload-page) {
     animation: none;
   }
 
-  .feedback-panel.is-offstage {
+  .feedback-panel-wrap.is-offstage {
     transform: none;
     opacity: 1;
   }

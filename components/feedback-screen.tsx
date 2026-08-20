@@ -141,89 +141,91 @@ export function FeedbackScreen() {
           <ReferenceImage image={image} imgRef={referenceImgRef} hidden={phase !== "done"} />
         </section>
 
-        <aside className={`feedback-panel ${hasEntrance && phase !== "done" ? "is-offstage" : ""}`}>
+        <aside className={`feedback-panel-wrap ${hasEntrance && phase !== "done" ? "is-offstage" : ""}`}>
           <h1 className="feedback-title">What should we fix?</h1>
 
-          <div className="feedback-field">
-            <div className="feedback-field-head">
-              <label htmlFor="goal">Goal</label>
-              <span className="feedback-required">Required</span>
-            </div>
-            <textarea
-              id="goal"
-              className="feedback-textarea"
-              rows={2}
-              placeholder="What outcome should this change move us toward?"
-              value={goal}
-              onChange={(event) => setGoal(event.target.value)}
-            />
-          </div>
-
-          <div className="feedback-field">
-            <div className="feedback-field-head">
-              <label htmlFor="feedback">Feedback, as received</label>
-              <span className="feedback-required">Required</span>
-            </div>
-            <div className="feedback-textarea-wrap">
+          <div className="feedback-panel">
+            <div className="feedback-field">
+              <div className="feedback-field-head">
+                <label htmlFor="goal">Goal</label>
+                <span className="feedback-required">Required</span>
+              </div>
               <textarea
-                id="feedback"
-                className="feedback-textarea has-expand"
-                rows={4}
-                placeholder="Paste the raw note, comment, or transcript exactly as it came in."
-                value={feedback}
-                onChange={(event) => setFeedback(event.target.value)}
+                id="goal"
+                className="feedback-textarea"
+                rows={2}
+                placeholder="What outcome should this change move us toward?"
+                value={goal}
+                onChange={(event) => setGoal(event.target.value)}
               />
+            </div>
+
+            <div className="feedback-field">
+              <div className="feedback-field-head">
+                <label htmlFor="feedback">Feedback, as received</label>
+                <span className="feedback-required">Required</span>
+              </div>
+              <div className="feedback-textarea-wrap">
+                <textarea
+                  id="feedback"
+                  className="feedback-textarea has-expand"
+                  rows={4}
+                  placeholder="Paste the raw note, comment, or transcript exactly as it came in."
+                  value={feedback}
+                  onChange={(event) => setFeedback(event.target.value)}
+                />
+                <button
+                  className="feedback-expand"
+                  type="button"
+                  onClick={() => setIsExpanded(true)}
+                  aria-label="Expand feedback into a larger editor"
+                >
+                  <Image src="/brand/icon-expand.svg" alt="" width={12} height={12} />
+                </button>
+              </div>
+              <div className="feedback-count">{feedback.length} characters</div>
+            </div>
+
+            <div className="feedback-field">
+              <div className="feedback-field-head">
+                <label htmlFor="reviewer-context">Reviewer context</label>
+              </div>
+              <input
+                id="reviewer-context"
+                className="feedback-input"
+                type="text"
+                placeholder="Who is this for, and what do they care about?"
+                value={reviewerContext}
+                onChange={(event) => setReviewerContext(event.target.value)}
+              />
+            </div>
+
+            <div className="feedback-field">
+              <div className="feedback-field-head">
+                <label htmlFor="constraints">Constraints</label>
+              </div>
+              <input
+                id="constraints"
+                className="feedback-input"
+                type="text"
+                placeholder="Anything that must not change?"
+                value={constraints}
+                onChange={(event) => setConstraints(event.target.value)}
+              />
+            </div>
+
+            <div className="feedback-commit">
               <button
-                className="feedback-expand"
+                className="feedback-synthesize"
                 type="button"
-                onClick={() => setIsExpanded(true)}
-                aria-label="Expand feedback into a larger editor"
+                onClick={handleSynthesize}
+                disabled={!canSynthesize}
+                data-status={status}
               >
-                <Image src="/brand/icon-expand.svg" alt="" width={12} height={12} />
+                {status === "synthesizing" && <span className="feedback-spinner" aria-hidden="true" />}
+                {status === "synthesizing" ? "Synthesizing…" : status === "done" ? "Synthesized" : "Synthesize"}
               </button>
             </div>
-            <div className="feedback-count">{feedback.length} characters</div>
-          </div>
-
-          <div className="feedback-field">
-            <div className="feedback-field-head">
-              <label htmlFor="reviewer-context">Reviewer context</label>
-            </div>
-            <input
-              id="reviewer-context"
-              className="feedback-input"
-              type="text"
-              placeholder="Who is this for, and what do they care about?"
-              value={reviewerContext}
-              onChange={(event) => setReviewerContext(event.target.value)}
-            />
-          </div>
-
-          <div className="feedback-field">
-            <div className="feedback-field-head">
-              <label htmlFor="constraints">Constraints</label>
-            </div>
-            <input
-              id="constraints"
-              className="feedback-input"
-              type="text"
-              placeholder="Anything that must not change?"
-              value={constraints}
-              onChange={(event) => setConstraints(event.target.value)}
-            />
-          </div>
-
-          <div className="feedback-commit">
-            <button
-              className="feedback-synthesize"
-              type="button"
-              onClick={handleSynthesize}
-              disabled={!canSynthesize}
-              data-status={status}
-            >
-              {status === "synthesizing" && <span className="feedback-spinner" aria-hidden="true" />}
-              {status === "synthesizing" ? "Synthesizing…" : status === "done" ? "Synthesized" : "Synthesize"}
-            </button>
           </div>
         </aside>
       </div>
