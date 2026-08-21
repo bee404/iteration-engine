@@ -1,13 +1,13 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260818020031802_github",
-  "base_packet": "cb_20260813054857389_github",
+  "packet_id": "cb_20260821152136288_github",
+  "base_packet": "cb_20260818020031802_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-18T02:00:31.802Z",
+  "generated_at": "2026-08-21T15:21:36.288Z",
   "changed": true,
-  "manifest_sha": "0d358675ba0b8f2f",
+  "manifest_sha": "4bb1ad11d8e7b5be",
   "sources": [
     {
       "id": "DESIGN.md",
@@ -96,8 +96,8 @@
     {
       "id": "components/code-sheet.tsx",
       "file": "components/code-sheet.tsx",
-      "sha256": "975828dbbc4df57ce8fc289baf00a15567f6387e549a0bcc256db2e602925582",
-      "bytes": 10382
+      "sha256": "7d733bb5cadba6b227d3aa053126c5cbfbff0c6adfabd6b11a7a88a552d356d0",
+      "bytes": 10659
     },
     {
       "id": "components/coqui-marks.tsx",
@@ -126,8 +126,8 @@
     {
       "id": "components/preview-frame.tsx",
       "file": "components/preview-frame.tsx",
-      "sha256": "b717f9efe8fa352b3782762954261f0594f7c1833703607dbc3154353ad3a750",
-      "bytes": 6956
+      "sha256": "911ecc02360f2a0b86cf775bd8d7d908eba80c2418c4d5b69c9ce1fb0709a16a",
+      "bytes": 7778
     },
     {
       "id": "components/round-history.tsx",
@@ -312,14 +312,32 @@
     {
       "id": "lib/preview/build-preview-document.test.ts",
       "file": "lib/preview/build-preview-document.test.ts",
-      "sha256": "bfe18dd4edff852530ea8f9598586ead1f3a54a2cacd065d7ee2495320920397",
-      "bytes": 7615
+      "sha256": "301ee0bd0595edc184673657f5cb08b5f2f6062bf3bcb0dce63c7a7ab95506fc",
+      "bytes": 10094
     },
     {
       "id": "lib/preview/build-preview-document.ts",
       "file": "lib/preview/build-preview-document.ts",
       "sha256": "288cda48534b081c291aa85ad262a91debe0086c6b6132abbc0277d07d33639c",
       "bytes": 14249
+    },
+    {
+      "id": "lib/preview/preview-fallback.test.ts",
+      "file": "lib/preview/preview-fallback.test.ts",
+      "sha256": "0dd6f8a0721486d3f5e4f6278761fe6b869521835d479fac0ae13d12e4a5721d",
+      "bytes": 1633
+    },
+    {
+      "id": "lib/preview/preview-fallback.ts",
+      "file": "lib/preview/preview-fallback.ts",
+      "sha256": "662224e8677578646da44741987c0ef1d50ca6e64971268d3c958d7dfe49890b",
+      "bytes": 1442
+    },
+    {
+      "id": "lib/preview/preview-frame-dispatch.test.ts",
+      "file": "lib/preview/preview-frame-dispatch.test.ts",
+      "sha256": "348755c69d82aee3f29e5f4beb7c8488a5468a6cf5f646b0f273a69ae5d5e5d1",
+      "bytes": 2748
     },
     {
       "id": "lib/preview/react-runtime.generated.ts",
@@ -334,16 +352,28 @@
       "bytes": 9759
     },
     {
+      "id": "lib/providers/codegen/__fixtures__/truncated-max-tokens.raw.txt",
+      "file": "lib/providers/codegen/__fixtures__/truncated-max-tokens.raw.txt",
+      "sha256": "3ef01a454c2e345861a1a53a4036be6c683ca41a49835cb7e99767c1a4316bd8",
+      "bytes": 16459
+    },
+    {
+      "id": "lib/providers/codegen/claude-provider.test.ts",
+      "file": "lib/providers/codegen/claude-provider.test.ts",
+      "sha256": "00e0d44b77309e7529b57937da3c4325e2ac001b25eb637349553a024306db1b",
+      "bytes": 5239
+    },
+    {
       "id": "lib/providers/codegen/claude-provider.ts",
       "file": "lib/providers/codegen/claude-provider.ts",
-      "sha256": "28d9364db47d87db629318e4eb1506668aa7b466da7008eaf8337281f91d2dfc",
-      "bytes": 13752
+      "sha256": "fe81cbb81462b342b3a9f77cb4bc2564b1d5a36b2f8aa4ed7ebff3b631f7c8dd",
+      "bytes": 17012
     },
     {
       "id": "lib/providers/codegen/errors.ts",
       "file": "lib/providers/codegen/errors.ts",
-      "sha256": "776cb3ef78a83c2e4d9256699c30a837f6ceaefef71460aa13a5b5f29ed06da1",
-      "bytes": 1342
+      "sha256": "856d58017d8b9974de934c72ebb7bb4e03486861fd136a8a62edbea75bf2020d",
+      "bytes": 1820
     },
     {
       "id": "lib/providers/codegen/fixture-provider.ts",
@@ -438,8 +468,8 @@
     {
       "id": "package.json",
       "file": "package.json",
-      "sha256": "66dbf9f0c3708515fd17486a6b55aca99d6d104cb422df37f9fb6bd6cb6a8e4f",
-      "bytes": 1350
+      "sha256": "d4fddfa83ea0a8e0bd877977e2605c2f61055fb84460a1cb2c9dd85ebe049e22",
+      "bytes": 1363
     },
     {
       "id": "public/brand/bg-sky-ambient.svg",
@@ -485,14 +515,21 @@
     }
   ],
   "source_changes": {
-    "added": [],
+    "added": [
+      "lib/preview/preview-fallback.test.ts",
+      "lib/preview/preview-fallback.ts",
+      "lib/preview/preview-frame-dispatch.test.ts",
+      "lib/providers/codegen/__fixtures__/truncated-max-tokens.raw.txt",
+      "lib/providers/codegen/claude-provider.test.ts"
+    ],
     "removed": [],
     "updated": [
-      "app/globals.css",
       "components/code-sheet.tsx",
       "components/preview-frame.tsx",
       "lib/preview/build-preview-document.test.ts",
-      "lib/preview/build-preview-document.ts"
+      "lib/providers/codegen/claude-provider.ts",
+      "lib/providers/codegen/errors.ts",
+      "package.json"
     ]
   },
   "facts": [
@@ -990,7 +1027,7 @@
   "missing_sources": [],
   "supplemental": [],
   "stats": {
-    "source_count": 79,
+    "source_count": 84,
     "fact_count": 34,
     "added": 0,
     "removed": 0,
