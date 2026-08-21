@@ -1,9 +1,15 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { RefObject } from "react";
 import type { GeneratedCodeStatus } from "@/lib/types";
 import { PreviewFrame } from "./preview-frame";
+
+// `useLayoutEffect` warns when it runs during SSR (it can't affect server output). This falls
+// back to `useEffect` on the server — a no-op there — and stays `useLayoutEffect` on the
+// client, which is the piece that actually needs to run before paint (see the streaming→
+// complete height pin below).
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 interface GeneratedCodeState {
   status: GeneratedCodeStatus;
@@ -27,13 +33,17 @@ const FOCUSABLE_SELECTOR =
   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 /**
- * Full-width bottom sheet for a direction's generated-code preview. Generated output is
- * itself a UI, so it gets the full viewport's height to breathe instead of being squeezed
- * into the direction card. Mounted only while open or animating closed, so the slide
- * transition can play in both directions; dismissible via the close button, a scrim click,
- * or Escape. Streaming/error rendering is untouched — this only changes where it's shown.
+ * Full-width bottom sheet for a direction's generated-code preview. A completed direction is
+ * itself a UI, so it gets the full viewport's height to breathe. While code is still streaming
+ * there's nothing useful to read yet, so the sheet collapses to a compact partial-height status
+ * panel instead of dumping raw source scrolling by; it expands to full height the instant the
+ * stream settles (complete or error). Mounted only while open or animating closed, so the slide
+ * transition can play in both directions; dismissible via the close button, a scrim click, or
+ * Escape.
  */
 export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerRef }: CodeSheetProps) {
+  // While streaming, collapse the sheet to a partial-height status panel (see body below).
+  const isStreaming = generated?.status === "streaming";
   const [isMounted, setIsMounted] = useState(isOpen);
   // The `.open` class drives the slide/fade. It must be applied one frame *after* the sheet
   // first paints in its closed position, or the CSS transition has no prior state to animate
@@ -52,6 +62,8 @@ export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerR
   const sheetRef = useRef<HTMLDivElement>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const wasOpenRef = useRef(false);
+  const wasStreamingRef = useRef(isStreaming);
+  const streamingHeightRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -100,6 +112,60 @@ export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerR
     return () => cancelAnimationFrame(frame);
   }, [isOpen]);
 
+  // Keep a live pixel snapshot of the sheet's compact streaming height, refreshed whenever the
+  // streamed content changes (so the panel can grow/shrink with each chunk). Deliberately scoped
+  // to `[isStreaming, generated]` rather than every render: an unconditional layout effect forces
+  // a synchronous reflow on *every* commit, including the ones that drive the close/scrim slide
+  // transition, which was enough to desync that transition from the browser's paint and swallow
+  // its `transitionend` (breaking the close-button/scrim/Escape dismissal). Scoping to content
+  // changes keeps the reflow to the commits that actually need it.
+  useIsomorphicLayoutEffect(() => {
+    if (isStreaming && sheetRef.current) {
+      streamingHeightRef.current = sheetRef.current.getBoundingClientRect().height;
+    }
+  }, [isStreaming, generated]);
+
+  // When the stream settles, `.is-streaming` drops off and the sheet's CSS height jumps from
+  // `auto` (compact status panel) to a fixed 85vh. CSS can't transition to/from `auto`, so we
+  // pin the sheet at its last known compact pixel height, then release the pin a frame later —
+  // the browser now has two concrete values (pinned px, target 85vh) to ease between instead of
+  // snapping. This must run as a layout effect: by the time a normal `useEffect` fires, React
+  // has already committed the class change *and* the browser has already painted the jumped-to
+  // 85vh frame, so there's nothing left to pin. This only runs on the streaming→complete edge;
+  // the reverse never happens in this UI, and `isOpen` is untouched, so it can't interfere with
+  // the open/close slide transition below.
+  useIsomorphicLayoutEffect(() => {
+    const streamingJustEnded = wasStreamingRef.current && !isStreaming;
+    wasStreamingRef.current = isStreaming;
+    if (!streamingJustEnded) return;
+    const sheet = sheetRef.current;
+    const startHeight = streamingHeightRef.current;
+    if (!sheet || startHeight == null) return;
+
+    sheet.style.height = `${startHeight}px`;
+    // The pinned value is numerically identical to what was already on screen, so nothing looks
+    // different yet — forcing a synchronous layout read makes the browser commit *this* value as
+    // a real rendered frame rather than folding it into the next style recalculation. A single
+    // requestAnimationFrame callback still runs *before* that frame paints, so releasing the pin
+    // there would again collapse both writes into one recalc; waiting for a second frame
+    // guarantees a full paint happened at the pinned height first, giving the transition an
+    // actual prior frame to ease away from.
+    void sheet.offsetHeight;
+    let pendingFrame = 0;
+    const releaseFrame = requestAnimationFrame(() => {
+      pendingFrame = requestAnimationFrame(() => {
+        sheet.style.height = "";
+      });
+    });
+    return () => {
+      cancelAnimationFrame(releaseFrame);
+      cancelAnimationFrame(pendingFrame);
+    };
+  }, [isStreaming]);
+
+  // `onTransitionEnd` now fires for both the open/close slide (`transform`) and the
+  // streaming→complete expand (`height`). Only the close case should unmount, and `isOpen` is
+  // false only for that case, so the two transitions can't cross-trigger an unwanted unmount.
   const handleTransitionEnd = useCallback(() => {
     if (!isOpen) setIsMounted(false);
   }, [isOpen]);
@@ -114,7 +180,7 @@ export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerR
     >
       <div
         ref={sheetRef}
-        className={`code-sheet ${isActive ? "open" : ""}`}
+        className={`code-sheet ${isActive ? "open" : ""} ${isStreaming ? "is-streaming" : ""}`}
         role="dialog"
         aria-modal="true"
         aria-label={`Generated code for ${directionTitle}`}
@@ -138,15 +204,23 @@ export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerR
         </header>
 
         <div className="code-sheet-body">
-          {generated ? (
+          {!generated ? (
+            <p className="code-status">Nothing generated yet.</p>
+          ) : isStreaming ? (
+            // No raw code dump while streaming — just a contextual status line at partial height.
+            <div className="code-sheet-streaming" role="status" aria-live="polite">
+              <span className="spinner" aria-hidden="true" />
+              <p>Generating component for “{directionTitle}”…</p>
+            </div>
+          ) : (
+            // `error` is threaded through so a failed generation shows the explicit fallback
+            // banner rather than a bannerless read-only source view (the "silent stall").
             <PreviewFrame
               code={generated.code}
               language={generated.language}
               status={generated.status}
               error={generated.error}
             />
-          ) : (
-            <p className="code-status">Nothing generated yet.</p>
           )}
         </div>
 

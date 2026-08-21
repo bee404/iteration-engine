@@ -5,7 +5,7 @@ full-stack merge (PRs #2–#9), not in older doc claims.
 
 ## Built and shipped (on `main`)
 
-The full core loop is live and persisted:
+The implemented generation loop is live and persisted:
 
 - Upload + inputs, with **screenshot natural-dimension capture** (`lib/image-dimensions.ts`).
 - Claude Sonnet **critique** (signal/preference split + flagged ambiguities).
@@ -23,12 +23,11 @@ The full core loop is live and persisted:
 > now **closed** on `main` (PR #7 live-mount + dimension capture; PR #9 Turso persistence). Trust
 > the code over those earlier snapshots.
 
-## Designed but not built: the before/after visual diff
+## Designed but not built: the fixed-box comparison
 
-The **BeforeAfter Visual Diff — Feature Blueprint** is fully specified but has **zero code** in
-the repo — no comparison component, no route, no entry-point button. It lets a designer compare
-the original screenshot against a generated direction in a viewport-matched, region-focused
-before/after view.
+The fixed-box comparison has **zero code** in the repo — no comparison component, no route, and
+no entry-point button. It lets a designer switch between a reference and its generated iteration
+at identical dimensions, scale, and coordinates.
 
 ### Build-order dependencies (the blueprint's 3-stage chain)
 
@@ -43,39 +42,30 @@ Each stage is "worthless without the one before it":
    can build directly on this.
 3. **Compare** — the unified comparison view itself. **Not built.** This is the remaining work.
 
-### Comparison view states still to build (superseded control model — see below)
+### Comparison view to build
 
-> **Superseded 2026-08-11 (Decision 10, `docs/decisions.md`).** The blueprint this section was
-> drawn from specified a `Before / Split / After` segmented control with a draggable divider and
-> a highlight toggle. Both later-recovered context packets independently confirm the actual
-> product decision is a **binary `Source` / `Iteration` toggle** in one fixed viewport box, with
-> no scrubber, no split view, and no drag gesture — that decision predates this blueprint
-> (pre-2026-08-08) and wins. The bullets below are kept as a historical record of the drafted
-> design, not the build target. Rebuild this section's control model against Decision 10 before
-> implementing.
-
-- Unified comparison frame at best-fit scale (single frame, not two shrunk side-by-side) — **still applies** to the binary-toggle model.
-- ~~Controls: **Before / Split / After** segmented control, draggable divider (`clip-path` + range input), **Highlight on/off** toggle, **Scale: fit**.~~ Replace with: a two-position `Source` / `Iteration` toggle, nothing else.
+- One fixed viewport box at best-fit scale. The reference screenshot and generated iteration
+  occupy identical dimensions, scale, and coordinates.
+- One two-position `Source` / `Iteration` toggle. No scrubber, split view, draggable divider,
+  highlight toggle, thumbnail strip, or additional comparison control.
 - Pixel-diff region highlight (rasterize both frames, diff `ImageData` client-side, zero LLM
   cost — chosen over asking the model to self-report a bounding box, "grading its own homework").
-  Still a candidate, independent of the control-model change above.
-- Off-happy-path states: streaming/partial-generation indicator (partial-height, contextual
-  status text — *not* full raw code), generation-failed entry guard, legacy-round fallback (no
-  captured width → default width, "scale approximate"), and the **whole-frame / rasterization-
-  unreliable fallback** — surface the direction's own `rationale` + `suggestedChanges` rather
-  than a bare "substantially restructured" label.
-- **New, from the binary-toggle decision:** if the selected direction's code compiles but fails
-  to mount, the iteration layer is source text, which cannot be stacked against an image in the
-  fixed box — what the toggle does in that state is undesigned (see `docs/blueprint.md` Open
-  questions).
+  Still a candidate, independent of the control-model decision above — not ruled out.
+- Off-happy-path states: streaming/partial-generation indicator with contextual status text,
+  generation-failed entry guard, and a legacy-round fallback when no captured width exists
+  (`scale approximate`).
+- If the selected direction compiles but fails to mount, `Iteration` shows the generated source
+  and exact runtime error inside the fixed box; `Source` continues to show the visual reference.
 
 ### Data-model prerequisites for the diff
 
-- **No region/bounding-box concept** exists on `Critique`/`Direction` — feedback doesn't know
-  which screen region it targets. The diff works around this with client-side pixel-diff.
 - **Content-width autocrop** field + confidence flag not yet on the model (only raw natural
   dimensions are).
-- The **highlight toggle** needs new local UI state (nothing in `round-store.ts` models it).
+- **No region/bounding-box concept** exists on `Critique`/`Direction` — feedback doesn't know
+  which screen region it targets. The pixel-diff candidate above works around this with
+  client-side rasterized diffing rather than model-reported coordinates.
+- A user-corrected viewport value and a chain-level locked viewport are not yet modeled.
+- Mount-success versus mount-failure needs an explicit comparison-layer state.
 - Locked note: if pixel-diff rasterization proves harder than expected, report effort back to
   Bryan for a call — it's a bounded spike, not an open-ended effort, and not a silent-fallback ship.
 
@@ -93,25 +83,32 @@ Each stage is "worthless without the one before it":
   interaction but has **not been designed yet**. Constraints on any future attempt (Decision 12,
   `decisions.md`): no branching UI, nothing implying history is editable, no drag scrubber, and
   not a list of thumbnails or a timeline row.
+- **Round-to-round inheritance of goal/context/constraints** — deferred, not a V1 decision.
+  Bryan flagged this as a potential macro/historical feature (patterns mined across a project's
+  round history) rather than a micro per-round convenience, and wants it scoped on its own later
+  rather than decided as a side effect of this doc consolidation.
 - **Critique, Directions, and Compare screens against the current gold visual system** — the
   Figma redesign (`docs/design-system.md`) only covers Add-image and Set-the-brief today. The
   rest of the flow still needs a pass in the current direction.
 
-## Open product questions
+## Resolved behavior and remaining implementation gaps
 
-Unresolved product-behavior questions surfaced during the 2026-08-11 context-packet review —
-flag rather than guess when implementing adjacent work:
-
-- Can the critique be regenerated after the fact, and does that invalidate directions already
-  generated from it?
-- Is there a retry path after a code-generation mount failure, or must the person pick a
-  different direction entirely?
-- Can a person move an item between the critique's real-problems and taste piles, or dismiss one,
-  before directions are generated from it?
-- Where does the lineage/chain view live in the interface, and can a person compare any two
-  nodes in a chain or only adjacent ones? (See the Lineage/chain view item above.)
-- What replaces the generated component's hover-driven interactivity on touch, once responsive
-  work resumes (Decision 13, `decisions.md`)?
+- Critique is read-only and may be regenerated only before directions exist. The current store
+  does not yet enforce that immutability boundary and must clear or lock downstream state.
+- Per-direction generation retry is already shipped through `Retry generation`.
+- Real-problems and taste items are read-only; changing the evidence requires new feedback and a
+  new round once directions exist.
+- The lineage view may browse the ordered chain, but comparison remains adjacent: each iteration
+  against its direct source. The lineage browsing surface itself has not been designed.
+- Later rounds require fresh feedback and use the prior iteration as their reference. Whether
+  later rounds also inherit the prior goal, reviewer context, or constraints as editable defaults
+  is explicitly deferred, not decided for V1 — see "Other planned-but-not-wired work" below.
+- Responsive and touch behavior remains deferred under Decision 13; it is not a blocker or an
+  open design input for the current desktop build.
+- `Save` and `Export` are two separate actions (primary CTA: Save, secondary CTA: Export), not
+  one combined action. Persistence (Save) is shipped; export/download and the final CTA treatment
+  are still in progress on the frontend.
+- The coquí-call control defaults to muted and remains disabled until an audio asset is supplied.
 
 ## Paused: external front-end / UX iteration
 
@@ -119,4 +116,3 @@ Bryan is running **front-end/UX quality passes externally** (outside this repo's
 pipeline) against the shipped app. DEMO_MODE exists specifically to support these passes with
 zero compute cost. Treat visual/UX polish decisions coming out of that work as **incoming**, and
 ground any front-end change against the shipped state above — not against older doc snapshots.
-

@@ -1,10 +1,10 @@
-# Iteration Engine
+# Coquí
 
-Iteration Engine is a product exploration focused on helping designers turn visual feedback into clearer, actionable iteration directions while preserving human judgment.
+Coquí is a personal design-iteration tool that turns visual feedback into a critique, a small set of rationale-backed directions, and an optional coded iteration while preserving designer judgment.
 
 ## Repository purpose
 
-This repository is the source of truth for Iteration Engine's product definition and implementation. It began as a neutral workspace for reconciling two discovery tracks: the work developed inside Obvious and the supporting discovery developed outside it. That reconciliation is now recorded in the decision log, blueprint, and release plan.
+This repository is the source of truth for Coquí's product definition and implementation. It began as a neutral workspace for reconciling two discovery tracks: the work developed inside Obvious and the supporting discovery developed outside it. That reconciliation, plus the later Claude and ChatGPT context packets, is now distilled into the decision log, blueprint, release plan, design-system documentation, and agent knowledge base.
 
 ## Current operating model
 
@@ -20,19 +20,24 @@ The operating sequence is:
 
 ## Status
 
-Discovery reconciliation was agreed on 2026-08-05. The current V1 blueprint, decisions, and release plan are approved and are the source of truth. The Next.js application scaffold is in progress; real provider integrations and end-to-end validation remain ahead.
+Discovery reconciliation was agreed on 2026-08-05 and the cross-tool context packets were consolidated on 2026-08-11. The core round is implemented: upload and intake, real Claude critique and directions, on-demand streamed code generation, live-mount preview with source fallback, Turso persistence and history, and fixture-backed demo mode.
+
+V1 is not complete. The remaining release work is the inferred fixed viewport box, the binary `Source` / `Iteration` comparison, downloadable source-bundle export, live 21st.dev grounding, the intended GPT-4o validation fallback, and validation against a real project. See `docs/release-plan.md` and `docs/knowledge-base/roadmap-and-open-work.md` for the current boundary.
 
 ## Repository map
 
 - `docs/existing-obvious-discovery.md`: Obvious's current product understanding and source references
 - `docs/external-discovery.md`: relevant discovery developed outside Obvious
 - `docs/discovery-diff.md`: structured comparison of the two discovery tracks
-- `docs/decisions.md`: decisions, rationale, owners, and unresolved questions
+- `DESIGN.md`: authoritative Coquí token and component specification
+- `docs/decisions.md`: decisions, rationale, and owners
 - `docs/blueprint.md`: agreed product blueprint after reconciliation
 - `docs/release-plan.md`: release definition derived from the approved blueprint
+- `docs/design-system.md`: visual identity, brand assets, copy, and design history
+- `docs/knowledge-base/`: concise implementation, QA, and open-work guidance for coding agents
 - `app/`: Next.js application routes and UI implementation
 - `lib/fixtures/`: real, previously-captured critique/directions/code-gen output replayed in demo mode
-- `public/`: static assets for the application
+- `public/brand/`: durable Coquí brand assets exported from the current Figma direction
 
 ## Demo mode (offline front-end QA)
 

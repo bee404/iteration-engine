@@ -844,11 +844,34 @@ button {
   gap: 12px;
   padding: 20px 24px;
   transform: translateY(100%);
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, height 0.3s ease;
 }
 
 .code-sheet.open {
   transform: translateY(0);
+}
+
+/* While streaming there's no useful code to read yet, so the sheet sits as a compact status
+   panel sized to its content, capped at 42vh. Once the stream settles, `code-sheet.tsx` briefly
+   pins the sheet's measured pixel height inline before this class is removed, giving the
+   `height` transition above two concrete values (pinned px → 85vh) to ease between instead of
+   snapping straight to full height. */
+.code-sheet.is-streaming {
+  height: auto;
+  max-height: 42vh;
+}
+
+.code-sheet-streaming {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 4px 8px;
+  color: var(--ink-mute);
+  font-size: 14px;
+}
+
+.code-sheet-streaming p {
+  margin: 0;
 }
 
 .code-sheet-header {

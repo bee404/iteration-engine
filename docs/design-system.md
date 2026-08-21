@@ -37,10 +37,8 @@ system — see `docs/knowledge-base/roadmap-and-open-work.md`.
 - **Where the name comes from:** the coquí is a small tree frog native to Puerto Rico
   (*Eleutherodactylus coqui*), known for its loud, repeating two-note call — "co-quí."
 - **Why it fits the product:** the product is a repeated call-and-response loop — feedback goes
-  in, an iteration comes out, and the loop runs again. A sound icon in the header
-  (`icon-volume-cross.svg`, currently rendered muted) is the one interface element that gestures
-  at this, but nothing in the interface explains it yet, and whether it plays the actual coquí
-  call, is a plain sound toggle, or is decorative is unresolved (see Open questions).
+  in, an iteration comes out, and the loop runs again. The sound icon plays and mutes the coquí
+  call, defaults to muted, and stays disabled until the audio asset is available.
 - **Written form:** always "Coquí," accent on the í. The wordmark treats the accent as a
   distinct gold-colored element.
 
@@ -57,6 +55,15 @@ Only the current pass's *outputs* (this file, `DESIGN.md`, the Figma file) are c
 | 3 — "Press proof" | Proofing-press metaphor: uncoated paper, near-black ink, spot red for register marks, halftone Compare treatment | **Parked** — passed finish review, not rejected on quality; could be revived |
 | 4 — "Direction 3" minimal product-tool | Figtree, blue accent, canvas-to-card transition, expand-to-modal feedback field | Superseded by the Figma move — established behaviors below still apply |
 | 5 — Figma "Coquí Visual Explore" | Gold accent, Owners Narrow + Figtree, dot-grid atmosphere | **Current** |
+
+### Typography decision: Inter → Figtree
+
+Pass 4 was originally set in Inter. On 2026-08-10 the body font was moved to **Figtree**;
+**Proxima Nova was evaluated and rejected because it is not freely licensed.** Figtree carried
+forward unchanged into the current Figma pass and remains the body face in `DESIGN.md` today —
+only the *display* face changed again after that, when the move into Figma introduced Owners
+Narrow for headings (see the licensing question for Owners Narrow in Open design questions
+below).
 
 ### Behaviors that must carry forward regardless of visual pass
 
@@ -94,12 +101,25 @@ Pass 3 ("Press proof") solved the Pass 2 Compare-screen payoff problem: the live
 over a halftone-screened render of the *old* screen, with a lifted corner proving two layers
 exist. Worth stealing the idea even though the pass itself is parked.
 
+### Design-drift detector findings against Pass 4
+
+A design-drift detector run against the Pass 4 build (`project/coqui-direction-03/setup.html`
+— outside this repository, see the note at the top of "Visual direction history" above) flagged
+Pass-4 leftover values not present in the gold system: colors `#d3d7e0` / `#ccd1dc` / `#d8dce4`,
+radii `5px` / `99px`, and type sizes `14px` / `9px`. The detector's conclusion: **the code, not
+the design system, needs to change** — i.e. the drift was in the Pass 4 build, not in the
+documented gold system.
+
+**Verified against this repository (2026-08-12):** none of those six values appear anywhere in
+`app/`, `lib/`, `docs/`, or `DESIGN.md`. The flagged file never lived in this repo — it's one of
+the `project/...` paths that only ever existed in Bryan's local design-exploration environment.
+There is no outstanding code change required here; recorded so the punch-list isn't lost if that
+local build is ever ported into or referenced from this repository again.
+
 ## Brand assets
 
-Not yet committed to this repository — they exist in Bryan's local design-exploration
-environment (`project/brand/`) and as Figma exports. Figma-hosted asset URLs expire ~7 days
-after export; only the local files are durable. When these are committed here, they should land
-under a conventional static-assets path (e.g. `public/brand/`).
+Stored under `public/brand/` from Bryan's durable local Figma exports. Use these repository
+copies rather than expiring Figma-hosted asset URLs.
 
 | Asset | What it is | Status |
 |---|---|---|
@@ -108,7 +128,7 @@ under a conventional static-assets path (e.g. `public/brand/`).
 | `icon-volume-cross.svg` | Header sound toggle, muted state. 20px. | Current |
 | `icon-expand.svg` | Expand-feedback-to-modal glyph. 12px. | Current |
 | `bg-sky-ambient.svg` | The ambient gradient wash behind the top of the canvas. | Current |
-| `coqui-mark.svg` | Two-color coquí silhouette (calling posture, inflated vocal sac, toe discs), built for 40×40 and inverted use. | Not adopted — Figma uses the wordmark instead. Undecided whether it has a future role (favicon, app icon, loading state) or should be dropped; see Open questions. |
+| `coqui-mark.svg` | Two-color coquí silhouette (calling posture, inflated vocal sac, toe discs), built for 40×40 and inverted use. | Reserved for favicon, app-icon, and other small-scale identity uses; the header continues to use the wordmark. |
 
 **Illustration style:** the engraving illustration is a deliberate brand signal — antique,
 hand-drawn, slightly absurd, against an otherwise clean modern interface. Any future
@@ -125,7 +145,7 @@ illustration should match this engraving register, not switch to flat vector or 
 | Dropzone helper | "also you can drop your image or ⌘ V to paste" |
 | Stage placeholder | "This is where the resized image should be displayed after upload." |
 | Stage caption | `[image-name.filetype]` · `1280 × 832 · viewport inferred` |
-| Rail heading | "What should we do fix?" — typo for "What should we fix?", not yet corrected in Figma |
+| Rail heading | "What should we fix?" — canonical correction of the typo in the source Figma frame |
 | Field labels | "Goal", "Feedback, as received", "Reviewer context", "Constraints" |
 | Required marker | "Required" (optional fields carry no marker at all) |
 | Placeholders | "Who gave this, and through what lens?" / "What must not change?" |
@@ -147,20 +167,20 @@ illustration should match this engraving register, not switch to flat vector or 
 **Reference**, **viewport box**, **goal**, **feedback**, **critique**, **real problems**,
 **taste**, **direction**, **grounding**, **iteration**, **round**, **lineage**, **chain**.
 
-## Open design questions
+## Resolved guidance and delivery constraints
 
-Unresolved — flag rather than guess:
-
-1. **Owners Narrow is a commercial typeface** (Frere-Jones). Confirm it's licensed for design
-   and web use before building against it, or nominate a fallback.
-2. **The header lost its stepper.** Neither current frame shows step position in the flow.
-   Intentional, or not yet designed?
-3. **The sound icon's behavior is unconfirmed** — coquí-call toggle, generic mute, or
-   decorative? It is the one unexplained element in the header.
-4. Is `coqui-mark.svg` dead, or does the frog silhouette have a future role (favicon, app icon,
-   loading state)?
-5. **Only four values are named Figma variables** (`Accent/onLight`, `Darker`, `Darkest`,
-   `Input labels`, `Dropshadow/Med`); everything else in `DESIGN.md` was extracted as a raw
-   literal. Proper tokens are needed before the system can be built against reliably at scale.
-6. No hover, focus, disabled, loading, or error states have been designed in any pass.
-
+1. **Owners Narrow remains the approved display face.** Supply a licensed design/web asset
+   before production implementation. Do not silently nominate a new face.
+2. **The removed stepper stays removed.** The current screen communicates position through its
+   own content; do not restore a persistent four-stage control.
+3. **The sound icon is the coquí-call control.** It defaults to muted, toggles play/mute, and
+   stays disabled until the audio asset exists. Both states require explicit accessible labels.
+4. **The silhouette mark is retained for small-scale identity.** Use it for favicon/app-icon
+   work; keep the wordmark in the header.
+5. **`DESIGN.md` is the normalized token source.** The limited set of named Figma variables no
+   longer blocks implementation; new tokens must be added to `DESIGN.md` rather than inferred
+   from raw Figma literals each time.
+6. **Missing interaction states are implementation work, not a new visual direction.** Derive
+   hover, focus, disabled, loading, and error states from the existing neutral, ink, line, and
+   gold tokens; preserve keyboard visibility, contrast, and reduced-motion behavior without
+   introducing another accent color.
