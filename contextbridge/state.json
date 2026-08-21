@@ -1,13 +1,13 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260821152136288_github",
-  "base_packet": "cb_20260818020031802_github",
+  "packet_id": "cb_20260821181611884_github",
+  "base_packet": "cb_20260821152136288_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-21T15:21:36.288Z",
+  "generated_at": "2026-08-21T18:16:11.884Z",
   "changed": true,
-  "manifest_sha": "4bb1ad11d8e7b5be",
+  "manifest_sha": "554e58acdb6e4bde",
   "sources": [
     {
       "id": "DESIGN.md",
@@ -20,6 +20,42 @@
       "file": "README.md",
       "sha256": "05df059a048b868e9cfe381c8469724f9562b0db6ae3fc56f097210ffdf873d7",
       "bytes": 4615
+    },
+    {
+      "id": "app/(app)/directions-alt/page.tsx",
+      "file": "app/(app)/directions-alt/page.tsx",
+      "sha256": "df68ce69167f80f6992d3612f476a530c5747220d5ef9d64a99ce3eb1e33b32e",
+      "bytes": 441
+    },
+    {
+      "id": "app/(app)/directions/page.tsx",
+      "file": "app/(app)/directions/page.tsx",
+      "sha256": "62d038d7685ecd54b9939c4ffe2cc780630d1a87dc777d7618449a962d6a5d5c",
+      "bytes": 151
+    },
+    {
+      "id": "app/(app)/feedback/page.tsx",
+      "file": "app/(app)/feedback/page.tsx",
+      "sha256": "1edc8e6d3040ed82dc8a9169456906bca2560ba25864bc8ecb6bd15469924bed",
+      "bytes": 137
+    },
+    {
+      "id": "app/(app)/layout.tsx",
+      "file": "app/(app)/layout.tsx",
+      "sha256": "05c69e8db1f55e9c064712d6bb8396fdd5529996c25599f93600dfc3832c274a",
+      "bytes": 714
+    },
+    {
+      "id": "app/(app)/synthesized/page.tsx",
+      "file": "app/(app)/synthesized/page.tsx",
+      "sha256": "e9ec3cfcd1c90fd9e7735e80c6a75d26500d713f379ffdbb6a97a6a34f0e791c",
+      "bytes": 149
+    },
+    {
+      "id": "app/(app)/upload/page.tsx",
+      "file": "app/(app)/upload/page.tsx",
+      "sha256": "fb36289d03fcdc6748ec16add40bd6c69a3f099eccfe9b927a379074596a8124",
+      "bytes": 144
     },
     {
       "id": "app/api/critique/route.ts",
@@ -66,8 +102,8 @@
     {
       "id": "app/globals.css",
       "file": "app/globals.css",
-      "sha256": "59071401813cad66284eaf2fbdbf7af0bbc2402ae291ea400379d4f523c5efde",
-      "bytes": 22306
+      "sha256": "f161e152fd9b823e29678fcae571940a6e8b2f682ee13356cd3073f910a2cb24",
+      "bytes": 78360
     },
     {
       "id": "app/icon.png",
@@ -84,8 +120,20 @@
     {
       "id": "app/page.tsx",
       "file": "app/page.tsx",
-      "sha256": "6cdd5c026befc596d4252b9324fd329c8f5fc6bbf2fb5596733afa49dcc10428",
-      "bytes": 1158
+      "sha256": "4a218a50a75d566a1d64f18cbe2709632d3a982a2b651cba8edd0e146cc6525e",
+      "bytes": 448
+    },
+    {
+      "id": "app/workflow/page.tsx",
+      "file": "app/workflow/page.tsx",
+      "sha256": "9efc65f904be4d537b097b05408e971d32cc20d55030465d0b4cdedfc334aab7",
+      "bytes": 10818
+    },
+    {
+      "id": "components/app-chrome.tsx",
+      "file": "components/app-chrome.tsx",
+      "sha256": "f57f558e94bb536f8cba5670e62f3b87c5a0266e33de9f8eda426c91245077ff",
+      "bytes": 873
     },
     {
       "id": "components/app-frame.tsx",
@@ -102,8 +150,8 @@
     {
       "id": "components/coqui-marks.tsx",
       "file": "components/coqui-marks.tsx",
-      "sha256": "325f41886d649ecf0edfa45fc0d9d27be4807ffc2aeca5e0a96525cba2929ce5",
-      "bytes": 2643
+      "sha256": "865106ab4d53f3cf414fa44ad778f4c55f3ef530ac9bb067981ea5af179f4dde",
+      "bytes": 3494
     },
     {
       "id": "components/critique-display.tsx",
@@ -118,16 +166,46 @@
       "bytes": 6165
     },
     {
+      "id": "components/direction-selection-list.tsx",
+      "file": "components/direction-selection-list.tsx",
+      "sha256": "54eabb60c566c651ec5ca98d58d2020c5c400fbe89b11acdfd8f9598363d4a69",
+      "bytes": 6610
+    },
+    {
       "id": "components/directions-comparison.tsx",
       "file": "components/directions-comparison.tsx",
       "sha256": "526e1c9bbcb0b229a92c285128c566de3a9e2cf0cbf1684f627148c16fe32bc6",
       "bytes": 1609
     },
     {
+      "id": "components/directions-screen.tsx",
+      "file": "components/directions-screen.tsx",
+      "sha256": "d208d290630dc214466239f9e7f967729e00ae514ddc8308fa02a1678f677aab",
+      "bytes": 5744
+    },
+    {
+      "id": "components/feedback-screen.tsx",
+      "file": "components/feedback-screen.tsx",
+      "sha256": "9350f64514e854922ae8358f0ef4c612fbc9152ac513e395687ccb74a0b3fe44",
+      "bytes": 10414
+    },
+    {
+      "id": "components/image-upload-screen.tsx",
+      "file": "components/image-upload-screen.tsx",
+      "sha256": "aa4b3574695ff9a7bbff9276b2a283eb061bdd950b44053663a266239febd58a",
+      "bytes": 8100
+    },
+    {
       "id": "components/preview-frame.tsx",
       "file": "components/preview-frame.tsx",
       "sha256": "911ecc02360f2a0b86cf775bd8d7d908eba80c2418c4d5b69c9ce1fb0709a16a",
       "bytes": 7778
+    },
+    {
+      "id": "components/reference-image.tsx",
+      "file": "components/reference-image.tsx",
+      "sha256": "fa407fdeb96450285fb4ece615b517ac61e7d33f40ee72ba2a6b33d8a9fceba6",
+      "bytes": 4587
     },
     {
       "id": "components/round-history.tsx",
@@ -140,6 +218,18 @@
       "file": "components/round-workspace.tsx",
       "sha256": "f9abb17db081c788767ab8d793915c3e5f2d7c3178e101b9fc99dc35f31edaef",
       "bytes": 7055
+    },
+    {
+      "id": "components/step-header.tsx",
+      "file": "components/step-header.tsx",
+      "sha256": "1cf3be7b8b51d7f03c11cfefb9721cce323877f56c0ca3546be38d4a70da6b0a",
+      "bytes": 882
+    },
+    {
+      "id": "components/synthesized-screen.tsx",
+      "file": "components/synthesized-screen.tsx",
+      "sha256": "f68781a1f343b7425306d11674bc47b7ec6f7dc815c101097c8399afcea59a21",
+      "bytes": 3420
     },
     {
       "id": "components/upload-form.tsx",
@@ -292,6 +382,12 @@
       "bytes": 8195
     },
     {
+      "id": "lib/fixtures/preview-directions.ts",
+      "file": "lib/fixtures/preview-directions.ts",
+      "sha256": "78141c570fdb810a050eaa9a4b45e93b4361ec30e4b199e1389fef29b2e0b3d7",
+      "bytes": 3689
+    },
+    {
       "id": "lib/fixtures/types.ts",
       "file": "lib/fixtures/types.ts",
       "sha256": "9d28db6869438c4c2ade11dda29ccd72b50d08cf9d5728859eac9de7e10b28d9",
@@ -442,16 +538,22 @@
       "bytes": 1131
     },
     {
+      "id": "lib/providers/patterns/component-url.ts",
+      "file": "lib/providers/patterns/component-url.ts",
+      "sha256": "c67f269f31ca47421fd108e4ffafaaff4c0a86edcb876dbdcd207c146453dece",
+      "bytes": 821
+    },
+    {
       "id": "lib/providers/patterns/index.ts",
       "file": "lib/providers/patterns/index.ts",
-      "sha256": "1a338df31612363a4feadc605c4fc7169141017511883f300c70537a53065c7c",
-      "bytes": 493
+      "sha256": "22a320f65361b328be0f877e83fd1e02176fb3225dec513d64dac48992c04420",
+      "bytes": 552
     },
     {
       "id": "lib/providers/patterns/mock-provider.ts",
       "file": "lib/providers/patterns/mock-provider.ts",
-      "sha256": "cca74448cafb4c500a5125071675a3455b3df3ccc48e565264e6e94f52ffc605",
-      "bytes": 1644
+      "sha256": "a6a41f6eddf9a8a2a7c9b001cd59853475e911afc5c020c07422fa7c21290ba3",
+      "bytes": 2007
     },
     {
       "id": "lib/providers/patterns/types.ts",
@@ -460,10 +562,58 @@
       "bytes": 801
     },
     {
+      "id": "lib/screenshot-edge-colors.test.ts",
+      "file": "lib/screenshot-edge-colors.test.ts",
+      "sha256": "3feaa6150ba651a3bf3e6825241dc2b6bf8821c212b31b6b9262c16e26df78d2",
+      "bytes": 4221
+    },
+    {
+      "id": "lib/screenshot-edge-colors.ts",
+      "file": "lib/screenshot-edge-colors.ts",
+      "sha256": "50f9dbc057618b5ec78f36eea4b1e02967edc2ee33b0bb89b9605b6b3fa7faf9",
+      "bytes": 8621
+    },
+    {
+      "id": "lib/screenshot-preprocess.ts",
+      "file": "lib/screenshot-preprocess.ts",
+      "sha256": "742cc85fe17bf26264e03e00a7433f7734405211e0c270781ebbe972b708f85a",
+      "bytes": 5991
+    },
+    {
+      "id": "lib/screenshot-raster.ts",
+      "file": "lib/screenshot-raster.ts",
+      "sha256": "338e94d5674a37c8a34dd43261db944d486412ed2ee9a0f155a93acacdac6723",
+      "bytes": 1514
+    },
+    {
+      "id": "lib/stores/round-image.ts",
+      "file": "lib/stores/round-image.ts",
+      "sha256": "86ca5bb9049c8e0f849a9b7de35d909a831c3f8480dddf3e733d5c6a291639b5",
+      "bytes": 2305
+    },
+    {
+      "id": "lib/stores/step-flow.ts",
+      "file": "lib/stores/step-flow.ts",
+      "sha256": "145b9ded5512be88c029e3bf623a3fc7e52f2f161b4a20741a5102f9e9f769b7",
+      "bytes": 928
+    },
+    {
       "id": "lib/types.ts",
       "file": "lib/types.ts",
       "sha256": "bfadb73a7158a9d775522f4f62ccbd85de1dc004c16b5df496bfff902f35d0f9",
       "bytes": 2909
+    },
+    {
+      "id": "lib/use-screenshot-color-split.ts",
+      "file": "lib/use-screenshot-color-split.ts",
+      "sha256": "bf197f2f515067521fbcc4a7a4c99457f4062abc140f325063713e0f62eb15c1",
+      "bytes": 1166
+    },
+    {
+      "id": "lib/use-step-stage.ts",
+      "file": "lib/use-step-stage.ts",
+      "sha256": "0745efa00ffaa7317c1015d483fa9c9b0c160d8f981cfdf628c18f11f311d043",
+      "bytes": 2343
     },
     {
       "id": "package.json",
@@ -516,20 +666,39 @@
   ],
   "source_changes": {
     "added": [
-      "lib/preview/preview-fallback.test.ts",
-      "lib/preview/preview-fallback.ts",
-      "lib/preview/preview-frame-dispatch.test.ts",
-      "lib/providers/codegen/__fixtures__/truncated-max-tokens.raw.txt",
-      "lib/providers/codegen/claude-provider.test.ts"
+      "app/(app)/directions-alt/page.tsx",
+      "app/(app)/directions/page.tsx",
+      "app/(app)/feedback/page.tsx",
+      "app/(app)/layout.tsx",
+      "app/(app)/synthesized/page.tsx",
+      "app/(app)/upload/page.tsx",
+      "app/workflow/page.tsx",
+      "components/app-chrome.tsx",
+      "components/direction-selection-list.tsx",
+      "components/directions-screen.tsx",
+      "components/feedback-screen.tsx",
+      "components/image-upload-screen.tsx",
+      "components/reference-image.tsx",
+      "components/step-header.tsx",
+      "components/synthesized-screen.tsx",
+      "lib/fixtures/preview-directions.ts",
+      "lib/providers/patterns/component-url.ts",
+      "lib/screenshot-edge-colors.test.ts",
+      "lib/screenshot-edge-colors.ts",
+      "lib/screenshot-preprocess.ts",
+      "lib/screenshot-raster.ts",
+      "lib/stores/round-image.ts",
+      "lib/stores/step-flow.ts",
+      "lib/use-screenshot-color-split.ts",
+      "lib/use-step-stage.ts"
     ],
     "removed": [],
     "updated": [
-      "components/code-sheet.tsx",
-      "components/preview-frame.tsx",
-      "lib/preview/build-preview-document.test.ts",
-      "lib/providers/codegen/claude-provider.ts",
-      "lib/providers/codegen/errors.ts",
-      "package.json"
+      "app/globals.css",
+      "app/page.tsx",
+      "components/coqui-marks.tsx",
+      "lib/providers/patterns/index.ts",
+      "lib/providers/patterns/mock-provider.ts"
     ]
   },
   "facts": [
@@ -1027,7 +1196,7 @@
   "missing_sources": [],
   "supplemental": [],
   "stats": {
-    "source_count": 84,
+    "source_count": 109,
     "fact_count": 34,
     "added": 0,
     "removed": 0,
