@@ -1,4 +1,5 @@
 import { ClaudeLLMProvider } from "@/lib/providers/llm/claude-provider";
+import { twentyFirstComponentUrl } from "@/lib/providers/patterns";
 import type { Critique, PatternReference } from "@/lib/types";
 
 /**
@@ -25,9 +26,9 @@ async function main() {
   };
 
   const patternReferences: PatternReference[] = [
-    { source: "21st.dev", name: "Single-column onboarding", url: "https://21st.dev/x", description: "A focused one-column setup flow with a single dominant CTA." },
-    { source: "21st.dev", name: "Progress stepper", url: "https://21st.dev/y", description: "A top-of-page step indicator for multi-step setup." },
-    { source: "21st.dev", name: "Split hero with primary action", url: "https://21st.dev/z", description: "A hero layout that anchors one primary action against supporting context." },
+    { source: "21st.dev", name: "Hero section", url: twentyFirstComponentUrl("prebuiltui", "hero-section"), description: "A focused hero that anchors one dominant CTA against supporting context." },
+    { source: "21st.dev", name: "Feature sections", url: twentyFirstComponentUrl("prebuiltui", "feature-sections"), description: "A scannable, weighted grid for the multi-step setup detail." },
+    { source: "21st.dev", name: "Bento grid", url: twentyFirstComponentUrl("designali-in", "bento-grid"), description: "A modular tile layout with clear focal points for the entry screen." },
   ];
 
   const provider = new ClaudeLLMProvider(apiKey);
