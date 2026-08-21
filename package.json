@@ -8,7 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "node --import tsx --test lib/**/*.test.ts",
+    "test": "node --import tsx --test $(find lib -name '*.test.ts')",
     "build:preview-runtime": "node scripts/build-preview-runtime.mjs",
     "contextbridge:sync": "node scripts/contextbridge/sync.mjs --scope github",
     "contextbridge:stage-local": "node scripts/contextbridge/stage-local.mjs",

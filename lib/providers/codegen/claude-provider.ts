@@ -6,7 +6,20 @@ import type { CodeGenProvider, CodeGenRequest } from "./types";
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
 const ANTHROPIC_VERSION = "2023-06-01";
 const DEFAULT_MODEL = "claude-sonnet-4-5-20250929";
-const MAX_TOKENS = 4096;
+// Full-page prototype components run ~4-5k output tokens; the original 4096 cap truncated the
+// larger ones mid-file (an unterminated string / unclosed JSX), which the pre-mount repair
+// stage can't heal because the closing half was never generated — the live-mount silently fell
+// back to read-only source. The 10-round PR #16 QA showed 8192 was still not enough: dense,
+// full-page directions (checkout, dense tables, settings, CRM detail) reliably produced ~30k
+// characters (~8k tokens) and truncated at the ceiling — reproduced directly, every checkout
+// generation hit stop_reason=max_tokens at 8192. 16384 clears those observed dense pages with
+// headroom; Sonnet 4.5 supports far higher output natively, so no beta header is needed.
+// max_tokens is only a ceiling (billed on tokens actually produced), so raising it costs
+// nothing unless a component genuinely needs the room. consumeStream still fails loudly if a
+// component ever exceeds even this, and PreviewFrame now always surfaces the fallback banner on
+// that (or any other) non-mount — so an over-budget generation is a clear message, never a
+// silent stall.
+const MAX_TOKENS = 16384;
 
 type SupportedImageMediaType = "image/png" | "image/jpeg" | "image/gif" | "image/webp";
 const SUPPORTED_IMAGE_MEDIA_TYPES: ReadonlySet<string> = new Set([
@@ -123,6 +136,15 @@ export const IMPLEMENTATION_REQUIREMENTS = [
     "unitless numbers may be unquoted (`opacity: 1`, `zIndex: 10`, `lineHeight: 1.5`). If you " +
     "use a `<style>` block, put its CSS inside a template-literal child " +
     "(`` <style>{`.card { color: ... }`}</style> ``), never as raw text between the tags.",
+  "- Valid JSX children (the transpiler rejects these and the component won't mount): never put " +
+    "a bare object literal in child position \u2014 `<div>{count: 5}</div>` or `<span>{label: value}</span>` " +
+    "is NOT a valid child and fails with 'Unexpected token when processing JSX children'. To show a " +
+    "computed value, use an expression that evaluates to a string or number " +
+    "(`<div>{`Total: ${total}`}</div>` or `<div>{formatPrice(total)}</div>`); to apply inline " +
+    "styles, use the double-brace attribute form (`style={{ color: 'red' }}`), never a child. " +
+    "Any literal `<` or `>` inside visible text must be escaped or wrapped in an expression " +
+    "(`Total {'<'} $50`, `&lt;`, `&gt;`, or `{'> 90% match'}`) \u2014 a bare `Total < $50` or `> 90%` " +
+    "in JSX text is a parse error.",
 ].join("\n");
 
 /**
@@ -182,7 +204,9 @@ function buildPrompt(direction: Direction, designGoal: string): string {
 
 interface AnthropicStreamEvent {
   type: string;
-  delta?: { type?: string; text?: string };
+  // `content_block_delta` carries text; `message_delta` carries the terminal stop_reason
+  // ("end_turn" on a clean finish, "max_tokens" when the output ceiling cut the response off).
+  delta?: { type?: string; text?: string; stop_reason?: string };
   error?: { type?: string; message?: string };
 }
 
@@ -265,6 +289,7 @@ export class ClaudeCodeGenProvider implements CodeGenProvider {
     const decoder = new TextDecoder();
     let buffer = "";
     let sawContent = false;
+    let stopReason: string | undefined;
 
     try {
       while (true) {
@@ -290,6 +315,8 @@ export class ClaudeCodeGenProvider implements CodeGenProvider {
           ) {
             sawContent = true;
             yield event.delta.text;
+          } else if (event.type === "message_delta" && typeof event.delta?.stop_reason === "string") {
+            stopReason = event.delta.stop_reason;
           } else if (event.type === "error") {
             throw new CodeGenGenerationError(
               "model_error",
@@ -306,6 +333,21 @@ export class ClaudeCodeGenProvider implements CodeGenProvider {
       throw new CodeGenGenerationError(
         "unparseable_response",
         "Claude's response contained no text content to stream."
+      );
+    }
+
+    // A "max_tokens" stop means the component was cut off mid-file: the tokens already
+    // streamed are real but incomplete, so the accumulated source won't parse and the
+    // pre-mount repair stage has nothing valid to heal. Fail loudly with a typed error
+    // rather than let the client mount a truncated component and report a mystery
+    // "Unexpected token." MAX_TOKENS was raised to make this rare; this keeps it honest
+    // if a component ever exceeds even the higher ceiling.
+    if (stopReason === "max_tokens") {
+      throw new CodeGenGenerationError(
+        "truncated_response",
+        "Claude hit the output-token limit and stopped before the component was complete, so the " +
+          "generated code is truncated and can't be rendered. Try generating again, or simplify the " +
+          "direction so the component fits the budget."
       );
     }
   }

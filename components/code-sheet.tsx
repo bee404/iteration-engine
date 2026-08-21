@@ -213,7 +213,14 @@ export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerR
               <p>Generating component for “{directionTitle}”…</p>
             </div>
           ) : (
-            <PreviewFrame code={generated.code} language={generated.language} status={generated.status} />
+            // `error` is threaded through so a failed generation shows the explicit fallback
+            // banner rather than a bannerless read-only source view (the "silent stall").
+            <PreviewFrame
+              code={generated.code}
+              language={generated.language}
+              status={generated.status}
+              error={generated.error}
+            />
           )}
         </div>
 
