@@ -91,6 +91,10 @@ problems** (critique's signal pile), **taste** (critique's preference pile), **d
 - **Visual pre-iteration / asset generation**: ComfyUI, running locally on Bryan's machine (port 8188), optional, health-checked via `GET /system_stats`; the system degrades to LLM-only when it's not running.
 - **Preview**: sandboxed iframe within the Next.js app, SSE streaming for generated code.
 - **Secrets**: Vercel server-only environment variables; `.env.local` for local dev (gitignored).
+- **Access**: live production is single-user and credential-gated; missing credentials fail closed. Public fixture demos remain open because they cannot call providers or write persistence.
+- **Input boundary**: screenshots are browser-uploaded image data URLs only, with a 3 MB decoded-size cap; arbitrary server-side URL fetching is prohibited.
+- **Generated-code boundary**: preview iframes combine sandboxing with a network-closed Content Security Policy.
+- **Abuse controls**: model endpoints have per-instance burst limits and structured security-event logs; Vercel Firewall provides the distributed traffic layer and alerting.
 - **Orchestration**: fully standalone — no runtime dependency on Obvious.
 
 ### V1 scope

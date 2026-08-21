@@ -1,5 +1,10 @@
 import { transform } from "sucrase";
 
+/** Generated previews may execute inline React, but they cannot reach the network, submit
+ * forms, load plugins, or change their base URL. The iframe sandbox remains a separate layer. */
+export const PREVIEW_CONTENT_SECURITY_POLICY =
+  "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; font-src data:; img-src data: blob:; connect-src 'none'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
+
 /**
  * Turns a single self-contained generated React component (TSX source) into an HTML document
  * that transpiles and mounts it live inside a sandboxed iframe. The generated code is always
@@ -247,6 +252,7 @@ ${registration}
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="${PREVIEW_CONTENT_SECURITY_POLICY}" />
     <style>
       html, body { margin: 0; padding: 0; background: #ffffff; color: #0a0a0a;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -310,6 +316,7 @@ export function buildStreamingSourceDocument(): string {
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="${PREVIEW_CONTENT_SECURITY_POLICY}" />
     <style>
       body { margin: 0; font-family: ui-monospace, monospace; background: #0b0d12; color: #d7dce2; }
       pre { margin: 0; padding: 16px; white-space: pre-wrap; word-break: break-word; font-size: 13px; line-height: 1.5; }
@@ -321,4 +328,3 @@ export function buildStreamingSourceDocument(): string {
   </body>
 </html>`;
 }
-

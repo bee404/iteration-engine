@@ -43,6 +43,21 @@ pipeline.
 The orchestration lives in `components/round-workspace.tsx` over the Zustand store; API routes
 are in `app/api/*/route.ts`.
 
+## Security boundary and monitoring
+
+- `proxy.ts` applies the first access check, and each API route repeats it as defense in depth.
+  Live production requires both `COQUI_ACCESS_USERNAME` and `COQUI_ACCESS_PASSWORD`; missing or
+  partial configuration returns 503. Local development and `DEMO_MODE=true` can remain open.
+- Model endpoints apply a best-effort in-memory burst limit. This limits ordinary accidental or
+  abusive bursts per function instance; Vercel Firewall is still required for distributed abuse.
+- `lib/security/screenshot.ts` accepts only supported base64 image data URLs up to 3 MB. Remote
+  URLs are rejected, so screenshot input cannot make the server probe another network address.
+- Preview documents combine `sandbox="allow-scripts"` with a CSP that blocks connections,
+  remote assets, forms, plugins, media, and base-URL changes.
+- `lib/security/events.ts` writes redacted single-line JSON events. In Vercel Runtime Logs,
+  filter for `"type":"security_event"`; configure Firewall alerts separately in the Vercel
+  dashboard. Dependency monitoring remains in GitHub through Dependabot and the audit workflow.
+
 ## Provider interfaces
 
 Three provider families, each a typed interface selected by a factory. Callers never branch on
@@ -169,4 +184,3 @@ deterministic and prompt sides). See `qa-conventions.md`.
 - `npm run verify:codegen` — codegen post-processing regression (must report 12/12).
 - `npm run db:migrate` — apply the Turso schema.
 - `DEMO_MODE=true npm run dev` — offline front-end QA on captured fixtures.
-

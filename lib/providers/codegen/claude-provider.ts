@@ -2,6 +2,8 @@ import { formatDesignSystemForPrompt, getActiveDesignSystem } from "@/lib/design
 import type { Direction } from "@/lib/types";
 import { CodeGenGenerationError } from "./errors";
 import type { CodeGenProvider, CodeGenRequest } from "./types";
+import { resolveScreenshotDataUrl, ScreenshotValidationError } from "@/lib/security/screenshot";
+import { logSecurityEvent } from "@/lib/security/events";
 
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
 const ANTHROPIC_VERSION = "2023-06-01";
@@ -21,75 +23,19 @@ const DEFAULT_MODEL = "claude-sonnet-4-5-20250929";
 // silent stall.
 const MAX_TOKENS = 16384;
 
-type SupportedImageMediaType = "image/png" | "image/jpeg" | "image/gif" | "image/webp";
-const SUPPORTED_IMAGE_MEDIA_TYPES: ReadonlySet<string> = new Set([
-  "image/png",
-  "image/jpeg",
-  "image/gif",
-  "image/webp",
-]);
-
-interface ResolvedImage {
-  mediaType: SupportedImageMediaType;
-  base64Data: string;
-}
-
 /**
- * Resolves screenshotRef into base64 image bytes Claude's vision input can read. Same
- * contract as lib/providers/llm/claude-provider.ts's resolveScreenshot (this step needed
- * its own copy rather than a shared import so this in-flight PR doesn't also touch the
- * already-reviewed critique provider): a data: URL (the browser upload path, see
- * components/upload-form.tsx) or an http(s) URL the server can fetch. A client-only object
- * URL (`blob:...`) can't be dereferenced here, so it's rejected with a non-retryable error.
+ * Resolves the browser-uploaded data URL without making a server-side network request.
  */
-async function resolveScreenshot(screenshotRef: string): Promise<ResolvedImage> {
-  if (screenshotRef.startsWith("data:")) {
-    const match = /^data:([^;,]+);base64,(.*)$/s.exec(screenshotRef);
-    if (!match) {
-      throw new CodeGenGenerationError(
-        "invalid_screenshot",
-        "screenshotRef is a data URL but is not base64-encoded image data."
-      );
+function resolveScreenshot(screenshotRef: string) {
+  try {
+    return resolveScreenshotDataUrl(screenshotRef);
+  } catch (error) {
+    if (error instanceof ScreenshotValidationError) {
+      logSecurityEvent("screenshot_rejected", { provider: "codegen" });
+      throw new CodeGenGenerationError("invalid_screenshot", error.message);
     }
-    const [, mediaType, base64Data] = match;
-    // Both groups are required (non-optional) in the regex above, so a successful match
-    // always populates them, but noUncheckedIndexedAccess types the destructure as possibly
-    // undefined regardless. Guard explicitly rather than asserting past it.
-    if (typeof mediaType !== "string" || typeof base64Data !== "string") {
-      throw new CodeGenGenerationError(
-        "invalid_screenshot",
-        "screenshotRef data URL is missing a media type or base64 payload."
-      );
-    }
-    if (!SUPPORTED_IMAGE_MEDIA_TYPES.has(mediaType)) {
-      throw new CodeGenGenerationError(
-        "invalid_screenshot",
-        `screenshotRef media type "${mediaType}" is not one Claude's vision input supports (png, jpeg, gif, webp).`
-      );
-    }
-    return { mediaType: mediaType as SupportedImageMediaType, base64Data };
+    throw error;
   }
-
-  if (screenshotRef.startsWith("http://") || screenshotRef.startsWith("https://")) {
-    const response = await fetch(screenshotRef);
-    if (!response.ok) {
-      throw new CodeGenGenerationError(
-        "invalid_screenshot",
-        `Could not fetch screenshotRef (${response.status} ${response.statusText}).`
-      );
-    }
-    const contentType = response.headers.get("content-type")?.split(";")[0]?.trim() ?? "";
-    const mediaType = SUPPORTED_IMAGE_MEDIA_TYPES.has(contentType)
-      ? (contentType as SupportedImageMediaType)
-      : "image/png";
-    const buffer = await response.arrayBuffer();
-    return { mediaType, base64Data: Buffer.from(buffer).toString("base64") };
-  }
-
-  throw new CodeGenGenerationError(
-    "invalid_screenshot",
-    'screenshotRef must be a data: URL or an http(s) URL reachable from the server (a client-only "blob:" object URL cannot be read server-side).'
-  );
 }
 
 const SYSTEM_PROMPT =
@@ -352,4 +298,3 @@ export class ClaudeCodeGenProvider implements CodeGenProvider {
     }
   }
 }
-

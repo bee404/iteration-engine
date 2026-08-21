@@ -9,7 +9,7 @@ export type CodeGenErrorCode =
  * Typed failure mode for real (non-mock) code generation, mirroring
  * lib/providers/llm/errors.ts's CritiqueGenerationError so this step fails the same way:
  *  - "invalid_screenshot": screenshotRef isn't a reference the provider can read bytes
- *    from (not a data: URL or a fetchable http(s) URL). Not worth retrying.
+ *    from (not a supported browser-uploaded image data URL). Not worth retrying.
  *  - "model_error": the upstream Anthropic call itself failed (network, auth, rate limit,
  *    or an `error` event mid-stream).
  *  - "unparseable_response": Claude responded but the stream carried no usable code text.
@@ -33,4 +33,3 @@ export class CodeGenGenerationError extends Error {
     this.code = code;
   }
 }
-

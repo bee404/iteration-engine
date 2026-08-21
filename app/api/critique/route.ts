@@ -1,7 +1,14 @@
 import { NextResponse } from "next/server";
 import { CRITIQUE_ERROR_STATUS, CritiqueGenerationError, getLLMProvider } from "@/lib/providers/llm";
+import { authorizeRequest } from "@/lib/security/access";
+import { enforceRateLimit, MODEL_RATE_LIMITS } from "@/lib/security/rate-limit";
 
 export async function POST(request: Request) {
+  const denied = authorizeRequest(request);
+  if (denied) return denied;
+  const limited = enforceRateLimit(request, MODEL_RATE_LIMITS.critique);
+  if (limited) return limited;
+
   const body = await request.json().catch(() => null);
 
   if (!body || typeof body.screenshotRef !== "string" || !body.screenshotRef) {
