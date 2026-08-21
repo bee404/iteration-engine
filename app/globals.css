@@ -1056,11 +1056,27 @@ body:has(.app-chrome) {
   z-index: 0;
   pointer-events: none;
   content: "";
-  /* Dot alpha tuned so the composited result over --ground (#f8f9fb) reads as ~#e9e9e9 —
-     matched to the reference export sample, not just eyeballed. */
-  background-image: radial-gradient(circle at 1px 1px, rgba(16, 18, 26, 0.075) 1px, transparent 0);
-  background-size: 20px 20px;
-  mask-image: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.68) 52%, transparent 88%);
+  /* Two radial-gradient layers, the second offset by half the 16px in-row dot spacing
+     (8px horizontally, 16px vertically), produce a brick/quincunx dot pattern — same
+     16px row-to-row rhythm and overall dot density as a plain 16px grid, but alternating
+     rows don't line up into straight columns. Alpha manually tuned by Bryan (#10121a24). */
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(16, 18, 26, 0.141) 1px, transparent 0),
+    radial-gradient(circle at 1px 1px, rgba(16, 18, 26, 0.141) 1px, transparent 0);
+  background-size: 16px 32px, 16px 32px;
+  background-position: 0 0, 8px 16px;
+  /* Two-layer mask: the vertical gradient keeps the original top-heavy bias (dots read
+     clearest near the top, fainter toward the bottom); the horizontal gradient is new and
+     symmetric so the left/right edges recede too. mask-composite multiplies the two layers
+     so a pixel stays opaque only where both agree — a soft vignette on all four edges. */
+  -webkit-mask-image:
+    linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.678) 52%, transparent 88%),
+    linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.678) 52%, transparent 88%),
+    linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-composite: intersect;
 }
 
 .app-chrome-content {
