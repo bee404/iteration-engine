@@ -18,6 +18,7 @@ Read the one file that matches your task, not all of them:
 
 | File | Read it when you need to know… |
 | --- | --- |
+| [`.agents/product-marketing.md`](../../.agents/product-marketing.md) | How Coquí is positioned publicly, who the initial audience is, what claims are defensible, and what the current launch CTA is. Read before writing marketing, launch, recruiting, or public-facing product copy. |
 | [`architecture.md`](./architecture.md) | How the shipped system actually works — pipeline stages, provider interfaces, data model, persistence, demo mode, live-mount preview, design-system enforcement. Start here for any code change. |
 | [`decisions.md`](./decisions.md) | *Why* the system is built the way it is — the durable, load-bearing decisions and their rationale (generation engine, token format, Sucrase, demo mode, 21st.dev shape, etc.). Read before changing a decision. |
 | [`roadmap-and-open-work.md`](./roadmap-and-open-work.md) | What is built vs. designed-but-not-built (the fixed-box `Source` / `Iteration` comparison), build-order dependencies, and the paused external UX iteration work. |
@@ -34,6 +35,10 @@ primary source-of-truth docs win, in this order:
    [`docs/release-plan.md`](../release-plan.md), [`docs/design-system.md`](../design-system.md),
    and the repo-root `DESIGN.md` — the reconciled product and visual source of truth.
 3. This knowledge base — a navigational synthesis layered on top of the above.
+
+For public messaging, `.agents/product-marketing.md` is the canonical interpretation of those
+product facts. It may narrow what is safe to claim, but it does not override shipped behavior or
+the decision log.
 
 If you find this hub drifting from code or the primary docs, correct it in the same PR that
 surfaces the drift.

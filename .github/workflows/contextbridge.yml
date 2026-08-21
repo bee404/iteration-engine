@@ -6,6 +6,10 @@ on:
       - "main"
     paths:
       - "README.md"
+      - "AGENTS.md"
+      - "CLAUDE.md"
+      - ".agents/product-marketing.md"
+      - ".github/copilot-instructions.md"
       - "PRODUCT.md"
       - "DESIGN.md"
       - "docs/**"
@@ -19,6 +23,8 @@ on:
       - "contextbridge/local-sources.json"
       - "contextbridge/OPERATING-AGREEMENT.md"
       - "scripts/contextbridge/**"
+      - "scripts/check-agent-context.mjs"
+      - "package.json"
       - ".github/workflows/contextbridge.yml"
   schedule:
     - cron: "17 * * * *"
@@ -42,6 +48,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Verify agent context contract
+        run: npm run context:check
 
       - name: Scan and publish compact packet
         env:

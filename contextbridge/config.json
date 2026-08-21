@@ -4,6 +4,10 @@
   "max_excerpt_chars": 900,
   "paths": [
     "README.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".github/copilot-instructions.md",
+    ".agents/product-marketing.md",
     "DESIGN.md",
     "docs/decisions.md",
     "docs/blueprint.md",
