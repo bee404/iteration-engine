@@ -1,0 +1,52 @@
+name: Agent Context Contract
+
+on:
+  pull_request:
+    paths:
+      - "AGENTS.md"
+      - "CLAUDE.md"
+      - ".agents/product-marketing.md"
+      - ".github/copilot-instructions.md"
+      - "README.md"
+      - "PRODUCT.md"
+      - "DESIGN.md"
+      - "docs/**"
+      - "contextbridge/config.json"
+      - "scripts/check-agent-context.mjs"
+      - "package.json"
+      - ".github/workflows/context-contract.yml"
+  push:
+    branches:
+      - "main"
+    paths:
+      - "AGENTS.md"
+      - "CLAUDE.md"
+      - ".agents/product-marketing.md"
+      - ".github/copilot-instructions.md"
+      - "README.md"
+      - "PRODUCT.md"
+      - "DESIGN.md"
+      - "docs/**"
+      - "contextbridge/config.json"
+      - "scripts/check-agent-context.mjs"
+      - "package.json"
+      - ".github/workflows/context-contract.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out Coquí
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify agent context contract
+        run: npm run context:check

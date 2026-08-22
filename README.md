@@ -35,6 +35,8 @@ V1 is not complete. The remaining release work is the inferred fixed viewport bo
 - `docs/release-plan.md`: release definition derived from the approved blueprint
 - `docs/design-system.md`: visual identity, brand assets, copy, and design history
 - `docs/knowledge-base/`: concise implementation, QA, and open-work guidance for coding agents
+- `.agents/product-marketing.md`: launch positioning, audience, messaging, proof, and claims boundaries
+- `AGENTS.md`: repository-wide context routing for coding and product agents
 - `app/`: Next.js application routes and UI implementation
 - `lib/fixtures/`: real, previously-captured critique/directions/code-gen output replayed in demo mode
 - `public/brand/`: durable Coquí brand assets exported from the current Figma direction
@@ -59,5 +61,11 @@ Set `DEMO_MODE=true` to walk the entire flow — upload -> critique -> direction
 ## Source-of-truth rule
 
 If code, a conversation, or an external tool conflicts with the repository documentation, update the repository documentation first and record the decision in `docs/decisions.md`. Keep the README status aligned with the current blueprint and release plan.
+
+## Agent context workflow
+
+`AGENTS.md` is the canonical entrypoint for any agent working from this repository. Claude Code and GitHub Copilot have small platform-specific instruction files that route back to it; they do not duplicate product decisions. Marketing context lives in `.agents/product-marketing.md`, and ContextBridge includes these files in its shared packets.
+
+Run `npm run context:check` to verify the contract locally. GitHub Actions runs the same check on pull requests and relevant pushes. When adopting another platform that does not discover `AGENTS.md`, add a minimal auto-loaded adapter that points to `AGENTS.md`, then register it with the check and ContextBridge.
 
 <!-- trigger: Vercel preview build for design QA, 2026-08-05T17:34:28Z -->
