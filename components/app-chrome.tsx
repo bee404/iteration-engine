@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { ThemeSwitch } from "@/components/theme-switch";
+
 /**
  * The persistent outer chrome for the whole Coquí app (Figma node 132:3296, "Outer chrome"):
  * the gold border, its inner shadow, and the dot-grid ground. Rendered once by the (app) route
@@ -13,6 +15,9 @@ export function AppChrome({ children }: { children: ReactNode }) {
     <div className="app-chrome">
       <div className="app-chrome-dot-grid" aria-hidden="true" />
       <div className="app-chrome-content">{children}</div>
+      {/* The step header is currently hidden pending redesign, so the theme switch lives on the
+          chrome itself: rendered once here, it persists across step navigation like the frame. */}
+      <ThemeSwitch />
     </div>
   );
 }
