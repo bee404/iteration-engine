@@ -10,7 +10,7 @@ Agreed 2026-08-05, reconciled with the shipped system and cross-tool context pac
 
 ### Implementation status as of 2026-08-11
 
-Shipped: screenshot intake and natural-dimension capture; real Claude critique and direction generation; per-direction streamed code generation; live-mount preview with source fallback; Turso round persistence and history; and fixture-backed `DEMO_MODE`.
+Shipped: screenshot intake and natural-dimension capture; real Claude critique and direction generation; per-direction streamed code generation; live-mount preview with source fallback; Turso round persistence and history; fixture-backed `DEMO_MODE`; and a single-user security baseline covering production access, burst limiting, screenshot validation, preview CSP, dependency audits, and structured security-event logs.
 
 Remaining for V1: infer and lock the actual interface viewport; build the binary `Source` / `Iteration` comparison in that fixed box; add downloadable source-bundle export to the committing action; wire live 21st.dev grounding and the intended GPT-4o validation fallback; and validate the complete loop against a real project. Optional ComfyUI clarification remains a graceful enhancement, not a blocker for the core comparison loop.
 

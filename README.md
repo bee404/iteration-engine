@@ -48,6 +48,14 @@ Set `DEMO_MODE=true` to walk the entire flow — upload -> critique -> direction
 - Because inputs are replayed, any screenshot/text a reviewer enters is accepted; the fixture's real captured output is what's returned.
 - All persistence routes (`POST /api/rounds`, `POST /api/projects`, `PATCH /api/rounds/[id]`) refuse writes while demo mode is on, backed by a write guard in the DB query layer.
 
+## Security baseline
+
+- Live production requires both `COQUI_ACCESS_USERNAME` and `COQUI_ACCESS_PASSWORD`; it fails closed if either is missing. Local development and public `DEMO_MODE=true` previews remain open.
+- Model endpoints have best-effort per-instance burst limits. Vercel Firewall remains the distributed traffic and DDoS layer.
+- Screenshot input accepts only base64 PNG, JPEG, GIF, or WebP data URLs up to 3 MB. The server never fetches a user-supplied screenshot URL.
+- Generated previews run in sandboxed iframes with a Content Security Policy that blocks network connections, remote assets, forms, plugins, and base-URL changes.
+- Security events are emitted as single-line JSON with `"type":"security_event"` and no credentials, request bodies, or screenshot data. Filter for that value in Vercel Runtime Logs and configure Firewall alerts in Vercel for production monitoring.
+
 ## Source-of-truth rule
 
 If code, a conversation, or an external tool conflicts with the repository documentation, update the repository documentation first and record the decision in `docs/decisions.md`. Keep the README status aligned with the current blueprint and release plan.

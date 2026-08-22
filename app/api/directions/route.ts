@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { DIRECTIONS_ERROR_STATUS, DirectionsGenerationError, getLLMProvider } from "@/lib/providers/llm";
 import { getPatternProvider } from "@/lib/providers/patterns";
 import type { Critique } from "@/lib/types";
+import { authorizeRequest } from "@/lib/security/access";
+import { enforceRateLimit, MODEL_RATE_LIMITS } from "@/lib/security/rate-limit";
 
 function isCritique(value: unknown): value is Critique {
   return (
@@ -14,6 +16,11 @@ function isCritique(value: unknown): value is Critique {
 }
 
 export async function POST(request: Request) {
+  const denied = authorizeRequest(request);
+  if (denied) return denied;
+  const limited = enforceRateLimit(request, MODEL_RATE_LIMITS.directions);
+  if (limited) return limited;
+
   const body = await request.json().catch(() => null);
 
   if (!body || !isCritique(body.critique)) {

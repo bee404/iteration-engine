@@ -4,8 +4,8 @@ export interface CodeGenRequest {
   direction: Direction;
   designGoal: string;
   /** The screenshot this round (and its directions) iterate on — same reference shape as
-   * lib/providers/llm's CritiqueRequest.screenshotRef (a data: URL or a server-fetchable
-   * http(s) URL), so the real provider can ground generated code in what's actually on screen. */
+   * lib/providers/llm's CritiqueRequest.screenshotRef (a browser-uploaded image data URL),
+   * so the real provider can ground generated code in what's actually on screen. */
   screenshotRef: string;
 }
 

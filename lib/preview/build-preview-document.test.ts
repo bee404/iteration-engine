@@ -7,12 +7,29 @@ import {
   buildStreamingSourceDocument,
   extractComponentName,
   nextStreamingSourceMessage,
+  PREVIEW_CONTENT_SECURITY_POLICY,
   quoteUnitfulStyleValues,
   stripCodeFences,
   stripSurroundingProse,
   transpilePreviewComponent,
   wrapBareStyleTagCss,
 } from "./build-preview-document";
+
+test("preview documents carry a network-closed content security policy", () => {
+  const live = buildPreviewDocument({
+    transpiledCode: "function App() { return null; }",
+    componentName: "App",
+    runtimeSource: "window.React = {}; window.ReactDOM = {};",
+  });
+  const streaming = buildStreamingSourceDocument();
+
+  for (const document of [live, streaming]) {
+    assert.match(document, /http-equiv="Content-Security-Policy"/);
+    assert.ok(document.includes(PREVIEW_CONTENT_SECURITY_POLICY));
+    assert.match(document, /connect-src 'none'/);
+    assert.match(document, /object-src 'none'/);
+  }
+});
 
 test("stripCodeFences removes a wrapping markdown fence but leaves plain source untouched", () => {
   assert.equal(stripCodeFences("```tsx\nconst x = 1;\n```"), "const x = 1;");

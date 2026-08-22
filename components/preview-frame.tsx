@@ -6,6 +6,7 @@ import {
   buildPreviewDocument,
   buildStreamingSourceDocument,
   nextStreamingSourceMessage,
+  PREVIEW_CONTENT_SECURITY_POLICY,
   transpilePreviewComponent,
 } from "@/lib/preview/build-preview-document";
 import { errorFallbackNotice, PREVIEW_FALLBACK_PREFIX } from "@/lib/preview/preview-fallback";
@@ -189,6 +190,7 @@ function sourceDocument(code: string): string {
 <html>
   <head>
     <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="${PREVIEW_CONTENT_SECURITY_POLICY}" />
     <style>
       body { margin: 0; font-family: ui-monospace, monospace; background: #0b0d12; color: #d7dce2; }
       pre { margin: 0; padding: 16px; white-space: pre-wrap; word-break: break-word; font-size: 13px; line-height: 1.5; }

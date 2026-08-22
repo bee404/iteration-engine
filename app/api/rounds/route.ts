@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { isDemoMode } from "@/lib/demo-mode";
 import { createRound, listRounds } from "@/lib/db/queries";
 import type { ImageDimensions } from "@/lib/types";
+import { authorizeRequest } from "@/lib/security/access";
+import { resolveScreenshotDataUrl, ScreenshotValidationError } from "@/lib/security/screenshot";
 
 /** Accepts screenshot dimensions from the request body only when both values are finite
  * positive numbers; anything else (missing, partial, malformed) is treated as absent. */
@@ -14,12 +16,17 @@ function parseScreenshotDimensions(value: unknown): ImageDimensions | null {
 }
 
 export async function GET(request: Request) {
+  const denied = authorizeRequest(request);
+  if (denied) return denied;
   const projectId = new URL(request.url).searchParams.get("projectId") ?? undefined;
   const rounds = await listRounds(projectId);
   return NextResponse.json({ rounds });
 }
 
 export async function POST(request: Request) {
+  const denied = authorizeRequest(request);
+  if (denied) return denied;
+
   // Demo mode never persists — refuse the write cleanly rather than touching Turso.
   if (isDemoMode()) {
     return NextResponse.json({ error: "Persistence is disabled in demo mode", code: "demo_mode" }, { status: 403 });
@@ -32,6 +39,14 @@ export async function POST(request: Request) {
   }
   if (typeof body.screenshotRef !== "string" || !body.screenshotRef) {
     return NextResponse.json({ error: "screenshotRef is required" }, { status: 400 });
+  }
+  try {
+    resolveScreenshotDataUrl(body.screenshotRef);
+  } catch (error) {
+    if (error instanceof ScreenshotValidationError) {
+      return NextResponse.json({ error: error.message, code: "invalid_screenshot" }, { status: 400 });
+    }
+    throw error;
   }
   if (typeof body.designGoal !== "string" || !body.designGoal.trim()) {
     return NextResponse.json({ error: "designGoal is required" }, { status: 400 });

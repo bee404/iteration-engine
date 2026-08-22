@@ -142,6 +142,23 @@ The silhouette `coqui-mark.svg` is retained for favicon, app-icon, and other sma
 
 **Owner:** Bryan. **Date:** 2026-08-11.
 
+### 16. Live production is private and generated content has closed network boundaries
+
+**Decision:** Coquí's current live deployment is a single-user tool and must require server-side
+credentials. Live production fails closed when credentials are absent or partial; public fixture
+demo deployments may remain open because they make no external provider calls and refuse all
+persistence writes. Screenshot input is restricted to supported browser-uploaded image data URLs
+up to 3 MB, never an arbitrary server-fetched URL. Generated previews combine iframe sandboxing
+with a Content Security Policy that prohibits network connections and remote assets. Expensive
+model endpoints are burst-limited and security denials are logged as redacted structured events.
+
+**Rationale:** These controls match the product's actual single-user operating model, remove an
+unneeded server-side request path, contain untrusted generated code, and make attempted misuse
+visible without collecting sensitive inputs. If Coquí becomes multi-user, replace the shared
+credential and per-instance limiter with identity-backed sessions and a distributed rate limiter.
+
+**Owner:** Bryan. **Date:** 2026-08-21.
+
 ## Carried forward unchanged (not in conflict, no new decision needed)
 
 - Input model: screenshot(s), feedback text, design tokens (W3C DTCG JSON), condensed style guide, optional flowchart screenshot — extended with "design goal" and "reviewer perspective/context" as explicit fields (external discovery, additive).

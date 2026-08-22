@@ -1,6 +1,8 @@
 import { CodeGenGenerationError, getCodeGenProvider } from "@/lib/providers/codegen";
 import { postProcessGeneratedCode } from "@/lib/providers/codegen/postprocess";
 import type { Direction } from "@/lib/types";
+import { authorizeRequest } from "@/lib/security/access";
+import { enforceRateLimit, MODEL_RATE_LIMITS } from "@/lib/security/rate-limit";
 
 function isDirection(value: unknown): value is Direction {
   return (
@@ -22,6 +24,11 @@ function sseEvent(event: string, data: unknown): string {
  * see components/direction-card.tsx.
  */
 export async function POST(request: Request) {
+  const denied = authorizeRequest(request);
+  if (denied) return denied;
+  const limited = enforceRateLimit(request, MODEL_RATE_LIMITS.generate);
+  if (limited) return limited;
+
   const body = await request.json().catch(() => null);
 
   if (!body || !isDirection(body.direction)) {
