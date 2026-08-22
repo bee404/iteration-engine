@@ -137,13 +137,14 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
               />
             </div>
           ) : (
-            <Image
+            /* The illustration is a single-path line drawing with one hardcoded fill, so as an
+               <img> its color is unreachable by any theme. Painting it as a CSS mask makes the
+               artwork a stencil that takes the theme's ink, which is the only way a second theme
+               can render it legibly on a dark ground. role/aria-label keep it announced. */
+            <span
               className="upload-illustration"
-              src="/brand/coqui-illustration.svg"
-              alt="A frog riding a goose, carrying a framed picture"
-              width={200}
-              height={237}
-              priority
+              role="img"
+              aria-label="A frog riding a goose, carrying a framed picture"
             />
           )}
 
