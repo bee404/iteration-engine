@@ -1,14 +1,38 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260822183732262_github",
-  "base_packet": "cb_20260821181611884_github",
+  "packet_id": "cb_20260822184954585_github",
+  "base_packet": "cb_20260822183732262_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-22T18:37:32.262Z",
+  "generated_at": "2026-08-22T18:49:54.585Z",
   "changed": true,
-  "manifest_sha": "c112f1fe47e34942",
+  "manifest_sha": "ea28e2274789385e",
   "sources": [
+    {
+      "id": ".agents/product-marketing.md",
+      "file": ".agents/product-marketing.md",
+      "sha256": "d1c8e53a85cd18846eb379b1b478c6fc06db49734856eda780807e235beecad6",
+      "bytes": 12330
+    },
+    {
+      "id": ".github/copilot-instructions.md",
+      "file": ".github/copilot-instructions.md",
+      "sha256": "6e397acd274c2d0bdef7b7f6879b0293669e77c7b2fc413836ec3c05b85f6576",
+      "bytes": 194
+    },
+    {
+      "id": "AGENTS.md",
+      "file": "AGENTS.md",
+      "sha256": "53f6167f93c09a034d20cfe210391e44959b70627cdd512bad54f775b7fedf77",
+      "bytes": 2589
+    },
+    {
+      "id": "CLAUDE.md",
+      "file": "CLAUDE.md",
+      "sha256": "9ebd673f360ef432315d767eb245dc0cbc63de20dd87f6ae94ac3c28b852c15c",
+      "bytes": 187
+    },
     {
       "id": "DESIGN.md",
       "file": "DESIGN.md",
@@ -18,8 +42,8 @@
     {
       "id": "README.md",
       "file": "README.md",
-      "sha256": "eeb66dad598471f7c2679b3ea06f21c663e86ab690cbcfaa7fa97060370234f2",
-      "bytes": 5509
+      "sha256": "52ff899d8dd8c5e8f88bce5bebe1941d017473a68353b1de72d7ce4110a432e2",
+      "bytes": 6379
     },
     {
       "id": "app/(app)/directions-alt/page.tsx",
@@ -270,8 +294,8 @@
     {
       "id": "docs/knowledge-base/README.md",
       "file": "docs/knowledge-base/README.md",
-      "sha256": "d9062164f37bd5ec597851da6bd2ead2a5222ba871c5a61ef1f2fe53eb836416",
-      "bytes": 3618
+      "sha256": "854c0e6a9f6bf1abfdb301288d5491c16811544c72b504e528e8e6cf2c07ff2a",
+      "bytes": 4113
     },
     {
       "id": "docs/knowledge-base/architecture.md",
@@ -660,8 +684,8 @@
     {
       "id": "package.json",
       "file": "package.json",
-      "sha256": "6b31cd98a9ccb5385e4b04ea73a9e450db7e8403a7919268e4e9432a3111ec7e",
-      "bytes": 1364
+      "sha256": "a10545a7b1fb519b26efd451ef623af6014e9ebb76b0ad31837e9279054cc30e",
+      "bytes": 1425
     },
     {
       "id": "public/brand/bg-sky-ambient.svg",
@@ -708,40 +732,89 @@
   ],
   "source_changes": {
     "added": [
-      "lib/security/access.test.ts",
-      "lib/security/access.ts",
-      "lib/security/events.ts",
-      "lib/security/rate-limit.test.ts",
-      "lib/security/rate-limit.ts",
-      "lib/security/screenshot.test.ts",
-      "lib/security/screenshot.ts"
+      ".agents/product-marketing.md",
+      ".github/copilot-instructions.md",
+      "AGENTS.md",
+      "CLAUDE.md"
     ],
     "removed": [],
     "updated": [
       "README.md",
-      "app/api/critique/route.ts",
-      "app/api/directions/route.ts",
-      "app/api/generate/route.ts",
-      "app/api/projects/[id]/route.ts",
-      "app/api/projects/route.ts",
-      "app/api/rounds/[id]/route.ts",
-      "app/api/rounds/route.ts",
-      "components/preview-frame.tsx",
-      "docs/blueprint.md",
-      "docs/decisions.md",
-      "docs/knowledge-base/architecture.md",
-      "docs/release-plan.md",
-      "lib/preview/build-preview-document.test.ts",
-      "lib/preview/build-preview-document.ts",
-      "lib/providers/codegen/claude-provider.ts",
-      "lib/providers/codegen/errors.ts",
-      "lib/providers/codegen/types.ts",
-      "lib/providers/llm/claude-provider.ts",
-      "lib/providers/llm/errors.ts",
+      "docs/knowledge-base/README.md",
       "package.json"
     ]
   },
   "facts": [
+    {
+      "id": ".agents/product-marketing.md::product_marketing_context",
+      "source": ".agents/product-marketing.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Product Marketing Context",
+      "text": "# Product Marketing Context **Document version:** v3 **Last updated:** 2026-08-21 **Scope:** Launch-ready context for Coquí's first public post, closed-alpha outreach, and eventual open-source release. Long-term positioning, market sizing, and competitive research are intentionally deferred.",
+      "evidence": {
+        "file": ".agents/product-marketing.md",
+        "sha256": "d1c8e53a85cd18846eb379b1b478c6fc06db49734856eda780807e235beecad6",
+        "line_start": 1,
+        "line_end": 6,
+        "truncated": false
+      }
+    },
+    {
+      "id": ".agents/product-marketing.md::product_overview",
+      "source": ".agents/product-marketing.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Product Overview",
+      "text": "## Product Overview **One-liner:** Coquí helps designers win back time by bringing screenshot-based feedback, critique, direction-setting, and optional prototyping into one guided workflow. **What it does:** A designer uploads a screen, states the goal, and pastes feedback. Coquí separates real problems from taste, flags ambiguity, returns 2–3 rationale-backed directions, and lets the designer optionally generate and inspect a coded preview before choosing and saving a round. **Product category:** Design-iteration and decision-support tool. **Product type:** Standalone desktop-first web application; currently suited to a closed alpha. The intended public release is open source, forkable, and run with the user's own Claude API key. **Business model:** Open-source distribution is the current direction. Pricing and any hosted offering are not decided. Do not imply paid plans or general ava…",
+      "evidence": {
+        "file": ".agents/product-marketing.md",
+        "sha256": "d1c8e53a85cd18846eb379b1b478c6fc06db49734856eda780807e235beecad6",
+        "line_start": 7,
+        "line_end": 18,
+        "truncated": true
+      }
+    },
+    {
+      "id": ".agents/product-marketing.md::public_positioning_statement",
+      "source": ".agents/product-marketing.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Public Positioning Statement",
+      "text": "## Public Positioning Statement Coquí is a design-iteration tool that turns a screenshot and raw feedback into a structured critique, a few rationale-backed directions, and an optional coded preview, helping designers move from feedback to a decision in one guided flow.",
+      "evidence": {
+        "file": ".agents/product-marketing.md",
+        "sha256": "d1c8e53a85cd18846eb379b1b478c6fc06db49734856eda780807e235beecad6",
+        "line_start": 156,
+        "line_end": 159,
+        "truncated": false
+      }
+    },
+    {
+      "id": "AGENTS.md::platform_adapter_contract",
+      "source": "AGENTS.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Platform adapter contract",
+      "text": "## Platform adapter contract `AGENTS.md` is the canonical entrypoint. Platform-specific instruction files must only point back here and add no competing product rules. Run `npm run context:check` after changing shared context. CI runs the same check on every pull request and relevant push. The check verifies that required source files exist, registered platform adapters reference `AGENTS.md`, the marketing document's version matches its newest changelog entry, and ContextBridge scans every entrypoint. When adding a platform that does not discover `AGENTS.md`, add the smallest instruction file that platform loads automatically, tell it to read and follow `AGENTS.md`, then register that adapter in `scripts/check-agent-context.mjs` and `contextbridge/config.json`.",
+      "evidence": {
+        "file": "AGENTS.md",
+        "sha256": "53f6167f93c09a034d20cfe210391e44959b70627cdd512bad54f775b7fedf77",
+        "line_start": 28,
+        "line_end": 35,
+        "truncated": false
+      }
+    },
+    {
+      "id": "AGENTS.md::start_with_the_relevant_source_of_truth",
+      "source": "AGENTS.md",
+      "kind": "verbatim_excerpt",
+      "heading": "Start with the relevant source of truth",
+      "text": "## Start with the relevant source of truth - For product definition and current behavior, read `README.md`, `PRODUCT.md`, and the implementation. - Before changing product direction, read `docs/decisions.md`, `docs/blueprint.md`, and `docs/release-plan.md`. - Before writing marketing, launch, recruiting, or other public-facing product copy, read `.agents/product-marketing.md`. - Before changing Coquí's interface or visual language, read `DESIGN.md` and `docs/design-system.md`. - For implementation routing, read `docs/knowledge-base/README.md` and then only the task-relevant knowledge-base files.",
+      "evidence": {
+        "file": "AGENTS.md",
+        "sha256": "53f6167f93c09a034d20cfe210391e44959b70627cdd512bad54f775b7fedf77",
+        "line_start": 5,
+        "line_end": 12,
+        "truncated": false
+      }
+    },
     {
       "id": "contextbridge/OPERATING-AGREEMENT.md::coqu_contextbridge_operating_agreement",
       "source": "contextbridge/OPERATING-AGREEMENT.md",
@@ -1198,7 +1271,7 @@
       "text": "## Current operating model Obvious is the conductor for planning and building the first release, but the shipped product is a standalone application. Product decisions belong in this repository, not only in an external tool or conversation. The operating sequence is: 1. Keep the agreed product decisions in `docs/decisions.md`. 2. Keep the resulting product shape in `docs/blueprint.md`. 3. Keep release boundaries and validation in `docs/release-plan.md`. 4. Update those documents when product decisions change, then align implementation with them. 5. Use `docs/discovery-diff.md` and the two discovery records as supporting context, not as a substitute for the current blueprint.",
       "evidence": {
         "file": "README.md",
-        "sha256": "eeb66dad598471f7c2679b3ea06f21c663e86ab690cbcfaa7fa97060370234f2",
+        "sha256": "52ff899d8dd8c5e8f88bce5bebe1941d017473a68353b1de72d7ce4110a432e2",
         "line_start": 9,
         "line_end": 20,
         "truncated": false
@@ -1212,7 +1285,7 @@
       "text": "## Repository purpose This repository is the source of truth for Coquí's product definition and implementation. It began as a neutral workspace for reconciling two discovery tracks: the work developed inside Obvious and the supporting discovery developed outside it. That reconciliation, plus the later Claude and ChatGPT context packets, is now distilled into the decision log, blueprint, release plan, design-system documentation, and agent knowledge base.",
       "evidence": {
         "file": "README.md",
-        "sha256": "eeb66dad598471f7c2679b3ea06f21c663e86ab690cbcfaa7fa97060370234f2",
+        "sha256": "52ff899d8dd8c5e8f88bce5bebe1941d017473a68353b1de72d7ce4110a432e2",
         "line_start": 5,
         "line_end": 8,
         "truncated": false
@@ -1226,14 +1299,14 @@
       "text": "## Status Discovery reconciliation was agreed on 2026-08-05 and the cross-tool context packets were consolidated on 2026-08-11. The core round is implemented: upload and intake, real Claude critique and directions, on-demand streamed code generation, live-mount preview with source fallback, Turso persistence and history, and fixture-backed demo mode. V1 is not complete. The remaining release work is the inferred fixed viewport box, the binary `Source` / `Iteration` comparison, downloadable source-bundle export, live 21st.dev grounding, the intended GPT-4o validation fallback, and validation against a real project. See `docs/release-plan.md` and `docs/knowledge-base/roadmap-and-open-work.md` for the current boundary.",
       "evidence": {
         "file": "README.md",
-        "sha256": "eeb66dad598471f7c2679b3ea06f21c663e86ab690cbcfaa7fa97060370234f2",
+        "sha256": "52ff899d8dd8c5e8f88bce5bebe1941d017473a68353b1de72d7ce4110a432e2",
         "line_start": 21,
         "line_end": 26,
         "truncated": false
       }
     }
   ],
-  "fact_count": 35,
+  "fact_count": 40,
   "conflicts": [],
   "decisions": [
     {
@@ -1250,10 +1323,10 @@
   "missing_sources": [],
   "supplemental": [],
   "stats": {
-    "source_count": 116,
-    "fact_count": 35,
-    "added": 1,
+    "source_count": 120,
+    "fact_count": 40,
+    "added": 5,
     "removed": 0,
-    "updated": 24
+    "updated": 3
   }
 }
