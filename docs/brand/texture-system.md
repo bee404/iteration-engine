@@ -2,16 +2,18 @@
 
 This is the committed reference for the two approved Obsidian53 material families. The images are user-adjusted examples from the Pairing 2C exploration. They are anchors for material identity and contrast behavior, not templates to duplicate exactly.
 
+The committed copies are compressed reference images (resized, WebP), not production or print masters — see [`design-review/brand-assets/textures/MANIFEST.md`](../../design-review/brand-assets/textures/MANIFEST.md) for the compression ratio and links to the archived full-resolution originals.
+
 ## Approved reference set
 
 | Family | Reference | Character | Use |
 |---|---|---|---|
-| Fissure | [`fissure-user-adjusted.png`](../../design-review/brand-assets/textures/fissure-user-adjusted.png) | Sparse, hairline warm fractures across a nearly black field with a few bright junctions | Active signal, atmospheric edge, or quiet high-contrast moment |
-| Fissure | [`fissure-alt-user-adjusted.png`](../../design-review/brand-assets/textures/fissure-alt-user-adjusted.png) | Larger negative space, long irregular routes, and isolated luminous nodes | Calm background, cover crop, or avatar-safe composition |
-| Mineral | [`mineral-background-user-adjusted.png`](../../design-review/brand-assets/textures/mineral-background-user-adjusted.png) | Broad layered black stone with fine relief and restrained warm inclusions | Flexible base material for surfaces and web sections |
-| Mineral | [`mineral-background-dark-user-adjusted.png`](../../design-review/brand-assets/textures/mineral-background-dark-user-adjusted.png) | Lower-key cut with deeper cavities and more subdued structure | Dark presentation, atmospheric hero, or text-safe field |
+| Fissure | [`fissure-user-adjusted.webp`](../../design-review/brand-assets/textures/fissure-user-adjusted.webp) | Sparse, hairline warm fractures across a nearly black field with a few bright junctions | Active signal, atmospheric edge, or quiet high-contrast moment |
+| Fissure | [`fissure-alt-user-adjusted.webp`](../../design-review/brand-assets/textures/fissure-alt-user-adjusted.webp) | Larger negative space, long irregular routes, and isolated luminous nodes | Calm background, cover crop, or avatar-safe composition |
+| Mineral | [`mineral-background-user-adjusted.webp`](../../design-review/brand-assets/textures/mineral-background-user-adjusted.webp) | Broad layered black stone with fine relief and restrained warm inclusions | Flexible base material for surfaces and web sections |
+| Mineral | [`mineral-background-dark-user-adjusted.webp`](../../design-review/brand-assets/textures/mineral-background-dark-user-adjusted.webp) | Lower-key cut with deeper cavities and more subdued structure | Dark presentation, atmospheric hero, or text-safe field |
 
-The compressed LinkedIn cover is [`linkedin-cover-under-2mb.png`](../../design-review/brand-assets/linkedin-cover-under-2mb.png). It preserves the original 3168 × 792 composition and is optimized for delivery under 2 MB.
+The LinkedIn cover (a marketing deliverable, not a texture reference) no longer lives in this repo. The 3168 × 792 original is archived at https://api.app.obvious.ai/prepare/files/link/fl_yfVLvNAW/linkedin-cover-under-2mb.png.
 
 ## Shared brand behavior
 
