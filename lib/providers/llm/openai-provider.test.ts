@@ -45,8 +45,12 @@ test("generateCritique parses a well-formed OpenAI tool call into a typed Critiq
     const { critique } = await provider.generateCritique(CRITIQUE_REQUEST);
     assert.equal(critique.model, "gpt-4o");
     assert.equal(critique.signal.length, 1);
-    assert.equal(critique.signal[0].kind, "signal");
-    assert.equal(critique.preference[0].kind, "preference");
+    const [firstSignal] = critique.signal;
+    const [firstPreference] = critique.preference;
+    assert.ok(firstSignal);
+    assert.ok(firstPreference);
+    assert.equal(firstSignal.kind, "signal");
+    assert.equal(firstPreference.kind, "preference");
   } finally {
     globalThis.fetch = originalFetch;
   }
@@ -121,7 +125,9 @@ test("generateDirections parses a well-formed OpenAI tool call into typed Direct
     const provider = new OpenAILLMProvider("test-key");
     const { directions } = await provider.generateDirections(DIRECTIONS_REQUEST);
     assert.equal(directions.length, 3);
-    assert.equal(directions[0].title, "A");
+    const [firstDirection] = directions;
+    assert.ok(firstDirection);
+    assert.equal(firstDirection.title, "A");
   } finally {
     globalThis.fetch = originalFetch;
   }
