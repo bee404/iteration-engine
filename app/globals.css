@@ -56,7 +56,163 @@
      is loaded as a free stand-in for the display face until the licensed font is provided. */
   --font-display: var(--font-owners, "Archivo Narrow"), "Figtree", sans-serif;
   --font-body: var(--font-figtree, "Figtree"), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Channel triplets. Every alpha-composited value in the sheet is authored as
+     `rgb(var(--x-rgb) / a)` rather than a baked rgba(), so an alternate theme inherits the
+     translucent layers — veils, focus rings, dot grid, scrims — and not just the opaque fills.
+     These are the same numbers as --ink / --surface / --accent / --chrome-border above. */
+  --ink-rgb: 16 18 26;
+  --surface-rgb: 255 255 255;
+  --accent-rgb: 226 181 32;
+  --chrome-rgb: 245 207 79;
+  /* The cool navy cast in the card/panel shadows, kept separate from neutral black. */
+  --shadow-cool-rgb: 10 13 77;
+  /* Shadows and modal scrims. Deliberately NOT --ink-rgb: an inverted theme flips ink to a light
+     value, and a light "shadow" is a glow while a light scrim fails to dim what's behind it. This
+     channel stays dark in every theme; only its opacity is tuned per theme. */
+  --shadow-rgb: 16 18 26;
+
+  /* Accent-adjacent surfaces: the faint warm wash under a hovered dropzone, plus the two inks that
+     sit *on* a solid fill. They are genuinely different cases and must not be collapsed:
+       --on-accent-ink  type on a light accent field (the gold/banana buttons and pill) — dark.
+       --on-solid       type on an inverted-ink chip (a dark fill in this theme)        — light.
+     Both must be declared per theme, not inherited from the ink ladder: the ladder flips with the
+     theme, but the accent field stays light in both, so type on it stays dark either way. */
+  --accent-wash: #fffdf5;
+  --on-accent-ink: #1a1400;
+  --on-solid: #ffffff;
+
+  /* The upward emboss under type on an accent fill. Deliberately not overridden per theme: the
+     accent field is light in both (gold, banana), so the highlight is white either way. A token
+     rather than a literal so the four accent buttons stay in agreement. */
+  --on-accent-emboss-rgb: 255 255 255;
+
+  /* Card radii, separate from the --r-* ladder: the ladder sizes controls and containers, these
+     size the floating cards, which an alternate theme may want materially rounder without also
+     rounding every input and button. --r-card-sm is the denser approach/selection card. */
+  --r-card: 16px;
+  --r-card-sm: 12px;
+
+  /* The empty-state illustration's ink. #372606 is the fill baked into the source SVG, restated
+     here so the default theme renders identically now that the artwork is painted through a mask
+     rather than an <img>. */
+  --illustration-ink: #372606;
+
+  /* Atmospherics. The default theme's light comes from the .app-glow horizon and its ground is
+     clean, so there is no bloom or grain; a dark theme turns both on via these knobs. */
+  --bloom: none;
+  --grain-opacity: 0;
 }
+
+/* ---------------------------------------------------------------------------
+   Obsidian53 — Pairing 2C. A selectable alternate theme, not a replacement: the default Coquí
+   palette above stays exactly as-is and remains the theme a first-time visitor gets. Everything
+   here is a pure token override on the same variable names the sheet already consumes, so no
+   component or layout rule is theme-aware.
+
+   Values are the locked "Obsidian & Banana" ramp, used verbatim — nothing is re-derived or tinted:
+     Void #0B0910 · Deep #15121C · Base #18191F · Ink #1E1F27 · Panel #24252C · Edge #35353B
+     Muted #53545A · Quiet #8A8A94 · Soft #C8C8C8 · Light #F9F9FB · Banana #F9F996
+   Standout #FFFFFF is deliberately unmapped: the brand reserves true white so it can still jump
+   off a surface, so no token here resolves to it.
+--------------------------------------------------------------------------- */
+[data-theme="obsidian53"] {
+  /* One voltage. Banana is the only saturated color in the theme, and the gold gradient
+     collapses to a flat banana field — a two-stop gradient would read as two accents. */
+  --accent: #f9f996;
+  --accent-text: #f9f996;
+  --accent-grad-start: #f9f996;
+  --accent-grad-end: #f9f996;
+  --accent-rgb: 249 249 150;
+  --chrome-rgb: 249 249 150;
+
+  /* The 8px outer frame. Banana at that width would be a headline, not an accent, so the frame
+     drops to Ink and reads as a bezel around the darker Void interior. */
+  --chrome-border: #1e1f27;
+
+  /* Ink ladder, inverted: Light for headings, Soft for body, Quiet for captions, Muted for
+     placeholders. Banana never carries body text — it stays on accents and the one commit action. */
+  --display-ink: #f9f9fb;
+  --ink: #f9f9fb;
+  --ink-label: #c8c8c8;
+  --ink-body: #c8c8c8;
+  --ink-mute: #8a8a94;
+  --ink-placeholder: #53545a;
+  --ink-rgb: 249 249 251;
+
+  /* Surfaces. Void is the ground, Base is the card, Panel is anything raised above a card. */
+  --ground: #0b0910;
+  --surface: #18191f;
+  --surface-veil: rgb(36 37 44 / 0.8);
+  --surface-rgb: 36 37 44;
+  --bezel: rgb(53 53 59 / 0.16);
+  --line: #35353b;
+  --line-soft: #24252c;
+  --line-dashed: #53545a;
+  --keycap: rgb(249 249 150 / 0.14);
+  --hairline-strong: rgb(53 53 59 / 0.9);
+
+  /* The critique columns pair signal against preference. "One voltage" forbids two saturated
+     tints, so signal goes neutral and preference keeps the banana. */
+  --signal: #8a8a94;
+  --preference: #f9f996;
+
+  /* Banana as type needs Ink or darker behind it; on a banana field the type inverts to Ink — so
+     both inks land on Ink here, for opposite reasons: --on-accent-ink because banana is a light
+     field, --on-solid because this theme's inverted-ink chip is Light rather than dark.
+     --on-accent-emboss-rgb is deliberately not overridden (see :root). */
+  --accent-wash: #1e1f27;
+  --on-accent-ink: #1e1f27;
+  --on-solid: #1e1f27;
+
+  /* Shadows stay black — only deeper, since a dark ground swallows the light theme's alphas.
+     --shadow-cool-rgb loses its navy cast: a blue-tinted shadow on Void reads as a color fringe. */
+  --shadow-cool-rgb: 0 0 0;
+  --e-raised: 0 1px 2px rgb(0 0 0 / 0.5), 0 2px 16px rgb(0 0 0 / 0.35);
+  --e-card: 0 2px 4px rgb(0 0 0 / 0.5), 0 18px 50px -8px rgb(0 0 0 / 0.6);
+  --e-panel: 0 1px 2px rgb(0 0 0 / 0.6), 0 2px 24px rgb(0 0 0 / 0.5);
+  --e-vignette: inset 0 0 36px 12px #0b0910;
+
+  /* Big soft cards floated on the dark ground rather than edge-to-edge boxes (22–40px). */
+  --r-card: 28px;
+  --r-card-sm: 22px;
+  --r-shell: 28px;
+
+  /* Soft, not Banana: the illustration is the largest element on the upload screen, and giving it
+     the accent would make banana the field rather than the single point of voltage. The accent
+     stays on the one call to action beneath it. */
+  --illustration-ink: #c8c8c8;
+
+  /* Contrast-led: a high-contrast serif display against Figtree Light. Instrument Serif ships
+     400 only, which is why no weight is ever requested off --font-display. */
+  --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Figtree", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* One diffuse bloom, never a hard corner-to-corner gradient, plus a grain wash at 0.06. */
+  --bloom: radial-gradient(ellipse 900px 520px at 50% -14%, rgb(249 249 150 / 0.07), transparent 68%);
+  --grain-opacity: 0.06;
+}
+
+/* /workflow is the standalone explainer page, not part of the (app) product shell. It carries its
+   own scoped --workflow-* palette and depicts a light mock of someone else's UI, so re-pinning the
+   shared tokens it also touches keeps it rendering identically under either theme. */
+[data-theme="obsidian53"] .workflow-page {
+  --surface: #ffffff;
+  --surface-rgb: 255 255 255;
+  --ink-rgb: 16 18 26;
+  --shadow-cool-rgb: 10 13 77;
+  --accent: #e2b520;
+  --accent-text: #b28800;
+  --accent-grad-start: #f5cf4f;
+  --accent-grad-end: #f8c105;
+  --accent-rgb: 226 181 32;
+  --on-solid: #ffffff;
+  --font-display: var(--font-owners, "Archivo Narrow"), "Figtree", sans-serif;
+  --font-body: var(--font-figtree, "Figtree"), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
 
 * {
   box-sizing: border-box;
@@ -88,7 +244,7 @@ body {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(16, 18, 26, 0.05) 1px, transparent 1px);
+  background-image: radial-gradient(rgb(var(--ink-rgb) / 0.05) 1px, transparent 1px);
   background-size: 22px 22px;
   background-position: -1px -1px;
   box-shadow: var(--e-vignette);
@@ -116,7 +272,7 @@ body {
   opacity: 0.7;
   background:
     radial-gradient(closest-side at 38% 60%, rgba(110, 168, 254, 0.20), transparent),
-    radial-gradient(closest-side at 62% 40%, rgba(245, 207, 79, 0.16), transparent),
+    radial-gradient(closest-side at 62% 40%, rgb(var(--chrome-rgb) / 0.16), transparent),
     radial-gradient(closest-side at 50% 55%, rgba(180, 200, 255, 0.14), transparent);
 }
 
@@ -125,7 +281,7 @@ body {
   opacity: 0.85;
   background:
     radial-gradient(closest-side at 34% 62%, rgba(248, 193, 5, 0.22), transparent),
-    radial-gradient(closest-side at 60% 42%, rgba(245, 207, 79, 0.26), transparent),
+    radial-gradient(closest-side at 60% 42%, rgb(var(--chrome-rgb) / 0.26), transparent),
     radial-gradient(closest-side at 52% 54%, rgba(255, 224, 150, 0.20), transparent);
 }
 
@@ -231,8 +387,8 @@ body {
   margin: 12px 0 0;
   padding: 9px 14px;
   border-radius: var(--r-lg);
-  background: rgba(245, 207, 79, 0.16);
-  border: 1px solid rgba(226, 181, 32, 0.35);
+  background: rgb(var(--chrome-rgb) / 0.16);
+  border: 1px solid rgb(var(--accent-rgb) / 0.35);
   color: var(--ink-body);
   font-size: 12.5px;
 }
@@ -245,7 +401,7 @@ body {
   padding: 3px 8px;
   border-radius: 999px;
   background: var(--accent);
-  color: #1a1400;
+  color: var(--on-accent-ink);
 }
 
 /* ---------------------------------------------------------------------------
@@ -310,7 +466,7 @@ body {
   padding: 24px;
   border: 1.5px dashed var(--line-dashed);
   border-radius: var(--r-md);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.1));
+  background: linear-gradient(180deg, rgb(var(--surface-rgb) / 0.5), rgb(var(--surface-rgb) / 0.1));
   color: var(--ink-placeholder);
   cursor: pointer;
   transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
@@ -320,7 +476,7 @@ body {
 .add-image-glyph.is-dragging {
   border-color: var(--accent);
   color: var(--accent-text);
-  background: linear-gradient(180deg, rgba(245, 207, 79, 0.08), rgba(255, 255, 255, 0.1));
+  background: linear-gradient(180deg, rgb(var(--chrome-rgb) / 0.08), rgb(var(--surface-rgb) / 0.1));
 }
 
 .add-image-heading {
@@ -471,7 +627,7 @@ body {
 .field textarea:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(226, 181, 32, 0.14);
+  box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.14);
 }
 
 .field-with-expand {
@@ -528,10 +684,10 @@ button {
   border: 1px solid var(--hairline-strong);
   border-radius: var(--r-md);
   background: linear-gradient(90deg, var(--accent-grad-start), var(--accent-grad-end));
-  color: var(--ink);
+  color: var(--on-accent-ink);
   font-size: 13px;
   font-weight: 600;
-  text-shadow: 0 -1px 1px rgba(255, 255, 255, 0.4);
+  text-shadow: 0 -1px 1px rgb(var(--on-accent-emboss-rgb) / 0.4);
   cursor: pointer;
 }
 
@@ -570,7 +726,7 @@ button {
 .spinner {
   width: 13px;
   height: 13px;
-  border: 2px solid rgba(16, 18, 26, 0.25);
+  border: 2px solid rgb(var(--ink-rgb) / 0.25);
   border-top-color: var(--ink);
   border-radius: 50%;
   flex-shrink: 0;
@@ -679,7 +835,7 @@ button {
 
 .direction-card.selected {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(226, 181, 32, 0.12);
+  box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.12);
 }
 
 .direction-card header {
@@ -746,8 +902,8 @@ button {
 }
 
 .selected-badge {
-  background: rgba(226, 181, 32, 0.16);
-  border: 1px solid rgba(226, 181, 32, 0.4);
+  background: rgb(var(--accent-rgb) / 0.16);
+  border: 1px solid rgb(var(--accent-rgb) / 0.4);
   color: var(--accent-text);
 }
 
@@ -769,7 +925,7 @@ button {
   height: 220px;
   border: 1px solid var(--line);
   border-radius: var(--r-md);
-  background: #fff;
+  background: var(--surface);
 }
 
 .preview-shell {
@@ -792,7 +948,7 @@ button {
   font-size: 12px;
   line-height: 1.5;
   color: var(--accent-text);
-  background: rgba(245, 207, 79, 0.1);
+  background: rgb(var(--chrome-rgb) / 0.1);
   border: 1px solid var(--line);
   border-radius: var(--r-md);
 }
@@ -818,7 +974,7 @@ button {
 .code-sheet-scrim {
   position: fixed;
   inset: 0;
-  background: rgba(16, 18, 26, 0.28);
+  background: rgb(var(--shadow-rgb) / 0.28);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
   opacity: 0;
@@ -842,7 +998,7 @@ button {
   max-height: 85vh;
   background: var(--surface);
   border-radius: var(--r-xl) var(--r-xl) 0 0;
-  box-shadow: 0 -8px 40px rgba(16, 18, 26, 0.22);
+  box-shadow: 0 -8px 40px rgb(var(--shadow-rgb) / 0.22);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -966,7 +1122,7 @@ button {
 
 .round-history-status-approved {
   color: var(--accent-text);
-  border-color: rgba(226, 181, 32, 0.4);
+  border-color: rgb(var(--accent-rgb) / 0.4);
 }
 
 .round-history-status-rejected {
@@ -1046,7 +1202,7 @@ body:has(.app-chrome) {
   border: 8px solid var(--chrome-border);
   border-radius: var(--r-shell);
   background: var(--ground);
-  box-shadow: inset 0 1px 2px rgba(16, 18, 26, 0.08), inset 0 0 0 1px rgba(16, 18, 26, 0.04);
+  box-shadow: inset 0 1px 2px rgb(var(--shadow-rgb) / 0.08), inset 0 0 0 1px rgb(var(--shadow-rgb) / 0.04);
   isolation: isolate;
 }
 
@@ -1061,8 +1217,8 @@ body:has(.app-chrome) {
      16px row-to-row rhythm and overall dot density as a plain 16px grid, but alternating
      rows don't line up into straight columns. Alpha manually tuned by Bryan (#10121a24). */
   background-image:
-    radial-gradient(circle at 1px 1px, rgba(16, 18, 26, 0.141) 1px, transparent 0),
-    radial-gradient(circle at 1px 1px, rgba(16, 18, 26, 0.141) 1px, transparent 0);
+    radial-gradient(circle at 1px 1px, rgb(var(--ink-rgb) / 0.141) 1px, transparent 0),
+    radial-gradient(circle at 1px 1px, rgb(var(--ink-rgb) / 0.141) 1px, transparent 0);
   background-size: 16px 32px, 16px 32px;
   background-position: 0 0, 8px 16px;
   /* Two-layer mask: the vertical gradient keeps the original top-heavy bias (dots read
@@ -1092,11 +1248,11 @@ body:has(.app-chrome) {
 /* Coquí upload screen ----------------------------------------------------- */
 
 .upload-page {
-  --upload-ground: #f8f9fb;
-  --upload-ink: #10121a;
-  --upload-display: #372606;
-  --upload-body: #404253;
-  --upload-accent-text: #b28800;
+  --upload-ground: var(--ground);
+  --upload-ink: var(--ink);
+  --upload-display: var(--display-ink);
+  --upload-body: var(--ink-label);
+  --upload-accent-text: var(--accent-text);
   position: relative;
   display: flex;
   flex: 1;
@@ -1104,7 +1260,7 @@ body:has(.app-chrome) {
   flex-direction: column;
   overflow: hidden;
   color: var(--upload-ink);
-  font-family: Figtree, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-body);
   isolation: isolate;
 }
 
@@ -1118,7 +1274,7 @@ body:has(.app-chrome) {
   pointer-events: none;
   content: "";
   background:
-    radial-gradient(ellipse 360px 180px at 27% -14%, rgba(245, 207, 79, 0.11), transparent 72%),
+    radial-gradient(ellipse 360px 180px at 27% -14%, rgb(var(--chrome-rgb) / 0.11), transparent 72%),
     radial-gradient(ellipse 760px 220px at 57% -18%, rgba(187, 230, 222, 0.13), transparent 74%),
     radial-gradient(ellipse 480px 260px at 103% -6%, rgba(228, 201, 164, 0.1), transparent 72%);
   background-blend-mode: screen;
@@ -1133,7 +1289,7 @@ body:has(.app-chrome) {
   z-index: -1;
   height: 164px;
   pointer-events: none;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), #fff);
+  background: linear-gradient(to bottom, rgb(var(--surface-rgb) / 0), var(--surface));
   opacity: 0.9;
 }
 
@@ -1147,8 +1303,8 @@ body:has(.app-chrome) {
   justify-content: space-between;
   padding: 0 18px;
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.8);
-  box-shadow: 0 0.25px 2px rgba(0, 0, 0, 0.08), 0 2px 16px rgba(10, 13, 77, 0.02);
+  background: rgb(var(--surface-rgb) / 0.8);
+  box-shadow: 0 0.25px 2px rgba(0, 0, 0, 0.08), 0 2px 16px rgb(var(--shadow-cool-rgb) / 0.02);
   backdrop-filter: blur(2px);
 }
 
@@ -1198,7 +1354,7 @@ body:has(.app-chrome) {
 }
 
 .upload-sound-button:focus-visible {
-  outline: 2px solid rgba(226, 181, 32, 0.56);
+  outline: 2px solid rgb(var(--accent-rgb) / 0.56);
   outline-offset: 3px;
 }
 
@@ -1220,14 +1376,14 @@ body:has(.app-chrome) {
   justify-content: center;
   gap: 28px;
   padding: 44px 40px;
-  border-radius: 16px;
-  background: #fff;
-  box-shadow: 0 0.25px 2px rgba(0, 0, 0, 0.08), 0 2px 16px rgba(10, 13, 77, 0.02), 0 18px 25px rgba(16, 18, 26, 0.16);
+  border-radius: var(--r-card);
+  background: var(--surface);
+  box-shadow: 0 0.25px 2px rgba(0, 0, 0, 0.08), 0 2px 16px rgb(var(--shadow-cool-rgb) / 0.02), 0 18px 25px rgb(var(--shadow-rgb) / 0.16);
   transition: box-shadow 160ms ease, transform 160ms ease;
 }
 
 .upload-card.is-dragging {
-  box-shadow: 0 0 0 3px rgba(226, 181, 32, 0.24), 0 18px 25px rgba(16, 18, 26, 0.16);
+  box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.24), 0 18px 25px rgb(var(--shadow-rgb) / 0.16);
   transform: translateY(-2px);
 }
 
@@ -1235,7 +1391,9 @@ body:has(.app-chrome) {
   display: block;
   width: 200px;
   height: 237px;
-  object-fit: contain;
+  background-color: var(--illustration-ink);
+  -webkit-mask: url("/brand/coqui-illustration.svg") no-repeat center / contain;
+  mask: url("/brand/coqui-illustration.svg") no-repeat center / contain;
 }
 
 .upload-preview-wrap {
@@ -1266,7 +1424,7 @@ body:has(.app-chrome) {
   width: 100%;
   margin: 0;
   color: var(--upload-display);
-  font-family: "Owners Narrow", "Arial Narrow", sans-serif;
+  font-family: var(--font-display);
   font-size: 24px;
   font-weight: 400;
   letter-spacing: 0.48px;
@@ -1284,9 +1442,9 @@ body:has(.app-chrome) {
   justify-content: center;
   gap: 12px;
   padding: 28px 24px;
-  border: 1px dashed #c7c9cb;
+  border: 1px dashed var(--line-dashed);
   border-radius: 12px;
-  background: #fff;
+  background: var(--surface);
   color: var(--upload-body);
   font: inherit;
   text-align: center;
@@ -1297,11 +1455,11 @@ body:has(.app-chrome) {
 .upload-dropzone:hover,
 .upload-dropzone:focus-visible,
 .upload-card.is-dragging .upload-dropzone {
-  background: #fffdf5;
+  background: var(--accent-wash);
 }
 
 .upload-dropzone:focus-visible {
-  outline: 2px solid rgba(226, 181, 32, 0.56);
+  outline: 2px solid rgb(var(--accent-rgb) / 0.56);
   outline-offset: 3px;
 }
 
@@ -1351,9 +1509,9 @@ body:has(.app-chrome) {
   justify-content: center;
   padding: 2px 6px;
   border-radius: 8px;
-  background: rgba(16, 18, 26, 0.12);
+  background: rgb(var(--ink-rgb) / 0.12);
   color: var(--upload-ink);
-  font: 700 11px/1.2 Figtree, "Helvetica Neue", Arial, sans-serif;
+  font: 700 11px/1.2 var(--font-body);
 }
 
 .upload-file-input {
@@ -1429,7 +1587,7 @@ body:has(.app-chrome) {
   z-index: 0;
   pointer-events: none;
   content: "";
-  background-image: radial-gradient(circle at 1px 1px, rgba(16, 18, 26, 0.055) 1px, transparent 0);
+  background-image: radial-gradient(circle at 1px 1px, rgb(var(--ink-rgb) / 0.055) 1px, transparent 0);
   background-size: 22px 22px;
   mask-image: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.7) 42%, transparent 86%);
 }
@@ -1443,7 +1601,7 @@ body:has(.app-chrome) {
   height: 360px;
   pointer-events: none;
   content: "";
-  background: radial-gradient(ellipse, rgba(245, 207, 79, 0.18) 0%, rgba(245, 207, 79, 0.05) 40%, transparent 72%);
+  background: radial-gradient(ellipse, rgb(var(--chrome-rgb) / 0.18) 0%, rgb(var(--chrome-rgb) / 0.05) 40%, transparent 72%);
   transform: translateX(-50%);
   filter: blur(10px);
 }
@@ -1466,9 +1624,9 @@ body:has(.app-chrome) {
   justify-content: space-between;
   height: 52px;
   padding: 0 18px;
-  background: rgba(255, 255, 255, 0.82);
+  background: rgb(var(--surface-rgb) / 0.82);
   border-radius: 16px;
-  box-shadow: 0 0.25px 2px rgba(0, 0, 0, 0.08), 0 2px 16px rgba(10, 13, 77, 0.02);
+  box-shadow: 0 0.25px 2px rgba(0, 0, 0, 0.08), 0 2px 16px rgb(var(--shadow-cool-rgb) / 0.02);
   backdrop-filter: blur(4px);
 }
 
@@ -1566,7 +1724,7 @@ body:has(.app-chrome) {
 .workflow-brief,
 .workflow-stage {
   background: var(--workflow-surface);
-  box-shadow: 0 2px 4px rgba(16, 18, 26, 0.04), 0 18px 50px -8px rgba(16, 18, 26, 0.12);
+  box-shadow: 0 2px 4px rgb(var(--shadow-rgb) / 0.04), 0 18px 50px -8px rgb(var(--shadow-rgb) / 0.12);
 }
 
 .workflow-reference-stage {
@@ -1591,8 +1749,8 @@ body:has(.app-chrome) {
   overflow: hidden;
   border: 1px solid #e2e4e9;
   border-radius: 12px;
-  background: #fff;
-  box-shadow: 0 12px 30px rgba(16, 18, 26, 0.09);
+  background: var(--surface);
+  box-shadow: 0 12px 30px rgb(var(--shadow-rgb) / 0.09);
 }
 
 .workflow-mock-toolbar {
@@ -1687,7 +1845,7 @@ body:has(.app-chrome) {
 
 .workflow-mock-content {
   padding: 32px clamp(24px, 5vw, 64px);
-  background: #fff;
+  background: var(--surface);
 }
 
 .workflow-mock-breadcrumb {
@@ -1741,7 +1899,7 @@ body:has(.app-chrome) {
 }
 
 .workflow-mock-task em {
-  color: #b28800;
+  color: var(--accent-text);
   font-size: 9px;
   font-style: normal;
   font-weight: 700;
@@ -1756,7 +1914,7 @@ body:has(.app-chrome) {
 
 .workflow-mock-task.is-next .workflow-mock-check {
   border-color: var(--workflow-gold);
-  box-shadow: inset 0 0 0 3px #fff, inset 0 0 0 4px var(--workflow-gold);
+  box-shadow: inset 0 0 0 3px var(--surface), inset 0 0 0 4px var(--workflow-gold);
 }
 
 .workflow-screenshot-caption {
@@ -1774,7 +1932,7 @@ body:has(.app-chrome) {
   min-height: 100%;
   padding: 25px 24px 22px;
   border-radius: 20px;
-  box-shadow: 0 0.25px 2px rgba(0, 0, 0, 0.12), 0 2px 24px rgba(10, 13, 77, 0.12);
+  box-shadow: 0 0.25px 2px rgba(0, 0, 0, 0.12), 0 2px 24px rgb(var(--shadow-cool-rgb) / 0.12);
 }
 
 .workflow-brief-topline {
@@ -2067,7 +2225,7 @@ body:has(.app-chrome) {
 }
 
 .workflow-live-pane {
-  background: #f8f9fb;
+  background: var(--ground);
 }
 
 .workflow-pane-bar {
@@ -2077,7 +2235,7 @@ body:has(.app-chrome) {
   min-height: 29px;
   padding: 0 11px;
   color: #969ca9;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgb(var(--surface-rgb) / 0.1);
   font-size: 10px;
 }
 
@@ -2140,7 +2298,7 @@ body:has(.app-chrome) {
   gap: 10px;
   min-height: 140px;
   padding: 20px;
-  background: #fff;
+  background: var(--surface);
 }
 
 .workflow-preview-heading {
@@ -2169,7 +2327,7 @@ body:has(.app-chrome) {
   width: 70px;
   height: 15px;
   border-radius: 4px;
-  background: linear-gradient(90deg, #f5cf4f, #f8c105);
+  background: linear-gradient(90deg, var(--accent-grad-start), var(--accent-grad-end));
 }
 
 .workflow-preview-row {
@@ -2227,7 +2385,7 @@ body:has(.app-chrome) {
   height: 10px;
   border: 2px solid #d2d6de;
   border-radius: 50%;
-  background: #fff;
+  background: var(--surface);
 }
 
 .workflow-chain-node.done {
@@ -2239,7 +2397,7 @@ body:has(.app-chrome) {
   width: 14px;
   height: 14px;
   border-color: var(--workflow-gold);
-  box-shadow: 0 0 0 4px rgba(226, 181, 32, 0.14);
+  box-shadow: 0 0 0 4px rgb(var(--accent-rgb) / 0.14);
 }
 
 .workflow-chain-line {
@@ -2270,9 +2428,9 @@ body:has(.app-chrome) {
   padding: 9px 13px;
   color: var(--workflow-ink);
   background: linear-gradient(90deg, var(--workflow-gold-start), var(--workflow-gold-end));
-  border: 1px solid rgba(16, 18, 26, 0.12);
+  border: 1px solid rgb(var(--ink-rgb) / 0.12);
   border-radius: 8px;
-  box-shadow: 0 -1px 1px rgba(255, 255, 255, 0.4) inset;
+  box-shadow: 0 -1px 1px rgb(var(--surface-rgb) / 0.4) inset;
   font-size: 12px;
   font-weight: 700;
 }
@@ -2293,7 +2451,7 @@ body:has(.app-chrome) {
   margin-top: 84px;
   padding: 24px 0 0;
   color: var(--workflow-mute);
-  border-top: 1px solid rgba(16, 18, 26, 0.1);
+  border-top: 1px solid rgb(var(--ink-rgb) / 0.1);
 }
 
 .workflow-footer a {
@@ -2454,7 +2612,7 @@ body:has(.app-chrome) {
 
 .upload-help-link {
   color: var(--ink-body);
-  font-family: Figtree, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-body);
   font-size: 13px;
   font-weight: 300;
   line-height: 1.2;
@@ -2473,7 +2631,7 @@ body:has(.app-chrome) {
 }
 
 .upload-help-link:focus-visible {
-  outline: 2px solid rgba(226, 181, 32, 0.56);
+  outline: 2px solid rgb(var(--accent-rgb) / 0.56);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -2487,12 +2645,12 @@ body:has(.app-chrome) {
   border: 1px solid var(--hairline-strong);
   border-radius: var(--r-md);
   background: linear-gradient(90deg, var(--accent-grad-start), var(--accent-grad-end));
-  color: var(--ink);
-  font-family: Figtree, "Helvetica Neue", Arial, sans-serif;
+  color: var(--on-accent-ink);
+  font-family: var(--font-body);
   font-size: 13px;
   font-weight: 600;
   text-decoration: none;
-  text-shadow: 0 -1px 1px rgba(255, 255, 255, 0.4);
+  text-shadow: 0 -1px 1px rgb(var(--on-accent-emboss-rgb) / 0.4);
   cursor: pointer;
   transition: filter 160ms ease, transform 160ms ease;
 }
@@ -2506,7 +2664,7 @@ body:has(.app-chrome) {
 }
 
 .upload-proceed:focus-visible {
-  outline: 2px solid rgba(226, 181, 32, 0.72);
+  outline: 2px solid rgb(var(--accent-rgb) / 0.72);
   outline-offset: 3px;
 }
 
@@ -2529,7 +2687,7 @@ body:has(.app-chrome) {
   z-index: -1;
   width: 180px;
   pointer-events: none;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0), #fff);
+  background: linear-gradient(to right, rgb(var(--surface-rgb) / 0), var(--surface));
   opacity: 0.9;
 }
 
@@ -2571,13 +2729,13 @@ body:has(.app-chrome) {
   align-self: center;
   max-width: 100%;
   padding: var(--ref-pad);
-  border-radius: 16px;
-  background: #fff;
+  border-radius: var(--r-card);
+  background: var(--surface);
   box-shadow:
-    0 1px 2px rgba(16, 18, 26, 0.04),
-    0 6px 16px -6px rgba(16, 18, 26, 0.12),
-    0 30px 60px -22px rgba(16, 18, 26, 0.22),
-    inset 0 0 0 1px rgba(16, 18, 26, 0.06);
+    0 1px 2px rgb(var(--shadow-rgb) / 0.04),
+    0 6px 16px -6px rgb(var(--shadow-rgb) / 0.12),
+    0 30px 60px -22px rgb(var(--shadow-rgb) / 0.22),
+    inset 0 0 0 1px rgb(var(--shadow-rgb) / 0.06);
 }
 
 /* When the screenshot resolves into two flat colour zones, continue them across the whole frame so
@@ -2607,9 +2765,9 @@ body:has(.app-chrome) {
   max-width: min(680px, 100%);
   max-height: 60vh;
   border-radius: 10px;
-  background: #fff;
+  background: var(--surface);
   object-fit: contain;
-  box-shadow: inset 0 0 0 1px rgba(16, 18, 26, 0.07);
+  box-shadow: inset 0 0 0 1px rgb(var(--shadow-rgb) / 0.07);
   transition: opacity 200ms ease;
 }
 
@@ -2627,7 +2785,7 @@ body:has(.app-chrome) {
   justify-content: flex-end;
   padding: 14px;
   border: 0;
-  border-radius: 16px;
+  border-radius: var(--r-card);
   background: transparent;
   cursor: zoom-in;
 }
@@ -2643,10 +2801,10 @@ body:has(.app-chrome) {
   width: 32px;
   height: 32px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgb(var(--surface-rgb) / 0.92);
   box-shadow:
-    0 1px 2px rgba(16, 18, 26, 0.12),
-    inset 0 0 0 1px rgba(16, 18, 26, 0.08);
+    0 1px 2px rgb(var(--shadow-rgb) / 0.12),
+    inset 0 0 0 1px rgb(var(--shadow-rgb) / 0.08);
   opacity: 0;
   transform: translateY(4px);
   transition: opacity 160ms ease, transform 160ms ease;
@@ -2697,7 +2855,7 @@ body:has(.app-chrome) {
   gap: 16px;
   max-height: 100%;
   padding: 20px 20px 24px;
-  border-radius: var(--r-xl);
+  border-radius: var(--r-card);
   background: var(--surface);
   box-shadow: var(--e-panel);
   overflow-y: auto;
@@ -2712,7 +2870,7 @@ body:has(.app-chrome) {
   left: 20px;
   margin: 0 0 20px;
   color: var(--display-ink);
-  font-family: "Owners Narrow", "Archivo Narrow", "Arial Narrow", sans-serif;
+  font-family: var(--font-display);
   font-size: 24px;
   font-weight: 500;
   letter-spacing: 0.48px;
@@ -2733,7 +2891,7 @@ body:has(.app-chrome) {
 
 .feedback-field-head label {
   color: var(--ink-label);
-  font-family: Figtree, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-body);
   font-size: 12.5px;
   font-weight: 600;
 }
@@ -2752,7 +2910,7 @@ body:has(.app-chrome) {
   border-radius: var(--r-md);
   background: var(--surface);
   color: var(--ink);
-  font-family: Figtree, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-body);
   font-size: 13px;
   font-weight: 400;
   line-height: 1.4;
@@ -2766,7 +2924,7 @@ body:has(.app-chrome) {
 
 .feedback-input:focus-visible,
 .feedback-textarea:focus-visible {
-  outline: 2px solid rgba(226, 181, 32, 0.5);
+  outline: 2px solid rgb(var(--accent-rgb) / 0.5);
   outline-offset: 1px;
   border-color: var(--accent);
 }
@@ -2798,12 +2956,12 @@ body:has(.app-chrome) {
 }
 
 .feedback-expand:hover {
-  background: #fffdf5;
+  background: var(--accent-wash);
   border-color: var(--line-dashed);
 }
 
 .feedback-expand:focus-visible {
-  outline: 2px solid rgba(226, 181, 32, 0.56);
+  outline: 2px solid rgb(var(--accent-rgb) / 0.56);
   outline-offset: 2px;
 }
 
@@ -2830,11 +2988,11 @@ body:has(.app-chrome) {
   border: 1px solid var(--hairline-strong);
   border-radius: var(--r-md);
   background: linear-gradient(90deg, var(--accent-grad-start), var(--accent-grad-end));
-  color: var(--ink);
-  font-family: Figtree, "Helvetica Neue", Arial, sans-serif;
+  color: var(--on-accent-ink);
+  font-family: var(--font-body);
   font-size: 13px;
   font-weight: 600;
-  text-shadow: 0 -1px 1px rgba(255, 255, 255, 0.4);
+  text-shadow: 0 -1px 1px rgb(var(--on-accent-emboss-rgb) / 0.4);
   cursor: pointer;
   transition: filter 160ms ease, transform 120ms ease;
 }
@@ -2848,7 +3006,7 @@ body:has(.app-chrome) {
 }
 
 .feedback-synthesize:focus-visible {
-  outline: 2px solid rgba(226, 181, 32, 0.72);
+  outline: 2px solid rgb(var(--accent-rgb) / 0.72);
   outline-offset: 3px;
 }
 
@@ -2867,7 +3025,7 @@ body:has(.app-chrome) {
 .feedback-spinner {
   width: 14px;
   height: 14px;
-  border: 2px solid rgba(16, 18, 26, 0.25);
+  border: 2px solid rgb(var(--ink-rgb) / 0.25);
   border-top-color: var(--ink);
   border-radius: 50%;
   animation: feedback-spin 640ms linear infinite;
@@ -2892,7 +3050,7 @@ body:has(.app-chrome) {
 .feedback-empty h1 {
   margin: 0;
   color: var(--display-ink);
-  font-family: "Owners Narrow", "Archivo Narrow", "Arial Narrow", sans-serif;
+  font-family: var(--font-display);
   font-size: 24px;
   font-weight: 500;
   letter-spacing: 0.48px;
@@ -2930,7 +3088,7 @@ body:has(.app-chrome) {
 .feedback-modal-scrim {
   position: absolute;
   inset: 0;
-  background: rgba(16, 18, 26, 0.28);
+  background: rgb(var(--shadow-rgb) / 0.28);
   backdrop-filter: blur(2px);
 }
 
@@ -2942,7 +3100,7 @@ body:has(.app-chrome) {
   flex-direction: column;
   gap: 12px;
   padding: 24px;
-  border-radius: var(--r-xl);
+  border-radius: var(--r-card);
   background: var(--surface);
   box-shadow: var(--e-panel);
 }
@@ -2956,7 +3114,7 @@ body:has(.app-chrome) {
 .feedback-modal-head h2 {
   margin: 0;
   color: var(--ink-label);
-  font-family: Figtree, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-body);
   font-size: 12.5px;
   font-weight: 600;
 }
@@ -2969,14 +3127,14 @@ body:has(.app-chrome) {
   border-radius: var(--r-md);
   background: var(--surface);
   color: var(--ink);
-  font-family: Figtree, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-body);
   font-size: 14px;
   line-height: 1.5;
   resize: none;
 }
 
 .feedback-modal-textarea:focus-visible {
-  outline: 2px solid rgba(226, 181, 32, 0.5);
+  outline: 2px solid rgb(var(--accent-rgb) / 0.5);
   outline-offset: 1px;
   border-color: var(--accent);
 }
@@ -3026,7 +3184,7 @@ body:has(.app-chrome) {
 .feedback-lightbox-scrim {
   position: absolute;
   inset: 0;
-  background: rgba(16, 18, 26, 0.28);
+  background: rgb(var(--shadow-rgb) / 0.28);
   /* "Blur by a factor of four": a deep backdrop blur, well past a typical subtle modal scrim. */
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
@@ -3040,7 +3198,7 @@ body:has(.app-chrome) {
   max-height: 94vh;
   object-fit: contain;
   border-radius: 2px;
-  box-shadow: 0 40px 120px -30px rgba(16, 18, 26, 0.5);
+  box-shadow: 0 40px 120px -30px rgb(var(--shadow-rgb) / 0.5);
   animation: feedback-lightbox-pop 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -3055,10 +3213,10 @@ body:has(.app-chrome) {
   height: 40px;
   border: 0;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgb(var(--surface-rgb) / 0.92);
   box-shadow:
-    0 2px 8px rgba(16, 18, 26, 0.18),
-    inset 0 0 0 1px rgba(16, 18, 26, 0.08);
+    0 2px 8px rgb(var(--shadow-rgb) / 0.18),
+    inset 0 0 0 1px rgb(var(--shadow-rgb) / 0.08);
   color: var(--ink-label);
   font-size: 22px;
   line-height: 1;
@@ -3161,7 +3319,7 @@ body:has(.app-chrome) {
 
 .recap-label {
   color: var(--ink-label);
-  font-family: Figtree, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-body);
   font-size: 12.5px;
   font-weight: 600;
 }
@@ -3169,7 +3327,7 @@ body:has(.app-chrome) {
 .recap-value {
   margin: 0;
   color: var(--ink);
-  font-family: Figtree, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-body);
   font-size: 13px;
   line-height: 1.55;
   white-space: pre-wrap;
@@ -3245,7 +3403,7 @@ body:has(.app-chrome) {
 .directions-title {
   margin: 0;
   color: var(--display-ink);
-  font-family: "Owners Narrow", "Archivo Narrow", "Arial Narrow", sans-serif;
+  font-family: var(--font-display);
   font-size: 40px;
   font-weight: 500;
   letter-spacing: 0.6px;
@@ -3290,7 +3448,7 @@ body:has(.app-chrome) {
   display: flex;
   flex-direction: column;
   background: var(--surface);
-  border-radius: var(--r-lg);
+  border-radius: var(--r-card-sm);
   padding: 20px 20px 18px;
   box-shadow: var(--e-card);
   transform: scale(1);
@@ -3469,7 +3627,7 @@ body:has(.app-chrome) {
   border: none;
   border-radius: var(--r-md);
   background: var(--ink);
-  color: #fff;
+  color: var(--on-solid);
   font-family: var(--font-body);
   font-size: 12.5px;
   font-weight: 600;
@@ -3480,8 +3638,8 @@ body:has(.app-chrome) {
 .approach-card:hover .approach-card__select,
 .approach-card.is-selected .approach-card__select {
   background: linear-gradient(90deg, var(--accent-grad-start), var(--accent-grad-end));
-  color: var(--ink);
-  text-shadow: 0 -1px 1px rgba(255, 255, 255, 0.4);
+  color: var(--on-accent-ink);
+  text-shadow: 0 -1px 1px rgb(var(--on-accent-emboss-rgb) / 0.4);
 }
 
 /* ---------------------------------------------------------------------------
@@ -3516,7 +3674,7 @@ body:has(.app-chrome) {
 .selection-list__row {
   background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: var(--r-xl);
+  border-radius: var(--r-card);
   padding: 20px 24px;
   cursor: pointer;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -3529,7 +3687,7 @@ body:has(.app-chrome) {
 }
 
 .selection-list__row:focus-visible {
-  outline: 2px solid rgba(226, 181, 32, 0.56);
+  outline: 2px solid rgb(var(--accent-rgb) / 0.56);
   outline-offset: 3px;
 }
 
@@ -3663,7 +3821,7 @@ body:has(.app-chrome) {
 .selection-list__select:hover,
 .selection-list__row.is-selected .selection-list__select {
   background: var(--display-ink);
-  color: var(--surface);
+  color: var(--on-solid);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -3692,6 +3850,130 @@ body:has(.app-chrome) {
   .selection-list__row,
   .selection-list__details-grid,
   .selection-list__select {
+    transition: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Obsidian53 — atmospherics, type tics, and the theme switch.
+
+   Everything above this point is theme-agnostic: the sheet reads tokens and the theme block
+   supplies values. The rules below are the few things Pairing 2C adds that have no equivalent in
+   the default theme (a bloom, a grain wash, its tracking signature), so they are scoped to
+   [data-theme="obsidian53"] rather than tokenised into a knob nobody else turns.
+--------------------------------------------------------------------------- */
+
+/* One diffuse bloom, never a hard corner-to-corner gradient. Sits above the ground and below
+   .app-chrome-content (z-index 1), so it lights the frame without washing out the UI. */
+.app-chrome::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background: var(--bloom);
+}
+
+/* Grain. One inline feTurbulence tile at --grain-opacity, which is 0 in the default theme, so the
+   layer is inert there. Fractal noise rather than a visible texture: it exists to stop the large
+   flat dark fields from banding. */
+.app-chrome::after {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Instrument Serif ships 400 only, so a heading must never ask for a heavier weight or the browser
+   synthesises a faux-bold. Contrast comes from the serif and the size, not the weight. */
+[data-theme="obsidian53"] .app-chrome h1,
+[data-theme="obsidian53"] .app-chrome h2,
+[data-theme="obsidian53"] .app-chrome h3 {
+  font-weight: 400;
+  line-height: 0.96;
+  letter-spacing: -0.015em;
+}
+
+/* The identifying tic of 2C: microscopic uppercase labels tracked out to +0.28em, deliberately not
+   tightened. Applied only to labels the default theme already sets uppercase, so nothing changes
+   case when the theme flips. */
+[data-theme="obsidian53"] .directions-kicker,
+[data-theme="obsidian53"] .approach-card__details-label,
+[data-theme="obsidian53"] .approach-card__tradeoffs-label,
+[data-theme="obsidian53"] .selection-list__details-label,
+[data-theme="obsidian53"] .selection-list__tradeoffs-label {
+  font-weight: 300;
+  letter-spacing: 0.28em;
+}
+
+/* ---------------------------------------------------------------------------
+   Theme switch. The step header (.upload-header) is display:none pending Bryan's redesign, so
+   there is no visible header to hang this off; it pins to the bottom-right inside the chrome
+   instead. z-index 2 keeps it above .app-chrome-content (1) so a scrolling step screen can't
+   cover it.
+--------------------------------------------------------------------------- */
+.theme-switch {
+  position: absolute;
+  z-index: 2;
+  right: 24px;
+  bottom: 20px;
+  display: inline-flex;
+  height: 28px;
+  align-items: center;
+  gap: 7px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-veil);
+  color: var(--ink-label);
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  line-height: 1;
+  text-transform: uppercase;
+  backdrop-filter: blur(6px);
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+/* --ink-label rather than --ink-mute, and no blanket opacity: 9px type is already quiet enough
+   without dropping it under 4.5:1. The mute step plus opacity: 0.7 measured 3.15:1 on the light
+   theme, which is a control the user cannot read. Restraint comes from size, not from contrast. */
+.theme-switch:hover,
+.theme-switch:focus-visible {
+  border-color: var(--accent);
+  color: var(--ink);
+}
+
+.theme-switch:focus-visible {
+  outline: 2px solid rgb(var(--accent-rgb) / 0.56);
+  outline-offset: 3px;
+}
+
+/* The swatch previews the theme the button switches you *to*, so its colors are literals: they
+   must not follow the theme currently in effect. */
+.theme-switch-swatch {
+  width: 11px;
+  height: 11px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.theme-switch-swatch[data-target="obsidian53"] {
+  background: #0b0910;
+  box-shadow: inset 0 0 0 2px #f9f996;
+}
+
+.theme-switch-swatch[data-target="coqui"] {
+  background: #f8f9fb;
+  box-shadow: inset 0 0 0 2px #e2b520;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-switch {
     transition: none;
   }
 }

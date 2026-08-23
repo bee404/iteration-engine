@@ -318,4 +318,51 @@ Stored from the source-frame exports under `public/brand/`; use these repository
 4. **The wordmark and silhouette have separate jobs.** Use `coqui-wordmark.svg` in the header. Reserve `coqui-mark.svg` for favicon, app-icon, and other small-scale identity uses.
 5. **The canonical panel heading is "What should we fix?"** This corrects the typo in the source Figma frame; do not reproduce "What should we do fix?" in implementation.
 6. **The primary action is labeled "Synthesize".** This is the settled replacement for "Interpret feedback" across the workflow.
-7. **Missing interaction states extend this system rather than reopen it.** Derive hover, focus, disabled, loading, and error states from the existing neutral, ink, line, and gold tokens. Preserve keyboard visibility, contrast, and reduced-motion behavior without introducing another accent.
+7. **The gold shell is the default theme, not the only one.** Every color, radius, and family in this document is a `:root` token in `app/globals.css`; an alternate theme is a `[data-theme]` block that re-declares those tokens and nothing else. Adding one must not touch a component. See "Themes" below.
+8. **Missing interaction states extend this system rather than reopen it.** Derive hover, focus, disabled, loading, and error states from the existing neutral, ink, line, and gold tokens. Preserve keyboard visibility, contrast, and reduced-motion behavior without introducing another accent.
+
+## Themes
+
+This document specifies the **default theme, `coqui`** — the gold accent, dot-grid ground, and Owners Narrow / Figtree stack described above. It remains the default and is unchanged.
+
+A second theme, **`obsidian53`**, ships alongside it: Bryan's Obsidian53 studio direction, "Pairing 2C". It is opt-in, never automatic — it is not wired to `prefers-color-scheme`, because it is a brand direction rather than a dark mode.
+
+### How themes work
+
+A theme is a block of CSS custom property overrides in `app/globals.css` and nothing else. There is one selector, `[data-theme="obsidian53"]`, on `<html>`. No component, layout, or spacing rule is duplicated per theme.
+
+The default theme is the **absence** of the attribute, not `data-theme="coqui"`, so `:root` alone is the default and there is exactly one way to be default.
+
+Adding a theme means adding a token block, an entry to `THEMES` in `lib/theme.ts`, and its successor in that file's `SUCCESSOR` map. It should not mean touching component CSS. If it does, a hardcoded value has leaked into a component rule and belongs in a token instead.
+
+### Tokens a theme must set
+
+Beyond the ground/surface/ink/line ladder, three groups are easy to miss and will silently break a theme that inverts the ink ladder:
+
+- **`--on-accent-ink` and `--on-solid`.** These are *not* interchangeable, and neither can be derived from `--ink`. `--on-accent-ink` is type on a light accent field (the gold/banana buttons); it stays dark in every theme because the accent field stays light in every theme. `--on-solid` is type on an inverted-ink chip, and it does flip with the ladder.
+- **`--illustration-ink`.** The empty-state illustration is painted as a CSS mask rather than an `<img>` precisely so a theme can recolor it. An `<img>` with a baked-in fill is unreachable by any theme.
+- **`--bloom` and `--grain-opacity`.** Both are inert in the default theme (`none` and `0`). Obsidian53 turns them on for its single diffuse bloom and 0.06 grain wash.
+
+### Selection and persistence
+
+`ThemeSwitch` (`components/theme-switch.tsx`) sits on the app chrome, bottom-right. The preference lives in `lib/stores/theme.ts` (zustand + `persist`, localStorage key `coqui:theme`) — the app's first persisted user preference, and the pattern to follow for the next one.
+
+The store owns the DOM write, not a component effect, so the attribute changes exactly when the preference does. `THEME_INIT_SCRIPT` in `lib/theme.ts` runs inline in `<head>` before first paint so a returning user never sees a frame of the wrong theme.
+
+### Obsidian53 constraints
+
+Carried from the Obsidian53 brand system; do not relax them without Bryan:
+
+1. **One voltage.** Neutrals plus exactly one saturated color per frame. Banana `#f9f996` is that color, and it is reserved for the single call to action — which is why the empty-state illustration takes Soft rather than the accent.
+2. **Banana only touches the darks.** As type it needs Ink `#1e1f27` or darker behind it. On a banana field the type inverts to Ink.
+3. **Surfaces are never flat white**, and `#ffffff` stays reserved so true white can still pop. It is not a default surface.
+4. **Instrument Serif ships weight 400 only.** Never request a heavier weight off `--font-display` or the browser synthesises a faux-bold.
+5. **Micro-labels are tracked to +0.28em** and are not to be tightened; that tracking is the identifying tic of Pairing 2C.
+
+### Texture library
+
+Obsidian53 has two approved organic material families: **Fissure**, a sparse network of hairline Banana-lit fractures in a nearly black field, and **Mineral**, a layered rough stone with fine relief, deep cavities, and restrained warm inclusions. The user-adjusted reference images and the regeneration contract live in [`docs/brand/texture-system.md`](docs/brand/texture-system.md).
+
+Treat these textures as a material system, not as fixed decorative images. New outputs should be a new cut from the same stone: preserve the palette, roughness, contrast hierarchy, and detail scale while changing the seed, topology, fold map, crop, or local density. Keep the tileable base separate from any vignette or edge fade, and validate repeated use with a 3 × 3 preview.
+
+When these assets are shown in future brand comps, place them inside an adventurous studio webpage concept rather than a framed picture or presentation board. Organic, real-feeling material should meet precise digital structure. Parallax, scroll-revealed shimmer, and bloom may be explored in the web implementation, but glow must remain sparse and subordinate to the stone.
