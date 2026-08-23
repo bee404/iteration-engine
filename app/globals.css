@@ -1093,6 +1093,121 @@ button {
 }
 
 /* ---------------------------------------------------------------------------
+   Source / Iteration comparison (Decision 10) — a binary toggle over one fixed,
+   unmoving viewport box. Both layers are children of that single box, so they
+   register exactly; the toggle only swaps which one is visible.
+--------------------------------------------------------------------------- */
+.comparison {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  min-height: 0;
+}
+
+.comparison-toggle {
+  display: inline-flex;
+  align-self: center;
+  flex-shrink: 0;
+  padding: 2px;
+  gap: 2px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+}
+
+.comparison-toggle-option {
+  padding: 5px 16px;
+  font: inherit;
+  font-size: 13px;
+  color: var(--ink-mute);
+  background: transparent;
+  border: 0;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+
+.comparison-toggle-option.is-active {
+  color: var(--ink-body);
+  background: rgb(var(--chrome-rgb) / 0.12);
+}
+
+.comparison-stage {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Sized inline in pixels from the round's viewport box fitted to the measured stage (see
+   `comparisonViewportStyle`); no dimensions here, or they would fight that measurement. */
+.comparison-viewport {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+}
+
+.comparison-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* `visibility` rather than `display` — it keeps the layer laid out and its iframe loaded while
+   still removing it from the tab order and the accessibility tree, so toggling never remounts
+   the live preview or re-runs its transpile. */
+.comparison-layer.is-hidden {
+  visibility: hidden;
+}
+
+/* Laid out at the round's true viewport pixels and scaled into the box (see
+   `iterationScaleStyle`), so the generated component resolves the same breakpoint the reference
+   screenshot was captured at. Pinned top-left because the scale transform is anchored there. */
+.comparison-scaler {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.comparison-layer .preview-frame,
+.comparison-layer .preview-shell {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
+  border: 0;
+}
+
+.comparison-source-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.comparison-empty {
+  margin: 0;
+  padding: 0 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ink-mute);
+}
+
+.comparison-caption {
+  flex-shrink: 0;
+  margin: 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--ink-mute);
+}
+
+/* ---------------------------------------------------------------------------
    Round history
 --------------------------------------------------------------------------- */
 .round-history-list {
