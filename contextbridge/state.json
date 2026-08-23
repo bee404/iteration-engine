@@ -1,19 +1,19 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260823044539195_github",
-  "base_packet": "cb_20260822184954585_github",
+  "packet_id": "cb_20260823044611869_github",
+  "base_packet": "cb_20260823044539195_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-23T04:45:39.195Z",
+  "generated_at": "2026-08-23T04:46:11.869Z",
   "changed": true,
-  "manifest_sha": "20fa3bcd4e4f958e",
+  "manifest_sha": "44f77adf43d20e11",
   "sources": [
     {
       "id": ".agents/product-marketing.md",
       "file": ".agents/product-marketing.md",
-      "sha256": "d1c8e53a85cd18846eb379b1b478c6fc06db49734856eda780807e235beecad6",
-      "bytes": 12330
+      "sha256": "4badd99ac7973baa6347ac9ba49ada585978371c819cac84ca19952ed1cb42e9",
+      "bytes": 13523
     },
     {
       "id": ".github/copilot-instructions.md",
@@ -749,18 +749,10 @@
     }
   ],
   "source_changes": {
-    "added": [
-      "components/theme-switch.tsx",
-      "lib/stores/theme.ts",
-      "lib/theme.ts"
-    ],
+    "added": [],
     "removed": [],
     "updated": [
-      "DESIGN.md",
-      "app/globals.css",
-      "app/layout.tsx",
-      "components/app-chrome.tsx",
-      "components/image-upload-screen.tsx"
+      ".agents/product-marketing.md"
     ]
   },
   "facts": [
@@ -769,10 +761,10 @@
       "source": ".agents/product-marketing.md",
       "kind": "verbatim_excerpt",
       "heading": "Product Marketing Context",
-      "text": "# Product Marketing Context **Document version:** v3 **Last updated:** 2026-08-21 **Scope:** Launch-ready context for Coquí's first public post, closed-alpha outreach, and eventual open-source release. Long-term positioning, market sizing, and competitive research are intentionally deferred.",
+      "text": "# Product Marketing Context **Document version:** v4 **Last updated:** 2026-08-22 **Scope:** Launch-ready context for Coquí's first public post, closed-alpha outreach, and eventual open-source release. Long-term positioning, market sizing, and competitive research are intentionally deferred.",
       "evidence": {
         "file": ".agents/product-marketing.md",
-        "sha256": "d1c8e53a85cd18846eb379b1b478c6fc06db49734856eda780807e235beecad6",
+        "sha256": "4badd99ac7973baa6347ac9ba49ada585978371c819cac84ca19952ed1cb42e9",
         "line_start": 1,
         "line_end": 6,
         "truncated": false
@@ -786,7 +778,7 @@
       "text": "## Product Overview **One-liner:** Coquí helps designers win back time by bringing screenshot-based feedback, critique, direction-setting, and optional prototyping into one guided workflow. **What it does:** A designer uploads a screen, states the goal, and pastes feedback. Coquí separates real problems from taste, flags ambiguity, returns 2–3 rationale-backed directions, and lets the designer optionally generate and inspect a coded preview before choosing and saving a round. **Product category:** Design-iteration and decision-support tool. **Product type:** Standalone desktop-first web application; currently suited to a closed alpha. The intended public release is open source, forkable, and run with the user's own Claude API key. **Business model:** Open-source distribution is the current direction. Pricing and any hosted offering are not decided. Do not imply paid plans or general ava…",
       "evidence": {
         "file": ".agents/product-marketing.md",
-        "sha256": "d1c8e53a85cd18846eb379b1b478c6fc06db49734856eda780807e235beecad6",
+        "sha256": "4badd99ac7973baa6347ac9ba49ada585978371c819cac84ca19952ed1cb42e9",
         "line_start": 7,
         "line_end": 18,
         "truncated": true
@@ -800,9 +792,9 @@
       "text": "## Public Positioning Statement Coquí is a design-iteration tool that turns a screenshot and raw feedback into a structured critique, a few rationale-backed directions, and an optional coded preview, helping designers move from feedback to a decision in one guided flow.",
       "evidence": {
         "file": ".agents/product-marketing.md",
-        "sha256": "d1c8e53a85cd18846eb379b1b478c6fc06db49734856eda780807e235beecad6",
-        "line_start": 156,
-        "line_end": 159,
+        "sha256": "4badd99ac7973baa6347ac9ba49ada585978371c819cac84ca19952ed1cb42e9",
+        "line_start": 158,
+        "line_end": 161,
         "truncated": false
       }
     },
@@ -1346,6 +1338,6 @@
     "fact_count": 40,
     "added": 0,
     "removed": 0,
-    "updated": 0
+    "updated": 3
   }
 }
