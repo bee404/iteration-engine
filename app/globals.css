@@ -1389,12 +1389,29 @@ body:has(.app-chrome) {
 /* The Coquí lockup is a full-color graphic (see components/image-upload-screen.tsx), not a
    themeable stencil, so unlike the retired frog illustration this is sizing only — no mask, no
    --illustration-ink. Width is set and height left to the image's own 520:162 ratio so the SVG
-   never distorts; 340px keeps the same visual weight above the headline the old 200×237 mark had. */
+   never distorts; 340px keeps the same visual weight above the headline the old 200×237 mark had.
+   Two full assets are shipped (dark/light) because the lockup's own paint differs per theme —
+   only one is ever in flow at a time, so this costs nothing in layout. */
 .upload-illustration {
-  display: block;
   width: 340px;
   max-width: 100%;
   height: auto;
+}
+
+.upload-illustration-dark {
+  display: block;
+}
+
+.upload-illustration-light {
+  display: none;
+}
+
+[data-theme="coqui"] .upload-illustration-dark {
+  display: none;
+}
+
+[data-theme="coqui"] .upload-illustration-light {
+  display: block;
 }
 
 .upload-preview-wrap {

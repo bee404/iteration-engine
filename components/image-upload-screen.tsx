@@ -137,18 +137,32 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
               />
             </div>
           ) : (
-            /* The Coquí lockup (Figma node 158:360, "Logo container"): Topo texture + two Dot
-               grid vectors + the wordmark, composed as one full-color graphic. Unlike the retired
-               frog illustration this is a fixed brand asset, not a themeable stencil — it renders
-               identically in both themes, same as the header wordmark. */
-            <Image
-              className="upload-illustration"
-              src="/brand/coqui-logo-lockup.svg"
-              alt="Coquí"
-              width={520}
-              height={162}
-              priority
-            />
+            /* The Coquí lockup (Figma node 182:491, "Coqui themes"): Topo texture + two Dot
+               grid vectors + the wordmark, composed as one full-color graphic per theme. Unlike
+               the header wordmark, this graphic is NOT color-identical across themes — Figma
+               ships a dedicated Dark (182:492) and Light (182:483) variant with different paint
+               (the Light wordmark uses a gradient fill that reads as noise on a dark surface, and
+               vice versa), so both SVGs are shipped and toggled by [data-theme] in globals.css
+               rather than picking one asset for both. Only the Dark variant is reachable today
+               since Coquí is hidden behind THEME_SWITCHING_ENABLED. */
+            <>
+              <Image
+                className="upload-illustration upload-illustration-dark"
+                src="/brand/coqui-logo-lockup-dark.svg"
+                alt="Coquí"
+                width={520}
+                height={162}
+                priority
+              />
+              <Image
+                className="upload-illustration upload-illustration-light"
+                src="/brand/coqui-logo-lockup-light.svg"
+                alt="Coquí"
+                width={520}
+                height={162}
+                priority
+              />
+            </>
           )}
 
           <div className="upload-content">

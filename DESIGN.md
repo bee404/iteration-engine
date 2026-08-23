@@ -305,7 +305,7 @@ Stored from the source-frame exports under `public/brand/`; use these repository
 
 - `coqui-wordmark.svg` — the Coquí logotype, 55.7 × 25.9
 - `coqui-illustration.svg` — engraved frog-and-goose empty-state illustration, 150 × 178. No longer rendered anywhere (see the upload screen entry below) but kept in the repo for a possible future return alongside the `coqui` theme.
-- `coqui-logo-lockup.svg` — the upload screen's empty-state graphic: Topo texture + two Dot grid vectors + the Coquí wordmark, composed as one full-color lockup (Figma node 158:360, "Logo container"), 520 × 162. Renders identically in both themes; it is a fixed brand graphic, not a token-driven illustration.
+- `coqui-logo-lockup-dark.svg` / `coqui-logo-lockup-light.svg` — the upload screen's empty-state graphic: Topo texture + two Dot grid vectors + the Coquí wordmark, composed as one full-color lockup per theme (Figma node 182:491, "Coqui themes", with Dark at 182:492 and Light at 182:483), 520 × 162 each. The two variants are NOT color-identical — the Light wordmark uses a gradient fill tuned for a white surface that reads as noise on Obsidian53's dark surface, and vice versa — so both are shipped and toggled by `[data-theme]` in `globals.css` (`.upload-illustration-dark` / `.upload-illustration-light`) rather than sharing one asset across themes.
 - `icon-volume-cross.svg` — header sound toggle, 20px
 - `icon-expand.svg` — expand-feedback glyph, 12px
 - `bg-sky-ambient.svg` — the top gradient band
@@ -343,7 +343,7 @@ Adding a theme means adding a token block, an entry to `THEMES` in `lib/theme.ts
 Beyond the ground/surface/ink/line ladder, three groups are easy to miss and will silently break a theme that inverts the ink ladder:
 
 - **`--on-accent-ink` and `--on-solid`.** These are *not* interchangeable, and neither can be derived from `--ink`. `--on-accent-ink` is type on a light accent field (the gold/banana buttons); it stays dark in every theme because the accent field stays light in every theme. `--on-solid` is type on an inverted-ink chip, and it does flip with the ladder.
-- **`--illustration-ink`.** Still declared by both themes, but currently unconsumed: the upload screen's empty-state graphic is now the full-color `coqui-logo-lockup.svg` lockup, rendered as a plain `<img>` rather than a CSS mask, so it renders identically regardless of theme rather than taking the theme's ink. Revive the token if a future illustration goes back to a single-path mask that should recolor per theme.
+- **`--illustration-ink`.** Still declared by both themes, but currently unconsumed: the upload screen's empty-state graphic is now the full-color `coqui-logo-lockup-dark.svg` / `coqui-logo-lockup-light.svg` lockups, rendered as plain `<img>`s toggled by `[data-theme]` rather than a CSS mask, so each theme gets its own baked-in paint rather than deriving color from a shared token. Revive the token if a future illustration goes back to a single-path mask that should recolor per theme.
 - **`--bloom` and `--grain-opacity`.** Both are inert in the default theme (`none` and `0`). Obsidian53 turns them on for its single diffuse bloom and 0.06 grain wash.
 
 ### Selection and persistence
