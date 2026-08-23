@@ -1,4 +1,5 @@
 import { strToU8, zipSync } from "fflate";
+import { extractInlinedFont } from "./export-inlined-font";
 import { extractComponentName } from "./preview/build-preview-document";
 import type { Direction } from "./types";
 
@@ -118,10 +119,11 @@ function buildIndexHtml(directionTitle: string): string {
 `;
 }
 
-function buildMainEntry(componentName: string): string {
+function buildMainEntry(componentName: string, stylesheetImport: string | null): string {
+  const fontImport = stylesheetImport ? `import "${stylesheetImport}";\n` : "";
   return `import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import ${componentName} from "./${componentName}";
+${fontImport}import ${componentName} from "./${componentName}";
 
 const container = document.getElementById("root");
 if (!container) throw new Error("Root element #root not found");
@@ -138,10 +140,17 @@ function buildReadme(params: {
   directionTitle: string;
   designGoal: string;
   componentFile: string;
+  fontAssetPath: string | null;
   roundId?: string | null;
 }): string {
-  const { directionTitle, designGoal, componentFile, roundId } = params;
+  const { directionTitle, designGoal, componentFile, fontAssetPath, roundId } = params;
   const roundLine = roundId ? `\n- Round: \`${roundId}\`` : "";
+  const fontLines = fontAssetPath
+    ? `\n- \`src/fonts.css\` + \`${fontAssetPath}\` — the design-system typeface. Coquí's preview` +
+      `\n  inlines this font as a base64 data URI; the export unpacks it into a real asset so the` +
+      `\n  component source stays readable. Remove both files and the \`./fonts.css\` import in` +
+      `\n  \`src/main.tsx\` to fall back to the system font stack.`
+    : "";
   return `# ${directionTitle}
 
 Standalone export of one approved direction from a Coquí design-iteration round.
@@ -152,7 +161,7 @@ Standalone export of one approved direction from a Coquí design-iteration round
 ## Contents
 
 - \`src/${componentFile}\` — the generated component, exactly as approved in Coquí.
-- \`src/main.tsx\` — mounts the component into \`index.html\` with React 19.
+- \`src/main.tsx\` — mounts the component into \`index.html\` with React 19.${fontLines}
 - Minimal Vite + TypeScript scaffolding so the component runs outside Coquí's sandboxed preview.
 
 ## Run it
@@ -172,21 +181,34 @@ Then open the printed local URL. \`npm run build\` produces a static production 
  */
 export function buildExportBundle(input: ExportBundleInput): ExportBundleResult {
   const componentName = extractComponentName(input.code) ?? "GeneratedPreview";
-  const code = ensureDefaultExport(input.code, componentName);
   const slug = slugify(input.direction.title);
   const componentFile = `${componentName}.tsx`;
+
+  // The preview inlines the design-system font as base64 inside the component source; a
+  // source bundle must not. Pull it back out into real files before writing the component.
+  const font = extractInlinedFont(input.code);
+  const code = ensureDefaultExport(font.code, componentName);
 
   const files: Record<string, Uint8Array<ArrayBuffer>> = {
     "package.json": strToU8(buildPackageJson(slug)),
     "README.md": strToU8(
-      buildReadme({ directionTitle: input.direction.title, designGoal: input.designGoal, componentFile, roundId: input.roundId }),
+      buildReadme({
+        directionTitle: input.direction.title,
+        designGoal: input.designGoal,
+        componentFile,
+        fontAssetPath: font.asset?.path ?? null,
+        roundId: input.roundId,
+      }),
     ),
     "index.html": strToU8(buildIndexHtml(input.direction.title)),
     "vite.config.ts": strToU8(buildViteConfig()),
     "tsconfig.json": strToU8(buildTsconfig()),
-    "src/main.tsx": strToU8(buildMainEntry(componentName)),
+    "src/main.tsx": strToU8(buildMainEntry(componentName, font.stylesheet ? "./fonts.css" : null)),
     [`src/${componentFile}`]: strToU8(code),
   };
+
+  if (font.stylesheet) files[font.stylesheet.path] = strToU8(font.stylesheet.contents);
+  if (font.asset) files[font.asset.path] = font.asset.bytes;
 
   return { fileName: `${slug}.zip`, bytes: zipSync(files, { level: 6 }) };
 }
