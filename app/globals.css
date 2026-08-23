@@ -1205,6 +1205,17 @@ body:has(.app-chrome) {
   isolation: isolate;
 }
 
+/* The upload screen's 184:501 reference frame keeps the gold outer bezel even on Obsidian53
+   (it happens to be the same #f5cf4f Coquí already uses for --chrome-border, just carried over
+   deliberately for this one screen) and a warmer near-black ground than the rest of the app.
+   Both live on .app-chrome itself — not .upload-page — so .app-chrome-dot-grid still shows
+   through underneath (.upload-page stays transparent; see below). Scoped via :has() to the
+   upload route only — every other Obsidian53 screen keeps the standard ink bezel and ground. */
+.app-chrome:has(.upload-page:not(.feedback-page)) {
+  border-color: #f5cf4f;
+  background: #17161a;
+}
+
 .app-chrome-dot-grid {
   position: absolute;
   inset: 0;
@@ -1246,12 +1257,18 @@ body:has(.app-chrome) {
 
 /* Coquí upload screen ----------------------------------------------------- */
 
+/* .upload-page is the shared shell for /upload, /feedback, /directions, and /synthesized
+   (the latter three also carry .feedback-page). Tokens default to the theme's own values here
+   so those three screens are untouched by anything below. */
 .upload-page {
   --upload-ground: var(--ground);
+  --upload-surface: var(--surface);
   --upload-ink: var(--ink);
   --upload-display: var(--display-ink);
   --upload-body: var(--ink-label);
   --upload-accent-text: var(--accent-text);
+  --upload-line-dashed: var(--line-dashed);
+  --upload-font-display: var(--font-display);
   position: relative;
   display: flex;
   flex: 1;
@@ -1261,6 +1278,33 @@ body:has(.app-chrome) {
   color: var(--upload-ink);
   font-family: var(--font-body);
   isolation: isolate;
+}
+
+/* Bryan's updated dark treatment for the /upload hero screen only (Figma node 184:501,
+   "01 - add image"): a warmer, neutral near-black ground/card (rather than the cooler
+   ink/surface used app-wide in Obsidian53), the gold accent + display face carried over from
+   Coquí's own palette, and a lighter secondary ink for hint copy. Scoped to
+   :not(.feedback-page) so /feedback, /directions, and /synthesized keep the app-wide Obsidian53
+   tokens set above. This is a deliberate per-screen divergence, not an app-wide restyle — the
+   [data-theme="coqui"] override below keeps Coquí's own light design untouched too. */
+.upload-page:not(.feedback-page) {
+  --upload-ground: #17161a;
+  --upload-surface: #1c1b1a;
+  --upload-display: #f5f5f4;
+  --upload-body: #e4e3e2;
+  --upload-accent-text: #f5cf4f;
+  --upload-line-dashed: #4a4642;
+  --upload-font-display: var(--font-owners, "Archivo Narrow"), "Figtree", sans-serif;
+}
+
+[data-theme="coqui"] .upload-page:not(.feedback-page) {
+  --upload-ground: var(--ground);
+  --upload-surface: var(--surface);
+  --upload-display: var(--display-ink);
+  --upload-body: var(--ink-label);
+  --upload-accent-text: var(--accent-text);
+  --upload-line-dashed: var(--line-dashed);
+  --upload-font-display: var(--font-display);
 }
 
 .upload-page::after {
@@ -1278,6 +1322,14 @@ body:has(.app-chrome) {
     radial-gradient(ellipse 480px 260px at 103% -6%, rgba(228, 201, 164, 0.1), transparent 72%);
   background-blend-mode: screen;
   opacity: 0.82;
+}
+
+/* Bryan's 184:501 reference shows a flat dot-grid ground with no top haze — this cool-toned
+   glow was tuned for the original Obsidian53 ground and reads as a mismatched smudge over the
+   new warmer near-black. Suppressed for the hero screen only; /feedback, /directions, and
+   /synthesized keep it. */
+.upload-page:not(.feedback-page)::after {
+  opacity: 0;
 }
 
 .upload-page-atmosphere {
@@ -1376,7 +1428,7 @@ body:has(.app-chrome) {
   gap: 28px;
   padding: 44px 40px;
   border-radius: var(--r-card);
-  background: var(--surface);
+  background: var(--upload-surface);
   box-shadow: 0 0.25px 2px rgba(0, 0, 0, 0.08), 0 2px 16px rgb(var(--shadow-cool-rgb) / 0.02), 0 18px 25px rgb(var(--shadow-rgb) / 0.16);
   transition: box-shadow 160ms ease, transform 160ms ease;
 }
@@ -1442,7 +1494,7 @@ body:has(.app-chrome) {
   width: 100%;
   margin: 0;
   color: var(--upload-display);
-  font-family: var(--font-display);
+  font-family: var(--upload-font-display);
   font-size: 24px;
   font-weight: 400;
   letter-spacing: 0.48px;
@@ -1460,9 +1512,9 @@ body:has(.app-chrome) {
   justify-content: center;
   gap: 12px;
   padding: 28px 24px;
-  border: 1px dashed var(--line-dashed);
+  border: 1px dashed var(--upload-line-dashed);
   border-radius: 12px;
-  background: var(--surface);
+  background: var(--upload-surface);
   color: var(--upload-body);
   font: inherit;
   text-align: center;
