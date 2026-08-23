@@ -20,9 +20,10 @@
   --accent-rgb: 249 249 150;
   --chrome-rgb: 249 249 150;
 
-  /* The 8px outer frame. Banana at that width would be a headline, not an accent, so the frame
-     drops to Ink and reads as a bezel around the darker Void interior. */
-  --chrome-border: #1e1f27;
+  /* Outer-chrome frame gold — measured directly off the Figma export for node 132:3296, same
+     value the Coquí theme uses. The persistent chrome frame is gold in every theme; it is not
+     an accent that varies with the palette, so this deliberately doesn't derive from --accent. */
+  --chrome-border: #f5cf4f;
 
   /* Ink ladder, inverted: Light for headings, Soft for body, Quiet for captions, Muted for
      placeholders. Banana never carries body text — it stays on accents and the one commit action. */
@@ -1205,14 +1206,13 @@ body:has(.app-chrome) {
   isolation: isolate;
 }
 
-/* The upload screen's 184:501 reference frame keeps the gold outer bezel even on Obsidian53
-   (it happens to be the same #f5cf4f Coquí already uses for --chrome-border, just carried over
-   deliberately for this one screen) and a warmer near-black ground than the rest of the app.
-   Both live on .app-chrome itself — not .upload-page — so .app-chrome-dot-grid still shows
-   through underneath (.upload-page stays transparent; see below). Scoped via :has() to the
-   upload route only — every other Obsidian53 screen keeps the standard ink bezel and ground. */
+/* The upload screen's 184:501 reference frame calls for a warmer near-black ground than the
+   rest of the app; the gold bezel itself is now the global --chrome-border default (see :root
+   above), so only the ground needs a route-scoped override here. Lives on .app-chrome itself —
+   not .upload-page — so .app-chrome-dot-grid still shows through underneath (.upload-page stays
+   transparent; see below). Scoped via :has() to the upload route only — every other Obsidian53
+   screen keeps the standard Void ground. */
 .app-chrome:has(.upload-page:not(.feedback-page)) {
-  border-color: #f5cf4f;
   background: #17161a;
 }
 
