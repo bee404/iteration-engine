@@ -10,10 +10,21 @@ interface DirectionsComparisonProps {
   screenshotRef: string | null;
   onApprove: () => void;
   isApproving?: boolean;
+  onExport: () => void;
+  /** Gated on a selected direction with completed generated code — see round-workspace.tsx. */
+  canExport: boolean;
 }
 
 /** Side-by-side comparison of the 2-3 generated directions — step 3 of the round workflow. */
-export function DirectionsComparison({ directions, designGoal, screenshotRef, onApprove, isApproving }: DirectionsComparisonProps) {
+export function DirectionsComparison({
+  directions,
+  designGoal,
+  screenshotRef,
+  onApprove,
+  isApproving,
+  onExport,
+  canExport,
+}: DirectionsComparisonProps) {
   const selectedDirectionId = useRoundStore((s) => s.selectedDirectionId);
   const selectDirection = useRoundStore((s) => s.selectDirection);
 
@@ -36,10 +47,15 @@ export function DirectionsComparison({ directions, designGoal, screenshotRef, on
         ))}
       </div>
 
-      <button type="button" className="btn-primary" onClick={onApprove} disabled={!selectedDirectionId || isApproving}>
-        {isApproving && <span className="spinner" role="status" aria-hidden="true" />}
-        {isApproving ? "Saving…" : "Approve round"}
-      </button>
+      <div className="round-actions">
+        <button type="button" className="btn-primary" onClick={onApprove} disabled={!selectedDirectionId || isApproving}>
+          {isApproving && <span className="spinner" role="status" aria-hidden="true" />}
+          {isApproving ? "Saving…" : "Approve round"}
+        </button>
+        <button type="button" className="btn-secondary" onClick={onExport} disabled={!canExport}>
+          Export
+        </button>
+      </div>
     </section>
   );
 }
