@@ -21,9 +21,13 @@ export function useElementSize(): [(node: HTMLElement | null) => void, ElementSi
       setSize(null);
       return;
     }
-    const observer = new ResizeObserver(([entry]) => {
-      const rect = entry.contentRect;
-      setSize({ width: rect.width, height: rect.height });
+    const observer = new ResizeObserver((entries) => {
+      // Only ever one observed node, but the entry list is still index-access: a spec-legal
+      // empty batch must not throw.
+      const entry = entries[0];
+      if (!entry) return;
+      const { width, height } = entry.contentRect;
+      setSize({ width, height });
     });
     observer.observe(node);
     return () => observer.disconnect();
