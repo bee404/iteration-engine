@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import { useChainViewport } from "@/lib/stores/chain-viewport";
 import type { Direction } from "@/lib/types";
 import { useRoundStore } from "@/store/round-store";
 import { CodeSheet } from "./code-sheet";
@@ -30,8 +31,14 @@ export function DirectionCard({ direction, designGoal, screenshotRef, isSelected
   const finalizeCode = useRoundStore((s) => s.finalizeCode);
   const completeCodeGen = useRoundStore((s) => s.completeCodeGen);
   const failCodeGen = useRoundStore((s) => s.failCodeGen);
+  const lockBox = useChainViewport((s) => s.lockBox);
 
   const runGeneration = useCallback(async () => {
+    // Decision 14's commit point: the first code generation anywhere in the chain's first round
+    // turns the viewport box from a correctable measurement into the chain's fixed frame. Locking
+    // on the trigger rather than on success keeps the box that grounded a request from moving
+    // underneath a retry of that same request.
+    lockBox();
     setIsStreaming(true);
     startCodeGen(direction.id, "tsx");
 
@@ -91,7 +98,7 @@ export function DirectionCard({ direction, designGoal, screenshotRef, isSelected
     } finally {
       setIsStreaming(false);
     }
-  }, [direction, designGoal, screenshotRef, startCodeGen, appendCodeToken, finalizeCode, completeCodeGen, failCodeGen]);
+  }, [direction, designGoal, screenshotRef, lockBox, startCodeGen, appendCodeToken, finalizeCode, completeCodeGen, failCodeGen]);
 
   // Generating starts the stream and opens the sheet together. Once a direction has completed
   // output, re-clicking just reopens the sheet instead of re-streaming; a fresh direction or one

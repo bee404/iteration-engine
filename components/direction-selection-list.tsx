@@ -7,6 +7,7 @@ import { useCallback, useState } from "react";
 import { PatternLinkIcon } from "@/components/coqui-marks";
 import { StepHeader } from "@/components/step-header";
 import { PREVIEW_DIRECTIONS } from "@/lib/fixtures/preview-directions";
+import { useChainViewport } from "@/lib/stores/chain-viewport";
 import type { Direction } from "@/lib/types";
 import { useStepStage } from "@/lib/use-step-stage";
 
@@ -106,15 +107,21 @@ function SelectionRow({ direction, isSelected, isExpanded, onSelect, onExpand }:
 export function DirectionsScreen() {
   const router = useRouter();
   const stage = useStepStage();
+  const lockBox = useChainViewport((state) => state.lockBox);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(PREVIEW_DIRECTIONS[0]?.id ?? null);
 
   const handleContinue = useCallback(() => {
     if (!selectedId) return;
+    // Carrying a direction forward closes this round into the chain, so the viewport box stops
+    // being this round's correctable measurement here too (Decision 14). Code generation is the
+    // canonical commit point (components/direction-card.tsx) and this path has none yet; locking
+    // on the close is never earlier than that, so it can't take the correction away too soon.
+    lockBox();
     // No downstream route exists yet; continuing closes the round and loops to a fresh one,
     // playing the same slide-up-and-out exit so the chain stays continuous.
     stage.exit(() => router.push("/upload"));
-  }, [selectedId, stage, router]);
+  }, [selectedId, lockBox, stage, router]);
 
   return (
     <main className="upload-page feedback-page">

@@ -11,10 +11,15 @@ import type {
   Round,
 } from "@/lib/types";
 
-/** Reconstructs screenshot dimensions from a round row; null unless both columns are set
- * (they are added together at insert time, so one-without-the-other is not a valid state). */
-function readScreenshotDimensions(row: Record<string, unknown>): ImageDimensions | null {
-  const { screenshot_width: width, screenshot_height: height } = row;
+/** Reconstructs a dimension pair from a round row; null unless both columns are set (they are
+ * written together at insert time, so one-without-the-other is not a valid state). */
+function readDimensions(
+  row: Record<string, unknown>,
+  widthColumn: string,
+  heightColumn: string,
+): ImageDimensions | null {
+  const width = row[widthColumn];
+  const height = row[heightColumn];
   if (width == null || height == null) return null;
   return { width: Number(width), height: Number(height) };
 }
@@ -73,6 +78,8 @@ export interface CreateRoundInput {
   previousRoundId?: string | null;
   screenshotRef: string;
   screenshotDimensions?: ImageDimensions | null;
+  /** The chain's locked viewport box, propagated from the previous round rather than re-inferred. */
+  lockedViewport?: ImageDimensions | null;
   designGoal: string;
   feedbackText: string;
   reviewerContext?: string | null;
@@ -94,9 +101,10 @@ export async function createRound(input: CreateRoundInput): Promise<Round> {
   await db.execute({
     sql: `INSERT INTO rounds (
             id, project_id, previous_round_id, screenshot_ref, screenshot_width, screenshot_height,
+            locked_viewport_width, locked_viewport_height,
             design_goal, feedback_text, reviewer_context, constraints, selected_direction_id,
             approval_status, created_at, updated_at
-          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     args: [
       id,
       input.projectId,
@@ -104,6 +112,8 @@ export async function createRound(input: CreateRoundInput): Promise<Round> {
       input.screenshotRef,
       input.screenshotDimensions?.width ?? null,
       input.screenshotDimensions?.height ?? null,
+      input.lockedViewport?.width ?? null,
+      input.lockedViewport?.height ?? null,
       input.designGoal,
       input.feedbackText,
       input.reviewerContext ?? null,
@@ -170,6 +180,7 @@ export async function createRound(input: CreateRoundInput): Promise<Round> {
     previousRoundId: input.previousRoundId ?? null,
     screenshotRef: input.screenshotRef,
     screenshotDimensions: input.screenshotDimensions ?? null,
+    lockedViewport: input.lockedViewport ?? null,
     designGoal: input.designGoal,
     feedbackText: input.feedbackText,
     reviewerContext: input.reviewerContext ?? null,
@@ -261,7 +272,8 @@ async function hydrateRound(row: Record<string, unknown>): Promise<Round> {
     projectId: String(row.project_id),
     previousRoundId: row.previous_round_id == null ? null : String(row.previous_round_id),
     screenshotRef: String(row.screenshot_ref),
-    screenshotDimensions: readScreenshotDimensions(row),
+    screenshotDimensions: readDimensions(row, "screenshot_width", "screenshot_height"),
+    lockedViewport: readDimensions(row, "locked_viewport_width", "locked_viewport_height"),
     designGoal: String(row.design_goal),
     feedbackText: String(row.feedback_text),
     reviewerContext: row.reviewer_context == null ? null : String(row.reviewer_context),

@@ -2,6 +2,7 @@
 
 import { useCallback, useState } from "react";
 import { useRoundStore } from "@/store/round-store";
+import { lockedBoxOf, useChainViewport } from "@/lib/stores/chain-viewport";
 import type { Critique, Direction } from "@/lib/types";
 import { persistApprovedRound } from "@/lib/persist-round";
 import { UploadForm } from "./upload-form";
@@ -34,6 +35,8 @@ export function RoundWorkspace() {
   const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
 
   const screenshotRef = useRoundStore((s) => s.screenshotRef);
+  const screenshotDimensions = useRoundStore((s) => s.screenshotDimensions);
+  const lockedViewport = useChainViewport((s) => lockedBoxOf(s.viewport));
   const designGoal = useRoundStore((s) => s.designGoal);
   const feedbackText = useRoundStore((s) => s.feedbackText);
   const reviewerContext = useRoundStore((s) => s.reviewerContext);
@@ -98,6 +101,8 @@ export function RoundWorkspace() {
     const directionTitle = directions.find((d) => d.id === selectedDirectionId)?.title ?? selectedDirectionId;
     const result = await persistApprovedRound({
       screenshotRef,
+      screenshotDimensions,
+      lockedViewport,
       designGoal,
       feedbackText,
       reviewerContext,
@@ -127,6 +132,8 @@ export function RoundWorkspace() {
     }
   }, [
     screenshotRef,
+    screenshotDimensions,
+    lockedViewport,
     designGoal,
     feedbackText,
     reviewerContext,

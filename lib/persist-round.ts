@@ -1,4 +1,12 @@
-import type { ApprovalStatus, Critique, Direction, GeneratedCode, Project, Round } from "@/lib/types";
+import type {
+  ApprovalStatus,
+  Critique,
+  Direction,
+  GeneratedCode,
+  ImageDimensions,
+  Project,
+  Round,
+} from "@/lib/types";
 
 /**
  * Draft shape of the in-progress round, taken straight from the Zustand store at the
@@ -7,6 +15,10 @@ import type { ApprovalStatus, Critique, Direction, GeneratedCode, Project, Round
  */
 export interface RoundDraft {
   screenshotRef: string | null;
+  screenshotDimensions: ImageDimensions | null;
+  /** The box this chain locked, as the client knows it. Only used when this round opens the
+   *  chain — a continuing round inherits the box already locked upstream. */
+  lockedViewport: ImageDimensions | null;
   designGoal: string;
   feedbackText: string;
   reviewerContext: string;
@@ -70,14 +82,23 @@ async function ensureProjectId(): Promise<string | { demoMode: true }> {
   return createBody.project.id;
 }
 
-/** Most recent round for the project, if any — becomes `previousRoundId` for the new round. */
-async function fetchLatestRoundId(projectId: string): Promise<string | null> {
+/** Most recent round for the project, if any — the round the new one chains onto. */
+async function fetchLatestRound(projectId: string): Promise<Round | null> {
   const response = await fetch(`/api/rounds?projectId=${encodeURIComponent(projectId)}`);
   const body = await readJson<{ rounds: Round[] }>(response);
   if (!response.ok || !body) {
     throw new Error(`Failed to load round history (${response.status})`);
   }
-  return body.rounds[0]?.id ?? null;
+  return body.rounds[0] ?? null;
+}
+
+/**
+ * The viewport box belongs to the chain, so a round that continues one carries the box locked
+ * upstream rather than whatever its own reference happens to measure (Decision 14). Only the
+ * round that opens a chain contributes a box of its own.
+ */
+function resolveLockedViewport(previousRound: Round | null, draft: RoundDraft): ImageDimensions | null {
+  return previousRound?.lockedViewport ?? draft.lockedViewport;
 }
 
 /**
@@ -92,7 +113,7 @@ export async function persistApprovedRound(draft: RoundDraft): Promise<PersistRo
     const projectId = await ensureProjectId();
     if (typeof projectId !== "string") return { status: "demo_mode" };
 
-    const previousRoundId = await fetchLatestRoundId(projectId);
+    const previousRound = await fetchLatestRound(projectId);
 
     const generatedCode = Object.entries(draft.generatedCodeByDirection).map(([directionId, entry]) => ({
       directionId,
@@ -106,8 +127,10 @@ export async function persistApprovedRound(draft: RoundDraft): Promise<PersistRo
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         projectId,
-        previousRoundId,
+        previousRoundId: previousRound?.id ?? null,
         screenshotRef: draft.screenshotRef ?? "",
+        screenshotDimensions: draft.screenshotDimensions,
+        lockedViewport: resolveLockedViewport(previousRound, draft),
         designGoal: draft.designGoal,
         feedbackText: draft.feedbackText,
         reviewerContext: draft.reviewerContext || null,

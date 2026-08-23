@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState, type CSSProperties, type RefObject } from "react";
 
+import { ViewportBoxField } from "@/components/viewport-box-field";
 import { toCssColor, type VerticalColorSplit } from "@/lib/screenshot-edge-colors";
 import { useScreenshotColorSplit } from "@/lib/use-screenshot-color-split";
 import type { RoundImage } from "@/lib/stores/round-image";
@@ -44,10 +45,6 @@ export function ReferenceImage({ image, imgRef, hidden }: ReferenceImageProps) {
     };
   }, [isLightboxOpen]);
 
-  const dimensionLabel = image.dimensions
-    ? `${image.dimensions.width} × ${image.dimensions.height} · viewport inferred`
-    : "viewport inferred";
-
   return (
     <figure className="feedback-reference">
       {/* Layered "Background+Shadow" frame (Figma node 9:484). A future Pinpoint annotation layer
@@ -74,9 +71,12 @@ export function ReferenceImage({ image, imgRef, hidden }: ReferenceImageProps) {
           </span>
         </button>
       </div>
-      <figcaption className="feedback-caption">
-        {image.fileName} · {dimensionLabel}
-      </figcaption>
+      {/* The measurement is deliberately not read off this image: it belongs to the chain, and
+          after the first committed iteration it stops tracking whatever screenshot is on screen. */}
+      <div className="feedback-reference-meta">
+        <figcaption className="feedback-caption">{image.fileName}</figcaption>
+        <ViewportBoxField />
+      </div>
 
       {isLightboxOpen && (
         <div

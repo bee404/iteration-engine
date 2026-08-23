@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { StepHeader } from "@/components/step-header";
 import { readImageDimensions } from "@/lib/image-dimensions";
 import { preprocessScreenshot } from "@/lib/screenshot-preprocess";
+import { useChainViewport } from "@/lib/stores/chain-viewport";
 import { useRoundImage } from "@/lib/stores/round-image";
 
 type ImageUploadScreenProps = {
@@ -27,6 +28,7 @@ function readAsDataUrl(file: File): Promise<string> {
 export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
   const router = useRouter();
   const beginTransition = useRoundImage((state) => state.beginTransition);
+  const inferBox = useChainViewport((state) => state.inferBox);
   const inputRef = useRef<HTMLInputElement>(null);
   const previewRef = useRef<HTMLImageElement>(null);
   // Guards the auto-advance effect against re-running for a file it has already sent onward.
@@ -71,6 +73,9 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
         const dimensions =
           processed.dimensions.width > 0 ? processed.dimensions : await readImageDimensions(dataUrl);
         if (cancelled) return;
+        // A locked chain ignores this: after the first committed iteration the box is the
+        // chain's, not this screenshot's (see lib/stores/chain-viewport.ts).
+        inferBox(dimensions);
         const rect = previewRef.current?.getBoundingClientRect();
         const origin = rect
           ? { top: rect.top, left: rect.left, width: rect.width, height: rect.height }
@@ -96,7 +101,7 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
     return () => {
       cancelled = true;
     };
-  }, [file, beginTransition, router]);
+  }, [file, beginTransition, inferBox, router]);
 
   useEffect(() => {
     return () => {
