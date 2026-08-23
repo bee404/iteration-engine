@@ -137,37 +137,24 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
               />
             </div>
           ) : (
-            /* The Coquí lockup (Figma node 182:491, "Coqui themes"): Topo texture + two Dot
-               grid vectors + the wordmark, composed as one full-color graphic per theme. Unlike
-               the header wordmark, this graphic is NOT color-identical across themes — Figma
-               ships a dedicated Dark (182:492) and Light (182:483) variant with different paint
-               (the Light wordmark uses a gradient fill that reads as noise on a dark surface, and
-               vice versa), so both SVGs are shipped and toggled by [data-theme] in globals.css
-               rather than picking one asset for both. Only the Dark variant is reachable today
-               since Coquí is hidden behind THEME_SWITCHING_ENABLED. */
-            <>
-              <Image
-                className="upload-illustration upload-illustration-dark"
-                src="/brand/coqui-logo-lockup-dark.svg"
-                alt="Coquí"
-                width={520}
-                height={162}
-                priority
-              />
-              <Image
-                className="upload-illustration upload-illustration-light"
-                src="/brand/coqui-logo-lockup-light.svg"
-                alt="Coquí"
-                width={520}
-                height={162}
-                priority
-              />
-            </>
+            /* `upload-hero` (Figma node 184:557): Topo texture + dot-grid vectors + the Coquí
+               wordmark, exported from Figma as one flattened raster rather than recomposed as
+               separate layers here. Previously this was two theme-specific SVG lockups toggled by
+               [data-theme]; the 184:505 frame specifies a single banner that spans the card's full
+               content width, so one asset serves every theme and the per-theme swap is gone. */
+            <Image
+              className="upload-hero"
+              src="/brand/upload-hero.png"
+              alt="Coquí"
+              width={1040}
+              height={324}
+              priority
+            />
           )}
 
           <div className="upload-content">
             <h1 id="upload-title">
-              {previewUrl ? "Screen ready to improve" : "Add the screen you want to improve"}
+              {previewUrl ? "Screen ready to improve" : "Upload the screen you want to improve"}
             </h1>
 
             {previewUrl ? (
@@ -198,8 +185,12 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
                 >
                   <span className="upload-dropzone-action">Select image to upload</span>
                   <span className="upload-dropzone-hint">
-                    also you can drop your image or <kbd>⌘</kbd>
-                    <kbd>V</kbd> to paste
+                    also you can drop your image or{" "}
+                    <span className="upload-paste-keys">
+                      <kbd>⌘</kbd>
+                      <kbd>V</kbd>
+                    </span>{" "}
+                    to paste
                   </span>
                 </button>
                 {uploadError && (
