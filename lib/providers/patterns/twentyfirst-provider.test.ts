@@ -119,6 +119,40 @@ test("findPatterns throws a typed unparseable_response error when structuredCont
   );
 });
 
+test("findPatterns trims whitespace from name the same way it trims description", async () => {
+  // Regression for a double-space render bug ("Grounded in:  Dashboard") caused by an
+  // untrimmed `name` from the MCP response while `description` was already trimmed.
+  await withMockedFetch(
+    () =>
+      new Response(
+        JSON.stringify({
+          jsonrpc: "2.0",
+          id: "1",
+          result: {
+            content: [],
+            structuredContent: {
+              results: [
+                {
+                  type: "component",
+                  name: " Dashboard ",
+                  description: " a dashboard layout ",
+                  url: "https://21st.dev/@author/components/dashboard",
+                },
+              ],
+            },
+          },
+        }),
+        { status: 200, headers: { "content-type": "application/json" } }
+      ),
+    async () => {
+      const provider = new TwentyFirstProvider("test-key");
+      const { references } = await provider.findPatterns({ query: "dashboard" });
+      assert.equal(references[0]?.name, "Dashboard");
+      assert.equal(references[0]?.description, "a dashboard layout");
+    }
+  );
+});
+
 test("findPatterns drops results missing a name, url, or description rather than fabricating one", async () => {
   await withMockedFetch(
     () =>

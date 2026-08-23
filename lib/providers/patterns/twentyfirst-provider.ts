@@ -162,7 +162,7 @@ export class TwentyFirstProvider implements PatternProvider {
       .slice(0, limit)
       .map((item) => ({
         source: "21st.dev" as const,
-        name: item.name,
+        name: item.name.trim(),
         url: item.url,
         description: item.description.trim(),
       }));
