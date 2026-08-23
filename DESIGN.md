@@ -359,3 +359,10 @@ Carried from the Obsidian53 brand system; do not relax them without Bryan:
 4. **Instrument Serif ships weight 400 only.** Never request a heavier weight off `--font-display` or the browser synthesises a faux-bold.
 5. **Micro-labels are tracked to +0.28em** and are not to be tightened; that tracking is the identifying tic of Pairing 2C.
 
+### Texture library
+
+Obsidian53 has two approved organic material families: **Fissure**, a sparse network of hairline Banana-lit fractures in a nearly black field, and **Mineral**, a layered rough stone with fine relief, deep cavities, and restrained warm inclusions. The user-adjusted reference images and the regeneration contract live in [`docs/brand/texture-system.md`](docs/brand/texture-system.md).
+
+Treat these textures as a material system, not as fixed decorative images. New outputs should be a new cut from the same stone: preserve the palette, roughness, contrast hierarchy, and detail scale while changing the seed, topology, fold map, crop, or local density. Keep the tileable base separate from any vignette or edge fade, and validate repeated use with a 3 × 3 preview.
+
+When these assets are shown in future brand comps, place them inside an adventurous studio webpage concept rather than a framed picture or presentation board. Organic, real-feeling material should meet precise digital structure. Parallax, scroll-revealed shimmer, and bloom may be explored in the web implementation, but glow must remain sparse and subordinate to the stone.
