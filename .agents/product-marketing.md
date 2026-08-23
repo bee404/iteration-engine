@@ -1,7 +1,7 @@
 # Product Marketing Context
 
-**Document version:** v3
-**Last updated:** 2026-08-21
+**Document version:** v4
+**Last updated:** 2026-08-22
 **Scope:** Launch-ready context for Coquí's first public post, closed-alpha outreach, and eventual open-source release. Long-term positioning, market sizing, and competitive research are intentionally deferred.
 
 ## Product Overview
@@ -20,7 +20,7 @@
 
 **Primary user:** Product designers and hands-on design leads who repeatedly turn screenshots and scattered feedback into a clear next design direction.
 
-**Initial user profile:** Designers working on single-screen interface iterations who want faster synthesis without handing final judgment to AI. The first alpha cohort should be small and should use Coquí on real design work beyond Bryan's own projects. The later self-serve release will be easiest for technical designers, design engineers, and others comfortable forking a repository and supplying an API key.
+**Initial user profile:** Designers working on single-screen interface iterations who want faster synthesis without handing final judgment to AI. Closed Alpha A is three trusted friends who match the target profile and will use Coquí on real design work beyond Bryan's own projects. Closed Alpha B will recruit a small external cohort from the tester list created through LinkedIn and the future website. The later self-serve release will be easiest for technical designers, design engineers, and others comfortable forking a repository and supplying an API key.
 
 **Secondary launch audience:** Recruiters and hiring managers evaluating Bryan's ability to identify a workflow problem and design and build a working product. They are viewers of the proof, not the product's primary users.
 
@@ -118,7 +118,7 @@
 
 **Tone:** Designer-centered, human, direct, calm, and specific.
 
-**Style:** Lead with the recognizable workflow and time reclaimed. Explain AI through useful transformations, not as the hero. For the initial launch, do not lead with the Puerto Rico origin story, the water crisis, or culturally specific illustration. Those elements introduce a separate conversation and should be held for later context if Bryan chooses to tell it.
+**Style:** Lead with the recognizable workflow and time reclaimed. Explain AI through useful transformations, not as the hero. Do not open launch copy with generic builder clichés such as "I've been quietly building," "excited to finally share," or adjacent startup-announcement formulas. For the initial launch, do not lead with the Puerto Rico origin story, the water crisis, or culturally specific illustration. Those elements introduce a separate conversation and should be held for later context if Bryan chooses to tell it.
 
 **Personality:** Thoughtful, practical, crafted, transparent.
 
@@ -143,13 +143,15 @@
 
 For the first launch visuals, favor product UI and neutral or permission-safe source screens. Avoid leading with the existing Puerto Rico and water-crisis illustration set.
 
-**Validation:** 18 automated tests pass; lint has no errors and one known font-loading warning; a clean production build succeeds. The complete loop has not yet been validated against a real project under the V1 success criteria.
+**Validation:** 50 automated tests pass as of 2026-08-22, including access-control, burst-limit, screenshot-validation, preview-security, and generation-path coverage. Earlier lint/build verification was clean apart from one known font-loading warning. The complete loop has not yet been validated across the planned Alpha A real-world use cases.
 
 ## Goals
 
-**Immediate business goal:** Establish a credible first public signal and recruit a small closed-alpha cohort to test Coquí against real design use cases beyond Bryan's own work, while demonstrating Bryan's product design and building ability.
+**Immediate business goal:** Establish a credible first public signal while running a staged closed alpha. Alpha A is a controlled cohort of three trusted target users testing real design use cases on Bryan's hosted Claude-backed instance. Alpha B admits a small group from the public tester list only after reviewing Alpha A usage and completing another deep security QA pass.
 
-**Primary conversion action:** For the first post, invite designers to join a small alpha testers list. Access is intentionally limited while the workflow is tested against real use cases. For the later open-source release, the primary action should become fork the repository and add your own Claude API key.
+**Primary conversion action:** For the first post, invite qualified designers to join the Alpha B testers list. The post should explain that access is intentionally limited and staged, without discussing Bryan's API credentials or presenting security work as complete. For the later open-source release, the primary action should become fork the repository and add your own Claude API key.
+
+**Owned channel direction:** A small Obsidian53 website will eventually provide the tester-list signup and a home for Coquí. Its intended feel is high-end, boutique, modern agency. Website architecture and copy are deferred until that project is explicitly started.
 
 **Current metrics:** None. Do not invent adoption, quality, speed, or time-saved metrics.
 
@@ -159,13 +161,13 @@ Coquí is a design-iteration tool that turns a screenshot and raw feedback into 
 
 ## Claims Boundary
 
-**Safe today:** The implemented single-screen workflow, designer-controlled direction choice, real critique and directions, optional coded preview, demo mode, persisted rounds/history, and the stated intent to release Coquí as open source and bring-your-own-key.
+**Safe today:** The implemented single-screen workflow, designer-controlled direction choice, real critique and directions, optional coded preview, demo mode, persisted rounds/history, the staged Closed Alpha A/B plan, and the stated intent to release Coquí as open source and bring-your-own-key.
 
 **Avoid until proven or built:** Saying the open-source release is available now; quantified time savings; superior output quality; production-ready code; pixel-perfect or perfectly registered comparison; general design-system adherence; multi-screen workflows; live 21st.dev grounding; GPT-4o fallback; source-bundle export; closed-beta maturity; customer adoption or satisfaction; enterprise readiness.
 
 ## Launch-Blocking Questions
 
-No positioning question materially blocks a scoped first public post or closed-alpha announcement today. The first-post CTA is now settled: join a small alpha testers list. Three operational choices still affect the visuals and later open-source release:
+No positioning question materially blocks a scoped first public post or closed-alpha announcement today. The first-post CTA is now settled: join the Alpha B testers list. Three operational choices still affect the visuals and later open-source release:
 
 1. Will the public proof be a controlled fixture-backed recording or a live connected demo?
 2. Which real or permission-safe screen and feedback example should appear in the visuals?
@@ -173,6 +175,7 @@ No positioning question materially blocks a scoped first public post or closed-a
 
 ## Changelog
 
+- v4 (2026-08-22) — Defined Closed Alpha A as three trusted target users, made a deep security QA pass the gate to public-list Alpha B, added the future Obsidian53 owned-channel direction, and prohibited generic "quietly building" launch openings.
 - v3 (2026-08-21) — Set the first-post CTA to a small alpha testers list and defined the cohort's purpose as testing Coquí against real use cases beyond Bryan's own work.
 - v2 (2026-08-21) — Added open-source, forkable, bring-your-own-Claude-key release direction; pulled Puerto Rico, water-crisis, and illustration-led storytelling out of the initial launch frame.
 - v1 (2026-08-21) — Initial launch-scoped context drafted from repository product decisions, implemented UI, release boundaries, and verification.
