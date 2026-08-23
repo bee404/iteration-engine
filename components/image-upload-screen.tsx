@@ -137,14 +137,17 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
               />
             </div>
           ) : (
-            /* The illustration is a single-path line drawing with one hardcoded fill, so as an
-               <img> its color is unreachable by any theme. Painting it as a CSS mask makes the
-               artwork a stencil that takes the theme's ink, which is the only way a second theme
-               can render it legibly on a dark ground. role/aria-label keep it announced. */
-            <span
+            /* The Coquí lockup (Figma node 158:360, "Logo container"): Topo texture + two Dot
+               grid vectors + the wordmark, composed as one full-color graphic. Unlike the retired
+               frog illustration this is a fixed brand asset, not a themeable stencil — it renders
+               identically in both themes, same as the header wordmark. */
+            <Image
               className="upload-illustration"
-              role="img"
-              aria-label="A frog riding a goose, carrying a framed picture"
+              src="/brand/coqui-logo-lockup.svg"
+              alt="Coquí"
+              width={520}
+              height={162}
+              priority
             />
           )}
 

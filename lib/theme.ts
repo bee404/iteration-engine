@@ -4,12 +4,23 @@
  * attribute; keeping them in one module is what makes the no-flash script safe to hand-write.
  */
 
-/** `coqui` is the default: the gold-accent, dot-grid, light app shell. */
+/** `obsidian53` is the default: the dark, Obsidian & Banana app shell — Coquí's current brand
+ * direction. Coquí (the gold-accent, dot-grid, light shell) stays fully implemented below, just
+ * not offered to users right now; see THEME_SWITCHING_ENABLED. */
 export const THEMES = ["coqui", "obsidian53"] as const;
 
 export type Theme = (typeof THEMES)[number];
 
-export const DEFAULT_THEME: Theme = "coqui";
+export const DEFAULT_THEME: Theme = "obsidian53";
+
+/**
+ * Whether the visible toggle offers a choice at all. Obsidian53 is the sole brand direction for
+ * now, so the switch renders nothing while this is `false` — see components/app-chrome.tsx, the
+ * toggle's only mount point. Everything else (both themes' tokens and CSS, the store, the toggle
+ * component itself, the pre-hydration script) stays fully wired for two themes; flipping this
+ * back to `true` is the entire re-enable path.
+ */
+export const THEME_SWITCHING_ENABLED = false;
 
 /** Human labels for the toggle. Kept beside the union so adding a theme forces a label. */
 export const THEME_LABELS: Record<Theme, string> = {
@@ -45,7 +56,8 @@ export function nextTheme(current: Theme): Theme {
 
 /**
  * Applies the theme to the document. The default theme removes the attribute rather than writing
- * `data-theme="coqui"`, so `:root` alone is the default and there is exactly one way to be default.
+ * `data-theme="obsidian53"`, so `:root` alone is the default and there is exactly one way to be
+ * default.
  */
 export function applyTheme(theme: Theme): void {
   const root = document.documentElement;
@@ -69,4 +81,3 @@ export const THEME_INIT_SCRIPT = `(function(){try{var s=localStorage.getItem(${J
 )}&&${JSON.stringify(THEMES)}.indexOf(t)>-1){document.documentElement.setAttribute(${JSON.stringify(
   THEME_ATTRIBUTE,
 )},t);}}catch(e){}})();`;
-
