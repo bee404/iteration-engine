@@ -1,13 +1,13 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260822184954585_github",
-  "base_packet": "cb_20260822183732262_github",
+  "packet_id": "cb_20260823044539195_github",
+  "base_packet": "cb_20260822184954585_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-22T18:49:54.585Z",
+  "generated_at": "2026-08-23T04:45:39.195Z",
   "changed": true,
-  "manifest_sha": "ea28e2274789385e",
+  "manifest_sha": "20fa3bcd4e4f958e",
   "sources": [
     {
       "id": ".agents/product-marketing.md",
@@ -36,8 +36,8 @@
     {
       "id": "DESIGN.md",
       "file": "DESIGN.md",
-      "sha256": "bc5f0f14e83c4cd9ccdcd649353b2a65791880ad3c586c5f732f45e86b690b64",
-      "bytes": 15198
+      "sha256": "2fb659f272e808d170abb8868ba43ae726e059317db830fd5bc0e1cc00caa4b3",
+      "bytes": 20086
     },
     {
       "id": "README.md",
@@ -126,8 +126,8 @@
     {
       "id": "app/globals.css",
       "file": "app/globals.css",
-      "sha256": "f161e152fd9b823e29678fcae571940a6e8b2f682ee13356cd3073f910a2cb24",
-      "bytes": 78360
+      "sha256": "9de7bc3d4ee67ea6646e0bd9f3272c243c31200ee18ae676a870d2324a00536f",
+      "bytes": 91473
     },
     {
       "id": "app/icon.png",
@@ -138,8 +138,8 @@
     {
       "id": "app/layout.tsx",
       "file": "app/layout.tsx",
-      "sha256": "e73e8484458197def8445e3acda00133ec4ed974b028179d1726b8a461abe3c7",
-      "bytes": 1179
+      "sha256": "ed06f888cbbfcc7dc54572db4d0c8ca6a81b359aaf9bf3ba5dd0f388339bc294",
+      "bytes": 2002
     },
     {
       "id": "app/page.tsx",
@@ -156,8 +156,8 @@
     {
       "id": "components/app-chrome.tsx",
       "file": "components/app-chrome.tsx",
-      "sha256": "f57f558e94bb536f8cba5670e62f3b87c5a0266e33de9f8eda426c91245077ff",
-      "bytes": 873
+      "sha256": "bf51ffa40001aa24b6b768a99a03d38bcf58c80c7d78985abcb04f0ffb9e70d8",
+      "bytes": 1150
     },
     {
       "id": "components/app-frame.tsx",
@@ -216,8 +216,8 @@
     {
       "id": "components/image-upload-screen.tsx",
       "file": "components/image-upload-screen.tsx",
-      "sha256": "aa4b3574695ff9a7bbff9276b2a283eb061bdd950b44053663a266239febd58a",
-      "bytes": 8100
+      "sha256": "c78d67b24ed2df54b245397964c01e1aff5c31b14cae368e96e102a275f6d347",
+      "bytes": 8388
     },
     {
       "id": "components/preview-frame.tsx",
@@ -254,6 +254,12 @@
       "file": "components/synthesized-screen.tsx",
       "sha256": "f68781a1f343b7425306d11674bc47b7ec6f7dc815c101097c8399afcea59a21",
       "bytes": 3420
+    },
+    {
+      "id": "components/theme-switch.tsx",
+      "file": "components/theme-switch.tsx",
+      "sha256": "c7cfb31e1e597f706c4130e8c64ec818c7dc75dc77904a1d775ba76d059a8259",
+      "bytes": 1573
     },
     {
       "id": "components/upload-form.tsx",
@@ -664,6 +670,18 @@
       "bytes": 928
     },
     {
+      "id": "lib/stores/theme.ts",
+      "file": "lib/stores/theme.ts",
+      "sha256": "3c1e3752b6bd0a6c05c7b902a63cfbe7b26c233af5d7c45d43191e54f3bf0e60",
+      "bytes": 1983
+    },
+    {
+      "id": "lib/theme.ts",
+      "file": "lib/theme.ts",
+      "sha256": "692bd9baf45da2ac0d5eec6ba14c8368f479d6a0c7a234cd1ffc03b78cefc616",
+      "bytes": 2734
+    },
+    {
       "id": "lib/types.ts",
       "file": "lib/types.ts",
       "sha256": "bfadb73a7158a9d775522f4f62ccbd85de1dc004c16b5df496bfff902f35d0f9",
@@ -732,16 +750,17 @@
   ],
   "source_changes": {
     "added": [
-      ".agents/product-marketing.md",
-      ".github/copilot-instructions.md",
-      "AGENTS.md",
-      "CLAUDE.md"
+      "components/theme-switch.tsx",
+      "lib/stores/theme.ts",
+      "lib/theme.ts"
     ],
     "removed": [],
     "updated": [
-      "README.md",
-      "docs/knowledge-base/README.md",
-      "package.json"
+      "DESIGN.md",
+      "app/globals.css",
+      "app/layout.tsx",
+      "components/app-chrome.tsx",
+      "components/image-upload-screen.tsx"
     ]
   },
   "facts": [
@@ -1323,10 +1342,10 @@
   "missing_sources": [],
   "supplemental": [],
   "stats": {
-    "source_count": 120,
+    "source_count": 123,
     "fact_count": 40,
-    "added": 5,
+    "added": 0,
     "removed": 0,
-    "updated": 3
+    "updated": 0
   }
 }
