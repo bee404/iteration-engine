@@ -7,6 +7,7 @@ import { useCallback, useLayoutEffect, useRef, useState } from "react";
 
 import { ReferenceImage } from "@/components/reference-image";
 import { StepHeader } from "@/components/step-header";
+import { LockedViewportNotice } from "@/components/viewport-box-field";
 import { useRoundImage } from "@/lib/stores/round-image";
 import { useStepStage } from "@/lib/use-step-stage";
 
@@ -126,6 +127,10 @@ export function FeedbackScreen() {
           <Link className="upload-proceed" href="/upload">
             Go to upload
           </Link>
+          {/* The reference image is in-memory only and does not survive a reload, but the chain's
+              locked box does — it is read back from the persisted round, so it still reads out
+              here rather than looking as though the lock were lost with the screenshot. */}
+          <LockedViewportNotice />
         </section>
       </main>
     );

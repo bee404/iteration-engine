@@ -23,6 +23,10 @@ interface ChainViewportState {
   correctBox: (box: ImageDimensions) => void;
   /** The commit point: from here the box is the chain's, not the round's. Idempotent. */
   lockBox: () => void;
+  /** Restores a box this chain locked in an earlier session, read back from the persisted round
+   *  (`Round.lockedViewport`). A committed lock outranks anything measured client-side since,
+   *  so it replaces an open measurement rather than deferring to it. */
+  hydrateLockedBox: (box: ImageDimensions) => void;
   /** Tears the lock down when a genuinely new chain starts (no UI reaches this yet). */
   startNewChain: () => void;
 }
@@ -37,9 +41,10 @@ export function lockedBoxOf(viewport: ChainViewport): ImageDimensions | null {
  * infers it and Bryan may correct it, the first committed iteration locks it, and every later
  * round reads the locked box instead of measuring its own reference again.
  *
- * In memory only, like the round image it describes (lib/stores/round-image.ts). The durable copy
- * travels on the round itself (`Round.lockedViewport`) and is propagated onto each new round in
- * the chain at persist time (lib/persist-round.ts).
+ * The durable copy travels on the round itself (`Round.lockedViewport`), is propagated onto each
+ * new round in the chain at persist time (lib/persist-round.ts), and is read back into this store
+ * on load by components/chain-viewport-hydrator.tsx — so a hard reload mid-chain restores the lock
+ * instead of re-opening the box for measurement.
  */
 export const useChainViewport = create<ChainViewportState>((set) => ({
   viewport: { status: "unmeasured" },
@@ -62,6 +67,8 @@ export const useChainViewport = create<ChainViewportState>((set) => ({
     set((state) =>
       state.viewport.status === "open" ? { viewport: { status: "locked", box: state.viewport.box } } : state,
     ),
+
+  hydrateLockedBox: (box) => set({ viewport: { status: "locked", box } }),
 
   startNewChain: () => set({ viewport: { status: "unmeasured" } }),
 }));

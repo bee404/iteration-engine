@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { StepHeader } from "@/components/step-header";
+import { LockedViewportNotice } from "@/components/viewport-box-field";
 import { readImageDimensions } from "@/lib/image-dimensions";
 import { preprocessScreenshot } from "@/lib/screenshot-preprocess";
 import { useChainViewport } from "@/lib/stores/chain-viewport";
@@ -67,15 +68,21 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
     (async () => {
       try {
         const rawDataUrl = await readAsDataUrl(file);
+        // The viewport box is the capture's own size, read off the file before anything touches
+        // it. It must not be read off the cropped copy below: trimming chrome shrinks the raster
+        // but not the viewport it was captured at, and every other surface in the app captions
+        // this file at its natural size.
+        const capturedBox = await readImageDimensions(rawDataUrl);
         // Strip browser/OS chrome and letterbox padding so the reference on /feedback is a clean UI.
         const processed = await preprocessScreenshot(rawDataUrl);
         const dataUrl = processed.dataUrl;
-        const dimensions =
-          processed.dimensions.width > 0 ? processed.dimensions : await readImageDimensions(dataUrl);
+        // What the reference container actually displays, which is the cropped raster when
+        // trimming happened — a different measurement from the viewport box above.
+        const dimensions = processed.dimensions.width > 0 ? processed.dimensions : capturedBox;
         if (cancelled) return;
         // A locked chain ignores this: after the first committed iteration the box is the
         // chain's, not this screenshot's (see lib/stores/chain-viewport.ts).
-        inferBox(dimensions);
+        inferBox(capturedBox);
         const rect = previewRef.current?.getBoundingClientRect();
         const origin = rect
           ? { top: rect.top, left: rect.left, width: rect.width, height: rect.height }
@@ -205,6 +212,10 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
                 )}
               </>
             )}
+
+            {/* A chain that already locked its box says so before the next screenshot lands:
+                whatever is uploaded here will be compared inside that box, not its own. */}
+            <LockedViewportNotice />
 
             <input
               ref={inputRef}

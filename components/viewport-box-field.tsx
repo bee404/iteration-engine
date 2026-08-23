@@ -28,6 +28,22 @@ function readout(viewport: ChainViewport): string {
 }
 
 /**
+ * The chain's box on screens with no reference image to hang it under: the /upload dropzone, and
+ * the /feedback empty state after a reload. Renders only once the box is locked — an open,
+ * still-correctable measurement belongs to a screenshot that isn't on screen, and offering the
+ * correction control there would invite a correction with nothing to check it against.
+ */
+export function LockedViewportNotice() {
+  const viewport = useChainViewport((state) => state.viewport);
+  if (viewport.status !== "locked") return null;
+  return (
+    <p className="viewport-box is-locked">
+      <span className="viewport-box-readout">{readout(viewport)}</span>
+    </p>
+  );
+}
+
+/**
  * The inferred viewport box, shown before synthesis with a correction affordance while the chain
  * is still open (Decision 14). Once the chain's first iteration is committed the box is locked and
  * this reads out as a fact — the correction control is gone for good, not merely disabled, so a
@@ -54,22 +70,23 @@ export function ViewportBoxField() {
     );
   }, []);
 
+  // The parse and the store write both happen here in the event handler, never inside a
+  // `setEditor` updater: React may run an updater during the render phase, so writing to the
+  // chain-viewport store from inside one updates other subscribers mid-render ("Cannot update a
+  // component while rendering a different component"). Updaters stay pure; effects stay outside.
   const submitCorrection = useCallback(() => {
-    setEditor((current) => {
-      if (current.status !== "editing") return current;
-      const parsed = parseViewportBox(current.draft);
-      if (parsed.status === "invalid") return { ...current, error: parsed.message };
-      correctBox(parsed.box);
-      return { status: "idle" };
-    });
-  }, [correctBox]);
+    if (editor.status !== "editing") return;
+    const parsed = parseViewportBox(editor.draft);
+    if (parsed.status === "invalid") {
+      setEditor({ status: "editing", draft: editor.draft, error: parsed.message });
+      return;
+    }
+    correctBox(parsed.box);
+    setEditor({ status: "idle" });
+  }, [editor, correctBox]);
 
   if (viewport.status === "locked") {
-    return (
-      <p className="viewport-box is-locked">
-        <span className="viewport-box-readout">{readout(viewport)}</span>
-      </p>
-    );
+    return <LockedViewportNotice />;
   }
 
   if (editor.status === "idle") {

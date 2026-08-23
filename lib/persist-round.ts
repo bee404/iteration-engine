@@ -62,12 +62,8 @@ function isDemoModeRefusal(response: Response, body: ApiErrorBody | null): boole
  * to because demo mode is on" from a real failure.
  */
 async function ensureProjectId(): Promise<string | { demoMode: true }> {
-  const listResponse = await fetch("/api/projects");
-  const listBody = await readJson<{ projects: Project[] }>(listResponse);
-  if (!listResponse.ok || !listBody) {
-    throw new Error(`Failed to list projects (${listResponse.status})`);
-  }
-  if (listBody.projects[0]) return listBody.projects[0].id;
+  const existing = await fetchFirstProjectId();
+  if (existing) return existing;
 
   const createResponse = await fetch("/api/projects", {
     method: "POST",
@@ -80,6 +76,17 @@ async function ensureProjectId(): Promise<string | { demoMode: true }> {
     throw new Error(createBody?.error ?? `Failed to create default project (${createResponse.status})`);
   }
   return createBody.project.id;
+}
+
+/** The single implicit project as it already exists, or null when nothing has been persisted yet
+ *  (a fresh database, or a demo-mode session that never wrote one). */
+async function fetchFirstProjectId(): Promise<string | null> {
+  const response = await fetch("/api/projects");
+  const body = await readJson<{ projects: Project[] }>(response);
+  if (!response.ok || !body) {
+    throw new Error(`Failed to list projects (${response.status})`);
+  }
+  return body.projects[0]?.id ?? null;
 }
 
 /** Most recent round for the project, if any — the round the new one chains onto. */
@@ -99,6 +106,21 @@ async function fetchLatestRound(projectId: string): Promise<Round | null> {
  */
 function resolveLockedViewport(previousRound: Round | null, draft: RoundDraft): ImageDimensions | null {
   return previousRound?.lockedViewport ?? draft.lockedViewport;
+}
+
+/**
+ * The box this chain already locked, as the server knows it — the durable counterpart to the
+ * in-memory store, read on load so a hard reload mid-chain does not re-open a committed box
+ * (Decision 14). Null when no round has been persisted yet or the chain never locked one.
+ *
+ * Throws on a genuine transport/API failure; the caller decides whether a failed rehydrate is
+ * worth surfacing. It never invents a box — an unreachable API leaves the chain unmeasured.
+ */
+export async function fetchChainLockedViewport(): Promise<ImageDimensions | null> {
+  const projectId = await fetchFirstProjectId();
+  if (!projectId) return null;
+  const latestRound = await fetchLatestRound(projectId);
+  return latestRound?.lockedViewport ?? null;
 }
 
 /**
