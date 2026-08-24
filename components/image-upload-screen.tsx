@@ -137,20 +137,24 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
               />
             </div>
           ) : (
-            /* The illustration is a single-path line drawing with one hardcoded fill, so as an
-               <img> its color is unreachable by any theme. Painting it as a CSS mask makes the
-               artwork a stencil that takes the theme's ink, which is the only way a second theme
-               can render it legibly on a dark ground. role/aria-label keep it announced. */
-            <span
-              className="upload-illustration"
-              role="img"
-              aria-label="A frog riding a goose, carrying a framed picture"
+            /* `upload-hero` (Figma node 184:557): Topo texture + dot-grid vectors + the Coquí
+               wordmark, exported from Figma as one flattened raster rather than recomposed as
+               separate layers here. Previously this was two theme-specific SVG lockups toggled by
+               [data-theme]; the 184:505 frame specifies a single banner that spans the card's full
+               content width, so one asset serves every theme and the per-theme swap is gone. */
+            <Image
+              className="upload-hero"
+              src="/brand/upload-hero.png"
+              alt="Coquí"
+              width={1040}
+              height={324}
+              priority
             />
           )}
 
           <div className="upload-content">
             <h1 id="upload-title">
-              {previewUrl ? "Screen ready to improve" : "Add the screen you want to improve"}
+              {previewUrl ? "Screen ready to improve" : "Upload the screen you want to improve"}
             </h1>
 
             {previewUrl ? (
@@ -181,8 +185,12 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
                 >
                   <span className="upload-dropzone-action">Select image to upload</span>
                   <span className="upload-dropzone-hint">
-                    also you can drop your image or <kbd>⌘</kbd>
-                    <kbd>V</kbd> to paste
+                    also you can drop your image or{" "}
+                    <span className="upload-paste-keys">
+                      <kbd>⌘</kbd>
+                      <kbd>V</kbd>
+                    </span>{" "}
+                    to paste
                   </span>
                 </button>
                 {uploadError && (

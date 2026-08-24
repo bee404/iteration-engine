@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 
 import { ThemeSwitch } from "@/components/theme-switch";
+import { THEME_SWITCHING_ENABLED } from "@/lib/theme";
 
 /**
  * The persistent outer chrome for the whole Coquí app (Figma node 132:3296, "Outer chrome"):
@@ -16,8 +17,10 @@ export function AppChrome({ children }: { children: ReactNode }) {
       <div className="app-chrome-dot-grid" aria-hidden="true" />
       <div className="app-chrome-content">{children}</div>
       {/* The step header is currently hidden pending redesign, so the theme switch lives on the
-          chrome itself: rendered once here, it persists across step navigation like the frame. */}
-      <ThemeSwitch />
+          chrome itself: rendered once here, it persists across step navigation like the frame.
+          THEME_SWITCHING_ENABLED is off while Obsidian53 is the sole brand direction, so this
+          renders nothing for now — flipping that flag back on is what brings the toggle back. */}
+      {THEME_SWITCHING_ENABLED && <ThemeSwitch />}
     </div>
   );
 }

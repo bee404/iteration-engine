@@ -304,7 +304,9 @@ Not specified in these frames. The established behavior — a flat white canvas 
 Stored from the source-frame exports under `public/brand/`; use these repository copies rather than expiring Figma asset URLs:
 
 - `coqui-wordmark.svg` — the Coquí logotype, 55.7 × 25.9
-- `coqui-illustration.svg` — engraved frog-and-goose empty-state illustration, 150 × 178
+- `coqui-illustration.svg` — engraved frog-and-goose empty-state illustration, 150 × 178. No longer rendered anywhere (see the upload screen entry below) but kept in the repo for a possible future return alongside the `coqui` theme.
+- `upload-hero.png` — the upload screen's empty-state graphic (Figma node 184:557 `upload-hero`, inside frame 184:505): Topo texture + dot-grid vectors + the Coquí wordmark, exported flat from Figma at 2x (1040 × 324, drawn at 520 × 162). Deliberately a raster, not a recomposed vector stack: the texture is the artwork, and rebuilding it from layers drifts from the frame every time the frame moves. It is a **transparent** PNG — only the lines, dots, and wordmark are painted — so the card's own background shows through and one asset serves every theme.
+- `coqui-logo-lockup-dark.svg` / `coqui-logo-lockup-light.svg` — the previous per-theme upload lockups (Figma node 182:491, "Coqui themes", Dark 182:492 / Light 182:483), 520 × 162 each. Superseded by `upload-hero.png` and no longer rendered anywhere; kept for the same reason as `coqui-illustration.svg`. They exist as a pair because their paint is NOT color-identical — the Light wordmark's gradient fill reads as noise on a dark surface — which is precisely the problem the transparent hero avoids.
 - `icon-volume-cross.svg` — header sound toggle, 20px
 - `icon-expand.svg` — expand-feedback glyph, 12px
 - `bg-sky-ambient.svg` — the top gradient band
@@ -318,20 +320,22 @@ Stored from the source-frame exports under `public/brand/`; use these repository
 4. **The wordmark and silhouette have separate jobs.** Use `coqui-wordmark.svg` in the header. Reserve `coqui-mark.svg` for favicon, app-icon, and other small-scale identity uses.
 5. **The canonical panel heading is "What should we fix?"** This corrects the typo in the source Figma frame; do not reproduce "What should we do fix?" in implementation.
 6. **The primary action is labeled "Synthesize".** This is the settled replacement for "Interpret feedback" across the workflow.
-7. **The gold shell is the default theme, not the only one.** Every color, radius, and family in this document is a `:root` token in `app/globals.css`; an alternate theme is a `[data-theme]` block that re-declares those tokens and nothing else. Adding one must not touch a component. See "Themes" below.
+7. **Every color, radius, and family in this document is a token, not the default.** Each is a CSS custom property in `app/globals.css`; the gold shell described here currently lives in a `[data-theme="coqui"]` override block rather than `:root` — see "Themes" below for which theme is default today and why that's expressed as a token swap, not a rewrite of this document.
 8. **Missing interaction states extend this system rather than reopen it.** Derive hover, focus, disabled, loading, and error states from the existing neutral, ink, line, and gold tokens. Preserve keyboard visibility, contrast, and reduced-motion behavior without introducing another accent.
 
 ## Themes
 
-This document specifies the **default theme, `coqui`** — the gold accent, dot-grid ground, and Owners Narrow / Figtree stack described above. It remains the default and is unchanged.
+This document specifies the **`coqui` theme** — the gold accent, dot-grid ground, and Owners Narrow / Figtree stack described above. It is no longer the default (see below) but every rule and token in this document still describes it accurately; only which theme `:root` resolves to has changed.
 
-A second theme, **`obsidian53`**, ships alongside it: Bryan's Obsidian53 studio direction, "Pairing 2C". It is opt-in, never automatic — it is not wired to `prefers-color-scheme`, because it is a brand direction rather than a dark mode.
+The active default is **`obsidian53`**: Bryan's Obsidian53 studio direction, "Pairing 2C", now the sole brand direction Coquí ships under. Neither theme is wired to `prefers-color-scheme` — this is a brand choice, not a dark-mode toggle.
+
+`coqui` is currently **retired from user view, not removed**: `THEME_SWITCHING_ENABLED` in `lib/theme.ts` is `false`, so the visible toggle (`ThemeSwitch`) renders nothing and there is no way for a user to reach it. Its tokens, CSS, and the switching infrastructure are all fully intact — flipping that one flag is the entire re-enable path. Treat every `coqui`-specific instruction below ("the gold shell", "the default theme") as describing the theme, not today's first impression.
 
 ### How themes work
 
-A theme is a block of CSS custom property overrides in `app/globals.css` and nothing else. There is one selector, `[data-theme="obsidian53"]`, on `<html>`. No component, layout, or spacing rule is duplicated per theme.
+A theme is a block of CSS custom property overrides in `app/globals.css` and nothing else. There is one selector per non-default theme; today that's `[data-theme="coqui"]`, since `obsidian53` is default. No component, layout, or spacing rule is duplicated per theme.
 
-The default theme is the **absence** of the attribute, not `data-theme="coqui"`, so `:root` alone is the default and there is exactly one way to be default.
+The default theme is the **absence** of the attribute, not `data-theme="obsidian53"`, so `:root` alone is the default and there is exactly one way to be default. Which theme is default is purely a question of which token block sits in `:root` versus behind a `[data-theme="..."]` selector — reversing it again later means moving blocks, not touching a component.
 
 Adding a theme means adding a token block, an entry to `THEMES` in `lib/theme.ts`, and its successor in that file's `SUCCESSOR` map. It should not mean touching component CSS. If it does, a hardcoded value has leaked into a component rule and belongs in a token instead.
 
@@ -340,12 +344,12 @@ Adding a theme means adding a token block, an entry to `THEMES` in `lib/theme.ts
 Beyond the ground/surface/ink/line ladder, three groups are easy to miss and will silently break a theme that inverts the ink ladder:
 
 - **`--on-accent-ink` and `--on-solid`.** These are *not* interchangeable, and neither can be derived from `--ink`. `--on-accent-ink` is type on a light accent field (the gold/banana buttons); it stays dark in every theme because the accent field stays light in every theme. `--on-solid` is type on an inverted-ink chip, and it does flip with the ladder.
-- **`--illustration-ink`.** The empty-state illustration is painted as a CSS mask rather than an `<img>` precisely so a theme can recolor it. An `<img>` with a baked-in fill is unreachable by any theme.
+- **`--illustration-ink`.** Still declared by both themes, but currently unconsumed: the upload screen's empty-state graphic is now `upload-hero.png`, a transparent full-color raster with its own baked-in paint, rather than a CSS mask that derives color from a token. Revive the token if a future illustration goes back to a single-path mask that should recolor per theme.
 - **`--bloom` and `--grain-opacity`.** Both are inert in the default theme (`none` and `0`). Obsidian53 turns them on for its single diffuse bloom and 0.06 grain wash.
 
 ### Selection and persistence
 
-`ThemeSwitch` (`components/theme-switch.tsx`) sits on the app chrome, bottom-right. The preference lives in `lib/stores/theme.ts` (zustand + `persist`, localStorage key `coqui:theme`) — the app's first persisted user preference, and the pattern to follow for the next one.
+`ThemeSwitch` (`components/theme-switch.tsx`) sits on the app chrome, bottom-right — but only while `THEME_SWITCHING_ENABLED` is `true`; it is currently `false`, so `app-chrome.tsx` doesn't mount it and there is no visible toggle. The preference lives in `lib/stores/theme.ts` (zustand + `persist`, localStorage key `coqui:theme`) — the app's first persisted user preference, and the pattern to follow for the next one.
 
 The store owns the DOM write, not a component effect, so the attribute changes exactly when the preference does. `THEME_INIT_SCRIPT` in `lib/theme.ts` runs inline in `<head>` before first paint so a returning user never sees a frame of the wrong theme.
 

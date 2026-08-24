@@ -1,123 +1,16 @@
 /*
- * Coquí design system — sourced from the two Figma frames "01 - add image" and
- * "02 - set brief" (file qzgdMASkzEkxZpRL3918QD) and the extracted spec in DESIGN.md.
- * Light, atmospheric ground; white cards float on a translucent bezel; a single gold
- * gradient marks the one commit action per screen. See DESIGN.md for the full rationale.
+ * Obsidian53 — Pairing 2C — is the default theme: it is Coquí's current brand direction, so
+ * :root carries its tokens directly and a first-time visitor gets it with zero `data-theme`
+ * attribute required. Dark, atmospheric ground; a single banana accent marks the one commit
+ * action per screen. Values are the locked "Obsidian & Banana" ramp, used verbatim — nothing is
+ * re-derived or tinted:
+ *   Void #0B0910 · Deep #15121C · Base #18191F · Ink #1E1F27 · Panel #24252C · Edge #35353B
+ *   Muted #53545A · Quiet #8A8A94 · Soft #C8C8C8 · Light #F9F9FB · Banana #F9F996
+ * Standout #FFFFFF is deliberately unmapped: the brand reserves true white so it can still jump
+ * off a surface, so no token here resolves to it.
  */
 
 :root {
-  /* Accent — the coquí's own gold, rationed to the one commit action + the empty-state invite. */
-  --accent: #e2b520;
-  --accent-text: #b28800;
-  --accent-grad-start: #f5cf4f;
-  --accent-grad-end: #f8c105;
-
-  /* Outer-chrome frame gold — measured directly off the Figma export for node 132:3296, distinct
-     from --accent (the in-app button/focus gold) so the two can diverge without cross-talk. */
-  --chrome-border: #f5cf4f;
-
-  /* Ink ladder — warm brown only for headings; everything else cool grey. */
-  --display-ink: #372606;
-  --ink: #10121a;
-  --ink-label: #404253;
-  --ink-body: #565d70;
-  --ink-mute: #8b91a3;
-  --ink-placeholder: #a8aebd;
-
-  /* Surface & line. */
-  --ground: #f8f9fb;
-  --surface: #ffffff;
-  --surface-veil: rgba(255, 255, 255, 0.8);
-  --bezel: rgba(212, 212, 212, 0.16);
-  --line: #e7e9ee;
-  --line-soft: #f0f2f5;
-  --line-dashed: #c7c9cb;
-  --keycap: rgba(16, 18, 26, 0.12);
-  --hairline-strong: rgba(16, 18, 26, 0.12);
-
-  /* Signal / preference tint for the critique columns (derived from the ink+accent families). */
-  --signal: #b4451f;
-  --preference: var(--accent-text);
-
-  /* Radii ladder — grows with the size of the thing it wraps. */
-  --r-sm: 6px;
-  --r-md: 8px;
-  --r-lg: 12px;
-  --r-xl: 16px;
-  --r-shell: 24px;
-
-  /* Elevation. */
-  --e-raised: 0 0.25px 2px rgba(0, 0, 0, 0.08), 0 2px 16px rgba(10, 13, 77, 0.02);
-  --e-card: 0 2px 4px rgba(16, 18, 26, 0.04), 0 18px 50px -8px rgba(16, 18, 26, 0.16);
-  --e-panel: 0 0.25px 2px rgba(0, 0, 0, 0.12), 0 2px 24px rgba(10, 13, 77, 0.12);
-  --e-vignette: inset 0 0 36px 12px #f8f9fb;
-
-  /* Type families. Owners Narrow is commercial (see DESIGN.md open question 1); Archivo Narrow
-     is loaded as a free stand-in for the display face until the licensed font is provided. */
-  --font-display: var(--font-owners, "Archivo Narrow"), "Figtree", sans-serif;
-  --font-body: var(--font-figtree, "Figtree"), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
-
-  /* Channel triplets. Every alpha-composited value in the sheet is authored as
-     `rgb(var(--x-rgb) / a)` rather than a baked rgba(), so an alternate theme inherits the
-     translucent layers — veils, focus rings, dot grid, scrims — and not just the opaque fills.
-     These are the same numbers as --ink / --surface / --accent / --chrome-border above. */
-  --ink-rgb: 16 18 26;
-  --surface-rgb: 255 255 255;
-  --accent-rgb: 226 181 32;
-  --chrome-rgb: 245 207 79;
-  /* The cool navy cast in the card/panel shadows, kept separate from neutral black. */
-  --shadow-cool-rgb: 10 13 77;
-  /* Shadows and modal scrims. Deliberately NOT --ink-rgb: an inverted theme flips ink to a light
-     value, and a light "shadow" is a glow while a light scrim fails to dim what's behind it. This
-     channel stays dark in every theme; only its opacity is tuned per theme. */
-  --shadow-rgb: 16 18 26;
-
-  /* Accent-adjacent surfaces: the faint warm wash under a hovered dropzone, plus the two inks that
-     sit *on* a solid fill. They are genuinely different cases and must not be collapsed:
-       --on-accent-ink  type on a light accent field (the gold/banana buttons and pill) — dark.
-       --on-solid       type on an inverted-ink chip (a dark fill in this theme)        — light.
-     Both must be declared per theme, not inherited from the ink ladder: the ladder flips with the
-     theme, but the accent field stays light in both, so type on it stays dark either way. */
-  --accent-wash: #fffdf5;
-  --on-accent-ink: #1a1400;
-  --on-solid: #ffffff;
-
-  /* The upward emboss under type on an accent fill. Deliberately not overridden per theme: the
-     accent field is light in both (gold, banana), so the highlight is white either way. A token
-     rather than a literal so the four accent buttons stay in agreement. */
-  --on-accent-emboss-rgb: 255 255 255;
-
-  /* Card radii, separate from the --r-* ladder: the ladder sizes controls and containers, these
-     size the floating cards, which an alternate theme may want materially rounder without also
-     rounding every input and button. --r-card-sm is the denser approach/selection card. */
-  --r-card: 16px;
-  --r-card-sm: 12px;
-
-  /* The empty-state illustration's ink. #372606 is the fill baked into the source SVG, restated
-     here so the default theme renders identically now that the artwork is painted through a mask
-     rather than an <img>. */
-  --illustration-ink: #372606;
-
-  /* Atmospherics. The default theme's light comes from the .app-glow horizon and its ground is
-     clean, so there is no bloom or grain; a dark theme turns both on via these knobs. */
-  --bloom: none;
-  --grain-opacity: 0;
-}
-
-/* ---------------------------------------------------------------------------
-   Obsidian53 — Pairing 2C. A selectable alternate theme, not a replacement: the default Coquí
-   palette above stays exactly as-is and remains the theme a first-time visitor gets. Everything
-   here is a pure token override on the same variable names the sheet already consumes, so no
-   component or layout rule is theme-aware.
-
-   Values are the locked "Obsidian & Banana" ramp, used verbatim — nothing is re-derived or tinted:
-     Void #0B0910 · Deep #15121C · Base #18191F · Ink #1E1F27 · Panel #24252C · Edge #35353B
-     Muted #53545A · Quiet #8A8A94 · Soft #C8C8C8 · Light #F9F9FB · Banana #F9F996
-   Standout #FFFFFF is deliberately unmapped: the brand reserves true white so it can still jump
-   off a surface, so no token here resolves to it.
---------------------------------------------------------------------------- */
-[data-theme="obsidian53"] {
   /* One voltage. Banana is the only saturated color in the theme, and the gold gradient
      collapses to a flat banana field — a two-stop gradient would read as two accents. */
   --accent: #f9f996;
@@ -127,9 +20,10 @@
   --accent-rgb: 249 249 150;
   --chrome-rgb: 249 249 150;
 
-  /* The 8px outer frame. Banana at that width would be a headline, not an accent, so the frame
-     drops to Ink and reads as a bezel around the darker Void interior. */
-  --chrome-border: #1e1f27;
+  /* Outer-chrome frame gold — measured directly off the Figma export for node 132:3296, same
+     value the Coquí theme uses. The persistent chrome frame is gold in every theme; it is not
+     an accent that varies with the palette, so this deliberately doesn't derive from --accent. */
+  --chrome-border: #f5cf4f;
 
   /* Ink ladder, inverted: Light for headings, Soft for body, Quiet for captions, Muted for
      placeholders. Banana never carries body text — it stays on accents and the one commit action. */
@@ -160,8 +54,7 @@
 
   /* Banana as type needs Ink or darker behind it; on a banana field the type inverts to Ink — so
      both inks land on Ink here, for opposite reasons: --on-accent-ink because banana is a light
-     field, --on-solid because this theme's inverted-ink chip is Light rather than dark.
-     --on-accent-emboss-rgb is deliberately not overridden (see :root). */
+     field, --on-solid because this theme's inverted-ink chip is Light rather than dark. */
   --accent-wash: #1e1f27;
   --on-accent-ink: #1e1f27;
   --on-solid: #1e1f27;
@@ -193,12 +86,120 @@
   /* One diffuse bloom, never a hard corner-to-corner gradient, plus a grain wash at 0.06. */
   --bloom: radial-gradient(ellipse 900px 520px at 50% -14%, rgb(249 249 150 / 0.07), transparent 68%);
   --grain-opacity: 0.06;
+
+  /* Tokens identical across every theme, kept here rather than duplicated in the Coquí override
+     below. Every alpha-composited value in the sheet is authored as `rgb(var(--x-rgb) / a)`
+     rather than a baked rgba(), so translucent layers — veils, focus rings, dot grid, scrims —
+     come along with a theme's opaque fills for free; --ink-rgb / --surface-rgb / --accent-rgb /
+     --chrome-rgb above are per-theme, --shadow-rgb below is not: shadows are always dark, only
+     their cast is themed (see --shadow-cool-rgb above). --r-sm / md / lg / xl are the control
+     radii ladder — --r-shell is themed (see the card-radii tokens above), the rest is not.
+     --on-accent-emboss-rgb: the accent field is light in every theme, so the highlight on it
+     stays white either way. */
+  --shadow-rgb: 16 18 26;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --on-accent-emboss-rgb: 255 255 255;
 }
 
-/* /workflow is the standalone explainer page, not part of the (app) product shell. It carries its
-   own scoped --workflow-* palette and depicts a light mock of someone else's UI, so re-pinning the
-   shared tokens it also touches keeps it rendering identically under either theme. */
-[data-theme="obsidian53"] .workflow-page {
+/* ---------------------------------------------------------------------------
+   Coquí — sourced from the two Figma frames "01 - add image" and "02 - set brief" (file
+   qzgdMASkzEkxZpRL3918QD) and the extracted spec in DESIGN.md. Light, atmospheric ground; white
+   cards float on a translucent bezel; a single gold gradient marks the one commit action per
+   screen. See DESIGN.md for the full rationale.
+
+   Retired from user view for now — see THEME_SWITCHING_ENABLED in lib/theme.ts — while
+   Obsidian53 is the sole brand direction, but the theme itself is untouched: a pure token
+   override on the same variable names the sheet already consumes, so no component or layout rule
+   is theme-aware, and flipping that flag is the entire re-enable path.
+--------------------------------------------------------------------------- */
+[data-theme="coqui"] {
+  /* Accent — the coquí's own gold, rationed to the one commit action + the empty-state invite. */
+  --accent: #e2b520;
+  --accent-text: #b28800;
+  --accent-grad-start: #f5cf4f;
+  --accent-grad-end: #f8c105;
+  --accent-rgb: 226 181 32;
+  --chrome-rgb: 245 207 79;
+
+  /* Outer-chrome frame gold — measured directly off the Figma export for node 132:3296, distinct
+     from --accent (the in-app button/focus gold) so the two can diverge without cross-talk. */
+  --chrome-border: #f5cf4f;
+
+  /* Ink ladder — warm brown only for headings; everything else cool grey. */
+  --display-ink: #372606;
+  --ink: #10121a;
+  --ink-label: #404253;
+  --ink-body: #565d70;
+  --ink-mute: #8b91a3;
+  --ink-placeholder: #a8aebd;
+  --ink-rgb: 16 18 26;
+
+  /* Surface & line. */
+  --ground: #f8f9fb;
+  --surface: #ffffff;
+  --surface-veil: rgba(255, 255, 255, 0.8);
+  --surface-rgb: 255 255 255;
+  --bezel: rgba(212, 212, 212, 0.16);
+  --line: #e7e9ee;
+  --line-soft: #f0f2f5;
+  --line-dashed: #c7c9cb;
+  --keycap: rgba(16, 18, 26, 0.12);
+  --hairline-strong: rgba(16, 18, 26, 0.12);
+
+  /* Signal / preference tint for the critique columns (derived from the ink+accent families). */
+  --signal: #b4451f;
+  --preference: var(--accent-text);
+
+  /* Accent-adjacent surfaces: the faint warm wash under a hovered dropzone, plus the two inks that
+     sit *on* a solid fill. They are genuinely different cases and must not be collapsed:
+       --on-accent-ink  type on a light accent field (the gold/banana buttons and pill) — dark.
+       --on-solid       type on an inverted-ink chip (a dark fill in this theme)        — light.
+     Both must be declared per theme, not inherited from the ink ladder: the ladder flips with the
+     theme, but the accent field stays light in both, so type on it stays dark either way. */
+  --accent-wash: #fffdf5;
+  --on-accent-ink: #1a1400;
+  --on-solid: #ffffff;
+
+  /* The cool navy cast in the card/panel shadows, kept separate from neutral black; --shadow-rgb
+     itself is theme-invariant (see :root). */
+  --shadow-cool-rgb: 10 13 77;
+  --e-raised: 0 0.25px 2px rgba(0, 0, 0, 0.08), 0 2px 16px rgba(10, 13, 77, 0.02);
+  --e-card: 0 2px 4px rgba(16, 18, 26, 0.04), 0 18px 50px -8px rgba(16, 18, 26, 0.16);
+  --e-panel: 0 0.25px 2px rgba(0, 0, 0, 0.12), 0 2px 24px rgba(10, 13, 77, 0.12);
+  --e-vignette: inset 0 0 36px 12px #f8f9fb;
+
+  /* Card radii, plus --r-shell (the invariant --r-* ladder lives in :root): the ladder sizes
+     controls and containers, these size the floating cards and the outer chrome shell, which
+     this theme wants materially squarer than Obsidian53's. --r-card-sm is the denser
+     approach/selection card. */
+  --r-card: 16px;
+  --r-card-sm: 12px;
+  --r-shell: 24px;
+
+  /* The empty-state illustration's ink. #372606 is the fill baked into the source SVG, restated
+     here so this theme renders identically now that the artwork is painted through a mask rather
+     than an <img>. */
+  --illustration-ink: #372606;
+
+  /* Type families. Owners Narrow is commercial (see DESIGN.md open question 1); Archivo Narrow
+     is loaded as a free stand-in for the display face until the licensed font is provided. */
+  --font-display: var(--font-owners, "Archivo Narrow"), "Figtree", sans-serif;
+  --font-body: var(--font-figtree, "Figtree"), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* Atmospherics. This theme's light comes from the .app-glow horizon and its ground is clean, so
+     there is no bloom or grain; Obsidian53 turns both on via these knobs. */
+  --bloom: none;
+  --grain-opacity: 0;
+}
+
+/* /workflow is the standalone explainer page, not part of the (app) product shell. It depicts a
+   light mock of someone else's UI and carries its own scoped --workflow-* palette, so it always
+   renders in Coquí's light tokens regardless of which theme is active. */
+.workflow-page {
   --surface: #ffffff;
   --surface-rgb: 255 255 255;
   --ink-rgb: 16 18 26;
@@ -212,7 +213,6 @@
   --font-display: var(--font-owners, "Archivo Narrow"), "Figtree", sans-serif;
   --font-body: var(--font-figtree, "Figtree"), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
-
 
 * {
   box-sizing: border-box;
@@ -1206,6 +1206,16 @@ body:has(.app-chrome) {
   isolation: isolate;
 }
 
+/* The upload screen's 184:501 reference frame calls for a warmer near-black ground than the
+   rest of the app; the gold bezel itself is now the global --chrome-border default (see :root
+   above), so only the ground needs a route-scoped override here. Lives on .app-chrome itself —
+   not .upload-page — so .app-chrome-dot-grid still shows through underneath (.upload-page stays
+   transparent; see below). Scoped via :has() to the upload route only — every other Obsidian53
+   screen keeps the standard Void ground. */
+.app-chrome:has(.upload-page:not(.feedback-page)) {
+  background: #17161a;
+}
+
 .app-chrome-dot-grid {
   position: absolute;
   inset: 0;
@@ -1247,12 +1257,23 @@ body:has(.app-chrome) {
 
 /* Coquí upload screen ----------------------------------------------------- */
 
+/* .upload-page is the shared shell for /upload, /feedback, /directions, and /synthesized
+   (the latter three also carry .feedback-page). Tokens default to the theme's own values here
+   so those three screens are untouched by anything below. */
 .upload-page {
   --upload-ground: var(--ground);
+  --upload-surface: var(--surface);
   --upload-ink: var(--ink);
   --upload-display: var(--display-ink);
   --upload-body: var(--ink-label);
   --upload-accent-text: var(--accent-text);
+  --upload-line-dashed: var(--line-dashed);
+  --upload-font-display: var(--font-display);
+  /* Figma 184:505 is named "Background+Border" and behaves like it: the card reads off the ground
+     by its 1px edge, not by elevation. Both tokens default to the plain theme surface here so the
+     three .feedback-page screens are unaffected; the hero screen overrides them below. */
+  --upload-card-line: var(--line);
+  --upload-card-bg: var(--surface);
   position: relative;
   display: flex;
   flex: 1;
@@ -1262,6 +1283,40 @@ body:has(.app-chrome) {
   color: var(--upload-ink);
   font-family: var(--font-body);
   isolation: isolate;
+}
+
+/* Bryan's updated dark treatment for the /upload hero screen only (Figma node 184:501,
+   "01 - add image"): a warmer, neutral near-black ground/card (rather than the cooler
+   ink/surface used app-wide in Obsidian53), the gold accent + display face carried over from
+   Coquí's own palette, and a lighter secondary ink for hint copy. Scoped to
+   :not(.feedback-page) so /feedback, /directions, and /synthesized keep the app-wide Obsidian53
+   tokens set above. This is a deliberate per-screen divergence, not an app-wide restyle — the
+   [data-theme="coqui"] override below keeps Coquí's own light design untouched too. */
+.upload-page:not(.feedback-page) {
+  --upload-ground: #17161a;
+  --upload-surface: #1c1b1a;
+  --upload-display: #f5f5f4;
+  --upload-body: #e4e3e2;
+  --upload-accent-text: #f5cf4f;
+  --upload-line-dashed: #4a4642;
+  --upload-font-display: var(--font-owners, "Archivo Narrow"), "Figtree", sans-serif;
+  /* 184:505's own paint, in the same warm neutral family as the ground above. The card darkens
+     top-to-bottom so the brief panel at its base sits in the deepest part of the panel and the
+     hero at the top sits on the lightest — a flat fill loses that separation. */
+  --upload-card-line: #343332;
+  --upload-card-bg: linear-gradient(180deg, #181716 0%, #0f0e0e 100%);
+}
+
+[data-theme="coqui"] .upload-page:not(.feedback-page) {
+  --upload-ground: var(--ground);
+  --upload-surface: var(--surface);
+  --upload-display: var(--display-ink);
+  --upload-body: var(--ink-label);
+  --upload-accent-text: var(--accent-text);
+  --upload-line-dashed: var(--line-dashed);
+  --upload-font-display: var(--font-display);
+  --upload-card-line: var(--line);
+  --upload-card-bg: var(--surface);
 }
 
 .upload-page::after {
@@ -1279,6 +1334,14 @@ body:has(.app-chrome) {
     radial-gradient(ellipse 480px 260px at 103% -6%, rgba(228, 201, 164, 0.1), transparent 72%);
   background-blend-mode: screen;
   opacity: 0.82;
+}
+
+/* Bryan's 184:501 reference shows a flat dot-grid ground with no top haze — this cool-toned
+   glow was tuned for the original Obsidian53 ground and reads as a mismatched smudge over the
+   new warmer near-black. Suppressed for the hero screen only; /feedback, /directions, and
+   /synthesized keep it. */
+.upload-page:not(.feedback-page)::after {
+  opacity: 0;
 }
 
 .upload-page-atmosphere {
@@ -1367,33 +1430,45 @@ body:has(.app-chrome) {
   padding: 16px 0 0;
 }
 
+/* Geometry measured off the Figma export of 184:501 (the frame that contains this card) at its
+   native 2x, so every number below is a halved render measurement, not an estimate: card 600x420
+   with a flat 40px inset, 520x162 hero, 40px hero-to-content gap, 24px heading-to-dropzone gap.
+   The card is named "Background+Border" in Figma and it means it literally — the previous
+   three-layer drop shadow is gone, and the panel now separates from the ground on a 1px edge and
+   a 12px radius (down from the 28px --r-card float). --r-card is deliberately not used here: this
+   card no longer floats, so the floating-card radius would misdescribe it. */
 .upload-card {
   display: flex;
-  width: min(680px, calc(100vw - 64px));
-  min-height: 440px;
+  width: min(600px, calc(100vw - 64px));
+  min-height: 420px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 28px;
-  padding: 44px 40px;
-  border-radius: var(--r-card);
-  background: var(--surface);
-  box-shadow: 0 0.25px 2px rgba(0, 0, 0, 0.08), 0 2px 16px rgb(var(--shadow-cool-rgb) / 0.02), 0 18px 25px rgb(var(--shadow-rgb) / 0.16);
-  transition: box-shadow 160ms ease, transform 160ms ease;
+  gap: 40px;
+  padding: 40px;
+  border: 1px solid var(--upload-card-line);
+  border-radius: var(--r-lg);
+  background: var(--upload-card-bg);
+  transition: border-color 160ms ease, transform 160ms ease;
 }
 
+/* Drag feedback rides the border rather than a shadow, so the card keeps its flat 184:505
+   silhouette while still confirming the drop target. */
 .upload-card.is-dragging {
-  box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.24), 0 18px 25px rgb(var(--shadow-rgb) / 0.16);
+  border-color: rgb(var(--accent-rgb) / 0.56);
   transform: translateY(-2px);
 }
 
-.upload-illustration {
+/* `upload-hero` (Figma 184:557) spans the card's full 520px content width and keeps its own
+   1040:324 ratio, so it scales with the card instead of being pinned to a fixed width. The PNG is
+   a transparent overlay — the topo lines, dot grid, and wordmark are painted, everything else is
+   alpha — which is why no background sits behind it: the card's own gradient shows through and
+   the hero reads as part of the panel rather than as a pasted-on tile. It is theme-independent
+   for the same reason, so the old dark/light asset pair and its [data-theme] swap are gone. */
+.upload-hero {
   display: block;
-  width: 200px;
-  height: 237px;
-  background-color: var(--illustration-ink);
-  -webkit-mask: url("/brand/coqui-illustration.svg") no-repeat center / contain;
-  mask: url("/brand/coqui-illustration.svg") no-repeat center / contain;
+  width: 100%;
+  height: auto;
 }
 
 .upload-preview-wrap {
@@ -1420,31 +1495,44 @@ body:has(.app-chrome) {
   gap: 24px;
 }
 
+/* 22px matches the cap height measured off the 184:501 export (16px design / 32px at 2x). The
+   export's advance width for this string is 332.5px against Archivo Narrow's 347px at the same
+   size — that ~4% is Owners Narrow vs. its stand-in, not a size error, so the size follows the
+   cap height and the old +0.48px tracking is dropped rather than tuned to force the width. */
 .upload-content h1 {
   width: 100%;
   margin: 0;
   color: var(--upload-display);
-  font-family: var(--font-display);
-  font-size: 24px;
-  font-weight: 400;
-  letter-spacing: 0.48px;
-  line-height: 1.15;
+  font-family: var(--upload-font-display);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: 0;
+  /* 34px, not a ratio: the export puts the heading's cap top 250.5px below the card top, which
+     only resolves if the line box is 34px tall (6px half-leading above a 22px face). A 1.2-ish
+     ratio shortens the box by ~8px and the whole stack below it drifts up. */
+  line-height: 34px;
   text-align: center;
 }
 
+/* 184:516 ("Aside - right: the brief"): 325x80, noticeably narrower than the 520px hero above it
+   rather than filling the content width, and squarer than the old 12px radius. --upload-surface
+   reads as a lift here rather than a match, because the card's gradient has already darkened
+   past it by the time the stack reaches this panel. */
 .upload-dropzone {
   display: flex;
-  width: min(560px, 100%);
+  width: min(325px, 100%);
   align-self: center;
-  min-height: 132px;
+  min-height: 80px;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
-  padding: 28px 24px;
-  border: 1px dashed var(--line-dashed);
-  border-radius: 12px;
-  background: var(--surface);
+  gap: 8px;
+  /* 15px rather than the measured ~16px so the box resolves to exactly the specified 80px: the
+     rows inside (19.2 + 8 + 20) plus 2px of border already spend 79.2 of it. */
+  padding: 15px 24px;
+  border: 1px dashed var(--upload-line-dashed);
+  border-radius: var(--r-md);
+  background: var(--upload-surface);
   color: var(--upload-body);
   font: inherit;
   text-align: center;
@@ -1475,9 +1563,18 @@ body:has(.app-chrome) {
   align-items: center;
   gap: 6px;
   color: var(--upload-body);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 300;
   line-height: 1.2;
+}
+
+/* Figma groups ⌘ and V as "Paste keys" (184:521) — a pair set tighter to each other (3px) than
+   the 6px that separates the group from the words either side of it, so the two keys read as one
+   chord. A single flex gap on the hint row cannot express both, hence the explicit group. */
+.upload-paste-keys {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
 }
 
 /* Shown in place of the dropzone once a screenshot lands — a status readout, not a confirmation
@@ -1501,15 +1598,18 @@ body:has(.app-chrome) {
   text-align: center;
 }
 
+/* 20px tall, ~21px (⌘) and ~17px (V) wide in the export — so the width is left to the glyph with
+   a floor, not fixed. The 0.2 alpha lands the chip on the export's #4d4947 against --surface; the
+   old 0.12 sat visibly darker than the reference. */
 .upload-dropzone kbd {
   display: inline-flex;
   height: 20px;
-  min-width: 20px;
+  min-width: 17px;
   align-items: center;
   justify-content: center;
-  padding: 2px 6px;
-  border-radius: 8px;
-  background: rgb(var(--ink-rgb) / 0.12);
+  padding: 0 5px;
+  border-radius: var(--r-sm);
+  background: rgb(var(--ink-rgb) / 0.2);
   color: var(--upload-ink);
   font: 700 11px/1.2 var(--font-body);
 }
@@ -1545,6 +1645,7 @@ body:has(.app-chrome) {
   .upload-card {
     width: 100%;
     min-height: 360px;
+    gap: 28px;
     padding: 24px 18px;
   }
 }

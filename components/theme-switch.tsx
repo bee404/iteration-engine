@@ -6,8 +6,12 @@ import { DEFAULT_THEME, THEME_LABELS, nextTheme } from "@/lib/theme";
 import { useThemeStore } from "@/lib/stores/theme";
 
 /**
- * The theme switch: one button that swaps between Coquí's default light shell and the Obsidian53
- * (Pairing 2C) dark theme, showing a swatch of the theme it will switch you *to*.
+ * The theme switch: one button that swaps between Coquí's light shell and the Obsidian53
+ * (Pairing 2C) dark default theme, showing a swatch of the theme it will switch you *to*.
+ *
+ * Not currently mounted: app-chrome.tsx only renders this while THEME_SWITCHING_ENABLED (in
+ * lib/theme.ts) is true. The component itself stays fully functional so re-enabling is a one-line
+ * change at the call site, not a rewrite here.
  *
  * Hydration: the persisted preference only exists on the client, so the server snapshot is pinned
  * to DEFAULT_THEME and React adopts the real value on its first client render. useSyncExternalStore
