@@ -1,13 +1,13 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260824140456590_github",
-  "base_packet": "cb_20260824130556716_github",
+  "packet_id": "cb_20260824140603890_github",
+  "base_packet": "cb_20260824140456590_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-24T14:04:56.590Z",
+  "generated_at": "2026-08-24T14:06:03.890Z",
   "changed": true,
-  "manifest_sha": "5ebf86109a8a57f7",
+  "manifest_sha": "89dbd4f7fa463790",
   "sources": [
     {
       "id": ".agents/product-marketing.md",
@@ -546,8 +546,8 @@
     {
       "id": "lib/providers/codegen/claude-provider.ts",
       "file": "lib/providers/codegen/claude-provider.ts",
-      "sha256": "5468376ccfb954a4aba7e5ab2c615603e86da5a740efa927c7929fff7cc52281",
-      "bytes": 14620
+      "sha256": "96190085abde28f2c337343f3659cc51d82ea284464ed466f28c1afa8debcad9",
+      "bytes": 7403
     },
     {
       "id": "lib/providers/codegen/errors.ts",
@@ -556,16 +556,34 @@
       "bytes": 1824
     },
     {
+      "id": "lib/providers/codegen/fallback-provider.test.ts",
+      "file": "lib/providers/codegen/fallback-provider.test.ts",
+      "sha256": "6ba1958525a2eacc614346000d7d2f1ef11c04353770f77041b66b2219142716",
+      "bytes": 4041
+    },
+    {
+      "id": "lib/providers/codegen/fallback-provider.ts",
+      "file": "lib/providers/codegen/fallback-provider.ts",
+      "sha256": "f9425d1d152f6ea6a001e2639665c065e7960e7d8ce831ab76536a63edf0f864",
+      "bytes": 2494
+    },
+    {
       "id": "lib/providers/codegen/fixture-provider.ts",
       "file": "lib/providers/codegen/fixture-provider.ts",
       "sha256": "cf7db499bf69d7951b80c2b1c53d3549d7708b6b5a0ec4c902921abf818d0dc9",
       "bytes": 1969
     },
     {
+      "id": "lib/providers/codegen/index.test.ts",
+      "file": "lib/providers/codegen/index.test.ts",
+      "sha256": "b2732a28c08248cffca5f15ea5557d9fa10ad6b081e9b41fa8ae3442ebe813d6",
+      "bytes": 2156
+    },
+    {
       "id": "lib/providers/codegen/index.ts",
       "file": "lib/providers/codegen/index.ts",
-      "sha256": "bf6a0e903ee567e6b50eb53fb9f4bf0fbafc54f20afce84bed945222d1624006",
-      "bytes": 1617
+      "sha256": "16d0b49c2789f2db3a3e8893505cc7171cd0ae0c4c28a8d1ddcd8075a42247a9",
+      "bytes": 2603
     },
     {
       "id": "lib/providers/codegen/mock-provider.ts",
@@ -574,10 +592,28 @@
       "bytes": 1497
     },
     {
+      "id": "lib/providers/codegen/openai-provider.test.ts",
+      "file": "lib/providers/codegen/openai-provider.test.ts",
+      "sha256": "e6d893679d448d0828131e698feeaceb04e044932c5eeee4e3b8b41e8931428f",
+      "bytes": 3840
+    },
+    {
+      "id": "lib/providers/codegen/openai-provider.ts",
+      "file": "lib/providers/codegen/openai-provider.ts",
+      "sha256": "6301dbb3ab959bcdaf37f2397657df0cf893d9b75cd86ef0bfe4ce6a4ee3581a",
+      "bytes": 5687
+    },
+    {
       "id": "lib/providers/codegen/postprocess.ts",
       "file": "lib/providers/codegen/postprocess.ts",
       "sha256": "dd3946a4e0afb87a82564832700be2b754a9f17ca1818e38c4e61ea55a414bb9",
       "bytes": 7284
+    },
+    {
+      "id": "lib/providers/codegen/shared.ts",
+      "file": "lib/providers/codegen/shared.ts",
+      "sha256": "f553a1f04cfc721eeace0f6d19519f900f5d8be9ed5357e3b421a4957a8f23b9",
+      "bytes": 7885
     },
     {
       "id": "lib/providers/codegen/types.ts",
@@ -588,8 +624,8 @@
     {
       "id": "lib/providers/llm/claude-provider.ts",
       "file": "lib/providers/llm/claude-provider.ts",
-      "sha256": "c80b825db2bf858f88e7585bc1f0a92cba2232a1e647afb9189ce83184270cca",
-      "bytes": 21065
+      "sha256": "25d1ecd7ec54e3973043afde34949ea6e5aa8309e15dc271ed4b4aa1cf8d614a",
+      "bytes": 7245
     },
     {
       "id": "lib/providers/llm/errors.ts",
@@ -598,22 +634,58 @@
       "bytes": 3275
     },
     {
+      "id": "lib/providers/llm/fallback-provider.test.ts",
+      "file": "lib/providers/llm/fallback-provider.test.ts",
+      "sha256": "d276942e7fdeae0fdc95d99fc2fc7ea4d9f54e0a2882c74f14d065d1a2d0f132",
+      "bytes": 5611
+    },
+    {
+      "id": "lib/providers/llm/fallback-provider.ts",
+      "file": "lib/providers/llm/fallback-provider.ts",
+      "sha256": "c8a4a8abda54d4b04b7ca4c8a692136f5af9411e930afb290e403cb6de50ea38",
+      "bytes": 2236
+    },
+    {
       "id": "lib/providers/llm/fixture-provider.ts",
       "file": "lib/providers/llm/fixture-provider.ts",
       "sha256": "4d9acb56fa611092bd891d0b5feda94f8a13703e3be05622933e8494b0f7b676",
       "bytes": 1083
     },
     {
+      "id": "lib/providers/llm/index.test.ts",
+      "file": "lib/providers/llm/index.test.ts",
+      "sha256": "17255e4d1d0593cb1d7699404bafe1c76756b24c7fdb01103056d814697504d3",
+      "bytes": 2087
+    },
+    {
       "id": "lib/providers/llm/index.ts",
       "file": "lib/providers/llm/index.ts",
-      "sha256": "bf8e84a3db33b95724a2fc0a7069b349b84eae2bca1db0b1358e4b77305adb7f",
-      "bytes": 2021
+      "sha256": "17f2e2fceee1c52e0aa0ba85bf474b598bd29b64388272f262fe1a5b7815e060",
+      "bytes": 2666
     },
     {
       "id": "lib/providers/llm/mock-provider.ts",
       "file": "lib/providers/llm/mock-provider.ts",
       "sha256": "f14d7cc8f28bb4f39b6ba886a84779129c5fc182e7b19ffcaa43fa596b67317c",
       "bytes": 3017
+    },
+    {
+      "id": "lib/providers/llm/openai-provider.test.ts",
+      "file": "lib/providers/llm/openai-provider.test.ts",
+      "sha256": "6eec34dca3bcef399f01fd03ccd02cebcecca3544fa8946ce8ccc2b0cc8f8550",
+      "bytes": 5850
+    },
+    {
+      "id": "lib/providers/llm/openai-provider.ts",
+      "file": "lib/providers/llm/openai-provider.ts",
+      "sha256": "364a4d5f26e55e13c5fc764e4f5d2ba4c9c1bb6ffa9c04907b80acaa3d4eea3f",
+      "bytes": 7653
+    },
+    {
+      "id": "lib/providers/llm/shared.ts",
+      "file": "lib/providers/llm/shared.ts",
+      "sha256": "780d5ca752dd9eb26a3c9b179aa89a748864dac6c647126a027cbd062c2753d5",
+      "bytes": 15613
     },
     {
       "id": "lib/providers/llm/types.ts",
@@ -870,14 +942,25 @@
   ],
   "source_changes": {
     "added": [
-      "lib/providers/patterns/errors.ts",
-      "lib/providers/patterns/twentyfirst-provider.test.ts",
-      "lib/providers/patterns/twentyfirst-provider.ts"
+      "lib/providers/codegen/fallback-provider.test.ts",
+      "lib/providers/codegen/fallback-provider.ts",
+      "lib/providers/codegen/index.test.ts",
+      "lib/providers/codegen/openai-provider.test.ts",
+      "lib/providers/codegen/openai-provider.ts",
+      "lib/providers/codegen/shared.ts",
+      "lib/providers/llm/fallback-provider.test.ts",
+      "lib/providers/llm/fallback-provider.ts",
+      "lib/providers/llm/index.test.ts",
+      "lib/providers/llm/openai-provider.test.ts",
+      "lib/providers/llm/openai-provider.ts",
+      "lib/providers/llm/shared.ts"
     ],
     "removed": [],
     "updated": [
-      "components/direction-card.tsx",
-      "lib/providers/patterns/index.ts"
+      "lib/providers/codegen/claude-provider.ts",
+      "lib/providers/codegen/index.ts",
+      "lib/providers/llm/claude-provider.ts",
+      "lib/providers/llm/index.ts"
     ]
   },
   "facts": [
@@ -1459,7 +1542,7 @@
   "missing_sources": [],
   "supplemental": [],
   "stats": {
-    "source_count": 143,
+    "source_count": 155,
     "fact_count": 40,
     "added": 0,
     "removed": 0,
