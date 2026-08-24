@@ -1,13 +1,13 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260824040603590_github",
-  "base_packet": "cb_20260824040343979_github",
+  "packet_id": "cb_20260824130556716_github",
+  "base_packet": "cb_20260824040603590_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-24T04:06:03.590Z",
+  "generated_at": "2026-08-24T13:05:56.716Z",
   "changed": true,
-  "manifest_sha": "814682289443733d",
+  "manifest_sha": "2c41d4b9275fee8a",
   "sources": [
     {
       "id": ".agents/product-marketing.md",
@@ -204,8 +204,8 @@
     {
       "id": "components/direction-card.tsx",
       "file": "components/direction-card.tsx",
-      "sha256": "53eebad6ab8605d278eb0cf5a8e81a614e39a9342e797cea6f913f206037a3f1",
-      "bytes": 7445
+      "sha256": "556ed8f9123b27d9c25e9ee10cb5857f21b3b2c56a28f71446dbecf39aeeaab8",
+      "bytes": 7412
     },
     {
       "id": "components/direction-selection-list.tsx",
@@ -714,8 +714,8 @@
     {
       "id": "lib/stores/chain-viewport.test.ts",
       "file": "lib/stores/chain-viewport.test.ts",
-      "sha256": "74bdea148cd79627255fff689af7b15acfe85cfc3d09da19410b5c9c94c3c103",
-      "bytes": 1732
+      "sha256": "882cca3995790b04bacbbfabf7b08078521e2befc9707de27c344dcb218bb454",
+      "bytes": 3158
     },
     {
       "id": "lib/stores/chain-viewport.ts",
@@ -851,17 +851,11 @@
     }
   ],
   "source_changes": {
-    "added": [
-      "lib/export-bundle.test.ts",
-      "lib/export-bundle.ts",
-      "lib/export-inlined-font.ts"
-    ],
+    "added": [],
     "removed": [],
     "updated": [
-      "app/globals.css",
-      "components/directions-comparison.tsx",
-      "components/round-workspace.tsx",
-      "package.json"
+      "components/direction-card.tsx",
+      "lib/stores/chain-viewport.test.ts"
     ]
   },
   "facts": [
