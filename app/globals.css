@@ -35,6 +35,9 @@
   --ink-placeholder: #53545a;
   --ink-rgb: 249 249 251;
 
+  /* Lifted off the dark ground so it stays legible without shouting. */
+  --danger: #f0857c;
+
   /* Surfaces. Void is the ground, Base is the card, Panel is anything raised above a card. */
   --ground: #0b0910;
   --surface: #18191f;
@@ -148,6 +151,9 @@
   --line-dashed: #c7c9cb;
   --keycap: rgba(16, 18, 26, 0.12);
   --hairline-strong: rgba(16, 18, 26, 0.12);
+
+  /* Validation failures only — the one place the palette is allowed to go red. */
+  --danger: #b3261e;
 
   /* Signal / preference tint for the critique columns (derived from the ink+accent families). */
   --signal: #b4451f;
@@ -506,15 +512,18 @@ body {
 }
 
 .stage-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
   margin: 14px 0 0 40px;
-  opacity: 0.5;
   font-size: 11.5px;
   color: var(--ink-body);
   align-self: flex-start;
 }
 
-.stage-caption .measure {
-  font-weight: 600;
+.stage-caption p {
+  margin: 0;
+  opacity: 0.5;
 }
 
 /* ---------------------------------------------------------------------------
@@ -2917,12 +2926,21 @@ body:has(.app-chrome) {
   transform: none;
 }
 
-.feedback-caption {
+/* Caption and viewport box ride together below the frame, out of flow, so neither factors into
+   the frame/form-panel centering pair in .feedback-body. */
+.feedback-reference-meta {
   position: absolute;
   top: 100%;
   left: 40px;
+  display: flex;
   max-width: 100%;
+  flex-direction: column;
+  gap: 6px;
   margin-top: 12px;
+}
+
+.feedback-caption {
+  max-width: 100%;
   overflow: hidden;
   color: var(--ink-body);
   font-size: 12.5px;
@@ -2931,6 +2949,96 @@ body:has(.app-chrome) {
   text-overflow: ellipsis;
   white-space: nowrap;
   opacity: 0.5;
+}
+
+/* ---------------------------------------------------------------------------
+   Viewport box — the chain's measurement, correctable until the first iteration
+   is committed and a plain readout afterwards (Decision 14).
+---------------------------------------------------------------------------- */
+.viewport-box {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  color: var(--ink-body);
+  font-size: 12.5px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.viewport-box-readout {
+  opacity: 0.5;
+}
+
+.viewport-box.is-locked .viewport-box-readout {
+  opacity: 0.75;
+}
+
+.viewport-box-action {
+  padding: 3px 9px;
+  border: 0;
+  border-radius: 999px;
+  background: rgb(var(--shadow-rgb) / 0.06);
+  color: var(--ink-label);
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.viewport-box-action:hover {
+  background: rgb(var(--shadow-rgb) / 0.1);
+}
+
+.viewport-box-action.is-primary {
+  background: var(--accent);
+  color: var(--display-ink);
+}
+
+.viewport-box-action:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.viewport-box-field {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-mute);
+  font-size: 11.5px;
+  font-weight: 600;
+}
+
+.viewport-box-input {
+  width: 62px;
+  padding: 3px 6px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm, 6px);
+  background: var(--surface);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 12.5px;
+}
+
+.viewport-box-input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+.viewport-box-input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+
+.viewport-box-times {
+  color: var(--ink-mute);
+}
+
+.viewport-box-error {
+  flex-basis: 100%;
+  color: var(--danger);
+  font-size: 11.5px;
+  font-weight: 500;
 }
 
 /* Wraps the title + card as one animated unit, but only the card's own box height feeds the

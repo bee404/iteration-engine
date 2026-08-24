@@ -5,9 +5,9 @@ import type { ImageDimensions } from "@/lib/types";
 import { authorizeRequest } from "@/lib/security/access";
 import { resolveScreenshotDataUrl, ScreenshotValidationError } from "@/lib/security/screenshot";
 
-/** Accepts screenshot dimensions from the request body only when both values are finite
+/** Accepts a dimension pair from the request body only when both values are finite
  * positive numbers; anything else (missing, partial, malformed) is treated as absent. */
-function parseScreenshotDimensions(value: unknown): ImageDimensions | null {
+function parseDimensions(value: unknown): ImageDimensions | null {
   if (!value || typeof value !== "object") return null;
   const { width, height } = value as Record<string, unknown>;
   if (typeof width !== "number" || typeof height !== "number") return null;
@@ -59,7 +59,8 @@ export async function POST(request: Request) {
     projectId: body.projectId,
     previousRoundId: body.previousRoundId ?? null,
     screenshotRef: body.screenshotRef,
-    screenshotDimensions: parseScreenshotDimensions(body.screenshotDimensions),
+    screenshotDimensions: parseDimensions(body.screenshotDimensions),
+    lockedViewport: parseDimensions(body.lockedViewport),
     designGoal: body.designGoal,
     feedbackText: body.feedbackText,
     reviewerContext: body.reviewerContext ?? null,

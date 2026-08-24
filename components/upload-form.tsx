@@ -3,7 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRoundStore } from "@/store/round-store";
 import { readImageDimensions } from "@/lib/image-dimensions";
+import { useChainViewport } from "@/lib/stores/chain-viewport";
 import { AddImageIcon, ExpandIcon } from "./coqui-marks";
+import { ViewportBoxField } from "./viewport-box-field";
 
 interface UploadFormProps {
   onSubmit: () => void;
@@ -21,7 +23,6 @@ interface UploadFormProps {
  */
 export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
   const screenshotRef = useRoundStore((s) => s.screenshotRef);
-  const dimensions = useRoundStore((s) => s.screenshotDimensions);
   const designGoal = useRoundStore((s) => s.designGoal);
   const feedbackText = useRoundStore((s) => s.feedbackText);
   const reviewerContext = useRoundStore((s) => s.reviewerContext);
@@ -32,6 +33,7 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
   const setFeedbackText = useRoundStore((s) => s.setFeedbackText);
   const setReviewerContext = useRoundStore((s) => s.setReviewerContext);
   const setConstraints = useRoundStore((s) => s.setConstraints);
+  const inferBox = useChainViewport((s) => s.inferBox);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [fileName, setFileName] = useState<string | null>(null);
@@ -46,6 +48,7 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
       if (!file) {
         setScreenshotRef(null);
         setScreenshotDimensions(null);
+        inferBox(null);
         setFileName(null);
         return;
       }
@@ -54,11 +57,14 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
       reader.onload = async () => {
         if (typeof reader.result !== "string") return;
         setScreenshotRef(reader.result);
-        setScreenshotDimensions(await readImageDimensions(reader.result));
+        const dimensions = await readImageDimensions(reader.result);
+        setScreenshotDimensions(dimensions);
+        // Ignored once the chain has locked its box (see lib/stores/chain-viewport.ts).
+        inferBox(dimensions);
       };
       reader.readAsDataURL(file);
     },
-    [setScreenshotRef, setScreenshotDimensions],
+    [setScreenshotRef, setScreenshotDimensions, inferBox],
   );
 
   function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -109,13 +115,10 @@ export function UploadForm({ onSubmit, disabled }: UploadFormProps) {
               {/* eslint-disable-next-line @next/next/no-img-element -- local data URL, not an optimizable remote asset */}
               <img src={screenshotRef} alt="Uploaded screenshot" />
             </div>
-            <p className="stage-caption">
-              {fileName ?? "screenshot"}
-              {" · "}
-              <span className="measure">
-                {dimensions ? `${dimensions.width} × ${dimensions.height}` : "—"}
-              </span>{" · viewport inferred"}
-            </p>
+            <div className="stage-caption">
+              <p>{fileName ?? "screenshot"}</p>
+              <ViewportBoxField />
+            </div>
           </div>
 
           {/* Frame 2 — Brief panel */}

@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 
 import { AppChrome } from "@/components/app-chrome";
+import { ChainViewportHydrator } from "@/components/chain-viewport-hydrator";
+import { isDemoMode } from "@/lib/demo-mode";
 
 /**
  * Route-group layout for every Coquí step screen (/upload, /feedback, /directions,
@@ -11,6 +13,13 @@ import { AppChrome } from "@/components/app-chrome";
  * and are unaffected.
  */
 export default function AppShellLayout({ children }: { children: ReactNode }) {
-  return <AppChrome>{children}</AppChrome>;
+  return (
+    <AppChrome>
+      {/* Reads the chain's committed viewport box back out of the persisted round, so a hard
+          reload mid-chain restores the lock instead of re-opening the box. */}
+      <ChainViewportHydrator persistenceEnabled={!isDemoMode()} />
+      {children}
+    </AppChrome>
+  );
 }
 

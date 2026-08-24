@@ -80,6 +80,10 @@ export interface Round {
   /** Natural pixel dimensions of screenshotRef, or null for legacy rounds captured before
    * dimension capture existed (or when the image never loaded). */
   screenshotDimensions: ImageDimensions | null;
+  /** The chain's viewport box, fixed when its first iteration was committed (Decision 14). Carried
+   * onto every later round in the chain rather than re-inferred from that round's own reference,
+   * so the comparison box never moves mid-chain. Null for rounds committed before the lock existed. */
+  lockedViewport: ImageDimensions | null;
   designGoal: string;
   feedbackText: string;
   reviewerContext: string | null;

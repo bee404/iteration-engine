@@ -1,4 +1,12 @@
-import type { ApprovalStatus, Critique, Direction, GeneratedCode, Project, Round } from "@/lib/types";
+import type {
+  ApprovalStatus,
+  Critique,
+  Direction,
+  GeneratedCode,
+  ImageDimensions,
+  Project,
+  Round,
+} from "@/lib/types";
 
 /**
  * Draft shape of the in-progress round, taken straight from the Zustand store at the
@@ -7,6 +15,10 @@ import type { ApprovalStatus, Critique, Direction, GeneratedCode, Project, Round
  */
 export interface RoundDraft {
   screenshotRef: string | null;
+  screenshotDimensions: ImageDimensions | null;
+  /** The box this chain locked, as the client knows it. Only used when this round opens the
+   *  chain — a continuing round inherits the box already locked upstream. */
+  lockedViewport: ImageDimensions | null;
   designGoal: string;
   feedbackText: string;
   reviewerContext: string;
@@ -50,12 +62,8 @@ function isDemoModeRefusal(response: Response, body: ApiErrorBody | null): boole
  * to because demo mode is on" from a real failure.
  */
 async function ensureProjectId(): Promise<string | { demoMode: true }> {
-  const listResponse = await fetch("/api/projects");
-  const listBody = await readJson<{ projects: Project[] }>(listResponse);
-  if (!listResponse.ok || !listBody) {
-    throw new Error(`Failed to list projects (${listResponse.status})`);
-  }
-  if (listBody.projects[0]) return listBody.projects[0].id;
+  const existing = await fetchFirstProjectId();
+  if (existing) return existing;
 
   const createResponse = await fetch("/api/projects", {
     method: "POST",
@@ -70,14 +78,49 @@ async function ensureProjectId(): Promise<string | { demoMode: true }> {
   return createBody.project.id;
 }
 
-/** Most recent round for the project, if any — becomes `previousRoundId` for the new round. */
-async function fetchLatestRoundId(projectId: string): Promise<string | null> {
+/** The single implicit project as it already exists, or null when nothing has been persisted yet
+ *  (a fresh database, or a demo-mode session that never wrote one). */
+async function fetchFirstProjectId(): Promise<string | null> {
+  const response = await fetch("/api/projects");
+  const body = await readJson<{ projects: Project[] }>(response);
+  if (!response.ok || !body) {
+    throw new Error(`Failed to list projects (${response.status})`);
+  }
+  return body.projects[0]?.id ?? null;
+}
+
+/** Most recent round for the project, if any — the round the new one chains onto. */
+async function fetchLatestRound(projectId: string): Promise<Round | null> {
   const response = await fetch(`/api/rounds?projectId=${encodeURIComponent(projectId)}`);
   const body = await readJson<{ rounds: Round[] }>(response);
   if (!response.ok || !body) {
     throw new Error(`Failed to load round history (${response.status})`);
   }
-  return body.rounds[0]?.id ?? null;
+  return body.rounds[0] ?? null;
+}
+
+/**
+ * The viewport box belongs to the chain, so a round that continues one carries the box locked
+ * upstream rather than whatever its own reference happens to measure (Decision 14). Only the
+ * round that opens a chain contributes a box of its own.
+ */
+function resolveLockedViewport(previousRound: Round | null, draft: RoundDraft): ImageDimensions | null {
+  return previousRound?.lockedViewport ?? draft.lockedViewport;
+}
+
+/**
+ * The box this chain already locked, as the server knows it — the durable counterpart to the
+ * in-memory store, read on load so a hard reload mid-chain does not re-open a committed box
+ * (Decision 14). Null when no round has been persisted yet or the chain never locked one.
+ *
+ * Throws on a genuine transport/API failure; the caller decides whether a failed rehydrate is
+ * worth surfacing. It never invents a box — an unreachable API leaves the chain unmeasured.
+ */
+export async function fetchChainLockedViewport(): Promise<ImageDimensions | null> {
+  const projectId = await fetchFirstProjectId();
+  if (!projectId) return null;
+  const latestRound = await fetchLatestRound(projectId);
+  return latestRound?.lockedViewport ?? null;
 }
 
 /**
@@ -92,7 +135,7 @@ export async function persistApprovedRound(draft: RoundDraft): Promise<PersistRo
     const projectId = await ensureProjectId();
     if (typeof projectId !== "string") return { status: "demo_mode" };
 
-    const previousRoundId = await fetchLatestRoundId(projectId);
+    const previousRound = await fetchLatestRound(projectId);
 
     const generatedCode = Object.entries(draft.generatedCodeByDirection).map(([directionId, entry]) => ({
       directionId,
@@ -106,8 +149,10 @@ export async function persistApprovedRound(draft: RoundDraft): Promise<PersistRo
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         projectId,
-        previousRoundId,
+        previousRoundId: previousRound?.id ?? null,
         screenshotRef: draft.screenshotRef ?? "",
+        screenshotDimensions: draft.screenshotDimensions,
+        lockedViewport: resolveLockedViewport(previousRound, draft),
         designGoal: draft.designGoal,
         feedbackText: draft.feedbackText,
         reviewerContext: draft.reviewerContext || null,

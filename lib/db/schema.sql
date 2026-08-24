@@ -21,6 +21,12 @@ CREATE TABLE IF NOT EXISTS rounds (
   -- created before dimension capture existed; load-bearing for the before/after visual diff.
   screenshot_width INTEGER,
   screenshot_height INTEGER,
+  -- The chain's viewport box, fixed when its first iteration was committed (Decision 14) and
+  -- copied onto every later round in the chain. Distinct from screenshot_width/height: those
+  -- describe this round's own reference image, this describes the frame the chain is judged in.
+  -- Nullable for rounds written before the lock existed.
+  locked_viewport_width INTEGER,
+  locked_viewport_height INTEGER,
   design_goal TEXT NOT NULL,
   feedback_text TEXT NOT NULL,
   reviewer_context TEXT,
