@@ -1,13 +1,13 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260824130556716_github",
-  "base_packet": "cb_20260824040603590_github",
+  "packet_id": "cb_20260824140456590_github",
+  "base_packet": "cb_20260824130556716_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-24T13:05:56.716Z",
+  "generated_at": "2026-08-24T14:04:56.590Z",
   "changed": true,
-  "manifest_sha": "2c41d4b9275fee8a",
+  "manifest_sha": "5ebf86109a8a57f7",
   "sources": [
     {
       "id": ".agents/product-marketing.md",
@@ -204,8 +204,8 @@
     {
       "id": "components/direction-card.tsx",
       "file": "components/direction-card.tsx",
-      "sha256": "556ed8f9123b27d9c25e9ee10cb5857f21b3b2c56a28f71446dbecf39aeeaab8",
-      "bytes": 7412
+      "sha256": "ba498095e74e2ab0b686d308c49ad0c18902ca021a14f8ea2863cd2b993e44cb",
+      "bytes": 7468
     },
     {
       "id": "components/direction-selection-list.tsx",
@@ -628,16 +628,34 @@
       "bytes": 821
     },
     {
+      "id": "lib/providers/patterns/errors.ts",
+      "file": "lib/providers/patterns/errors.ts",
+      "sha256": "188dad1af31fc666179fc33a8528a287b83c686c940b72bda3cb791200cfd3dd",
+      "bytes": 1182
+    },
+    {
       "id": "lib/providers/patterns/index.ts",
       "file": "lib/providers/patterns/index.ts",
-      "sha256": "22a320f65361b328be0f877e83fd1e02176fb3225dec513d64dac48992c04420",
-      "bytes": 552
+      "sha256": "13e02314bf25c2fbfedc3096225bc189a4e1af438bbeadf9c4dc4f5b6db40290",
+      "bytes": 1019
     },
     {
       "id": "lib/providers/patterns/mock-provider.ts",
       "file": "lib/providers/patterns/mock-provider.ts",
       "sha256": "a6a41f6eddf9a8a2a7c9b001cd59853475e911afc5c020c07422fa7c21290ba3",
       "bytes": 2007
+    },
+    {
+      "id": "lib/providers/patterns/twentyfirst-provider.test.ts",
+      "file": "lib/providers/patterns/twentyfirst-provider.test.ts",
+      "sha256": "7bd2e6b50127f8afca40fa912a2a9575fb8fa424fb23f1beb05a4106912bea86",
+      "bytes": 7292
+    },
+    {
+      "id": "lib/providers/patterns/twentyfirst-provider.ts",
+      "file": "lib/providers/patterns/twentyfirst-provider.ts",
+      "sha256": "7604bd84aaa67f13c2009456ad13faabc12ebb70e73c21fae6980b61d2c3cd60",
+      "bytes": 6899
     },
     {
       "id": "lib/providers/patterns/types.ts",
@@ -851,11 +869,15 @@
     }
   ],
   "source_changes": {
-    "added": [],
+    "added": [
+      "lib/providers/patterns/errors.ts",
+      "lib/providers/patterns/twentyfirst-provider.test.ts",
+      "lib/providers/patterns/twentyfirst-provider.ts"
+    ],
     "removed": [],
     "updated": [
       "components/direction-card.tsx",
-      "lib/stores/chain-viewport.test.ts"
+      "lib/providers/patterns/index.ts"
     ]
   },
   "facts": [
@@ -1437,7 +1459,7 @@
   "missing_sources": [],
   "supplemental": [],
   "stats": {
-    "source_count": 140,
+    "source_count": 143,
     "fact_count": 40,
     "added": 0,
     "removed": 0,
