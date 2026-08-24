@@ -8,6 +8,9 @@ import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import { ReferenceImage } from "@/components/reference-image";
 import { StepHeader } from "@/components/step-header";
 import { LockedViewportNotice } from "@/components/viewport-box-field";
+import { requestCritique } from "@/lib/round-api";
+import { encodeScreenshotForModel } from "@/lib/screenshot-encode";
+import { useRoundGeneration } from "@/lib/stores/round-generation";
 import { useRoundImage } from "@/lib/stores/round-image";
 import { useStepStage } from "@/lib/use-step-stage";
 
@@ -26,6 +29,7 @@ export function FeedbackScreen() {
   const image = useRoundImage((state) => state.image);
   const clearTransition = useRoundImage((state) => state.clearTransition);
   const setBrief = useRoundImage((state) => state.setBrief);
+  const setCritique = useRoundGeneration((state) => state.setCritique);
   const stage = useStepStage();
   // Snapshot the origin rect once: the store's copy is cleared as soon as the entrance plays.
   const [origin] = useState(() => useRoundImage.getState().transitionOrigin);
@@ -40,6 +44,7 @@ export function FeedbackScreen() {
   const [constraints, setConstraints] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
   const [status, setStatus] = useState<SynthesizeStatus>("idle");
+  const [error, setError] = useState<string | null>(null);
 
   useLayoutEffect(() => {
     if (!image || !origin || !referenceImgRef.current) {
@@ -99,18 +104,40 @@ export function FeedbackScreen() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const handleSynthesize = useCallback(() => {
-    if (status !== "idle" || !goal.trim() || !feedback.trim()) return;
+  // "Synthesize" is the round's real critique call. It used to be a 700ms setTimeout that navigated
+  // on to a fixture-backed /directions, which is why a live run through the UI produced the same
+  // canned output every time even with DEMO_MODE=false and real keys configured. The screenshot is
+  // sent as the data URL staged by /upload — the only screenshotRef form /api/critique accepts.
+  const handleSynthesize = useCallback(async () => {
+    if (status !== "idle" || !goal.trim() || !feedback.trim() || !image) return;
     setStatus("synthesizing");
-    // No backend yet: treat the click as a successful synthesis — persist the brief (the data prep
-    // the three /directions cards read from), then run the canonical exit-up transition straight to
-    // /directions. The /synthesized recap is skipped entirely: it was an unnecessary confirmation
-    // stop between writing the brief and seeing the directions, not a required step in the chain.
-    window.setTimeout(() => {
+    setError(null);
+
+    try {
+      // The displayed reference stays full-resolution; only the transmitted copy is shrunk to fit
+      // the route's 3 MB ceiling, which a retina capture clears on its own.
+      const screenshotRef = await encodeScreenshotForModel(image.dataUrl);
+      const critique = await requestCritique({
+        screenshotRef,
+        designGoal: goal,
+        feedbackText: feedback,
+        reviewerContext: reviewerContext.trim() || undefined,
+        constraints: constraints.trim() || undefined,
+      });
       setBrief({ goal, feedback, reviewerContext, constraints });
+      setCritique(critique);
+      setStatus("done");
+      // The /synthesized recap is skipped: it was an unnecessary confirmation stop between writing
+      // the brief and seeing the directions, not a required step in the chain.
       stage.exit(() => router.push("/directions"));
-    }, 700);
-  }, [goal, feedback, reviewerContext, constraints, status, setBrief, stage, router]);
+    } catch (critiqueError) {
+      // Surface the route's typed message and return the button to idle so the run can be retried.
+      // Falling through to /directions on a failed critique is what would put fabricated output in
+      // front of the user again.
+      setError(critiqueError instanceof Error ? critiqueError.message : "Critique failed");
+      setStatus("idle");
+    }
+  }, [goal, feedback, reviewerContext, constraints, status, image, setBrief, setCritique, stage, router]);
 
   const canSynthesize = goal.trim().length > 0 && feedback.trim().length > 0 && status === "idle";
 
@@ -228,8 +255,18 @@ export function FeedbackScreen() {
                 data-status={status}
               >
                 {status === "synthesizing" && <span className="feedback-spinner" aria-hidden="true" />}
-                {status === "synthesizing" ? "Synthesizing…" : status === "done" ? "Synthesized" : "Synthesize"}
+                {status === "synthesizing" ? "Reading your screen…" : status === "done" ? "Synthesized" : "Synthesize"}
               </button>
+              {status === "synthesizing" && (
+                <p className="feedback-commit-note">
+                  Claude is looking at your screenshot against this brief. This takes a few seconds.
+                </p>
+              )}
+              {error && (
+                <p className="feedback-commit-error" role="alert">
+                  {error}
+                </p>
+              )}
             </div>
           </div>
         </aside>

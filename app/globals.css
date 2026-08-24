@@ -4310,3 +4310,121 @@ body:has(.app-chrome) {
   }
 }
 
+
+/* ---------------------------------------------------------------------------
+   Live-generation states for the stepped round flow. /feedback and /directions
+   now make real model calls, so both screens need visible pending and error
+   states — a multi-second request with no feedback reads as a dead button.
+   --------------------------------------------------------------------------- */
+
+.feedback-commit-note {
+  margin: 10px 0 0;
+  color: var(--ink-mute);
+  font-size: 11.5px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.feedback-commit-error {
+  margin: 10px 0 0;
+  color: var(--danger);
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+.round-actions-note {
+  margin: 10px 0 0;
+  color: var(--ink-mute);
+  font-size: 12px;
+}
+
+.directions-status {
+  display: flex;
+  max-width: 640px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  color: var(--ink-mute);
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.directions-status p {
+  margin: 0;
+}
+
+.directions-status--error {
+  color: var(--danger);
+}
+
+/* The critique that grounds this round's directions, sitting between the step header and the
+   cards so the output is legibly per-run rather than a fixed set of three approaches. */
+.directions-critique {
+  display: flex;
+  width: 100%;
+  max-width: 1000px;
+  flex-direction: column;
+  gap: 14px;
+  padding: 20px 22px;
+  border: 1px solid var(--line-soft);
+  border-radius: var(--r-lg);
+  background: var(--surface-veil);
+}
+
+.directions-critique__kicker {
+  color: var(--accent-text);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.directions-critique__summary {
+  margin: 0;
+  color: var(--display-ink);
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.directions-critique__columns {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.directions-critique__label {
+  margin: 0 0 6px;
+  color: var(--ink-mute);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.directions-critique__list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: 0;
+  padding-left: 16px;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* Ambiguities Claude could not act on: set apart from signal/preference so they read as a
+   question back to the reviewer rather than a third category of finding. */
+.directions-critique__flagged {
+  padding-top: 14px;
+  border-top: 1px solid var(--line-soft);
+}
+
+.directions-critique__model {
+  margin: 0;
+  color: var(--ink-mute);
+  font-size: 11px;
+}
