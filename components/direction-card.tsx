@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { useChainViewport } from "@/lib/stores/chain-viewport";
+import { lockedBoxOf, useChainViewport } from "@/lib/stores/chain-viewport";
 import type { Direction } from "@/lib/types";
 import { resolveComparisonViewport } from "@/lib/comparison-viewport";
 import { useRoundStore } from "@/store/round-store";
@@ -33,15 +33,15 @@ export function DirectionCard({ direction, designGoal, screenshotRef, isSelected
   const completeCodeGen = useRoundStore((s) => s.completeCodeGen);
   const failCodeGen = useRoundStore((s) => s.failCodeGen);
   const lockBox = useChainViewport((s) => s.lockBox);
+  const lockedViewport = useChainViewport((s) => lockedBoxOf(s.viewport));
   const screenshotDimensions = useRoundStore((s) => s.screenshotDimensions);
 
-  // The box the Source/Iteration comparison renders into. The screenshot's natural size is the
-  // interim source of truth; the per-chain viewport lock (PR #32, `useChainViewport` +
-  // `lockedBoxOf`) is the real one, and this is the single call site to switch now that it is
-  // on main — pass the locked box as `lockedViewport` and the resolver already prefers it.
-  // TODO(viewport-lock): replace `lockedViewport: null` with the chain's locked box.
+  // The box the Source/Iteration comparison renders into. The per-chain viewport lock (PR #32)
+  // is the real source of truth once one exists; the screenshot's natural size is only the
+  // fallback for a chain that hasn't locked yet. `resolveComparisonViewport` already prefers a
+  // non-null `lockedViewport` over `screenshotDimensions`.
   const comparisonViewport = resolveComparisonViewport({
-    lockedViewport: null,
+    lockedViewport,
     screenshotDimensions,
   });
 
