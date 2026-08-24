@@ -1,13 +1,13 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260824040047162_github",
-  "base_packet": "cb_20260824034636692_github",
+  "packet_id": "cb_20260824040343979_github",
+  "base_packet": "cb_20260824040047162_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-24T04:00:47.162Z",
+  "generated_at": "2026-08-24T04:03:43.979Z",
   "changed": true,
-  "manifest_sha": "19d339e74d02e540",
+  "manifest_sha": "3b85b956b346fec3",
   "sources": [
     {
       "id": ".agents/product-marketing.md",
@@ -126,8 +126,8 @@
     {
       "id": "app/globals.css",
       "file": "app/globals.css",
-      "sha256": "831c0d7f082156d06258ee4f26c9fa6b2db531b8e842617d2cc29a2abee92227",
-      "bytes": 100283
+      "sha256": "149905429e967e33911641cd3d91220bb2a742d300e85ad00fe905286cc53b77",
+      "bytes": 103037
     },
     {
       "id": "app/icon.png",
@@ -154,6 +154,12 @@
       "bytes": 10818
     },
     {
+      "id": "app/workspace/page.tsx",
+      "file": "app/workspace/page.tsx",
+      "sha256": "b5b63beed7eddae0038d20634902671c445074da886077df414d67df4eb0e737",
+      "bytes": 764
+    },
+    {
       "id": "components/app-chrome.tsx",
       "file": "components/app-chrome.tsx",
       "sha256": "f7041e81418e1b9b99b79ec1f95ad0fc046779463be5b3de7583f114ae5c751e",
@@ -174,8 +180,14 @@
     {
       "id": "components/code-sheet.tsx",
       "file": "components/code-sheet.tsx",
-      "sha256": "7d733bb5cadba6b227d3aa053126c5cbfbff0c6adfabd6b11a7a88a552d356d0",
-      "bytes": 10659
+      "sha256": "4ffc09c81fa41d5267183497a9e4427c84bd3375f66412f820d25f55cdc0c759",
+      "bytes": 11230
+    },
+    {
+      "id": "components/comparison-viewport.tsx",
+      "file": "components/comparison-viewport.tsx",
+      "sha256": "0ac4f8c5f730d60885e43dcb8d09deffd070cc6a6c82b32513d63e8a5dde4abd",
+      "bytes": 3987
     },
     {
       "id": "components/coqui-marks.tsx",
@@ -192,8 +204,8 @@
     {
       "id": "components/direction-card.tsx",
       "file": "components/direction-card.tsx",
-      "sha256": "91aae7d6f48d1649a51adf3bc2a21ba35f16d7309e5ff7f4f39dc539a2c2536b",
-      "bytes": 6646
+      "sha256": "53eebad6ab8605d278eb0cf5a8e81a614e39a9342e797cea6f913f206037a3f1",
+      "bytes": 7445
     },
     {
       "id": "components/direction-selection-list.tsx",
@@ -338,6 +350,18 @@
       "file": "docs/release-plan.md",
       "sha256": "dd852ea88ac34e09bdcef93159994e4b02cf1913bfb0ca1f4ad004e4d07c65d7",
       "bytes": 5272
+    },
+    {
+      "id": "lib/comparison-viewport.test.ts",
+      "file": "lib/comparison-viewport.test.ts",
+      "sha256": "9861724e6f41897a598b73e100e44ee49b30c3b80fccf9ba02051e56a1283644",
+      "bytes": 4264
+    },
+    {
+      "id": "lib/comparison-viewport.ts",
+      "file": "lib/comparison-viewport.ts",
+      "sha256": "56021bbd1aac4840c07aeb844e1fe490d8cb04d3b0f2f909df73807c41558db9",
+      "bytes": 4542
     },
     {
       "id": "lib/db/client.ts",
@@ -712,6 +736,12 @@
       "bytes": 3253
     },
     {
+      "id": "lib/use-element-size.ts",
+      "file": "lib/use-element-size.ts",
+      "sha256": "bb6d69fcd9db130cb788e430f9e143aa3935fbd045b4c478b5fc99ab4974db36",
+      "bytes": 1226
+    },
+    {
       "id": "lib/use-screenshot-color-split.ts",
       "file": "lib/use-screenshot-color-split.ts",
       "sha256": "bf197f2f515067521fbcc4a7a4c99457f4062abc140f325063713e0f62eb15c1",
@@ -804,30 +834,17 @@
   ],
   "source_changes": {
     "added": [
-      "components/chain-viewport-hydrator.tsx",
-      "components/viewport-box-field.tsx",
-      "lib/stores/chain-viewport.test.ts",
-      "lib/stores/chain-viewport.ts",
-      "lib/viewport-box.test.ts",
-      "lib/viewport-box.ts"
+      "app/workspace/page.tsx",
+      "components/comparison-viewport.tsx",
+      "lib/comparison-viewport.test.ts",
+      "lib/comparison-viewport.ts",
+      "lib/use-element-size.ts"
     ],
     "removed": [],
     "updated": [
-      "app/(app)/layout.tsx",
-      "app/api/rounds/route.ts",
       "app/globals.css",
-      "components/direction-card.tsx",
-      "components/direction-selection-list.tsx",
-      "components/feedback-screen.tsx",
-      "components/image-upload-screen.tsx",
-      "components/reference-image.tsx",
-      "components/round-workspace.tsx",
-      "components/upload-form.tsx",
-      "lib/db/migrate.ts",
-      "lib/db/queries.ts",
-      "lib/db/schema.sql",
-      "lib/persist-round.ts",
-      "lib/types.ts"
+      "components/code-sheet.tsx",
+      "components/direction-card.tsx"
     ]
   },
   "facts": [
@@ -1409,7 +1426,7 @@
   "missing_sources": [],
   "supplemental": [],
   "stats": {
-    "source_count": 132,
+    "source_count": 137,
     "fact_count": 40,
     "added": 0,
     "removed": 0,
