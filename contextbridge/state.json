@@ -1,13 +1,13 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260824040343979_github",
-  "base_packet": "cb_20260824040047162_github",
+  "packet_id": "cb_20260824040603590_github",
+  "base_packet": "cb_20260824040343979_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-24T04:03:43.979Z",
+  "generated_at": "2026-08-24T04:06:03.590Z",
   "changed": true,
-  "manifest_sha": "3b85b956b346fec3",
+  "manifest_sha": "814682289443733d",
   "sources": [
     {
       "id": ".agents/product-marketing.md",
@@ -126,8 +126,8 @@
     {
       "id": "app/globals.css",
       "file": "app/globals.css",
-      "sha256": "149905429e967e33911641cd3d91220bb2a742d300e85ad00fe905286cc53b77",
-      "bytes": 103037
+      "sha256": "fa971f30b65de278666e7c3107eb72dbc1f2a62469a23fa37288f22abefb4ef2",
+      "bytes": 103244
     },
     {
       "id": "app/icon.png",
@@ -216,8 +216,8 @@
     {
       "id": "components/directions-comparison.tsx",
       "file": "components/directions-comparison.tsx",
-      "sha256": "526e1c9bbcb0b229a92c285128c566de3a9e2cf0cbf1684f627148c16fe32bc6",
-      "bytes": 1609
+      "sha256": "19862d30383c432156ead75e076befc3ceeec0ed6666c1e12afb23a8edef88eb",
+      "bytes": 1981
     },
     {
       "id": "components/directions-screen.tsx",
@@ -258,8 +258,8 @@
     {
       "id": "components/round-workspace.tsx",
       "file": "components/round-workspace.tsx",
-      "sha256": "2963145583cbdbee461ef61b2193dee703e681571d482187f2f78ab04b01f789",
-      "bytes": 7380
+      "sha256": "ff2501b57110c26422aaaebff14ba97c5bbe0f778733046bb7893a40d41d49fe",
+      "bytes": 8739
     },
     {
       "id": "components/step-header.tsx",
@@ -434,6 +434,24 @@
       "file": "lib/design-systems/vercel-geist.ts",
       "sha256": "e87bf8c51b90ef3185dad8de04601c63fdeb234cdc34e3f798bb70ba7d137777",
       "bytes": 10882
+    },
+    {
+      "id": "lib/export-bundle.test.ts",
+      "file": "lib/export-bundle.test.ts",
+      "sha256": "d3cade89d4644791a8e8018bb9a020b77a73986cae43e332f7dd516397935693",
+      "bytes": 4071
+    },
+    {
+      "id": "lib/export-bundle.ts",
+      "file": "lib/export-bundle.ts",
+      "sha256": "53ee51f9eae4f0ce6d3f919270b36fb606a8aa18720a448fb136d11e67e0665a",
+      "bytes": 7669
+    },
+    {
+      "id": "lib/export-inlined-font.ts",
+      "file": "lib/export-inlined-font.ts",
+      "sha256": "386aee599771df037814115f46131a359e74f6563d1c0d3a8b8581e1ed75b9d7",
+      "bytes": 5661
     },
     {
       "id": "lib/fixtures/data/hightouch-onboarding.code.ts",
@@ -768,8 +786,8 @@
     {
       "id": "package.json",
       "file": "package.json",
-      "sha256": "a10545a7b1fb519b26efd451ef623af6014e9ebb76b0ad31837e9279054cc30e",
-      "bytes": 1425
+      "sha256": "6739c2b86d4eae781648958ef36b1c580859f9033554581612b17ee28768801b",
+      "bytes": 1449
     },
     {
       "id": "public/brand/bg-sky-ambient.svg",
@@ -834,17 +852,16 @@
   ],
   "source_changes": {
     "added": [
-      "app/workspace/page.tsx",
-      "components/comparison-viewport.tsx",
-      "lib/comparison-viewport.test.ts",
-      "lib/comparison-viewport.ts",
-      "lib/use-element-size.ts"
+      "lib/export-bundle.test.ts",
+      "lib/export-bundle.ts",
+      "lib/export-inlined-font.ts"
     ],
     "removed": [],
     "updated": [
       "app/globals.css",
-      "components/code-sheet.tsx",
-      "components/direction-card.tsx"
+      "components/directions-comparison.tsx",
+      "components/round-workspace.tsx",
+      "package.json"
     ]
   },
   "facts": [
@@ -1426,7 +1443,7 @@
   "missing_sources": [],
   "supplemental": [],
   "stats": {
-    "source_count": 137,
+    "source_count": 140,
     "fact_count": 40,
     "added": 0,
     "removed": 0,
