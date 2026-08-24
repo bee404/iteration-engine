@@ -3,6 +3,7 @@
 import { useCallback, useRef, useState } from "react";
 import { useChainViewport } from "@/lib/stores/chain-viewport";
 import type { Direction } from "@/lib/types";
+import { resolveComparisonViewport } from "@/lib/comparison-viewport";
 import { useRoundStore } from "@/store/round-store";
 import { CodeSheet } from "./code-sheet";
 
@@ -32,6 +33,17 @@ export function DirectionCard({ direction, designGoal, screenshotRef, isSelected
   const completeCodeGen = useRoundStore((s) => s.completeCodeGen);
   const failCodeGen = useRoundStore((s) => s.failCodeGen);
   const lockBox = useChainViewport((s) => s.lockBox);
+  const screenshotDimensions = useRoundStore((s) => s.screenshotDimensions);
+
+  // The box the Source/Iteration comparison renders into. The screenshot's natural size is the
+  // interim source of truth; the per-chain viewport lock (PR #32, `useChainViewport` +
+  // `lockedBoxOf`) is the real one, and this is the single call site to switch now that it is
+  // on main — pass the locked box as `lockedViewport` and the resolver already prefers it.
+  // TODO(viewport-lock): replace `lockedViewport: null` with the chain's locked box.
+  const comparisonViewport = resolveComparisonViewport({
+    lockedViewport: null,
+    screenshotDimensions,
+  });
 
   const runGeneration = useCallback(async () => {
     // Decision 14's commit point: the first code generation anywhere in the chain's first round
@@ -162,6 +174,8 @@ export function DirectionCard({ direction, designGoal, screenshotRef, isSelected
         isOpen={isSheetOpen}
         directionTitle={direction.title}
         generated={generated}
+        screenshotRef={screenshotRef}
+        viewport={comparisonViewport}
         onClose={handleSheetClose}
         triggerRef={generateButtonRef}
       />

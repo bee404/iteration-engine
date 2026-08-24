@@ -2,8 +2,8 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { RefObject } from "react";
-import type { GeneratedCodeStatus } from "@/lib/types";
-import { PreviewFrame } from "./preview-frame";
+import type { GeneratedCodeStatus, ImageDimensions } from "@/lib/types";
+import { ComparisonViewport } from "./comparison-viewport";
 
 // `useLayoutEffect` warns when it runs during SSR (it can't affect server output). This falls
 // back to `useEffect` on the server — a no-op there — and stays `useLayoutEffect` on the
@@ -24,6 +24,10 @@ interface CodeSheetProps {
   isOpen: boolean;
   directionTitle: string;
   generated: GeneratedCodeState | undefined;
+  /** Data URL of the round's reference screenshot — the comparison's `Source` position. */
+  screenshotRef: string | null;
+  /** The fixed box both comparison layers render into (see `resolveComparisonViewport`). */
+  viewport: ImageDimensions | null;
   onClose: () => void;
   /** Focus returns here when the sheet closes, so keyboard users land back where they started. */
   triggerRef: RefObject<HTMLButtonElement | null>;
@@ -41,7 +45,15 @@ const FOCUSABLE_SELECTOR =
  * transition can play in both directions; dismissible via the close button, a scrim click, or
  * Escape.
  */
-export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerRef }: CodeSheetProps) {
+export function CodeSheet({
+  isOpen,
+  directionTitle,
+  generated,
+  screenshotRef,
+  viewport,
+  onClose,
+  triggerRef,
+}: CodeSheetProps) {
   // While streaming, collapse the sheet to a partial-height status panel (see body below).
   const isStreaming = generated?.status === "streaming";
   const [isMounted, setIsMounted] = useState(isOpen);
@@ -213,9 +225,13 @@ export function CodeSheet({ isOpen, directionTitle, generated, onClose, triggerR
               <p>Generating component for “{directionTitle}”…</p>
             </div>
           ) : (
-            // `error` is threaded through so a failed generation shows the explicit fallback
-            // banner rather than a bannerless read-only source view (the "silent stall").
-            <PreviewFrame
+            // Once the stream settles the body becomes the comparison: a Source/Iteration toggle
+            // over one fixed viewport box. `error` is threaded through so a failed generation
+            // shows the explicit fallback banner inside that same box rather than a bannerless
+            // read-only source view (the "silent stall").
+            <ComparisonViewport
+              screenshotRef={screenshotRef}
+              viewport={viewport}
               code={generated.code}
               language={generated.language}
               status={generated.status}
