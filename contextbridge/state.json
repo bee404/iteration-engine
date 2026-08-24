@@ -1,13 +1,13 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260824140603890_github",
-  "base_packet": "cb_20260824140456590_github",
+  "packet_id": "cb_20260824143916043_github",
+  "base_packet": "cb_20260824140603890_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-24T14:06:03.890Z",
+  "generated_at": "2026-08-24T14:39:16.043Z",
   "changed": true,
-  "manifest_sha": "89dbd4f7fa463790",
+  "manifest_sha": "3df7e70e79417457",
   "sources": [
     {
       "id": ".agents/product-marketing.md",
@@ -876,7 +876,7 @@
     {
       "id": "package.json",
       "file": "package.json",
-      "sha256": "6739c2b86d4eae781648958ef36b1c580859f9033554581612b17ee28768801b",
+      "sha256": "ae574c16f96276294e81009fdf2ee91746bda55de95b48821876630832ade5a8",
       "bytes": 1449
     },
     {
@@ -941,26 +941,10 @@
     }
   ],
   "source_changes": {
-    "added": [
-      "lib/providers/codegen/fallback-provider.test.ts",
-      "lib/providers/codegen/fallback-provider.ts",
-      "lib/providers/codegen/index.test.ts",
-      "lib/providers/codegen/openai-provider.test.ts",
-      "lib/providers/codegen/openai-provider.ts",
-      "lib/providers/codegen/shared.ts",
-      "lib/providers/llm/fallback-provider.test.ts",
-      "lib/providers/llm/fallback-provider.ts",
-      "lib/providers/llm/index.test.ts",
-      "lib/providers/llm/openai-provider.test.ts",
-      "lib/providers/llm/openai-provider.ts",
-      "lib/providers/llm/shared.ts"
-    ],
+    "added": [],
     "removed": [],
     "updated": [
-      "lib/providers/codegen/claude-provider.ts",
-      "lib/providers/codegen/index.ts",
-      "lib/providers/llm/claude-provider.ts",
-      "lib/providers/llm/index.ts"
+      "package.json"
     ]
   },
   "facts": [
