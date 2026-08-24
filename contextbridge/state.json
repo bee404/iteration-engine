@@ -1,13 +1,13 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260824034636692_github",
-  "base_packet": "cb_20260823044611869_github",
+  "packet_id": "cb_20260824040047162_github",
+  "base_packet": "cb_20260824034636692_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-24T03:46:36.692Z",
+  "generated_at": "2026-08-24T04:00:47.162Z",
   "changed": true,
-  "manifest_sha": "d98bcfeca42dbdee",
+  "manifest_sha": "19d339e74d02e540",
   "sources": [
     {
       "id": ".agents/product-marketing.md",
@@ -66,8 +66,8 @@
     {
       "id": "app/(app)/layout.tsx",
       "file": "app/(app)/layout.tsx",
-      "sha256": "05c69e8db1f55e9c064712d6bb8396fdd5529996c25599f93600dfc3832c274a",
-      "bytes": 714
+      "sha256": "e4b50581e7e46805dd3da917db81fd325c85e62d480390487277e145b09f97f4",
+      "bytes": 1101
     },
     {
       "id": "app/(app)/synthesized/page.tsx",
@@ -120,14 +120,14 @@
     {
       "id": "app/api/rounds/route.ts",
       "file": "app/api/rounds/route.ts",
-      "sha256": "34c4a14d334f99c96b12beab9dd19e7607d03aac808d828ad1331a7f0c1c8aaa",
-      "bytes": 3251
+      "sha256": "4302b5b30c2bb3cb02f8e04e7e9fc902946d73f243687721a13bc2a882709e2d",
+      "bytes": 3284
     },
     {
       "id": "app/globals.css",
       "file": "app/globals.css",
-      "sha256": "50e398e60124c812fa7fedb2b0327326e617557b696bf03b8784c32f5f537257",
-      "bytes": 97961
+      "sha256": "831c0d7f082156d06258ee4f26c9fa6b2db531b8e842617d2cc29a2abee92227",
+      "bytes": 100283
     },
     {
       "id": "app/icon.png",
@@ -166,6 +166,12 @@
       "bytes": 2001
     },
     {
+      "id": "components/chain-viewport-hydrator.tsx",
+      "file": "components/chain-viewport-hydrator.tsx",
+      "sha256": "cc49a2fd6c57f5aa6c9bb290cd050498acae97ed6cd258e7e61f1b37585b91fa",
+      "bytes": 2197
+    },
+    {
       "id": "components/code-sheet.tsx",
       "file": "components/code-sheet.tsx",
       "sha256": "7d733bb5cadba6b227d3aa053126c5cbfbff0c6adfabd6b11a7a88a552d356d0",
@@ -186,14 +192,14 @@
     {
       "id": "components/direction-card.tsx",
       "file": "components/direction-card.tsx",
-      "sha256": "03396f90ce88d3f07e0804038e3b6661658e8de7527c40e5bc467ac864ac20f2",
-      "bytes": 6165
+      "sha256": "91aae7d6f48d1649a51adf3bc2a21ba35f16d7309e5ff7f4f39dc539a2c2536b",
+      "bytes": 6646
     },
     {
       "id": "components/direction-selection-list.tsx",
       "file": "components/direction-selection-list.tsx",
-      "sha256": "54eabb60c566c651ec5ca98d58d2020c5c400fbe89b11acdfd8f9598363d4a69",
-      "bytes": 6610
+      "sha256": "55a8b06ac085d5e9c12213a6950dbe5d66ad3fc2ad52567056146014032d6796",
+      "bytes": 7146
     },
     {
       "id": "components/directions-comparison.tsx",
@@ -210,14 +216,14 @@
     {
       "id": "components/feedback-screen.tsx",
       "file": "components/feedback-screen.tsx",
-      "sha256": "9350f64514e854922ae8358f0ef4c612fbc9152ac513e395687ccb74a0b3fe44",
-      "bytes": 10414
+      "sha256": "30ef595d14c5094712d5fa16a8a530452225b3f17122ac6337c4d585143857b3",
+      "bytes": 10811
     },
     {
       "id": "components/image-upload-screen.tsx",
       "file": "components/image-upload-screen.tsx",
-      "sha256": "b27525e5722b99b08fd8e297ccdba7710c2488bb831d05299caf77c6d52bebf5",
-      "bytes": 8673
+      "sha256": "de730c936b6f302d4655471a180db6ea003a9dce58cc4dee7d2e220aadadcd3b",
+      "bytes": 9853
     },
     {
       "id": "components/preview-frame.tsx",
@@ -228,8 +234,8 @@
     {
       "id": "components/reference-image.tsx",
       "file": "components/reference-image.tsx",
-      "sha256": "fa407fdeb96450285fb4ece615b517ac61e7d33f40ee72ba2a6b33d8a9fceba6",
-      "bytes": 4587
+      "sha256": "a1bedc296f75559ff207efd4ec3b0056cf5ebb44726f752f7c4235d5532f890c",
+      "bytes": 4754
     },
     {
       "id": "components/round-history.tsx",
@@ -240,8 +246,8 @@
     {
       "id": "components/round-workspace.tsx",
       "file": "components/round-workspace.tsx",
-      "sha256": "f9abb17db081c788767ab8d793915c3e5f2d7c3178e101b9fc99dc35f31edaef",
-      "bytes": 7055
+      "sha256": "2963145583cbdbee461ef61b2193dee703e681571d482187f2f78ab04b01f789",
+      "bytes": 7380
     },
     {
       "id": "components/step-header.tsx",
@@ -264,8 +270,14 @@
     {
       "id": "components/upload-form.tsx",
       "file": "components/upload-form.tsx",
-      "sha256": "67106535d20cc257f23838cd79c0fdf65e10fed7255856d58edcd71c1536b2b9",
-      "bytes": 9459
+      "sha256": "a094029d2ccb83b0941a9adb606279ad10f47461aab73252a0f6137b3101bd15",
+      "bytes": 9611
+    },
+    {
+      "id": "components/viewport-box-field.tsx",
+      "file": "components/viewport-box-field.tsx",
+      "sha256": "e92526bfcebf43144f08fe4cd4819ff52f7f307d9710acee6b1eb8d56043ac01",
+      "bytes": 5255
     },
     {
       "id": "contextbridge/OPERATING-AGREEMENT.md",
@@ -336,20 +348,20 @@
     {
       "id": "lib/db/migrate.ts",
       "file": "lib/db/migrate.ts",
-      "sha256": "5e02a8bc9dfa8e94838a7cf850e94d6ee10a655cc86082663bcec0a052603eec",
-      "bytes": 527
+      "sha256": "93080a8e01c88b0af10e6364a08942e9d7d3cdb6afbb10442a563df03a9324ae",
+      "bytes": 1764
     },
     {
       "id": "lib/db/queries.ts",
       "file": "lib/db/queries.ts",
-      "sha256": "6eaebd3adfb21016732efb2ac2af7357411972455af1eaedcd1adc197bc33042",
-      "bytes": 10042
+      "sha256": "75e329988d607c7fc91b5a12de841c6adc2277a6190958741e557d6d7de6dd1a",
+      "bytes": 10551
     },
     {
       "id": "lib/db/schema.sql",
       "file": "lib/db/schema.sql",
-      "sha256": "a7805592fba8b6eded2f456f5a135ff935ec2d9ab263c9630c5e86c8cd438b29",
-      "bytes": 2749
+      "sha256": "22f867c4db578dd6d62219f8214685d87766094e88463bd67b83a622003d92ae",
+      "bytes": 3159
     },
     {
       "id": "lib/demo-mode.ts",
@@ -432,8 +444,8 @@
     {
       "id": "lib/persist-round.ts",
       "file": "lib/persist-round.ts",
-      "sha256": "555ff563cb5ec318b893aa5033bc47564d48f4374a0fca1bd48b985dddc6c3e6",
-      "bytes": 5375
+      "sha256": "6c8439103f9000273e0e7f9e690576825ae84b7f72c3a084be881b97b98a66a1",
+      "bytes": 7253
     },
     {
       "id": "lib/preview/build-preview-document.test.ts",
@@ -658,6 +670,18 @@
       "bytes": 2131
     },
     {
+      "id": "lib/stores/chain-viewport.test.ts",
+      "file": "lib/stores/chain-viewport.test.ts",
+      "sha256": "74bdea148cd79627255fff689af7b15acfe85cfc3d09da19410b5c9c94c3c103",
+      "bytes": 1732
+    },
+    {
+      "id": "lib/stores/chain-viewport.ts",
+      "file": "lib/stores/chain-viewport.ts",
+      "sha256": "8a79cb8b0a6a8f415e4ae23f212c3ac0ef78c630b66d8492b097ed4e5e1947e0",
+      "bytes": 3325
+    },
+    {
       "id": "lib/stores/round-image.ts",
       "file": "lib/stores/round-image.ts",
       "sha256": "86ca5bb9049c8e0f849a9b7de35d909a831c3f8480dddf3e733d5c6a291639b5",
@@ -684,8 +708,8 @@
     {
       "id": "lib/types.ts",
       "file": "lib/types.ts",
-      "sha256": "bfadb73a7158a9d775522f4f62ccbd85de1dc004c16b5df496bfff902f35d0f9",
-      "bytes": 2909
+      "sha256": "0ccc0e7ba42dc2b2d42535b98c14a1f212d23fad6e3ec78e7397ebd2e2f005b0",
+      "bytes": 3253
     },
     {
       "id": "lib/use-screenshot-color-split.ts",
@@ -698,6 +722,18 @@
       "file": "lib/use-step-stage.ts",
       "sha256": "0745efa00ffaa7317c1015d483fa9c9b0c160d8f981cfdf628c18f11f311d043",
       "bytes": 2343
+    },
+    {
+      "id": "lib/viewport-box.test.ts",
+      "file": "lib/viewport-box.test.ts",
+      "sha256": "b0830b32148a4b1106b54829cbf2f05c62e86a2e132e1e89ff675e4f84e87840",
+      "bytes": 1420
+    },
+    {
+      "id": "lib/viewport-box.ts",
+      "file": "lib/viewport-box.ts",
+      "sha256": "873cf032a6037bbed87150479a39eeb7f39ef75ee8ef4694c91115632f710714",
+      "bytes": 1796
     },
     {
       "id": "package.json",
@@ -768,18 +804,30 @@
   ],
   "source_changes": {
     "added": [
-      "public/brand/coqui-logo-lockup-dark.svg",
-      "public/brand/coqui-logo-lockup-light.svg",
-      "public/brand/upload-hero.png"
+      "components/chain-viewport-hydrator.tsx",
+      "components/viewport-box-field.tsx",
+      "lib/stores/chain-viewport.test.ts",
+      "lib/stores/chain-viewport.ts",
+      "lib/viewport-box.test.ts",
+      "lib/viewport-box.ts"
     ],
     "removed": [],
     "updated": [
-      "DESIGN.md",
+      "app/(app)/layout.tsx",
+      "app/api/rounds/route.ts",
       "app/globals.css",
-      "components/app-chrome.tsx",
+      "components/direction-card.tsx",
+      "components/direction-selection-list.tsx",
+      "components/feedback-screen.tsx",
       "components/image-upload-screen.tsx",
-      "components/theme-switch.tsx",
-      "lib/theme.ts"
+      "components/reference-image.tsx",
+      "components/round-workspace.tsx",
+      "components/upload-form.tsx",
+      "lib/db/migrate.ts",
+      "lib/db/queries.ts",
+      "lib/db/schema.sql",
+      "lib/persist-round.ts",
+      "lib/types.ts"
     ]
   },
   "facts": [
@@ -1361,7 +1409,7 @@
   "missing_sources": [],
   "supplemental": [],
   "stats": {
-    "source_count": 126,
+    "source_count": 132,
     "fact_count": 40,
     "added": 0,
     "removed": 0,
