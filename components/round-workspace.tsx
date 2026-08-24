@@ -5,6 +5,7 @@ import { useRoundStore } from "@/store/round-store";
 import { lockedBoxOf, useChainViewport } from "@/lib/stores/chain-viewport";
 import type { Critique, Direction } from "@/lib/types";
 import { persistApprovedRound } from "@/lib/persist-round";
+import { buildExportBundle, downloadExportBundle } from "@/lib/export-bundle";
 import { UploadForm } from "./upload-form";
 import { CritiqueDisplay } from "./critique-display";
 import { DirectionsComparison } from "./directions-comparison";
@@ -33,6 +34,8 @@ export function RoundWorkspace() {
   const [approvedMessage, setApprovedMessage] = useState<string | null>(null);
   const [isPersisting, setIsPersisting] = useState(false);
   const [historyRefreshKey, setHistoryRefreshKey] = useState(0);
+  const [lastSavedRoundId, setLastSavedRoundId] = useState<string | null>(null);
+  const [exportError, setExportError] = useState<string | null>(null);
 
   const screenshotRef = useRoundStore((s) => s.screenshotRef);
   const screenshotDimensions = useRoundStore((s) => s.screenshotDimensions);
@@ -120,6 +123,7 @@ export function RoundWorkspace() {
       setApprovedMessage(
         `Round approved with direction "${directionTitle}" and saved to Turso (round ${result.round.id.slice(0, 8)}).`,
       );
+      setLastSavedRoundId(result.round.id);
       setHistoryRefreshKey((key) => key + 1);
     } else if (result.status === "demo_mode") {
       setApprovedMessage(
@@ -145,6 +149,28 @@ export function RoundWorkspace() {
     setApprovalStatus,
   ]);
 
+  const selectedGeneratedCode = selectedDirectionId ? generatedCodeByDirection[selectedDirectionId] : undefined;
+  const canExport = Boolean(selectedDirectionId && selectedGeneratedCode?.status === "complete");
+
+  const handleExport = useCallback(() => {
+    if (!selectedDirectionId || !selectedGeneratedCode || selectedGeneratedCode.status !== "complete") return;
+    const direction = directions.find((d) => d.id === selectedDirectionId);
+    if (!direction) return;
+
+    setExportError(null);
+    try {
+      const bundle = buildExportBundle({
+        direction: { title: direction.title },
+        code: selectedGeneratedCode.code,
+        designGoal,
+        roundId: lastSavedRoundId,
+      });
+      downloadExportBundle(bundle);
+    } catch (error) {
+      setExportError(error instanceof Error ? error.message : "Export failed");
+    }
+  }, [selectedDirectionId, selectedGeneratedCode, directions, designGoal, lastSavedRoundId]);
+
   return (
     <div className="workspace">
       <UploadForm onSubmit={handleGenerateCritique} disabled={isCritiquing} />
@@ -164,8 +190,12 @@ export function RoundWorkspace() {
           screenshotRef={screenshotRef}
           onApprove={handleApprove}
           isApproving={isPersisting}
+          onExport={handleExport}
+          canExport={canExport}
         />
       )}
+
+      {exportError && <p className="error">Export error: {exportError}</p>}
 
       {approvedMessage && (
         <section className="panel approved-banner">

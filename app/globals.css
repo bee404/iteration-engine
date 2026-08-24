@@ -732,6 +732,14 @@ button {
   cursor: default;
 }
 
+/* Save (primary) and Export (secondary) sit side by side per Decision 14 — two
+   independent actions, not a two-step sequence. */
+.round-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .spinner {
   width: 13px;
   height: 13px;
