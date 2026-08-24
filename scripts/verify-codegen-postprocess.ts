@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { postProcessGeneratedCode } from "@/lib/providers/codegen/postprocess";
-import { IMPLEMENTATION_REQUIREMENTS } from "@/lib/providers/codegen/claude-provider";
+import { IMPLEMENTATION_REQUIREMENTS } from "@/lib/providers/codegen/shared";
 import { formatDesignSystemForPrompt, getActiveDesignSystem, getColorAllowlist } from "@/lib/design-systems";
 
 /**

@@ -1,8 +1,10 @@
 import { isDemoMode } from "@/lib/demo-mode";
 import { ClaudeLLMProvider } from "./claude-provider";
 import { CritiqueGenerationError } from "./errors";
+import { FallbackLLMProvider } from "./fallback-provider";
 import { FixtureLLMProvider } from "./fixture-provider";
 import { MockLLMProvider } from "./mock-provider";
+import { OpenAILLMProvider } from "./openai-provider";
 import type { LLMProvider } from "./types";
 
 export type { LLMProvider, CritiqueRequest, CritiqueResult, DirectionsRequest, DirectionsResult } from "./types";
@@ -24,8 +26,12 @@ export {
  *   without burning real API calls). LLM_PROVIDER=claude without a key is a misconfiguration
  *   and fails loudly rather than silently falling back.
  *
- * OpenAI fallback-on-validation-failure (docs/decisions.md) is not wired yet; only the
- * Claude branch is implemented today. No API route or component depends on which branch runs.
+ * - ANTHROPIC_API_KEY set AND OPENAI_API_KEY set -> Claude wrapped in FallbackLLMProvider, so a
+ *   Claude failure that survives its own retries (a thrown CritiqueGenerationError /
+ *   DirectionsGenerationError) falls through to OpenAILLMProvider (GPT-4o) instead of
+ *   surfacing to the caller — the documented Claude-primary/GPT-4o-fallback shape
+ *   (docs/decisions.md, docs/blueprint.md). OPENAI_API_KEY unset -> ClaudeLLMProvider is
+ *   returned bare, exactly as before this fallback existed: no wrapper, no behavior change.
  */
 export function getLLMProvider(): LLMProvider {
   // DEMO_MODE wins over every other selector so the live path is fully bypassed regardless of
@@ -36,7 +42,11 @@ export function getLLMProvider(): LLMProvider {
   if (override === "mock") return new MockLLMProvider();
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (apiKey) return new ClaudeLLMProvider(apiKey);
+  if (apiKey) {
+    const claude = new ClaudeLLMProvider(apiKey);
+    const openaiApiKey = process.env.OPENAI_API_KEY;
+    return openaiApiKey ? new FallbackLLMProvider(claude, new OpenAILLMProvider(openaiApiKey)) : claude;
+  }
 
   if (override === "claude") {
     throw new Error("LLM_PROVIDER=claude was set but ANTHROPIC_API_KEY is missing.");
