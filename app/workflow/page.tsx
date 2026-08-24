@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { ROUND_PERSISTENCE_DISABLED_REASON } from "@/lib/round-persistence";
+
 const directionRows = [
   { label: "Clearer path", detail: "Reduce hesitation", accent: "light" },
   { label: "Stronger focus", detail: "Make the next move obvious", accent: "warm" },
@@ -201,8 +203,17 @@ export default function WorkflowPage() {
                 <span className="workflow-chain-node current" />
               </div>
               <div className="workflow-commit-label"><span>Round 03</span><strong>Saved to the chain</strong></div>
-              <button className="workflow-primary-action" type="button">Save &amp; export <span aria-hidden="true">↗</span></button>
-              <small>Save is live. Export is the next handoff.</small>
+              {/* Static overview of the flow, not the live control — but it must not advertise a
+                  save that the demo deployment cannot perform (see lib/round-persistence.ts). */}
+              <button
+                className="workflow-primary-action"
+                type="button"
+                disabled
+                title={ROUND_PERSISTENCE_DISABLED_REASON}
+              >
+                Save &amp; export <span aria-hidden="true">↗</span>
+              </button>
+              <small>{ROUND_PERSISTENCE_DISABLED_REASON}</small>
             </div>
           </div>
         </article>

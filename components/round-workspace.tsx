@@ -5,25 +5,12 @@ import { useRoundStore } from "@/store/round-store";
 import { lockedBoxOf, useChainViewport } from "@/lib/stores/chain-viewport";
 import type { Critique, Direction } from "@/lib/types";
 import { persistApprovedRound } from "@/lib/persist-round";
+import { requestCritique, requestDirections } from "@/lib/round-api";
 import { buildExportBundle, downloadExportBundle } from "@/lib/export-bundle";
 import { UploadForm } from "./upload-form";
 import { CritiqueDisplay } from "./critique-display";
 import { DirectionsComparison } from "./directions-comparison";
 import { RoundHistory } from "./round-history";
-
-/**
- * The critique route always returns a typed `{ error, code }` JSON body on failure (see
- * app/api/critique/route.ts), even for errors it didn't anticipate. Surface that message
- * instead of just the bare status code — "Critique request failed (502)" tells a reviewer
- * nothing about whether that's an invalid screenshot, an Anthropic outage, or a real bug.
- */
-async function describeCritiqueFailure(response: Response): Promise<string> {
-  const body = await response.json().catch(() => null);
-  if (body && typeof body.error === "string") {
-    return typeof body.code === "string" ? `${body.error} (${body.code})` : body.error;
-  }
-  return `Critique request failed (${response.status})`;
-}
 
 /**
  * Orchestrates the full round workflow against the store: intake -> critique ->
@@ -67,14 +54,15 @@ export function RoundWorkspace() {
   const handleGenerateCritique = useCallback(async () => {
     startCritique();
     try {
-      const response = await fetch("/api/critique", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ screenshotRef, designGoal, feedbackText, reviewerContext, constraints }),
-      });
-      if (!response.ok) throw new Error(await describeCritiqueFailure(response));
-      const data: { critique: Critique } = await response.json();
-      setCritique(data.critique);
+      setCritique(
+        await requestCritique({
+          screenshotRef: screenshotRef ?? "",
+          designGoal,
+          feedbackText,
+          reviewerContext,
+          constraints,
+        }),
+      );
     } catch (error) {
       setCritiqueError(error instanceof Error ? error.message : "Critique failed");
     }
@@ -84,14 +72,7 @@ export function RoundWorkspace() {
     if (!critique) return;
     startDirections();
     try {
-      const response = await fetch("/api/directions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ critique, designGoal, feedbackText, constraints }),
-      });
-      if (!response.ok) throw new Error(`Directions request failed (${response.status})`);
-      const data: { directions: Direction[] } = await response.json();
-      setDirections(data.directions);
+      setDirections(await requestDirections({ critique, designGoal, feedbackText, constraints }));
     } catch (error) {
       setDirectionsError(error instanceof Error ? error.message : "Directions generation failed");
     }
