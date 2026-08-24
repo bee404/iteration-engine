@@ -148,8 +148,14 @@ export function DirectionCard({ direction, designGoal, screenshotRef, isSelected
       </ul>
 
       {direction.patternReference && (
-        <a href={direction.patternReference.url} target="_blank" rel="noreferrer" className="pattern-reference">
-          Grounded in: {direction.patternReference.name} ({direction.patternReference.source})
+        <a
+          href={direction.patternReference.url}
+          target="_blank"
+          rel="noreferrer"
+          className="pattern-reference"
+          title={`Pattern reference: ${direction.patternReference.name}`}
+        >
+          Pattern reference
         </a>
       )}
 
