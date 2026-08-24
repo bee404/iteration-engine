@@ -1,13 +1,13 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260823044611869_github",
-  "base_packet": "cb_20260823044539195_github",
+  "packet_id": "cb_20260824034636692_github",
+  "base_packet": "cb_20260823044611869_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-23T04:46:11.869Z",
+  "generated_at": "2026-08-24T03:46:36.692Z",
   "changed": true,
-  "manifest_sha": "44f77adf43d20e11",
+  "manifest_sha": "d98bcfeca42dbdee",
   "sources": [
     {
       "id": ".agents/product-marketing.md",
@@ -36,8 +36,8 @@
     {
       "id": "DESIGN.md",
       "file": "DESIGN.md",
-      "sha256": "2fb659f272e808d170abb8868ba43ae726e059317db830fd5bc0e1cc00caa4b3",
-      "bytes": 20086
+      "sha256": "96704cc9b208e2a48bf0101330393ae9f822b8e15442cbeaf58bdc78388644ee",
+      "bytes": 22554
     },
     {
       "id": "README.md",
@@ -126,8 +126,8 @@
     {
       "id": "app/globals.css",
       "file": "app/globals.css",
-      "sha256": "9de7bc3d4ee67ea6646e0bd9f3272c243c31200ee18ae676a870d2324a00536f",
-      "bytes": 91473
+      "sha256": "50e398e60124c812fa7fedb2b0327326e617557b696bf03b8784c32f5f537257",
+      "bytes": 97961
     },
     {
       "id": "app/icon.png",
@@ -156,8 +156,8 @@
     {
       "id": "components/app-chrome.tsx",
       "file": "components/app-chrome.tsx",
-      "sha256": "bf51ffa40001aa24b6b768a99a03d38bcf58c80c7d78985abcb04f0ffb9e70d8",
-      "bytes": 1150
+      "sha256": "f7041e81418e1b9b99b79ec1f95ad0fc046779463be5b3de7583f114ae5c751e",
+      "bytes": 1426
     },
     {
       "id": "components/app-frame.tsx",
@@ -216,8 +216,8 @@
     {
       "id": "components/image-upload-screen.tsx",
       "file": "components/image-upload-screen.tsx",
-      "sha256": "c78d67b24ed2df54b245397964c01e1aff5c31b14cae368e96e102a275f6d347",
-      "bytes": 8388
+      "sha256": "b27525e5722b99b08fd8e297ccdba7710c2488bb831d05299caf77c6d52bebf5",
+      "bytes": 8673
     },
     {
       "id": "components/preview-frame.tsx",
@@ -258,8 +258,8 @@
     {
       "id": "components/theme-switch.tsx",
       "file": "components/theme-switch.tsx",
-      "sha256": "c7cfb31e1e597f706c4130e8c64ec818c7dc75dc77904a1d775ba76d059a8259",
-      "bytes": 1573
+      "sha256": "7637cd787c3dd1f405e0bd76b169f73c8d60ffd35bf0ab9d2464355d9427861a",
+      "bytes": 1816
     },
     {
       "id": "components/upload-form.tsx",
@@ -678,8 +678,8 @@
     {
       "id": "lib/theme.ts",
       "file": "lib/theme.ts",
-      "sha256": "692bd9baf45da2ac0d5eec6ba14c8368f479d6a0c7a234cd1ffc03b78cefc616",
-      "bytes": 2734
+      "sha256": "82cda29fa6215c36b920d17eb1c803f6f1b086eb5550838427dd240eeeff2425",
+      "bytes": 3426
     },
     {
       "id": "lib/types.ts",
@@ -718,6 +718,18 @@
       "bytes": 55687
     },
     {
+      "id": "public/brand/coqui-logo-lockup-dark.svg",
+      "file": "public/brand/coqui-logo-lockup-dark.svg",
+      "sha256": "0c8bd575e1a641a07fe1a96f9ff41d5e5012e818abe67c929a73951836b5d779",
+      "bytes": 80234
+    },
+    {
+      "id": "public/brand/coqui-logo-lockup-light.svg",
+      "file": "public/brand/coqui-logo-lockup-light.svg",
+      "sha256": "53eebd8ed9fa1ad0ae5d5b15627d177ddf78b1ea893332995a4722b54cc5b0c7",
+      "bytes": 80445
+    },
+    {
       "id": "public/brand/coqui-mark.svg",
       "file": "public/brand/coqui-mark.svg",
       "sha256": "f9bcfe1fb1fdfbe52f833ff6d34e1183b61cc953b38f9d93735ffe53a3732f89",
@@ -742,6 +754,12 @@
       "bytes": 1803
     },
     {
+      "id": "public/brand/upload-hero.png",
+      "file": "public/brand/upload-hero.png",
+      "sha256": "9493562211bdc43962be11a94c369a23263e51c4143bffbf62f9580d41d6ae69",
+      "bytes": 100020
+    },
+    {
       "id": "store/round-store.ts",
       "file": "store/round-store.ts",
       "sha256": "da1768f6a7bca0d1d102962a0e5765b9eddfd361a1331c43175902610e1643d7",
@@ -749,10 +767,19 @@
     }
   ],
   "source_changes": {
-    "added": [],
+    "added": [
+      "public/brand/coqui-logo-lockup-dark.svg",
+      "public/brand/coqui-logo-lockup-light.svg",
+      "public/brand/upload-hero.png"
+    ],
     "removed": [],
     "updated": [
-      ".agents/product-marketing.md"
+      "DESIGN.md",
+      "app/globals.css",
+      "components/app-chrome.tsx",
+      "components/image-upload-screen.tsx",
+      "components/theme-switch.tsx",
+      "lib/theme.ts"
     ]
   },
   "facts": [
@@ -1334,10 +1361,10 @@
   "missing_sources": [],
   "supplemental": [],
   "stats": {
-    "source_count": 123,
+    "source_count": 126,
     "fact_count": 40,
     "added": 0,
     "removed": 0,
-    "updated": 3
+    "updated": 0
   }
 }
