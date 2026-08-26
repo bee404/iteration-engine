@@ -7,14 +7,15 @@ Obvious project's Findings Log if ever needed. Conclusions only.
 The repo's own `docs/decisions.md` remains the formal decision log; this is a condensed,
 agent-facing digest of the load-bearing ones.
 
-## Generation engine: Claude Sonnet (GPT-4o as intended fallback)
+## Generation engine: Claude Sonnet (GPT-4o fallback)
 
 Claude Sonnet is the default for screenshot→code and for critique/directions — it wins on
 visual fidelity and clean code output for UI generation, at low per-round cost (~$0.005/round
-with screenshot downscaling and prompt caching). GPT-4o is the *intended* fallback for
-validation failures but is **not wired yet** — only the Claude branch exists in code today
-(`lib/providers/llm/`, `lib/providers/codegen/`). Any single-shot generation needs retries and
-validation heuristics, not blind trust in one call.
+with screenshot downscaling and prompt caching). When `OPENAI_API_KEY` is configured alongside
+Claude, GPT-4o is the typed fallback after Claude exhausts its own validation/error retries
+(`lib/providers/llm/`, `lib/providers/codegen/`). Without that key, Claude remains unwrapped;
+without an Anthropic key, local development uses the mock provider. Any single-shot generation
+needs retries and validation heuristics, not blind trust in one call.
 
 ## Design-token format: W3C DTCG JSON, compressed for the LLM
 
@@ -83,9 +84,9 @@ grounding directions in a real pattern library is viable. **Decided shape:** cal
 per round under Bryan's own key, feed results transiently into that round's prompt context —
 **do not** persist a local taxonomy/metadata snapshot. That retention pattern is explicitly
 prohibited by 21st.dev's ToS (reusing structured metadata / training on content), even though
-the MCP access itself is sanctioned. **Status:** decided but **not wired** —
-`getPatternProvider()` returns a mock today; a `TwentyFirstProvider` branches in once
-`TWENTYFIRST_API_KEY` is configured.
+the MCP access itself is sanctioned. **Status:** wired. `getPatternProvider()` uses
+`TwentyFirstProvider` when `TWENTYFIRST_API_KEY` is configured and the typed mock provider
+otherwise.
 
 ## ComfyUI: optional local service, graceful degradation
 
@@ -102,8 +103,9 @@ of generated assets). **Status:** decided integration shape; not part of the shi
 - **Screenshots** downscale to ~1024px width before the LLM to cut image tokens.
 - **Flowcharts** are just image inputs to the vision model — no structured format.
 - **Multi-screen** generation is sequential with shared design context (up to ~10 screens).
-- **Prototype preview** is an in-app sandboxed iframe, not a separate route or downloadable bundle.
+- **Prototype preview** is an in-app sandboxed iframe; approved prototypes can also be downloaded
+  as standalone source bundles.
 - **API keys** are Vercel server-only env vars; never reach the client.
-- **Screenshot autocrop:** capture content *width* only (height stays fluid) for the codegen
-  viewport target, with a confidence flag — groundwork for the visual diff.
-
+- **Screenshot autocrop (future refinement):** if real-project validation shows that natural
+  screenshot dimensions are insufficient, capture content *width* only (height stays fluid) for
+  the codegen viewport target and attach a confidence flag.

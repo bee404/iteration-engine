@@ -1,8 +1,8 @@
 # Architecture — The Shipped System
 
-This describes what is **actually on `main`** as of the full-stack merge (`6e2fae8`, PRs #2–#9
-all merged). Where a claim in an older research doc is now outdated by shipped code, this file
-reflects the code. Paths are repo-relative.
+This describes what is **actually on `main`** as of commit `34b7a31` (status checked 2026-08-26).
+Where a claim in an older research doc is now outdated by shipped code, this file reflects the
+code. Paths are repo-relative.
 
 ## Stack
 
@@ -11,8 +11,8 @@ reflects the code. Paths are repo-relative.
 - **Turso / libSQL** (`@libsql/client`) for round-history persistence.
 - **Sucrase** for in-browser TSX transpilation of generated components.
 - **@vercel/analytics** for usage tracking.
-- **Claude Sonnet** (Anthropic) for critique, directions, and code generation, behind typed
-  provider interfaces with mock + fixture fallbacks.
+- **Claude Sonnet** (Anthropic) as the primary for critique, directions, and code generation, with
+  GPT-4o fallback when configured, behind typed provider interfaces with mock + fixture fallbacks.
 
 Note: React is used two ways — the app itself (Next.js/React) and a separately vendored React
 runtime inlined into the preview iframe (see Live-mount preview below). There is no separate
@@ -36,7 +36,10 @@ pipeline.
    direction + design goal + screenshot + the active design system.
 5. **Live-mount preview** (`components/preview-frame.tsx`) — on completion, the TSX is
    transpiled with Sucrase and mounted as an interactive component in a sandboxed iframe.
-6. **Approve & persist** — approving a round writes it to Turso (`lib/persist-round.ts` →
+6. **Compare & export** (`components/comparison-viewport.tsx`, `lib/export-bundle.ts`) — the
+   generated iteration and direct source render in one fixed viewport with a binary `Source` /
+   `Iteration` toggle; an approved direction can be downloaded as a standalone source bundle.
+7. **Approve & persist** — approving a round writes it to Turso (`lib/persist-round.ts` →
    `POST /api/rounds`), chained to the prior round via `previousRoundId`. A History section
    (`components/round-history.tsx`) reads back recent rounds.
 
@@ -77,10 +80,10 @@ which implementation runs — that is the whole point of the shape.
 codegen provider appends a condensed design-system spec to every prompt (see below).
 
 ### Patterns (21st.dev grounding) — `lib/providers/patterns/`
-`getPatternProvider()` **always returns `MockPatternProvider` today.** The live 21st.dev MCP
-integration is a decided shape (live per-round query, no bulk snapshot — see `decisions.md`) but
-is **not yet wired**: the factory has a comment marking where a `TwentyFirstProvider` branches
-in once `TWENTYFIRST_API_KEY` is configured. Do not assume live pattern lookups happen.
+`getPatternProvider()` returns `TwentyFirstProvider` when `TWENTYFIRST_API_KEY` is configured and
+`MockPatternProvider` otherwise. The live path performs an on-demand per-round MCP query and does
+not keep a local taxonomy snapshot. Without the key, local development intentionally uses the
+typed mock provider; do not assume live pattern lookups happen in that mode.
 
 ## Data model — `lib/types.ts`
 
@@ -95,7 +98,8 @@ The core shapes (also the Turso persisted shapes, `lib/db/schema.sql`):
 - **`GeneratedCode`** — `{ id, directionId, language, code, status, createdAt }` where status is
   `streaming | complete | error`.
 - **`ImageDimensions`** — `{ width, height }`, nullable on a round for legacy rounds captured
-  before dimension capture existed. Load-bearing for the future visual diff.
+  before dimension capture existed. It supplies the initial viewport model; the chain-level
+  corrected and locked viewport is stored separately.
 
 Note there is **no region/selector/bounding-box** concept anywhere — feedback and directions do
 not know *which part of the screen* they target. That gap matters for the visual-diff feature

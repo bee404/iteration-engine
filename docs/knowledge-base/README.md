@@ -21,7 +21,7 @@ Read the one file that matches your task, not all of them:
 | [`.agents/product-marketing.md`](../../.agents/product-marketing.md) | How Coquí is positioned publicly, who the initial audience is, what claims are defensible, and what the current launch CTA is. Read before writing marketing, launch, recruiting, or public-facing product copy. |
 | [`architecture.md`](./architecture.md) | How the shipped system actually works — pipeline stages, provider interfaces, data model, persistence, demo mode, live-mount preview, design-system enforcement. Start here for any code change. |
 | [`decisions.md`](./decisions.md) | *Why* the system is built the way it is — the durable, load-bearing decisions and their rationale (generation engine, token format, Sucrase, demo mode, 21st.dev shape, etc.). Read before changing a decision. |
-| [`roadmap-and-open-work.md`](./roadmap-and-open-work.md) | What is built vs. designed-but-not-built (the fixed-box `Source` / `Iteration` comparison), build-order dependencies, and the paused external UX iteration work. |
+| [`roadmap-and-open-work.md`](./roadmap-and-open-work.md) | What is built vs. still open (including remaining viewport precision work), build-order dependencies, and the paused external UX iteration work. |
 | [`qa-conventions.md`](./qa-conventions.md) | The PR-review and design-QA pattern this project follows before anything merges. Read before opening a PR. |
 | [`../design-system.md`](../design-system.md) | Coquí's own visual identity, naming, brand assets, copy voice, and design history — distinct from the Vercel Geist system this hub's `architecture.md` covers, which grounds only *generated* code. Read before any UI/visual change to the app shell itself. |
 

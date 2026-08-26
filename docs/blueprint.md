@@ -115,5 +115,5 @@ V1 succeeds when a round's output is coherent: respectful of the inputs Bryan ga
 - Critique items are read-only. Regeneration is allowed only before directions exist; after that, changed feedback starts a new immutable round.
 - Code generation can be retried for the same direction after failure.
 - On a compile-success/mount-failure result, `Iteration` shows the generated source and exact runtime error inside the fixed viewport box. `Source` still shows the visual reference.
-- `Save` and `Export` are two separate actions, not one combined action: Save (primary CTA) persists the approved round; Export (secondary CTA) downloads the approved prototype as a source bundle. Persistence is shipped; export/download and the final CTA treatment remain in progress.
+- `Save` and `Export` are two separate actions, not one combined action: Save (primary CTA) persists the approved round; Export (secondary CTA) downloads the approved prototype as a source bundle. Both behaviors are shipped; final CTA treatment remains subject to front-end/UX review.
 - Comparison is adjacent by design: each iteration against its direct source. The lineage view may browse the full chain but does not become an arbitrary node-to-node comparison or branching interface.

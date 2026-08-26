@@ -1,7 +1,7 @@
 # Roadmap & Open Work
 
-What is built vs. designed-but-not-built, and what's paused. Grounded in `main` as of the
-full-stack merge (PRs #2–#9), not in older doc claims.
+What is built vs. still open, and what's paused. Grounded in `main` commit `34b7a31`, status
+checked 2026-08-26, not in older doc claims.
 
 ## Built and shipped (on `main`)
 
@@ -13,7 +13,14 @@ The implemented generation loop is live and persisted:
 - Per-direction **code generation** streamed over SSE into a bottom sheet.
 - **Live-mount preview** — generated TSX transpiled with Sucrase and mounted as an interactive
   component in a zero-network sandboxed iframe, with source-view fallbacks.
+- **Viewport model** — screenshot dimensions seed the viewport; Bryan can correct the value before
+  the first committed iteration, after which the viewport locks for the chain.
+- **Fixed-box comparison** — `Source` / `Iteration` is a binary toggle in one registered viewport,
+  with source and runtime-error fallbacks when an iteration cannot mount.
+- **Source-bundle export** — an approved direction can be downloaded as a standalone bundle.
 - **Design-system enforcement** (Geist prompt grounding + deterministic post-processing).
+- **Provider fallbacks** — GPT-4o can take over after typed Claude failures when both provider keys
+  are configured; 21st.dev grounding uses a live per-round MCP query when its key is configured.
 - **DEMO_MODE** fixture replay with write-refusal.
 - **Turso round persistence** + a History section reading back recent rounds, chained via
   `previousRoundId`.
@@ -23,56 +30,22 @@ The implemented generation loop is live and persisted:
 > now **closed** on `main` (PR #7 live-mount + dimension capture; PR #9 Turso persistence). Trust
 > the code over those earlier snapshots.
 
-## Designed but not built: the fixed-box comparison
+## Remaining precision work
 
-The fixed-box comparison has **zero code** in the repo — no comparison component, no route, and
-no entry-point button. It lets a designer switch between a reference and its generated iteration
-at identical dimensions, scale, and coordinates.
+The fixed-box comparison and its viewport lock are shipped. The current viewport model starts
+with the screenshot's natural dimensions and accepts a user correction before the chain locks;
+it does not yet detect and remove browser chrome or letterboxing from a capture.
 
-### Build-order dependencies (the blueprint's 3-stage chain)
-
-Each stage is "worthless without the one before it":
-
-1. **Capture (content-width autocrop)** — detect the real content width of the screenshot so the
-   generated component can be scaled to the same viewport. **Partially in place:** natural
-   dimensions are now captured (`screenshotDimensions`), but the *content-width autocrop*
-   (canvas pixel-scan to trim chrome/letterboxing, with a confidence flag) is not yet built.
-2. **Live-render (Sucrase mount)** — mount the generated component as real UI rather than text.
-   **DONE** — shipped in PR #7 (`components/preview-frame.tsx`, `lib/preview/`). The visual diff
-   can build directly on this.
-3. **Compare** — the unified comparison view itself. **Not built.** This is the remaining work.
-
-### Comparison view to build
-
-- One fixed viewport box at best-fit scale. The reference screenshot and generated iteration
-  occupy identical dimensions, scale, and coordinates.
-- One two-position `Source` / `Iteration` toggle. No scrubber, split view, draggable divider,
-  highlight toggle, thumbnail strip, or additional comparison control.
-- Pixel-diff region highlight (rasterize both frames, diff `ImageData` client-side, zero LLM
-  cost — chosen over asking the model to self-report a bounding box, "grading its own homework").
-  Still a candidate, independent of the control-model decision above — not ruled out.
-- Off-happy-path states: streaming/partial-generation indicator with contextual status text,
-  generation-failed entry guard, and a legacy-round fallback when no captured width exists
-  (`scale approximate`).
-- If the selected direction compiles but fails to mount, `Iteration` shows the generated source
-  and exact runtime error inside the fixed box; `Source` continues to show the visual reference.
-
-### Data-model prerequisites for the diff
-
-- **Content-width autocrop** field + confidence flag not yet on the model (only raw natural
-  dimensions are).
-- **No region/bounding-box concept** exists on `Critique`/`Direction` — feedback doesn't know
-  which screen region it targets. The pixel-diff candidate above works around this with
-  client-side rasterized diffing rather than model-reported coordinates.
-- A user-corrected viewport value and a chain-level locked viewport are not yet modeled.
-- Mount-success versus mount-failure needs an explicit comparison-layer state.
-- Locked note: if pixel-diff rasterization proves harder than expected, report effort back to
-  Bryan for a call — it's a bounded spike, not an open-ended effort, and not a silent-fallback ship.
+- **Content-width autocrop** — a bounded future refinement that could detect the actual interface
+  width and attach a confidence flag. It should be added only if real-project validation shows
+  that natural dimensions are insufficient.
+- **Pixel-diff region highlighting** — remains an optional exploration, not part of the current
+  comparison contract. The shipped control is only the binary `Source` / `Iteration` toggle.
+- **Legacy rounds** — rounds without captured dimensions continue to use the documented fallback
+  behavior rather than inventing a viewport ratio.
 
 ## Other planned-but-not-wired work
 
-- **GPT-4o fallback** on Claude validation failure — intended, only the Claude branch exists.
-- **Live 21st.dev MCP** pattern grounding — decided shape, mock provider today (see `decisions.md`).
 - **Per-project / per-round design-system selection** — blocked on a design-system reference
   field in `Round`/`Project`; one hardcoded Geist system today.
 - **W3C DTCG token-index input model** — decided format, not yet built as an input.
@@ -106,8 +79,8 @@ Each stage is "worthless without the one before it":
 - Responsive and touch behavior remains deferred under Decision 13; it is not a blocker or an
   open design input for the current desktop build.
 - `Save` and `Export` are two separate actions (primary CTA: Save, secondary CTA: Export), not
-  one combined action. Persistence (Save) is shipped; export/download and the final CTA treatment
-  are still in progress on the frontend.
+  one combined action. Both behaviors are shipped; final CTA treatment remains subject to
+  front-end/UX review.
 - The coquí-call control defaults to muted and remains disabled until an audio asset is supplied.
 
 ## Paused: external front-end / UX iteration

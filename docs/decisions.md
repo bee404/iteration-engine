@@ -126,7 +126,9 @@ Critique items are read-only evidence. A critique may be regenerated before dire
 
 The comparison always shows an iteration against its direct source in the chain; it is not an arbitrary node-to-node comparison tool. If generated code compiles but fails to mount, the `Iteration` layer shows the generated source and exact runtime error inside the same fixed viewport box, while `Source` continues to show the visual reference. The round remains usable.
 
-`Save` and `Export` are two separate actions, not one combined action: Save is the primary CTA and persists the approved round and its lineage record to Turso; Export is the secondary CTA and downloads the approved prototype as a source bundle. The current code implements persistence (Save) but not the export download yet, and the frontend's primary/secondary CTA treatment is still in progress.
+`Save` and `Export` are two separate actions, not one combined action: Save is the primary CTA and persists the approved round and its lineage record to Turso; Export is the secondary CTA and downloads the approved prototype as a source bundle. Both behaviors are implemented. The frontend's final primary/secondary CTA treatment remains subject to front-end/UX review.
+
+**Implementation status update (2026-08-26):** The viewport inference/correction and chain lock, fixed-box `Source` / `Iteration` comparison, source-bundle export, live 21st.dev provider path, and Claude-primary/GPT-4o fallback path described by the surrounding decisions are present on `main`. Real-project validation remains outstanding.
 
 **Rationale:** These choices complete the immutable convergence model without introducing hidden edits, alternate histories, or a second comparison system. They also reconcile the product-facing commit semantics with the existing persistence implementation and the release-plan target. Round-to-round inheritance and the final Save/Export CTA treatment are deliberately left open rather than locked in here — both need their own scoping pass.
 
