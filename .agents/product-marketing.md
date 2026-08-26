@@ -1,14 +1,14 @@
 # Product Marketing Context
 
-**Document version:** v5
+**Document version:** v7
 **Last updated:** 2026-08-26
 **Scope:** Launch-ready context for Coquí's first public post, closed-alpha outreach, and eventual open-source release. Long-term positioning, market sizing, and competitive research are intentionally deferred.
 
 ## Product Overview
 
-**One-liner:** Coquí helps designers win back time by bringing screenshot-based feedback, critique, direction-setting, and optional prototyping into one guided workflow.
+**One-liner:** Coquí helps designers turn screenshot-based feedback into a considered direction and a portable coded prototype in one guided workflow.
 
-**What it does:** A designer uploads a screen, states the goal, and pastes feedback. Coquí separates real problems from taste, flags ambiguity, returns 2–3 rationale-backed directions, and lets the designer optionally generate and inspect a coded preview before choosing and saving a round.
+**What it does:** A designer uploads a screen, states the goal, and pastes feedback. Coquí separates real problems from taste, flags ambiguity, returns 2–3 rationale-backed directions, and generates a coded preview for the direction the designer selects. The final download includes runnable source and the complete context behind it.
 
 **Product category:** Design-iteration and decision-support tool.
 
@@ -24,13 +24,13 @@
 
 **Secondary launch audience:** Recruiters and hiring managers evaluating Bryan's ability to identify a workflow problem and design and build a working product. They are viewers of the proof, not the product's primary users.
 
-**Primary use case:** Move from a screenshot and raw feedback to a defensible next direction, with optional interactive prototyping, in one guided round.
+**Primary use case:** Move from a screenshot and raw feedback to a defensible next direction and portable interactive prototype in one guided exploration.
 
 **Jobs to be done:**
 
 - Make sense of mixed or vague design feedback.
 - Compare a small number of meaningfully different directions before committing.
-- Prototype only the directions worth testing and retain the reasoning behind the decision.
+- Prototype the direction worth testing and carry its reasoning into the downloaded handoff.
 
 ## Personas
 
@@ -65,11 +65,12 @@
 
 **Key differentiators:**
 
-- Judgment-first: critique and alternatives come before optional code generation.
+- Judgment-first: critique and alternatives come before selected-direction code generation.
 - Feedback-aware: separates signal from preference and flags unclear input.
 - Bounded choice: presents 2–3 rationale-backed directions with tradeoffs rather than one opaque answer or unlimited variation.
-- On-demand fidelity: designers can generate code for zero, one, or several directions before choosing.
-- Durable rounds: approved inputs, critique, directions, generated code, and history are persisted together.
+- Selected-direction fidelity: the designer chooses which direction becomes a coded prototype.
+- Portable context: the runnable prototype, raw inputs, synthesized critique, selected direction, and generation notes download together.
+- Privacy-conscious V0: screenshots and exploration history are not retained by the canonical workflow.
 - Intended open-source model: users can inspect, fork, adapt, and run Coquí with their own Claude API key once release packaging is complete.
 
 **Implemented but not fully validated:** The fixed-box `Source` / `Iteration` comparison, conditional live 21st.dev grounding, source-bundle export, and GPT-4o fallback are now in the codebase. The complete loop still needs validation against a real project before stronger quality or registration claims are made.
@@ -80,7 +81,7 @@
 
 | Objection | Response |
 |-----------|----------|
-| "Is this another AI tool making design decisions for me?" | No. Coquí structures critique and directions; the designer selects what advances, and code generation is optional. |
+| "Is this another AI tool making design decisions for me?" | No. Coquí structures critique and directions; the designer selects what advances into a prototype. |
 | "Will it understand my product and constraints?" | The round accepts a goal, feedback, reviewer context, and constraints, but broader design-system input and real-project validation are still incomplete. |
 | "Is it ready for production use?" | Not yet. The honest offer today is a closed alpha around the implemented single-screen workflow. |
 
@@ -100,7 +101,7 @@
 
 **Current source language:** Repository and founder language only; no external customer interviews yet.
 
-**Words to use:** win back time, design iteration, raw feedback, critique, real problems, taste, directions, rationale, tradeoffs, optional coded preview, designer judgment, guided workflow, closed alpha.
+**Words to use:** win back time, design exploration, raw feedback, critique, real problems, taste, directions, rationale, tradeoffs, coded prototype, portable handoff, designer judgment, guided workflow, closed alpha.
 
 **Words to avoid:** autonomous designer, replaces designers, instant production-ready design, pixel-perfect, proven time savings, enterprise platform, unlimited, one-click magic.
 
@@ -108,11 +109,11 @@
 
 | Term | Meaning |
 |------|---------|
-| Round | One cycle from screenshot and feedback through critique, directions, optional code, and approval |
+| Exploration | One browser-session cycle from screenshot and feedback through critique, directions, selected prototype, and download |
 | Direction | A meaningfully different approach with rationale, tradeoffs, and suggested changes |
 | Signal | Feedback pointing to a real design problem |
 | Preference | Feedback expressing taste rather than an established problem |
-| Iteration | A generated or approved next version of the source screen |
+| Iteration | A generated next version of the source screen |
 
 ## Brand Voice
 
@@ -129,20 +130,19 @@
 - Screenshot upload/paste, natural-dimension capture, goal, raw feedback, reviewer context, and constraints.
 - Real Claude-generated critique that separates signal from preference and flags ambiguities.
 - Real Claude-generated 2–3 distinct directions with rationale, tradeoffs, and suggested changes.
-- Optional per-direction streamed code generation and interactive sandboxed preview with source/error fallback.
-- Viewport inference, pre-commit correction, chain locking, and fixed-box `Source` / `Iteration` comparison.
-- Approved-prototype export as a downloadable source bundle.
+- Selected-direction streamed code generation and interactive sandboxed preview with source/error fallback.
+- Viewport inference, pre-generation correction, per-exploration locking, and fixed-box `Source` / `Iteration` comparison.
+- Context-rich prototype export with runnable source, raw inputs, synthesized critique, selected direction, and generation notes.
 - Claude-primary GPT-4o fallback and conditional live 21st.dev pattern grounding when the relevant server keys are configured.
-- Approval, Turso persistence, and recent round history.
-- Fixture-backed demo mode that replays captured real output with no external calls or writes.
+- Fixture-backed demo mode that replays captured real output with no external calls.
 
 **Visual proof hierarchy:**
 
 1. The input transition: uploaded screen beside a concise design brief.
 2. The critique: `Signal — real problems` versus `Preference — taste`, plus ambiguity flags.
 3. The direction decision: 2–3 distinct direction cards with rationale and tradeoffs.
-4. The optional coded preview opening from a direction.
-5. A saved-round confirmation or history view, if the story needs a closing frame.
+4. The generated prototype compared with the source.
+5. The context-rich download as the closing handoff.
 
 For the first launch visuals, favor product UI and neutral or permission-safe source screens. Avoid leading with the existing Puerto Rico and water-crisis illustration set.
 
@@ -160,11 +160,11 @@ For the first launch visuals, favor product UI and neutral or permission-safe so
 
 ## Public Positioning Statement
 
-Coquí is a design-iteration tool that turns a screenshot and raw feedback into a structured critique, a few rationale-backed directions, and an optional coded preview, helping designers move from feedback to a decision in one guided flow.
+Coquí is a design-exploration tool that turns a screenshot and raw feedback into a structured critique, a few rationale-backed directions, and a portable coded prototype, helping designers move from feedback to a tangible next direction in one guided flow.
 
 ## Claims Boundary
 
-**Safe today:** The implemented single-screen workflow, designer-controlled direction choice, real critique and directions, optional coded preview, fixed-box `Source` / `Iteration` comparison, source-bundle export, demo mode, persisted rounds/history, the staged Closed Alpha A/B plan, and the stated intent to release Coquí as open source and bring-your-own-key. Live 21st.dev grounding and GPT-4o fallback are implemented conditionally when their server-side keys are configured.
+**Safe today:** The implemented single-screen workflow, designer-controlled direction choice, real critique and directions, selected-direction coded preview, fixed-box `Source` / `Iteration` comparison, context-rich prototype export, demo mode, the staged Closed Alpha A/B plan, and the stated intent to release Coquí as open source and bring-your-own-key. Live 21st.dev grounding and GPT-4o fallback are implemented conditionally when their server-side keys are configured.
 
 **Avoid until proven or released:** Saying the open-source release is available now; quantified time savings; superior output quality; production-ready code; pixel-perfect or perfectly registered results; general design-system adherence; multi-screen workflows; closed-beta maturity; customer adoption or satisfaction; enterprise readiness; or implying that live provider integrations are available without their server-side configuration.
 
@@ -174,10 +174,12 @@ No positioning question materially blocks a scoped first public post or closed-a
 
 1. Will the public proof be a controlled fixture-backed recording or a live connected demo?
 2. Which real or permission-safe screen and feedback example should appear in the visuals?
-3. Before calling it open source and fork-ready, choose a license and add a public setup path covering installation, the Claude key, local persistence, and known product limits. The repository already has an environment-variable example, but no license or contributor-facing setup guide was found.
+3. Before calling it open source and fork-ready, choose a license and add a public setup path covering installation, the Claude key, the transient V0 data model, and known product limits. The repository already has an environment-variable example, but no license or contributor-facing setup guide was found.
 
 ## Changelog
 
+- v7 (2026-08-26) — Aligned launch vocabulary and setup boundaries with the selected-direction prototype flow and transient V0 data model.
+- v6 (2026-08-26) — Reframed V0 as a transient exploration ending in a selected-direction prototype and context-rich download; removed approval, persisted history, and screenshot retention from current claims.
 - v5 (2026-08-26) — Reconciled public proof and claims with the shipped viewport comparison, export, provider fallback, and conditional 21st.dev grounding; updated verification counts and retained real-project validation as the remaining evidence gate.
 - v4 (2026-08-22) — Defined Closed Alpha A as three trusted target users, made a deep security QA pass the gate to public-list Alpha B, added the future Obsidian53 owned-channel direction, and prohibited generic "quietly building" launch openings.
 - v3 (2026-08-21) — Set the first-post CTA to a small alpha testers list and defined the cohort's purpose as testing Coquí against real use cases beyond Bryan's own work.

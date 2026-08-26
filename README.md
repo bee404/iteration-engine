@@ -1,6 +1,6 @@
 # Coquí
 
-Coquí is a personal design-iteration tool that turns visual feedback into a critique, a small set of rationale-backed directions, and an optional coded iteration while preserving designer judgment.
+Coquí is a personal design-exploration tool that turns visual feedback into a critique, a small set of rationale-backed directions, and a downloadable coded prototype while preserving designer judgment.
 
 ## Repository purpose
 
@@ -20,9 +20,9 @@ The operating sequence is:
 
 ## Status
 
-Discovery reconciliation was agreed on 2026-08-05 and the cross-tool context packets were consolidated on 2026-08-11. As of `main` commit `34b7a31` (2026-08-24), the implemented round includes upload and intake, real Claude critique and directions, on-demand streamed code generation, live-mount preview with source fallback, viewport inference/correction and chain locking, fixed-box `Source` / `Iteration` comparison, downloadable source-bundle export, Turso persistence and history, fixture-backed demo mode, live 21st.dev grounding when configured, and GPT-4o fallback when configured alongside Claude.
+The current V0 flow is screenshot upload and intake, Claude critique and directions, one selected direction, streamed code generation, a fixed-box `Source` / `Iteration` review, and a client-generated ZIP. The ZIP contains a runnable Vite/React prototype plus `coqui-context.json` with the raw inputs, synthesized critique, full selected direction, viewport, and generation notes. The processed screenshot remains transient browser-session state and is excluded from the download by default.
 
-V1's remaining release gate is validation of the complete loop against a real project. Content-width autocrop and a confidence flag remain possible precision improvements, while multi-screen workflows, per-project design systems, responsive behavior, and ComfyUI remain deferred. See `docs/release-plan.md` and `docs/knowledge-base/roadmap-and-open-work.md` for the current boundary.
+The remaining release gate is validation of this complete loop against a real project. Historical rounds, retention features, multi-screen workflows, per-project design systems, responsive behavior, and ComfyUI remain deferred. See `docs/release-plan.md` and `docs/knowledge-base/roadmap-and-open-work.md` for the current boundary.
 
 ## Repository map
 
@@ -43,12 +43,12 @@ V1's remaining release gate is validation of the complete loop against a real pr
 
 ## Demo mode (offline front-end QA)
 
-Set `DEMO_MODE=true` to walk the entire flow — upload -> critique -> directions -> code streaming into the bottom sheet — on **real, previously-captured** data with zero external API calls and zero Turso writes. It's implemented as fixture-backed implementations of the existing `LLMProvider` / `CodeGenProvider` interfaces, selected ahead of every other provider by the same factories the live path uses (`lib/providers/**/index.ts`), so flipping the flag off restores normal live behavior with no fixture code on that path.
+Set `DEMO_MODE=true` to walk the entire flow on **real, previously-captured** output with zero external API calls. Fixture-backed implementations use the same provider interfaces as the live path, so flipping the flag off restores normal live behavior.
 
 - Captured examples live in `lib/fixtures/` (`examples.ts` is the registry; `data/` holds verbatim captured code). Add a new example by appending a `DemoFixture` — no provider or format changes needed.
 - Pin which example to replay with `DEMO_FIXTURE=<id>` (defaults to the first registered fixture).
 - Because inputs are replayed, any screenshot/text a reviewer enters is accepted; the fixture's real captured output is what's returned.
-- All persistence routes (`POST /api/rounds`, `POST /api/projects`, `PATCH /api/rounds/[id]`) refuse writes while demo mode is on, backed by a write guard in the DB query layer.
+- The canonical V0 flow does not persist explorations in either live or demo mode.
 
 ## Security baseline
 

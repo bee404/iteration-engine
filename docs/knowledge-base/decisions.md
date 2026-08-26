@@ -66,16 +66,17 @@ with a notice — never a blank frame, never worse than text.
 Bryan runs multiple front-end/UX quality passes without spending real API compute or hitting
 live Claude. DEMO_MODE replays real captured outputs through the *same* provider interfaces
 (fixture-backed implementations selected ahead of every other provider), so the whole flow feels
-interactive end-to-end with zero external calls and zero Turso writes. It reuses the existing
+interactive end-to-end with zero external calls. It reuses the existing
 mock-provider precedent rather than inventing new mocking machinery, and writes are refused while
 it's on. Flipping it off restores live behavior exactly.
 
-## Persistence: Turso (SQLite at the edge)
+## V0 durability: portable download, not application persistence
 
-Sufficient for a single-user personal tool without leaving the Vercel deployment. Structured
-fields are JSON `TEXT` columns parsed at the query layer (SQLite has no array/object type).
-Rounds chain via `previousRoundId` for cross-round version history. Upgrade path (Postgres/cloud
-sync) only if multi-user/multi-device is ever needed.
+The canonical V0 exploration is transient browser state. Selecting a direction is not approval.
+The durable output is a ZIP with runnable source and `coqui-context.json`; the screenshot is not
+included by default and is not retained by the canonical workflow. Historical rounds, lineage,
+and a stronger commit state are future retention features. Legacy Turso code remains isolated
+pending a separately approved removal.
 
 ## 21st.dev grounding: live per-round MCP query, never a bulk snapshot
 
@@ -99,12 +100,11 @@ of generated assets). **Status:** decided integration shape; not part of the shi
 ## Resolved product calls (quick reference)
 
 - **Vague feedback** is flagged for clarification, never guessed at (`flaggedAmbiguities`).
-- **Every iteration** needs explicit human approval before finalizing (approval gate).
+- **Every prototype** follows an explicit human direction selection; selection is not formal approval.
 - **Screenshots** downscale to ~1024px width before the LLM to cut image tokens.
 - **Flowcharts** are just image inputs to the vision model — no structured format.
 - **Multi-screen** generation is sequential with shared design context (up to ~10 screens).
-- **Prototype preview** is an in-app sandboxed iframe; approved prototypes can also be downloaded
-  as standalone source bundles.
+- **Prototype preview** is an in-app sandboxed iframe; selected prototypes download with their full exploration context.
 - **API keys** are Vercel server-only env vars; never reach the client.
 - **Screenshot autocrop (future refinement):** if real-project validation shows that natural
   screenshot dimensions are insufficient, capture content *width* only (height stays fluid) for

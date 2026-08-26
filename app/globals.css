@@ -3724,6 +3724,56 @@ body:has(.app-chrome) {
   text-align: center;
 }
 
+.prototype-body {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 76px 0 96px;
+}
+
+.prototype-header {
+  max-width: 760px;
+  margin-bottom: 40px;
+}
+
+.prototype-generating {
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.prototype-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.prototype-actions .directions-restart {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.prototype-privacy-note {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--ink-mute);
+  font-size: 0.82rem;
+}
+
+@media (max-width: 720px) {
+  .prototype-body {
+    width: min(100% - 28px, 1180px);
+    padding-top: 48px;
+  }
+}
+
 .directions-kicker {
   color: var(--accent-text);
   font-size: 11px;

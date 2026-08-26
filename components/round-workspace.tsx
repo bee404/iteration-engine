@@ -134,23 +134,30 @@ export function RoundWorkspace() {
   const canExport = Boolean(selectedDirectionId && selectedGeneratedCode?.status === "complete");
 
   const handleExport = useCallback(() => {
-    if (!selectedDirectionId || !selectedGeneratedCode || selectedGeneratedCode.status !== "complete") return;
+    if (!selectedDirectionId || !selectedGeneratedCode || selectedGeneratedCode.status !== "complete" || !critique) return;
     const direction = directions.find((d) => d.id === selectedDirectionId);
     if (!direction) return;
 
     setExportError(null);
     try {
       const bundle = buildExportBundle({
-        direction: { title: direction.title },
+        direction,
+        critique,
         code: selectedGeneratedCode.code,
-        designGoal,
-        roundId: lastSavedRoundId,
+        inputs: {
+          designGoal,
+          feedbackText,
+          reviewerContext: reviewerContext ?? undefined,
+          constraints: constraints ?? undefined,
+        },
+        viewport: lockedViewport ?? screenshotDimensions,
+        warnings: selectedGeneratedCode.warnings,
       });
       downloadExportBundle(bundle);
     } catch (error) {
       setExportError(error instanceof Error ? error.message : "Export failed");
     }
-  }, [selectedDirectionId, selectedGeneratedCode, directions, designGoal, lastSavedRoundId]);
+  }, [selectedDirectionId, selectedGeneratedCode, critique, directions, designGoal, feedbackText, reviewerContext, constraints, lockedViewport, screenshotDimensions]);
 
   return (
     <div className="workspace">

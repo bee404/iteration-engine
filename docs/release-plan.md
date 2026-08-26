@@ -10,7 +10,7 @@ Agreed 2026-08-05, reconciled with the shipped system and cross-tool context pac
 
 ### Implementation status as of 2026-08-26
 
-Shipped: screenshot intake and natural-dimension capture; real Claude critique and direction generation; per-direction streamed code generation; live-mount preview with source fallback; viewport inference, correction, and chain locking; fixed-box `Source` / `Iteration` comparison; downloadable source-bundle export; live 21st.dev grounding when `TWENTYFIRST_API_KEY` is configured; GPT-4o fallback when `OPENAI_API_KEY` is configured alongside Claude; Turso round persistence and history; fixture-backed `DEMO_MODE`; and a single-user security baseline covering production access, burst limiting, screenshot validation, preview CSP, dependency audits, and structured security-event logs.
+Implemented on `codex/v0-portable-prototype`: screenshot intake and natural-dimension capture; real Claude critique and direction generation; selected-direction streamed code generation; live-mount preview with source fallback; per-exploration viewport inference, correction, and locking; fixed-box `Source` / `Iteration` comparison; and a client-generated ZIP containing runnable source plus the full exploration context. The canonical V0 flow is transient and does not persist screenshots, approvals, or history.
 
 Remaining for V1: validate the complete loop against a real project and evaluate whether content-width autocrop plus a confidence flag is needed beyond the current natural-dimension viewport model. Optional ComfyUI clarification remains a graceful enhancement, not a blocker for the core comparison loop.
 
@@ -27,14 +27,14 @@ Per Bryan's own guidance for this reconciliation: don't optimize solely for a de
 - 2-3 direction generation per round, each with rationale and tradeoffs.
 - Live 21st.dev MCP queries for pattern grounding on direction generation.
 - Vague-feedback flagging and clarification (text-based; ComfyUI visual clarification if available locally).
-- On-demand code/prototype generation for any direction (Claude Sonnet primary, GPT-4o fallback), streamed via SSE to a sandboxed preview iframe.
+- Code/prototype generation for the selected direction (Claude Sonnet primary, GPT-4o fallback), streamed via SSE to a sandboxed preview iframe.
 - Fixed-box `Source` / `Iteration` comparison (the generated iteration against its direct source).
-- Turso persistence of rounds (critique, directions, any generated code, driving feedback).
-- Approved-prototype export as a downloadable bundle.
+- Portable prototype export with runnable source, raw inputs, synthesized critique, complete selected direction, viewport, and generation notes.
 
 ### Explicitly out of scope for v1 (deferred, not rejected)
 
 - Multi-screen workflows (up to 10 screens, shared context) — architecture should not preclude this, but it is not built in v1.
+- Historical rounds, screenshot hosting, approval state, lineage, and retention features.
 - Comparing directions across multiple rounds as a dedicated view beyond basic version history (the within-round comparison is v1; a richer cross-round comparison view can follow).
 - A paid 21st.dev tier — start on the free tier (2 code-retrievals/day); revisit only if usage hits that ceiling.
 - Any Higgsfield or additional generation-layer integration.
@@ -53,7 +53,7 @@ Validated against Decision 7's success bar: run v1 on at least one real Obsidian
 ### Risks
 
 - 21st.dev's free-tier 2/day code-retrieval cap could bottleneck iteration during heavy build/test days — mitigated by the fact that search/metadata (used for grounding) is unmetered; only literal code retrieval is capped.
-- Claude Sonnet costs scale with directions-per-round; 2-3 directions with rationale-only (no code) keeps this bounded, since code generation is on-demand and per-direction, not automatic.
+- Claude Sonnet costs include one code generation per completed exploration; the selected-direction gate keeps this bounded.
 - No explicit multi-screen support in v1 could limit real-world use for larger initiatives — accepted tradeoff, architecture is designed not to preclude the extension later.
 
 ### Next decision point

@@ -8,26 +8,28 @@ web
 
 ## Users
 
-Primary user: Bryan, using Coquí as a personal design-iteration tool. He uploads a visual design, adds a design goal and feedback, reviews critique and directions, optionally generates code, previews the result, and saves an approved round.
+Primary user: Bryan, using Coquí as a personal design-exploration tool. He uploads a visual design, adds a design goal and feedback, reviews critique and directions, selects one direction, previews the generated prototype, and downloads a portable handoff.
 
 ## Product Purpose
 
-Coquí compresses the loop between visual feedback, critique, design direction, and iteration while keeping the designer responsible for judgment. The happy-path workflow page should make that loop immediately understandable, beginning with the screenshot as the object being iterated.
+Coquí compresses the loop between visual feedback, critique, design direction, and prototyping while keeping the designer responsible for judgment.
 
 ## Positioning
 
-The product turns critique into a small set of rationale-backed iteration directions before optional code generation, rather than treating AI as the final decision-maker or producing one opaque regenerated prototype.
+The product turns critique into a small set of rationale-backed directions before the designer selects one for code generation. Selection expresses intent to explore, not formal approval.
 
 ## Operating Context
 
-The workflow page is a separate explanatory surface inside the existing Coquí application. It should show the happy path only for now, with a later surface available for fallback and failure states. The page should use the repository's current visual system and keep copy concise.
+The canonical V0 experience is one transient browser-session exploration. Historical records and retention features are progressive enhancements, not prerequisites for useful output.
 
 ## Capabilities and Constraints
 
 - The page starts with a screenshot, design goal, and feedback.
-- The visible happy path is: input, critique, directions, optional code generation, live preview, approval, and save.
+- The visible happy path is: input, critique, directions, select direction, code generation, live preview, and download.
 - The explanatory page must not imply that Higgsfield, ComfyUI, or Impeccable are currently runtime stages; the codebase records those as excluded, optional/planned, or external respectively.
-- Current code saves approved rounds to Turso. The approved V1 export is a downloadable source bundle; that download is planned but not yet implemented.
+- The final ZIP includes runnable Vite/React source plus the raw inputs, synthesized critique, selected direction, viewport, and generation notes in `coqui-context.json`.
+- The screenshot is used transiently to ground model calls and compare Source/Iteration. V0 does not save it to application persistence or include it in the ZIP by default.
+- Historical rounds and an explicit approval/commit state are deferred.
 - The current design target is desktop-only at approximately 1241px. Responsive and touch adaptations are deferred until the visual direction and remaining screens are stable.
 - Preserve the existing Coquí visual system in `DESIGN.md`.
 
@@ -46,8 +48,8 @@ Product name: Coquí. Preserve the existing atmospheric ground, floating white c
 - Start with the visual artifact and keep it central.
 - Show AI as a sequence of useful transformations, not as an opaque authority.
 - Keep the happy path legible at a glance.
-- Make optional code generation visibly optional.
-- Keep the designer's approval as the committing moment.
+- Make the selected direction and generated result easy to inspect together.
+- Keep the designer in control of selection and download without implying that either is formal approval.
 
 ## Accessibility & Inclusion
 

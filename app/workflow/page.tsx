@@ -1,8 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { ROUND_PERSISTENCE_DISABLED_REASON } from "@/lib/round-persistence";
-
 const directionRows = [
   { label: "Clearer path", detail: "Reduce hesitation", accent: "light" },
   { label: "Stronger focus", detail: "Make the next move obvious", accent: "warm" },
@@ -64,12 +62,12 @@ export default function WorkflowPage() {
 
       <section className="workflow-intro" aria-labelledby="workflow-title">
         <div>
-          <p className="workflow-kicker">One round, end to end</p>
+          <p className="workflow-kicker">One exploration, end to end</p>
           <h1 id="workflow-title">Start with the screen.<br /><em>Leave with a sharper one.</em></h1>
         </div>
         <p className="workflow-intro-copy">
           Coquí turns a screenshot and the feedback around it into a clearer next move.
-          You stay in charge of what earns another round.
+          You stay in charge of which direction becomes a prototype.
         </p>
       </section>
 
@@ -157,7 +155,7 @@ export default function WorkflowPage() {
           <div className="workflow-stage-index">04</div>
           <div className="workflow-stage-main">
             <div className="workflow-stage-copy">
-              <p className="workflow-stage-eyebrow">Make it tangible <span>Optional</span></p>
+              <p className="workflow-stage-eyebrow">Make it tangible</p>
               <h3>Generate code when a direction earns it.</h3>
               <p>Sonnet streams a self-contained prototype. Coquí keeps the raw source visible while the live preview mounts.</p>
             </div>
@@ -190,37 +188,30 @@ export default function WorkflowPage() {
           <div className="workflow-stage-index">05</div>
           <div className="workflow-stage-main workflow-commit-main">
             <div className="workflow-stage-copy">
-              <p className="workflow-stage-eyebrow">Commit</p>
-              <h3>Keep the useful one.</h3>
-              <p>Approve the direction you want to carry forward. The round is saved to your chain.</p>
+              <p className="workflow-stage-eyebrow">Take it with you</p>
+              <h3>Download the useful one.</h3>
+              <p>The runnable prototype ships with the selected direction, synthesized critique, and raw inputs.</p>
             </div>
             <div className="workflow-commit-action">
-              <div className="workflow-chain" aria-label="Round saved to the iteration chain">
+              <div className="workflow-chain" aria-label="Exploration ready to download">
                 <span className="workflow-chain-node done" />
                 <span className="workflow-chain-line" />
                 <span className="workflow-chain-node done" />
                 <span className="workflow-chain-line" />
                 <span className="workflow-chain-node current" />
               </div>
-              <div className="workflow-commit-label"><span>Round 03</span><strong>Saved to the chain</strong></div>
-              {/* Static overview of the flow, not the live control — but it must not advertise a
-                  save that the demo deployment cannot perform (see lib/round-persistence.ts). */}
-              <button
-                className="workflow-primary-action"
-                type="button"
-                disabled
-                title={ROUND_PERSISTENCE_DISABLED_REASON}
-              >
-                Save &amp; export <span aria-hidden="true">↗</span>
-              </button>
-              <small>{ROUND_PERSISTENCE_DISABLED_REASON}</small>
+              <div className="workflow-commit-label"><span>Final payload</span><strong>Ready to download</strong></div>
+              <Link className="workflow-primary-action" href="/upload">
+                Start exploring <span aria-hidden="true">↗</span>
+              </Link>
+              <small>The screenshot stays in your browser session and is not included by default.</small>
             </div>
           </div>
         </article>
       </section>
 
       <footer className="workflow-footer">
-        <span>One screen. One decision. One clearer next round.</span>
+        <span>One screen. One direction. One portable prototype.</span>
         <Link href="/upload">Back to Coquí <span aria-hidden="true">↗</span></Link>
       </footer>
     </main>

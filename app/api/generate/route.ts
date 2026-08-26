@@ -21,7 +21,7 @@ function sseEvent(event: string, data: unknown): string {
 /**
  * Streams generated code for a single direction as Server-Sent Events. Consumed by
  * the client via fetch + ReadableStream (not EventSource, since this is a POST) —
- * see components/direction-card.tsx.
+ * see lib/codegen-client.ts.
  */
 export async function POST(request: Request) {
   const denied = authorizeRequest(request);

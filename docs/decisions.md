@@ -12,6 +12,8 @@ Reconciliation decisions recorded 2026-08-05. This is the source of truth for wh
 
 ### 1. Product center of gravity: judgment-first, not code-first
 
+**V0 update (2026-08-26):** Judgment remains the center of gravity, but after reviewing directions the canonical V0 path requires selecting one direction and generating its prototype so the exploration ends in a tangible, portable output. See Decision 17.
+
 **Decision:** Coquí is a critique-and-direction decision-support tool. A round produces a critique plus several rationale-backed directions; code/prototype generation is a separate, optional step (see Decision 3), not the product's primary output.
 
 **Rationale:** The original blueprint's one-regenerated-prototype-per-round model risked producing exactly the "shallow visual variation" the external discovery warns against — a new look each round with no comparison of genuinely different decisions. The judgment-first framing keeps Bryan choosing between real alternatives before any code is spent.
@@ -29,6 +31,8 @@ Reconciliation decisions recorded 2026-08-05. This is the source of truth for wh
 **Owner:** Bryan. **Date:** 2026-08-05.
 
 ### 3. Code/prototype generation is optional and on-demand, never a required pipeline stage
+
+**V0 update (2026-08-26):** Superseded for the canonical V0 path by Decision 17. Earlier prototypes supported generating zero or several directions; V0 now generates the one selected direction before the final download. The historical rationale remains recorded here.
 
 **Decision:** Generating full code for a direction is an action Bryan can trigger for zero, one, or several directions, at any point — independent of whether he has formally "picked" a direction yet. It is a fidelity option, not a mandatory last step of the workflow.
 
@@ -104,6 +108,8 @@ Reconciliation decisions recorded 2026-08-05. This is the source of truth for wh
 
 ### 12. Lineage is append-only; no branching, forking, merging, or version-graph UI
 
+**V0 update (2026-08-26):** Deferred by Decision 17. V0 has no lineage or round-history surface. If history is added later, the non-branching constraint remains the starting point.
+
 **Decision:** History is a single ordered chain per screen, readable and permanent, never editable. A past selection cannot be changed and propagated forward — starting a different path means starting a new chain from that node, leaving the original chain intact. Looking at an unselected direction (including generating its code to inspect it) is non-destructive and commits to nothing. The product never exposes branching, forking, merging, or a version graph, even though the underlying data retains every unselected direction.
 
 **Rationale:** Confirms and sharpens the standing "convergence over exploration" position (Decision 1): the product converges on one answer per round, and its history should read the same way. A lineage/chain browsing view for this history has not been designed yet — see `docs/knowledge-base/roadmap-and-open-work.md`.
@@ -119,6 +125,8 @@ Reconciliation decisions recorded 2026-08-05. This is the source of truth for wh
 **Owner:** Bryan. **Date:** 2026-08-11.
 
 ### 14. Round mutability, comparison failure, lineage comparison, and export are resolved
+
+**V0 update (2026-08-26):** The persistence, approval, and lineage portions are superseded by Decision 17. Fixed-box comparison, explicit runtime failure, and source-bundle export remain active.
 
 **Decision:** The first round infers a viewport box and shows its dimensions before synthesis. Bryan may correct that measurement before the first iteration is committed; after that, the box is locked for the chain. Later rounds require fresh feedback and use the prior iteration as their reference. Whether later rounds also inherit the prior goal, reviewer context, or constraints as editable defaults is explicitly deferred — not a V1 decision (see `docs/knowledge-base/roadmap-and-open-work.md`); it's flagged as a possible macro/historical feature (patterns mined across a project's round history) rather than a micro per-round convenience, worth scoping on its own later.
 
@@ -161,15 +169,27 @@ credential and per-instance limiter with identity-backed sessions and a distribu
 
 **Owner:** Bryan. **Date:** 2026-08-21.
 
+### 17. V0 ends in a portable prototype, not an approval or persisted round
+
+**Decision:** The canonical V0 flow is Upload → Feedback → Directions → select one direction → generated prototype → `Source` / `Iteration` review → download. The direction CTA is **Continue to prototype** and the final primary CTA is **Download prototype**. Selection means “this is the direction I want to explore,” not formal approval.
+
+The browser creates a ZIP containing a runnable Vite/React prototype and `coqui-context.json`. That context file includes the raw design goal, raw feedback, optional reviewer context and constraints, the complete synthesized critique, the complete selected direction, viewport dimensions, and generation notes. The screenshot remains transient browser-session state and is excluded from the ZIP by default. The canonical V0 path does not write an exploration, screenshot, approval state, or round history to application persistence.
+
+Historical records, round-to-round lineage, and a stronger “commit iteration” state are progressive enhancements. They become valuable when Coquí can show what was selected in each round and use that record to improve return value and retention; they are not required for V0 to deliver a useful handoff.
+
+**Rationale:** A formal approval state has little product meaning without a durable record of what was approved and how it relates to prior rounds. V0 is clearer as an exploration tool whose durable artifact belongs to the user. The context-rich download preserves the reasoning needed to continue elsewhere without requiring Coquí to host screenshots after the session ends.
+
+**Owner:** Bryan. **Date:** 2026-08-26.
+
 ## Carried forward unchanged (not in conflict, no new decision needed)
 
 - Input model: screenshot(s), feedback text, design tokens (W3C DTCG JSON), condensed style guide, optional flowchart screenshot — extended with "design goal" and "reviewer perspective/context" as explicit fields (external discovery, additive).
-- Comparison workflow: a generated iteration is compared with its direct source inside a round; the ordered chain preserves history across rounds without arbitrary node-to-node comparison.
-- Technical architecture: Next.js/Vercel Hobby, Zustand, Turso, Claude Sonnet primary / GPT-4o fallback, ComfyUI optional local service for visual pre-iteration and asset generation.
-- Human control: the designer approves, judges quality, and decides what advances; AI never finalizes. Strongest point of agreement across both discovery tracks.
+- Comparison workflow: a generated iteration is compared with its direct source in one fixed viewport.
+- Technical architecture: Next.js/Vercel Hobby, Zustand, Claude Sonnet primary / GPT-4o fallback, and optional future ComfyUI integration.
+- Human control: the designer selects, judges quality, and decides what advances; AI never finalizes.
 
 ## Implementation guidance carried forward
 
-- On-demand code generation is triggered by the per-direction `Generate code (optional)` action and opens that direction's generated-code preview.
+- Code generation begins after the designer selects a direction and chooses `Continue to prototype`.
 - Start with the free 21st.dev tier. Revisit payment only if real usage hits its code-retrieval limit.
 - V1 uses the per-round coherence bar in Decision 7. No longitudinal metric is required before real usage supplies evidence for one.

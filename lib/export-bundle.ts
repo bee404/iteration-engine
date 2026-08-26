@@ -1,11 +1,11 @@
 import { strToU8, zipSync } from "fflate";
 import { extractInlinedFont } from "./export-inlined-font";
 import { extractComponentName } from "./preview/build-preview-document";
-import type { Direction } from "./types";
+import type { Critique, Direction, ImageDimensions } from "./types";
 
 /**
  * Export (Decision 14, docs/decisions.md #14) ships a standalone Vite + React project, not
- * just the bare component file, so the approved direction can actually run outside Coquí's
+ * just the bare component file, so the selected direction can actually run outside Coquí's
  * sandboxed preview iframe. Dependencies are pinned to the same React release the preview
  * vendors (lib/preview/react-runtime.generated.ts) so unpacking and running the bundle
  * reproduces exactly what was approved.
@@ -16,11 +16,18 @@ const TYPES_REACT_DOM_VERSION = "19.2.4";
 const TYPESCRIPT_VERSION = "6.0.3";
 
 export interface ExportBundleInput {
-  direction: Pick<Direction, "title">;
+  direction: Direction;
+  critique: Critique;
   code: string;
-  designGoal: string;
-  /** Included in the README for traceability when the round has already been saved. */
-  roundId?: string | null;
+  inputs: {
+    designGoal: string;
+    feedbackText: string;
+    reviewerContext?: string;
+    constraints?: string;
+  };
+  viewport: ImageDimensions | null;
+  warnings?: string[];
+  exportedAt?: string;
 }
 
 export interface ExportBundleResult {
@@ -141,10 +148,8 @@ function buildReadme(params: {
   designGoal: string;
   componentFile: string;
   fontAssetPath: string | null;
-  roundId?: string | null;
 }): string {
-  const { directionTitle, designGoal, componentFile, fontAssetPath, roundId } = params;
-  const roundLine = roundId ? `\n- Round: \`${roundId}\`` : "";
+  const { directionTitle, designGoal, componentFile, fontAssetPath } = params;
   const fontLines = fontAssetPath
     ? `\n- \`src/fonts.css\` + \`${fontAssetPath}\` — the design-system typeface. Coquí's preview` +
       `\n  inlines this font as a base64 data URI; the export unpacks it into a real asset so the` +
@@ -153,14 +158,16 @@ function buildReadme(params: {
     : "";
   return `# ${directionTitle}
 
-Standalone export of one approved direction from a Coquí design-iteration round.
+Standalone export of one selected direction from a Coquí design exploration.
 
 - Direction: **${directionTitle}**
-- Design goal: ${designGoal}${roundLine}
+- Design goal: ${designGoal}
 
 ## Contents
 
-- \`src/${componentFile}\` — the generated component, exactly as approved in Coquí.
+- \`src/${componentFile}\` — the generated component for the selected direction.
+- \`coqui-context.json\` — raw inputs, synthesized feedback, the full selected direction, viewport,
+  and generation notes for traceability.
 - \`src/main.tsx\` — mounts the component into \`index.html\` with React 19.${fontLines}
 - Minimal Vite + TypeScript scaffolding so the component runs outside Coquí's sandboxed preview.
 
@@ -194,11 +201,29 @@ export function buildExportBundle(input: ExportBundleInput): ExportBundleResult 
     "README.md": strToU8(
       buildReadme({
         directionTitle: input.direction.title,
-        designGoal: input.designGoal,
+        designGoal: input.inputs.designGoal,
         componentFile,
         fontAssetPath: font.asset?.path ?? null,
-        roundId: input.roundId,
       }),
+    ),
+    "coqui-context.json": strToU8(
+      `${JSON.stringify(
+        {
+          schemaVersion: 1,
+          exportedAt: input.exportedAt ?? new Date().toISOString(),
+          rawInputs: input.inputs,
+          synthesizedFeedback: input.critique,
+          selectedDirection: input.direction,
+          prototype: {
+            sourceFile: `src/${componentFile}`,
+            language: "tsx",
+            viewport: input.viewport,
+            warnings: input.warnings ?? [],
+          },
+        },
+        null,
+        2,
+      )}\n`,
     ),
     "index.html": strToU8(buildIndexHtml(input.direction.title)),
     "vite.config.ts": strToU8(buildViteConfig()),
@@ -228,4 +253,3 @@ export function downloadExportBundle(result: ExportBundleResult): void {
   document.body.removeChild(anchor);
   URL.revokeObjectURL(url);
 }
-
