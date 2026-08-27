@@ -1,19 +1,19 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260824151726898_github",
-  "base_packet": "cb_20260824144051441_github",
+  "packet_id": "cb_20260827182039928_github",
+  "base_packet": "cb_20260824151726898_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-24T15:17:26.898Z",
+  "generated_at": "2026-08-27T18:20:39.928Z",
   "changed": true,
-  "manifest_sha": "4fb614f8b74a599a",
+  "manifest_sha": "be38acfcf61a4dfb",
   "sources": [
     {
       "id": ".agents/product-marketing.md",
       "file": ".agents/product-marketing.md",
-      "sha256": "4badd99ac7973baa6347ac9ba49ada585978371c819cac84ca19952ed1cb42e9",
-      "bytes": 13523
+      "sha256": "7a6d68a8fc1e490c7506bf8eceeeefd81b007c12a4fce7ffe29fc94058c03361",
+      "bytes": 14474
     },
     {
       "id": ".github/copilot-instructions.md",
@@ -42,8 +42,8 @@
     {
       "id": "README.md",
       "file": "README.md",
-      "sha256": "52ff899d8dd8c5e8f88bce5bebe1941d017473a68353b1de72d7ce4110a432e2",
-      "bytes": 6379
+      "sha256": "cc0e51a98870d88fb1545ad5d0a9999e552ac231f95c82db8e375d5bd3038ed4",
+      "bytes": 6654
     },
     {
       "id": "app/(app)/directions-alt/page.tsx",
@@ -294,14 +294,14 @@
     {
       "id": "docs/blueprint.md",
       "file": "docs/blueprint.md",
-      "sha256": "a4d1d77c0bf2bfbd6bf341d427e297ab047598b6327620d1cda84a7a8ca6a120",
+      "sha256": "f0821242c524a35ad07bb3d0809c540e692f38ab543ca91b1fe31468874ba533",
       "bytes": 12472
     },
     {
       "id": "docs/decisions.md",
       "file": "docs/decisions.md",
-      "sha256": "f5d7f7c3f6e99176084fb1ef8604d4dfd3356345b4f35054ba62621f23ccd8f9",
-      "bytes": 17182
+      "sha256": "10c00f7d2a1d9171725c57f7a562a466fd61a9373e1b009f5117ee1141d9bae6",
+      "bytes": 17495
     },
     {
       "id": "docs/design-system.md",
@@ -318,14 +318,14 @@
     {
       "id": "docs/knowledge-base/README.md",
       "file": "docs/knowledge-base/README.md",
-      "sha256": "854c0e6a9f6bf1abfdb301288d5491c16811544c72b504e528e8e6cf2c07ff2a",
-      "bytes": 4113
+      "sha256": "759d7f2322bbaada5bb03ec38c0ceeb21f001af77b97ffb89aeec4dbae2d1e9d",
+      "bytes": 4097
     },
     {
       "id": "docs/knowledge-base/architecture.md",
       "file": "docs/knowledge-base/architecture.md",
-      "sha256": "3d16309682ee2f4852f39898fa2ab49ac9ba8f7b1abb4a7b791f475390bdcb37",
-      "bytes": 11937
+      "sha256": "b774f76556a5f134acbd96b2876f89d134ebadc7e871210c2556dfd026a4159d",
+      "bytes": 12323
     },
     {
       "id": "docs/knowledge-base/qa-conventions.md",
@@ -336,14 +336,14 @@
     {
       "id": "docs/knowledge-base/roadmap-and-open-work.md",
       "file": "docs/knowledge-base/roadmap-and-open-work.md",
-      "sha256": "86ea55798f7e4c4dc7708a6a2649c6ba17303e47da4754f0de1fe7d6959a075d",
-      "bytes": 7701
+      "sha256": "d17ad7ae54ba80bcb79b07b8f41c7253493b7d7e3a388e7329fa75f6f9342e33",
+      "bytes": 6079
     },
     {
       "id": "docs/release-plan.md",
       "file": "docs/release-plan.md",
-      "sha256": "dd852ea88ac34e09bdcef93159994e4b02cf1913bfb0ca1f4ad004e4d07c65d7",
-      "bytes": 5272
+      "sha256": "48fd81296a05748ddf6f024062780b4f4454705103aa19e854912874a1ff0ec9",
+      "bytes": 5192
     },
     {
       "id": "lib/comparison-viewport.test.ts",
@@ -953,23 +953,17 @@
     }
   ],
   "source_changes": {
-    "added": [
-      "lib/round-api.ts",
-      "lib/round-persistence.ts",
-      "lib/screenshot-encode.ts",
-      "lib/stores/round-generation.ts"
-    ],
-    "removed": [
-      "components/directions-screen.tsx",
-      "lib/fixtures/preview-directions.ts"
-    ],
+    "added": [],
+    "removed": [],
     "updated": [
-      "app/globals.css",
-      "app/workflow/page.tsx",
-      "components/direction-selection-list.tsx",
-      "components/directions-comparison.tsx",
-      "components/feedback-screen.tsx",
-      "components/round-workspace.tsx"
+      ".agents/product-marketing.md",
+      "README.md",
+      "docs/blueprint.md",
+      "docs/decisions.md",
+      "docs/knowledge-base/README.md",
+      "docs/knowledge-base/architecture.md",
+      "docs/knowledge-base/roadmap-and-open-work.md",
+      "docs/release-plan.md"
     ]
   },
   "facts": [
@@ -978,10 +972,10 @@
       "source": ".agents/product-marketing.md",
       "kind": "verbatim_excerpt",
       "heading": "Product Marketing Context",
-      "text": "# Product Marketing Context **Document version:** v4 **Last updated:** 2026-08-22 **Scope:** Launch-ready context for Coquí's first public post, closed-alpha outreach, and eventual open-source release. Long-term positioning, market sizing, and competitive research are intentionally deferred.",
+      "text": "# Product Marketing Context **Document version:** v5 **Last updated:** 2026-08-26 **Scope:** Launch-ready context for Coquí's first public post, closed-alpha outreach, and eventual open-source release. Long-term positioning, market sizing, and competitive research are intentionally deferred.",
       "evidence": {
         "file": ".agents/product-marketing.md",
-        "sha256": "4badd99ac7973baa6347ac9ba49ada585978371c819cac84ca19952ed1cb42e9",
+        "sha256": "7a6d68a8fc1e490c7506bf8eceeeefd81b007c12a4fce7ffe29fc94058c03361",
         "line_start": 1,
         "line_end": 6,
         "truncated": false
@@ -995,7 +989,7 @@
       "text": "## Product Overview **One-liner:** Coquí helps designers win back time by bringing screenshot-based feedback, critique, direction-setting, and optional prototyping into one guided workflow. **What it does:** A designer uploads a screen, states the goal, and pastes feedback. Coquí separates real problems from taste, flags ambiguity, returns 2–3 rationale-backed directions, and lets the designer optionally generate and inspect a coded preview before choosing and saving a round. **Product category:** Design-iteration and decision-support tool. **Product type:** Standalone desktop-first web application; currently suited to a closed alpha. The intended public release is open source, forkable, and run with the user's own Claude API key. **Business model:** Open-source distribution is the current direction. Pricing and any hosted offering are not decided. Do not imply paid plans or general ava…",
       "evidence": {
         "file": ".agents/product-marketing.md",
-        "sha256": "4badd99ac7973baa6347ac9ba49ada585978371c819cac84ca19952ed1cb42e9",
+        "sha256": "7a6d68a8fc1e490c7506bf8eceeeefd81b007c12a4fce7ffe29fc94058c03361",
         "line_start": 7,
         "line_end": 18,
         "truncated": true
@@ -1009,9 +1003,9 @@
       "text": "## Public Positioning Statement Coquí is a design-iteration tool that turns a screenshot and raw feedback into a structured critique, a few rationale-backed directions, and an optional coded preview, helping designers move from feedback to a decision in one guided flow.",
       "evidence": {
         "file": ".agents/product-marketing.md",
-        "sha256": "4badd99ac7973baa6347ac9ba49ada585978371c819cac84ca19952ed1cb42e9",
-        "line_start": 158,
-        "line_end": 161,
+        "sha256": "7a6d68a8fc1e490c7506bf8eceeeefd81b007c12a4fce7ffe29fc94058c03361",
+        "line_start": 161,
+        "line_end": 164,
         "truncated": false
       }
     },
@@ -1079,7 +1073,7 @@
       "text": "## Blueprint",
       "evidence": {
         "file": "docs/blueprint.md",
-        "sha256": "a4d1d77c0bf2bfbd6bf341d427e297ab047598b6327620d1cda84a7a8ca6a120",
+        "sha256": "f0821242c524a35ad07bb3d0809c540e692f38ab543ca91b1fe31468874ba533",
         "line_start": 13,
         "line_end": 14,
         "truncated": false
@@ -1093,7 +1087,7 @@
       "text": "# Product Blueprint",
       "evidence": {
         "file": "docs/blueprint.md",
-        "sha256": "a4d1d77c0bf2bfbd6bf341d427e297ab047598b6327620d1cda84a7a8ca6a120",
+        "sha256": "f0821242c524a35ad07bb3d0809c540e692f38ab543ca91b1fe31468874ba533",
         "line_start": 1,
         "line_end": 2,
         "truncated": false
@@ -1107,7 +1101,7 @@
       "text": "### Product principles - The designer remains responsible for selecting directions, evaluating quality, applying taste, and deciding what advances. AI is never the final decision-maker. - The system should avoid producing shallow visual variation that looks different but doesn't represent a genuinely different design decision. - Vague feedback is flagged and clarified before generation — never silently guessed at. - Code/prototype generation is an on-demand fidelity step, not a mandatory pipeline stage. - The tool is modular and agnostic: not tied to any specific product, brand, or technology. - For design systems supplied to Coquí to constrain generated prototypes, code and tokens are the source of truth and Figma mirrors them. For Coquí's own application shell, root `DESIGN.md` is authoritative and the current Figma file is the visual reference. Do not conflate the two systems. - **Co…",
       "evidence": {
         "file": "docs/blueprint.md",
-        "sha256": "a4d1d77c0bf2bfbd6bf341d427e297ab047598b6327620d1cda84a7a8ca6a120",
+        "sha256": "f0821242c524a35ad07bb3d0809c540e692f38ab543ca91b1fe31468874ba533",
         "line_start": 23,
         "line_end": 36,
         "truncated": true
@@ -1121,7 +1115,7 @@
       "text": "## Purpose Define the agreed product direction after the discovery differences and consequential product decisions were resolved.",
       "evidence": {
         "file": "docs/blueprint.md",
-        "sha256": "a4d1d77c0bf2bfbd6bf341d427e297ab047598b6327620d1cda84a7a8ca6a120",
+        "sha256": "f0821242c524a35ad07bb3d0809c540e692f38ab543ca91b1fe31468874ba533",
         "line_start": 3,
         "line_end": 6,
         "truncated": false
@@ -1135,7 +1129,7 @@
       "text": "## Status Agreed 2026-08-05. This is the current source of truth for what the product is. See `docs/decisions.md` for the rationale behind each choice and `docs/release-plan.md` for how it ships. **Naming note (2026-08-11):** the product was renamed **Coquí** (formerly \"Iteration Engine\") — see Decision 8 in `docs/decisions.md`. Historical discovery snapshots retain the old name; current product documentation and surfaces use Coquí. Visual identity, brand, and copy voice live in `docs/design-system.md`.",
       "evidence": {
         "file": "docs/blueprint.md",
-        "sha256": "a4d1d77c0bf2bfbd6bf341d427e297ab047598b6327620d1cda84a7a8ca6a120",
+        "sha256": "f0821242c524a35ad07bb3d0809c540e692f38ab543ca91b1fe31468874ba533",
         "line_start": 7,
         "line_end": 12,
         "truncated": false
@@ -1149,7 +1143,7 @@
       "text": "### Technical architecture - **App**: Next.js, deployed to Vercel Hobby (free tier covers expected usage; 60s function timeout is sufficient for Claude Sonnet calls). - **State**: Zustand. - **Persistence**: Turso (SQLite on the edge) — iteration history, directions, critiques, project configs, generated code snapshots. - **Critique and direction generation**: Claude Sonnet (primary), GPT-4o as fallback on validation failure. - **Pattern grounding**: live MCP queries to 21st.dev (`https://21st.dev/api/mcp`) under Bryan's own API key, at generation time only — no local mirror of their taxonomy, per their Terms of Service. - **Visual pre-iteration / asset generation**: ComfyUI, running locally on Bryan's machine (port 8188), optional, health-checked via `GET /system_stats`; the system degrades to LLM-only when it's not running. - **Preview**: sandboxed iframe within the Next.js app, SSE s…",
       "evidence": {
         "file": "docs/blueprint.md",
-        "sha256": "a4d1d77c0bf2bfbd6bf341d427e297ab047598b6327620d1cda84a7a8ca6a120",
+        "sha256": "f0821242c524a35ad07bb3d0809c540e692f38ab543ca91b1fe31468874ba533",
         "line_start": 84,
         "line_end": 99,
         "truncated": true
@@ -1163,7 +1157,7 @@
       "text": "### 1. Product center of gravity: judgment-first, not code-first **Decision:** Coquí is a critique-and-direction decision-support tool. A round produces a critique plus several rationale-backed directions; code/prototype generation is a separate, optional step (see Decision 3), not the product's primary output. **Rationale:** The original blueprint's one-regenerated-prototype-per-round model risked producing exactly the \"shallow visual variation\" the external discovery warns against — a new look each round with no comparison of genuinely different decisions. The judgment-first framing keeps Bryan choosing between real alternatives before any code is spent. **Owner:** Bryan. **Date:** 2026-08-05.",
       "evidence": {
         "file": "docs/decisions.md",
-        "sha256": "f5d7f7c3f6e99176084fb1ef8604d4dfd3356345b4f35054ba62621f23ccd8f9",
+        "sha256": "10c00f7d2a1d9171725c57f7a562a466fd61a9373e1b009f5117ee1141d9bae6",
         "line_start": 13,
         "line_end": 20,
         "truncated": false
@@ -1177,7 +1171,7 @@
       "text": "### 12. Lineage is append-only; no branching, forking, merging, or version-graph UI **Decision:** History is a single ordered chain per screen, readable and permanent, never editable. A past selection cannot be changed and propagated forward — starting a different path means starting a new chain from that node, leaving the original chain intact. Looking at an unselected direction (including generating its code to inspect it) is non-destructive and commits to nothing. The product never exposes branching, forking, merging, or a version graph, even though the underlying data retains every unselected direction. **Rationale:** Confirms and sharpens the standing \"convergence over exploration\" position (Decision 1): the product converges on one answer per round, and its history should read the same way. A lineage/chain browsing view for this history has not been designed yet — see `docs/knowle…",
       "evidence": {
         "file": "docs/decisions.md",
-        "sha256": "f5d7f7c3f6e99176084fb1ef8604d4dfd3356345b4f35054ba62621f23ccd8f9",
+        "sha256": "10c00f7d2a1d9171725c57f7a562a466fd61a9373e1b009f5117ee1141d9bae6",
         "line_start": 105,
         "line_end": 112,
         "truncated": true
@@ -1191,9 +1185,9 @@
       "text": "### 14. Round mutability, comparison failure, lineage comparison, and export are resolved **Decision:** The first round infers a viewport box and shows its dimensions before synthesis. Bryan may correct that measurement before the first iteration is committed; after that, the box is locked for the chain. Later rounds require fresh feedback and use the prior iteration as their reference. Whether later rounds also inherit the prior goal, reviewer context, or constraints as editable defaults is explicitly deferred — not a V1 decision (see `docs/knowledge-base/roadmap-and-open-work.md`); it's flagged as a possible macro/historical feature (patterns mined across a project's round history) rather than a micro per-round convenience, worth scoping on its own later. Critique items are read-only evidence. A critique may be regenerated before directions are produced; after directions exist, the ro…",
       "evidence": {
         "file": "docs/decisions.md",
-        "sha256": "f5d7f7c3f6e99176084fb1ef8604d4dfd3356345b4f35054ba62621f23ccd8f9",
+        "sha256": "10c00f7d2a1d9171725c57f7a562a466fd61a9373e1b009f5117ee1141d9bae6",
         "line_start": 121,
-        "line_end": 134,
+        "line_end": 136,
         "truncated": true
       }
     },
@@ -1205,9 +1199,9 @@
       "text": "### 16. Live production is private and generated content has closed network boundaries **Decision:** Coquí's current live deployment is a single-user tool and must require server-side credentials. Live production fails closed when credentials are absent or partial; public fixture demo deployments may remain open because they make no external provider calls and refuse all persistence writes. Screenshot input is restricted to supported browser-uploaded image data URLs up to 3 MB, never an arbitrary server-fetched URL. Generated previews combine iframe sandboxing with a Content Security Policy that prohibits network connections and remote assets. Expensive model endpoints are burst-limited and security denials are logged as redacted structured events. **Rationale:** These controls match the product's actual single-user operating model, remove an unneeded server-side request path, contain u…",
       "evidence": {
         "file": "docs/decisions.md",
-        "sha256": "f5d7f7c3f6e99176084fb1ef8604d4dfd3356345b4f35054ba62621f23ccd8f9",
-        "line_start": 145,
-        "line_end": 161,
+        "sha256": "10c00f7d2a1d9171725c57f7a562a466fd61a9373e1b009f5117ee1141d9bae6",
+        "line_start": 147,
+        "line_end": 163,
         "truncated": true
       }
     },
@@ -1219,7 +1213,7 @@
       "text": "### 8. Product renamed to Coquí **Decision:** The product is renamed from **Iteration Engine** to **Coquí**. Always written with the accent (\"Coquí\"). The former name is fully retired from product-facing surfaces. Repository/infrastructure identifiers (GitHub repo slug `iteration-engine`, `package.json` name) are not part of this decision and remain unrenamed for now — a separate follow-up if pursued. **Rationale:** The coquí is a Puerto Rican tree frog known for a loud, repeating two-note call. The product is itself a repeated call-and-response loop — feedback in, iteration out, loop again — which the name captures better than \"Iteration Engine\" did. See `docs/design-system.md` for the full naming rationale and the header sound behavior recorded in Decision 15. **Owner:** Bryan. **Date:** 2026-08-11.",
       "evidence": {
         "file": "docs/decisions.md",
-        "sha256": "f5d7f7c3f6e99176084fb1ef8604d4dfd3356345b4f35054ba62621f23ccd8f9",
+        "sha256": "10c00f7d2a1d9171725c57f7a562a466fd61a9373e1b009f5117ee1141d9bae6",
         "line_start": 73,
         "line_end": 80,
         "truncated": false
@@ -1233,9 +1227,9 @@
       "text": "## Carried forward unchanged (not in conflict, no new decision needed) - Input model: screenshot(s), feedback text, design tokens (W3C DTCG JSON), condensed style guide, optional flowchart screenshot — extended with \"design goal\" and \"reviewer perspective/context\" as explicit fields (external discovery, additive). - Comparison workflow: a generated iteration is compared with its direct source inside a round; the ordered chain preserves history across rounds without arbitrary node-to-node comparison. - Technical architecture: Next.js/Vercel Hobby, Zustand, Turso, Claude Sonnet primary / GPT-4o fallback, ComfyUI optional local service for visual pre-iteration and asset generation. - Human control: the designer approves, judges quality, and decides what advances; AI never finalizes. Strongest point of agreement across both discovery tracks.",
       "evidence": {
         "file": "docs/decisions.md",
-        "sha256": "f5d7f7c3f6e99176084fb1ef8604d4dfd3356345b4f35054ba62621f23ccd8f9",
-        "line_start": 162,
-        "line_end": 168,
+        "sha256": "10c00f7d2a1d9171725c57f7a562a466fd61a9373e1b009f5117ee1141d9bae6",
+        "line_start": 164,
+        "line_end": 170,
         "truncated": false
       }
     },
@@ -1247,7 +1241,7 @@
       "text": "# Decision Log",
       "evidence": {
         "file": "docs/decisions.md",
-        "sha256": "f5d7f7c3f6e99176084fb1ef8604d4dfd3356345b4f35054ba62621f23ccd8f9",
+        "sha256": "10c00f7d2a1d9171725c57f7a562a466fd61a9373e1b009f5117ee1141d9bae6",
         "line_start": 1,
         "line_end": 2,
         "truncated": false
@@ -1261,7 +1255,7 @@
       "text": "## Decisions",
       "evidence": {
         "file": "docs/decisions.md",
-        "sha256": "f5d7f7c3f6e99176084fb1ef8604d4dfd3356345b4f35054ba62621f23ccd8f9",
+        "sha256": "10c00f7d2a1d9171725c57f7a562a466fd61a9373e1b009f5117ee1141d9bae6",
         "line_start": 11,
         "line_end": 12,
         "truncated": false
@@ -1275,7 +1269,7 @@
       "text": "## Purpose Record consequential product decisions, their rationale, supporting evidence, owner, date, and implementation constraints.",
       "evidence": {
         "file": "docs/decisions.md",
-        "sha256": "f5d7f7c3f6e99176084fb1ef8604d4dfd3356345b4f35054ba62621f23ccd8f9",
+        "sha256": "10c00f7d2a1d9171725c57f7a562a466fd61a9373e1b009f5117ee1141d9bae6",
         "line_start": 3,
         "line_end": 6,
         "truncated": false
@@ -1289,7 +1283,7 @@
       "text": "## Status Reconciliation decisions recorded 2026-08-05. This is the source of truth for what was decided and why; `blueprint.md` is the resulting product shape.",
       "evidence": {
         "file": "docs/decisions.md",
-        "sha256": "f5d7f7c3f6e99176084fb1ef8604d4dfd3356345b4f35054ba62621f23ccd8f9",
+        "sha256": "10c00f7d2a1d9171725c57f7a562a466fd61a9373e1b009f5117ee1141d9bae6",
         "line_start": 7,
         "line_end": 10,
         "truncated": false
@@ -1384,10 +1378,10 @@
       "source": "docs/knowledge-base/architecture.md",
       "kind": "verbatim_excerpt",
       "heading": "Architecture — The Shipped System",
-      "text": "# Architecture — The Shipped System This describes what is **actually on `main`** as of the full-stack merge (`6e2fae8`, PRs #2–#9 all merged). Where a claim in an older research doc is now outdated by shipped code, this file reflects the code. Paths are repo-relative.",
+      "text": "# Architecture — The Shipped System This describes what is **actually on `main`** as of commit `34b7a31` (status checked 2026-08-26). Where a claim in an older research doc is now outdated by shipped code, this file reflects the code. Paths are repo-relative.",
       "evidence": {
         "file": "docs/knowledge-base/architecture.md",
-        "sha256": "3d16309682ee2f4852f39898fa2ab49ac9ba8f7b1abb4a7b791f475390bdcb37",
+        "sha256": "b774f76556a5f134acbd96b2876f89d134ebadc7e871210c2556dfd026a4159d",
         "line_start": 1,
         "line_end": 6,
         "truncated": false
@@ -1398,26 +1392,12 @@
       "source": "docs/knowledge-base/architecture.md",
       "kind": "verbatim_excerpt",
       "heading": "Stack",
-      "text": "## Stack - **Next.js 16** (App Router) + **React 19**, deployed on **Vercel**. TypeScript throughout. - **Zustand 5** for client round state (`store/round-store.ts`). - **Turso / libSQL** (`@libsql/client`) for round-history persistence. - **Sucrase** for in-browser TSX transpilation of generated components. - **@vercel/analytics** for usage tracking. - **Claude Sonnet** (Anthropic) for critique, directions, and code generation, behind typed provider interfaces with mock + fixture fallbacks. Note: React is used two ways — the app itself (Next.js/React) and a separately vendored React runtime inlined into the preview iframe (see Live-mount preview below). There is no separate Vite app in this repo; the standalone Vite prototype Bryan saw earlier lived outside this pipeline.",
+      "text": "## Stack - **Next.js 16** (App Router) + **React 19**, deployed on **Vercel**. TypeScript throughout. - **Zustand 5** for client round state (`store/round-store.ts`). - **Turso / libSQL** (`@libsql/client`) for round-history persistence. - **Sucrase** for in-browser TSX transpilation of generated components. - **@vercel/analytics** for usage tracking. - **Claude Sonnet** (Anthropic) as the primary for critique, directions, and code generation, with GPT-4o fallback when configured, behind typed provider interfaces with mock + fixture fallbacks. Note: React is used two ways — the app itself (Next.js/React) and a separately vendored React runtime inlined into the preview iframe (see Live-mount preview below). There is no separate Vite app in this repo; the standalone Vite prototype Bryan saw earlier lived outside this pipeline.",
       "evidence": {
         "file": "docs/knowledge-base/architecture.md",
-        "sha256": "3d16309682ee2f4852f39898fa2ab49ac9ba8f7b1abb4a7b791f475390bdcb37",
+        "sha256": "b774f76556a5f134acbd96b2876f89d134ebadc7e871210c2556dfd026a4159d",
         "line_start": 7,
         "line_end": 21,
-        "truncated": false
-      }
-    },
-    {
-      "id": "docs/knowledge-base/roadmap-and-open-work.md::build_order_dependencies_the_blueprint_s_3_stage_chain",
-      "source": "docs/knowledge-base/roadmap-and-open-work.md",
-      "kind": "verbatim_excerpt",
-      "heading": "Build-order dependencies (the blueprint's 3-stage chain)",
-      "text": "### Build-order dependencies (the blueprint's 3-stage chain) Each stage is \"worthless without the one before it\": 1. **Capture (content-width autocrop)** — detect the real content width of the screenshot so the generated component can be scaled to the same viewport. **Partially in place:** natural dimensions are now captured (`screenshotDimensions`), but the *content-width autocrop* (canvas pixel-scan to trim chrome/letterboxing, with a confidence flag) is not yet built. 2. **Live-render (Sucrase mount)** — mount the generated component as real UI rather than text. **DONE** — shipped in PR #7 (`components/preview-frame.tsx`, `lib/preview/`). The visual diff can build directly on this. 3. **Compare** — the unified comparison view itself. **Not built.** This is the remaining work.",
-      "evidence": {
-        "file": "docs/knowledge-base/roadmap-and-open-work.md",
-        "sha256": "86ea55798f7e4c4dc7708a6a2649c6ba17303e47da4754f0de1fe7d6959a075d",
-        "line_start": 32,
-        "line_end": 44,
         "truncated": false
       }
     },
@@ -1426,27 +1406,27 @@
       "source": "docs/knowledge-base/roadmap-and-open-work.md",
       "kind": "verbatim_excerpt",
       "heading": "Roadmap & Open Work",
-      "text": "# Roadmap & Open Work What is built vs. designed-but-not-built, and what's paused. Grounded in `main` as of the full-stack merge (PRs #2–#9), not in older doc claims.",
+      "text": "# Roadmap & Open Work What is built vs. still open, and what's paused. Grounded in `main` commit `34b7a31`, status checked 2026-08-26, not in older doc claims.",
       "evidence": {
         "file": "docs/knowledge-base/roadmap-and-open-work.md",
-        "sha256": "86ea55798f7e4c4dc7708a6a2649c6ba17303e47da4754f0de1fe7d6959a075d",
+        "sha256": "d17ad7ae54ba80bcb79b07b8f41c7253493b7d7e3a388e7329fa75f6f9342e33",
         "line_start": 1,
         "line_end": 5,
         "truncated": false
       }
     },
     {
-      "id": "docs/release-plan.md::implementation_status_as_of_2026_08_11",
+      "id": "docs/release-plan.md::implementation_status_as_of_2026_08_26",
       "source": "docs/release-plan.md",
       "kind": "verbatim_excerpt",
-      "heading": "Implementation status as of 2026-08-11",
-      "text": "### Implementation status as of 2026-08-11 Shipped: screenshot intake and natural-dimension capture; real Claude critique and direction generation; per-direction streamed code generation; live-mount preview with source fallback; Turso round persistence and history; fixture-backed `DEMO_MODE`; and a single-user security baseline covering production access, burst limiting, screenshot validation, preview CSP, dependency audits, and structured security-event logs. Remaining for V1: infer and lock the actual interface viewport; build the binary `Source` / `Iteration` comparison in that fixed box; add downloadable source-bundle export to the committing action; wire live 21st.dev grounding and the intended GPT-4o validation fallback; and validate the complete loop against a real project. Optional ComfyUI clarification remains a graceful enhancement, not a blocker for the core comparison loop.",
+      "heading": "Implementation status as of 2026-08-26",
+      "text": "### Implementation status as of 2026-08-26 Shipped: screenshot intake and natural-dimension capture; real Claude critique and direction generation; per-direction streamed code generation; live-mount preview with source fallback; viewport inference, correction, and chain locking; fixed-box `Source` / `Iteration` comparison; downloadable source-bundle export; live 21st.dev grounding when `TWENTYFIRST_API_KEY` is configured; GPT-4o fallback when `OPENAI_API_KEY` is configured alongside Claude; Turso round persistence and history; fixture-backed `DEMO_MODE`; and a single-user security baseline covering production access, burst limiting, screenshot validation, preview CSP, dependency audits, and structured security-event logs. Remaining for V1: validate the complete loop against a real project and evaluate whether content-width autocrop plus a confidence flag is needed beyond the current nat…",
       "evidence": {
         "file": "docs/release-plan.md",
-        "sha256": "dd852ea88ac34e09bdcef93159994e4b02cf1913bfb0ca1f4ad004e4d07c65d7",
+        "sha256": "48fd81296a05748ddf6f024062780b4f4454705103aa19e854912874a1ff0ec9",
         "line_start": 11,
         "line_end": 16,
-        "truncated": false
+        "truncated": true
       }
     },
     {
@@ -1457,9 +1437,9 @@
       "text": "### Next decision point Once v1 has run on at least one real project, revisit: whether the 2-3 directions target needs to flex, whether a paid 21st.dev tier is warranted, and how the success bar should evolve for v2.",
       "evidence": {
         "file": "docs/release-plan.md",
-        "sha256": "dd852ea88ac34e09bdcef93159994e4b02cf1913bfb0ca1f4ad004e4d07c65d7",
-        "line_start": 62,
-        "line_end": 65,
+        "sha256": "48fd81296a05748ddf6f024062780b4f4454705103aa19e854912874a1ff0ec9",
+        "line_start": 59,
+        "line_end": 62,
         "truncated": false
       }
     },
@@ -1471,7 +1451,7 @@
       "text": "## Purpose Define an achievable release shape, sequencing, validation approach, and delivery constraints derived from the approved product blueprint.",
       "evidence": {
         "file": "docs/release-plan.md",
-        "sha256": "dd852ea88ac34e09bdcef93159994e4b02cf1913bfb0ca1f4ad004e4d07c65d7",
+        "sha256": "48fd81296a05748ddf6f024062780b4f4454705103aa19e854912874a1ff0ec9",
         "line_start": 3,
         "line_end": 6,
         "truncated": false
@@ -1482,10 +1462,10 @@
       "source": "docs/release-plan.md",
       "kind": "verbatim_excerpt",
       "heading": "Status",
-      "text": "## Status Agreed 2026-08-05, reconciled with the shipped system and cross-tool context packets on 2026-08-11. Derived from `docs/blueprint.md`, `docs/decisions.md`, and the implementation status in `docs/knowledge-base/roadmap-and-open-work.md`.",
+      "text": "## Status Agreed 2026-08-05, reconciled with the shipped system and cross-tool context packets on 2026-08-11. Implementation status last checked against `main` commit `34b7a31` on 2026-08-26. Derived from `docs/blueprint.md`, `docs/decisions.md`, and the implementation status in `docs/knowledge-base/roadmap-and-open-work.md`.",
       "evidence": {
         "file": "docs/release-plan.md",
-        "sha256": "dd852ea88ac34e09bdcef93159994e4b02cf1913bfb0ca1f4ad004e4d07c65d7",
+        "sha256": "48fd81296a05748ddf6f024062780b4f4454705103aa19e854912874a1ff0ec9",
         "line_start": 7,
         "line_end": 10,
         "truncated": false
@@ -1499,7 +1479,7 @@
       "text": "## Current operating model Obvious is the conductor for planning and building the first release, but the shipped product is a standalone application. Product decisions belong in this repository, not only in an external tool or conversation. The operating sequence is: 1. Keep the agreed product decisions in `docs/decisions.md`. 2. Keep the resulting product shape in `docs/blueprint.md`. 3. Keep release boundaries and validation in `docs/release-plan.md`. 4. Update those documents when product decisions change, then align implementation with them. 5. Use `docs/discovery-diff.md` and the two discovery records as supporting context, not as a substitute for the current blueprint.",
       "evidence": {
         "file": "README.md",
-        "sha256": "52ff899d8dd8c5e8f88bce5bebe1941d017473a68353b1de72d7ce4110a432e2",
+        "sha256": "cc0e51a98870d88fb1545ad5d0a9999e552ac231f95c82db8e375d5bd3038ed4",
         "line_start": 9,
         "line_end": 20,
         "truncated": false
@@ -1513,7 +1493,7 @@
       "text": "## Repository purpose This repository is the source of truth for Coquí's product definition and implementation. It began as a neutral workspace for reconciling two discovery tracks: the work developed inside Obvious and the supporting discovery developed outside it. That reconciliation, plus the later Claude and ChatGPT context packets, is now distilled into the decision log, blueprint, release plan, design-system documentation, and agent knowledge base.",
       "evidence": {
         "file": "README.md",
-        "sha256": "52ff899d8dd8c5e8f88bce5bebe1941d017473a68353b1de72d7ce4110a432e2",
+        "sha256": "cc0e51a98870d88fb1545ad5d0a9999e552ac231f95c82db8e375d5bd3038ed4",
         "line_start": 5,
         "line_end": 8,
         "truncated": false
@@ -1524,17 +1504,17 @@
       "source": "README.md",
       "kind": "verbatim_excerpt",
       "heading": "Status",
-      "text": "## Status Discovery reconciliation was agreed on 2026-08-05 and the cross-tool context packets were consolidated on 2026-08-11. The core round is implemented: upload and intake, real Claude critique and directions, on-demand streamed code generation, live-mount preview with source fallback, Turso persistence and history, and fixture-backed demo mode. V1 is not complete. The remaining release work is the inferred fixed viewport box, the binary `Source` / `Iteration` comparison, downloadable source-bundle export, live 21st.dev grounding, the intended GPT-4o validation fallback, and validation against a real project. See `docs/release-plan.md` and `docs/knowledge-base/roadmap-and-open-work.md` for the current boundary.",
+      "text": "## Status Discovery reconciliation was agreed on 2026-08-05 and the cross-tool context packets were consolidated on 2026-08-11. As of `main` commit `34b7a31` (2026-08-24), the implemented round includes upload and intake, real Claude critique and directions, on-demand streamed code generation, live-mount preview with source fallback, viewport inference/correction and chain locking, fixed-box `Source` / `Iteration` comparison, downloadable source-bundle export, Turso persistence and history, fixture-backed demo mode, live 21st.dev grounding when configured, and GPT-4o fallback when configured alongside Claude. V1's remaining release gate is validation of the complete loop against a real project. Content-width autocrop and a confidence flag remain possible precision improvements, while multi-screen workflows, per-project design systems, responsive behavior, and ComfyUI remain deferred. Se…",
       "evidence": {
         "file": "README.md",
-        "sha256": "52ff899d8dd8c5e8f88bce5bebe1941d017473a68353b1de72d7ce4110a432e2",
+        "sha256": "cc0e51a98870d88fb1545ad5d0a9999e552ac231f95c82db8e375d5bd3038ed4",
         "line_start": 21,
         "line_end": 26,
-        "truncated": false
+        "truncated": true
       }
     }
   ],
-  "fact_count": 40,
+  "fact_count": 39,
   "conflicts": [],
   "decisions": [
     {
@@ -1543,7 +1523,7 @@
       "e": {
         "f": "docs/decisions.md",
         "l": "73-80",
-        "h": "f5d7f7c3f6e9"
+        "h": "10c00f7d2a1d"
       }
     }
   ],
@@ -1552,9 +1532,9 @@
   "supplemental": [],
   "stats": {
     "source_count": 157,
-    "fact_count": 40,
-    "added": 0,
-    "removed": 0,
-    "updated": 0
+    "fact_count": 39,
+    "added": 1,
+    "removed": 2,
+    "updated": 28
   }
 }
