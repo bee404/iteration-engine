@@ -1,4 +1,4 @@
-import type { Direction } from "@/lib/types";
+import type { Direction, GenerationProvenance } from "@/lib/types";
 
 export interface CodeGenRequest {
   direction: Direction;
@@ -17,6 +17,8 @@ export interface CodeGenRequest {
  */
 export interface CodeGenProvider {
   readonly name: string;
+  /** Reflects the backend that most recently completed or attempted this provider's stream. */
+  readonly provenance: GenerationProvenance;
   language: string;
   streamCode(request: CodeGenRequest): AsyncGenerator<string, void, unknown>;
 }

@@ -8,6 +8,7 @@ import type { CodeGenProvider, CodeGenRequest } from "./types";
  */
 export class MockCodeGenProvider implements CodeGenProvider {
   readonly name = "mock-codegen";
+  readonly provenance = { provider: "mock", model: null };
   readonly language = "tsx";
 
   async *streamCode(request: CodeGenRequest): AsyncGenerator<string, void, unknown> {

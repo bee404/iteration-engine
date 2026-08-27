@@ -2,7 +2,7 @@
   "name": "iteration-engine",
   "version": "0.1.0",
   "private": true,
-  "description": "Personal design-iteration tool: screenshot + feedback in, critique and rationale-backed directions out, on-demand code generation, Turso-persisted round history.",
+  "description": "Personal design-exploration tool: screenshot and feedback in, critique, directions, generated prototype, and portable context-rich export out.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

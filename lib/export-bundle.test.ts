@@ -15,6 +15,23 @@ const RAW_COMPONENT = `function ApprovedDirection() {
 }
 `;
 
+const DIRECTION = {
+  id: "direction-1",
+  title: "Make the next action unmistakable",
+  rationale: "Give the primary action a stronger visual hierarchy.",
+  tradeoffs: "Secondary actions become quieter.",
+  suggestedChanges: ["Increase primary-action contrast", "Reduce competing emphasis"],
+  patternReference: null,
+};
+
+const CRITIQUE = {
+  summary: "The next action competes with surrounding content.",
+  signal: [{ kind: "signal" as const, text: "Primary hierarchy is unclear." }],
+  preference: [{ kind: "preference" as const, text: "The page could feel lighter." }],
+  flaggedAmbiguities: ["Make it pop"],
+  model: "test-model",
+};
+
 function generatedCodeWithInlinedFont(): string {
   const code = ensureFontFace(RAW_COMPONENT);
   assert.notEqual(code, RAW_COMPONENT, "fixture precondition: the font injector must have run");
@@ -23,9 +40,19 @@ function generatedCodeWithInlinedFont(): string {
 
 function unzipBundle(code: string): Record<string, Uint8Array> {
   const bundle = buildExportBundle({
-    direction: { title: "Make the next action unmistakable" },
+    direction: DIRECTION,
+    critique: CRITIQUE,
     code,
-    designGoal: "Clarify the primary action",
+    inputs: {
+      designGoal: "Clarify the primary action",
+      feedbackText: "People do not know where to begin.",
+      reviewerContext: "New workspace admins",
+      constraints: "Keep the existing information architecture",
+    },
+    viewport: { width: 1280, height: 832 },
+    warnings: ["One icon was normalized."],
+    provenance: { provider: "anthropic", model: "claude-sonnet-4-5-20250929" },
+    exportedAt: "2026-08-26T12:00:00.000Z",
   });
   assert.equal(bundle.fileName, "make-the-next-action-unmistakable.zip");
   return unzipSync(bundle.bytes);
@@ -65,6 +92,32 @@ test("the font ships as a real asset the entry point imports", () => {
 
   assert.ok(strFromU8(entry(files, "src/main.tsx")).includes(`import "./fonts.css";`));
   assert.ok(strFromU8(entry(files, "README.md")).includes("src/assets/Geist.woff2"));
+});
+
+test("the export carries the complete exploration context without the screenshot", () => {
+  const files = unzipBundle(RAW_COMPONENT);
+  const context = JSON.parse(strFromU8(entry(files, "coqui-context.json")));
+
+  assert.deepEqual(context.rawInputs, {
+    designGoal: "Clarify the primary action",
+    feedbackText: "People do not know where to begin.",
+    reviewerContext: "New workspace admins",
+    constraints: "Keep the existing information architecture",
+  });
+  assert.deepEqual(context.synthesizedFeedback, CRITIQUE);
+  assert.deepEqual(context.selectedDirection, DIRECTION);
+  assert.deepEqual(context.prototype.viewport, { width: 1280, height: 832 });
+  assert.deepEqual(context.prototype.provenance, {
+    provider: "anthropic",
+    model: "claude-sonnet-4-5-20250929",
+  });
+  assert.equal(context.exportedAt, "2026-08-26T12:00:00.000Z");
+  assert.equal(files["reference.png"], undefined);
+
+  const readme = strFromU8(entry(files, "README.md"));
+  assert.match(readme, /selected direction/i);
+  assert.match(readme, /coqui-context\.json/);
+  assert.doesNotMatch(readme, /approved direction/i);
 });
 
 test("code with no inlined font is exported untouched and gains no font files", () => {

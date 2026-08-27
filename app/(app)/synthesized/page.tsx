@@ -1,6 +1,5 @@
-import { SynthesizedScreen } from "@/components/synthesized-screen";
+import { redirect } from "next/navigation";
 
 export default function SynthesizedPage() {
-  return <SynthesizedScreen />;
+  redirect("/directions");
 }
-

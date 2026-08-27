@@ -1,4 +1,5 @@
 import { CodeGenGenerationError } from "./errors";
+import type { GenerationProvenance } from "@/lib/types";
 import type { CodeGenProvider, CodeGenRequest } from "./types";
 import { buildPrompt, resolveScreenshot, SYSTEM_PROMPT } from "./shared";
 
@@ -50,6 +51,10 @@ export class ClaudeCodeGenProvider implements CodeGenProvider {
   constructor(apiKey: string, model: string = DEFAULT_MODEL) {
     this.apiKey = apiKey;
     this.model = model;
+  }
+
+  get provenance(): GenerationProvenance {
+    return { provider: "anthropic", model: this.model };
   }
 
   async *streamCode(request: CodeGenRequest): AsyncGenerator<string, void, unknown> {

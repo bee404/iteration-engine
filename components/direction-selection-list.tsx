@@ -6,10 +6,10 @@ import { useCallback, useEffect, useState } from "react";
 
 import { PatternLinkIcon } from "@/components/coqui-marks";
 import { StepHeader } from "@/components/step-header";
+import { generatePrototype } from "@/lib/codegen-client";
 import { requestDirections } from "@/lib/round-api";
-import { useChainViewport } from "@/lib/stores/chain-viewport";
-import { useRoundGeneration } from "@/lib/stores/round-generation";
-import { useRoundImage } from "@/lib/stores/round-image";
+import { useRoundStore } from "@/lib/stores/round";
+import { useRoundViewport } from "@/lib/stores/round-viewport";
 import type { Critique, Direction } from "@/lib/types";
 import { useStepStage } from "@/lib/use-step-stage";
 
@@ -160,15 +160,17 @@ function CritiqueSummary({ critique }: { critique: Critique }) {
 export function DirectionsScreen() {
   const router = useRouter();
   const stage = useStepStage();
-  const lockBox = useChainViewport((state) => state.lockBox);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const lockBox = useRoundViewport((state) => state.lockBox);
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  const brief = useRoundImage((state) => state.brief);
-  const critique = useRoundGeneration((state) => state.critique);
-  const directions = useRoundGeneration((state) => state.directions);
-  const directionsSource = useRoundGeneration((state) => state.directionsSource);
-  const setDirections = useRoundGeneration((state) => state.setDirections);
+  const image = useRoundStore((state) => state.image);
+  const brief = useRoundStore((state) => state.brief);
+  const critique = useRoundStore((state) => state.critique);
+  const directions = useRoundStore((state) => state.directions);
+  const directionsSource = useRoundStore((state) => state.directionsSource);
+  const selectedId = useRoundStore((state) => state.selectedDirectionId);
+  const setDirections = useRoundStore((state) => state.setDirections);
+  const selectDirection = useRoundStore((state) => state.selectDirection);
 
   const [error, setError] = useState<string | null>(null);
   // Bumped by "Try again", which is the only way a settled request is re-issued.
@@ -216,16 +218,13 @@ export function DirectionsScreen() {
   }, []);
 
   const handleContinue = useCallback(() => {
-    if (!selectedId) return;
-    // Carrying a direction forward closes this round into the chain, so the viewport box stops
-    // being this round's correctable measurement here too (Decision 14). Code generation is the
-    // canonical commit point (components/direction-card.tsx) and this path has none yet; locking
-    // on the close is never earlier than that, so it can't take the correction away too soon.
+    const direction = directions.find((candidate) => candidate.id === selectedId);
+    if (!direction || !image || !brief) return;
+    // The comparison box locks at the moment the request is grounded against it.
     lockBox();
-    // No downstream route exists yet; continuing closes the round and loops to a fresh one,
-    // playing the same slide-up-and-out exit so the chain stays continuous.
-    stage.exit(() => router.push("/upload"));
-  }, [selectedId, lockBox, stage, router]);
+    void generatePrototype({ direction, designGoal: brief.goal, screenshotRef: image.dataUrl });
+    stage.exit(() => router.push("/prototype"));
+  }, [selectedId, directions, image, brief, lockBox, stage, router]);
 
   const header = (
     <>
@@ -293,7 +292,7 @@ export function DirectionsScreen() {
                   direction={direction}
                   isSelected={selectedId === direction.id}
                   isExpanded={openId === direction.id}
-                  onSelect={() => setSelectedId(direction.id)}
+                  onSelect={() => selectDirection(direction.id)}
                   onExpand={() => setExpandedId(direction.id)}
                 />
               ))}
@@ -308,14 +307,10 @@ export function DirectionsScreen() {
             onClick={handleContinue}
             disabled={!selectedId}
           >
-            Continue with this direction
+            Continue to prototype
           </button>
-          <p className="directions-actions-note">
-            Code generation is the next handoff. For now, continuing closes this round and starts a
-            fresh one.
-          </p>
           <Link className="directions-restart" href="/upload">
-            Start another round
+            Start another exploration
           </Link>
         </div>
       </div>

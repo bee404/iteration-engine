@@ -1,39 +1,34 @@
 # Roadmap & Open Work
 
-What is built vs. still open, and what's paused. Grounded in `main` commit `34b7a31`, status
-checked 2026-08-26, not in older doc claims.
+What is built vs. still open, and what's paused. Grounded in `codex/v0-portable-prototype`, status checked 2026-08-26.
 
 ## Built and shipped (on `main`)
 
-The implemented generation loop is live and persisted:
+The canonical generation loop is live and transient:
 
 - Upload + inputs, with **screenshot natural-dimension capture** (`lib/image-dimensions.ts`).
 - Claude Sonnet **critique** (signal/preference split + flagged ambiguities).
 - Claude Sonnet **directions** (2–3, rationale-backed, optional pattern reference).
-- Per-direction **code generation** streamed over SSE into a bottom sheet.
+- Selected-direction **code generation** streamed over SSE into the prototype stage.
 - **Live-mount preview** — generated TSX transpiled with Sucrase and mounted as an interactive
   component in a zero-network sandboxed iframe, with source-view fallbacks.
 - **Viewport model** — screenshot dimensions seed the viewport; Bryan can correct the value before
-  the first committed iteration, after which the viewport locks for the chain.
+  prototype generation, after which the viewport locks for that exploration.
 - **Fixed-box comparison** — `Source` / `Iteration` is a binary toggle in one registered viewport,
   with source and runtime-error fallbacks when an iteration cannot mount.
-- **Source-bundle export** — an approved direction can be downloaded as a standalone bundle.
+- **Context-rich export** — runnable Vite/React source downloads with raw inputs, synthesized critique, full selected direction, viewport, generation notes, and completed-run provider/model provenance.
 - **Design-system enforcement** (Geist prompt grounding + deterministic post-processing).
 - **Provider fallbacks** — GPT-4o can take over after typed Claude failures when both provider keys
   are configured; 21st.dev grounding uses a live per-round MCP query when its key is configured.
-- **DEMO_MODE** fixture replay with write-refusal.
-- **Turso round persistence** + a History section reading back recent rounds, chained via
-  `previousRoundId`.
+- **DEMO_MODE** fixture replay with no external model calls.
+- **No screenshot retention or history in V0** — exploration state is in-memory and the screenshot is excluded from the ZIP by default.
 
-> Note on older docs: the "View & State Inventory" and "Findings Log" were written when
-> `PreviewFrame` only escaped code into a `<pre>` and no round was ever persisted. Both gaps are
-> now **closed** on `main` (PR #7 live-mount + dimension capture; PR #9 Turso persistence). Trust
-> the code over those earlier snapshots.
+> Note on older docs: the "View & State Inventory" and "Findings Log" predate the live-mount preview and current V0 product decision. Trust the current code and Decision 17 over those snapshots.
 
 ## Remaining precision work
 
 The fixed-box comparison and its viewport lock are shipped. The current viewport model starts
-with the screenshot's natural dimensions and accepts a user correction before the chain locks;
+with the screenshot's natural dimensions and accepts a user correction before the exploration locks;
 it does not yet detect and remove browser chrome or letterboxing from a capture.
 
 - **Content-width autocrop** — a bounded future refinement that could detect the actual interface
@@ -52,7 +47,7 @@ it does not yet detect and remove browser chrome or letterboxing from a capture.
 - **ComfyUI** optional local visual pre-iteration / asset generation — decided shape, not in the
   core loop.
 - **Project management UI** — single implicit project today; no switcher.
-- **Lineage/chain view** — a way to browse a chain's full history is a candidate signature
+- **Historical record / lineage** — a future retention enhancement that becomes valuable when the product can show what was selected in each exploration. A future way to browse a chain's full history is a candidate signature
   interaction but has **not been designed yet**. Constraints on any future attempt (Decision 12,
   `decisions.md`): no branching UI, nothing implying history is editable, no drag scrubber, and
   not a list of thumbnails or a timeline row.
@@ -71,16 +66,13 @@ it does not yet detect and remove browser chrome or letterboxing from a capture.
 - Per-direction generation retry is already shipped through `Retry generation`.
 - Real-problems and taste items are read-only; changing the evidence requires new feedback and a
   new round once directions exist.
-- The lineage view may browse the ordered chain, but comparison remains adjacent: each iteration
-  against its direct source. The lineage browsing surface itself has not been designed.
+- Any future lineage view must preserve adjacent source/iteration comparison. No lineage surface is part of V0.
 - Later rounds require fresh feedback and use the prior iteration as their reference. Whether
   later rounds also inherit the prior goal, reviewer context, or constraints as editable defaults
   is explicitly deferred, not decided for V1 — see "Other planned-but-not-wired work" below.
 - Responsive and touch behavior remains deferred under Decision 13; it is not a blocker or an
   open design input for the current desktop build.
-- `Save` and `Export` are two separate actions (primary CTA: Save, secondary CTA: Export), not
-  one combined action. Both behaviors are shipped; final CTA treatment remains subject to
-  front-end/UX review.
+- `Download prototype` is the final primary action. `Start another exploration` clears transient state and returns to upload.
 - The coquí-call control defaults to muted and remains disabled until an audio asset is supplied.
 
 ## Paused: external front-end / UX iteration

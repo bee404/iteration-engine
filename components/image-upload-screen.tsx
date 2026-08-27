@@ -8,8 +8,8 @@ import { StepHeader } from "@/components/step-header";
 import { LockedViewportNotice } from "@/components/viewport-box-field";
 import { readImageDimensions } from "@/lib/image-dimensions";
 import { preprocessScreenshot } from "@/lib/screenshot-preprocess";
-import { useChainViewport } from "@/lib/stores/chain-viewport";
-import { useRoundImage } from "@/lib/stores/round-image";
+import { useRoundStore } from "@/lib/stores/round";
+import { useRoundViewport } from "@/lib/stores/round-viewport";
 
 type ImageUploadScreenProps = {
   onImageSelected?: (file: File) => void;
@@ -28,8 +28,8 @@ function readAsDataUrl(file: File): Promise<string> {
 /** The first Coquí screen: one quiet place to bring a reference into a round. */
 export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
   const router = useRouter();
-  const beginTransition = useRoundImage((state) => state.beginTransition);
-  const inferBox = useChainViewport((state) => state.inferBox);
+  const beginTransition = useRoundStore((state) => state.beginTransition);
+  const inferBox = useRoundViewport((state) => state.inferBox);
   const inputRef = useRef<HTMLInputElement>(null);
   const previewRef = useRef<HTMLImageElement>(null);
   // Guards the auto-advance effect against re-running for a file it has already sent onward.
@@ -80,8 +80,8 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
         // trimming happened — a different measurement from the viewport box above.
         const dimensions = processed.dimensions.width > 0 ? processed.dimensions : capturedBox;
         if (cancelled) return;
-        // A locked chain ignores this: after the first committed iteration the box is the
-        // chain's, not this screenshot's (see lib/stores/chain-viewport.ts).
+        // A locked exploration ignores this because generation has already started against its
+        // fixed comparison box.
         inferBox(capturedBox);
         const rect = previewRef.current?.getBoundingClientRect();
         const origin = rect

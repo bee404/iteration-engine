@@ -1,4 +1,4 @@
-import { RoundWorkspace } from "@/components/round-workspace";
+import { redirect } from "next/navigation";
 
 /**
  * The single-page round workspace: intake → critique → directions → per-direction code
@@ -12,6 +12,5 @@ import { RoundWorkspace } from "@/components/round-workspace";
  * round on one page.
  */
 export default function WorkspacePage() {
-  return <RoundWorkspace />;
+  redirect("/upload");
 }
-

@@ -1,4 +1,5 @@
 import { CodeGenGenerationError } from "./errors";
+import type { GenerationProvenance } from "@/lib/types";
 import type { CodeGenProvider, CodeGenRequest } from "./types";
 
 /**
@@ -24,6 +25,7 @@ import type { CodeGenProvider, CodeGenRequest } from "./types";
 export class FallbackCodeGenProvider implements CodeGenProvider {
   readonly name: string;
   readonly language: string;
+  private activeProvider: CodeGenProvider;
 
   constructor(
     private readonly primary: CodeGenProvider,
@@ -31,9 +33,15 @@ export class FallbackCodeGenProvider implements CodeGenProvider {
   ) {
     this.name = `${primary.name}-with-${secondary.name}-fallback`;
     this.language = primary.language;
+    this.activeProvider = primary;
+  }
+
+  get provenance(): GenerationProvenance {
+    return this.activeProvider.provenance;
   }
 
   async *streamCode(request: CodeGenRequest): AsyncGenerator<string, void, unknown> {
+    this.activeProvider = this.primary;
     let yieldedAnyToken = false;
     try {
       for await (const token of this.primary.streamCode(request)) {
@@ -47,6 +55,7 @@ export class FallbackCodeGenProvider implements CodeGenProvider {
       console.warn(
         `[codegen/fallback-provider] ${this.primary.name} streamCode failed (${error.code}) before yielding any tokens; falling back to ${this.secondary.name}.`
       );
+      this.activeProvider = this.secondary;
       yield* this.secondary.streamCode(request);
     }
   }

@@ -1,14 +1,13 @@
 # Architecture — The Shipped System
 
-This describes what is **actually on `main`** as of commit `34b7a31` (status checked 2026-08-26).
+This describes the canonical V0 implementation on `codex/v0-portable-prototype` (status checked 2026-08-26).
 Where a claim in an older research doc is now outdated by shipped code, this file reflects the
 code. Paths are repo-relative.
 
 ## Stack
 
 - **Next.js 16** (App Router) + **React 19**, deployed on **Vercel**. TypeScript throughout.
-- **Zustand 5** for client round state (`store/round-store.ts`).
-- **Turso / libSQL** (`@libsql/client`) for round-history persistence.
+- **Zustand 5** for transient client exploration state (`lib/stores/round.ts`).
 - **Sucrase** for in-browser TSX transpilation of generated components.
 - **@vercel/analytics** for usage tracking.
 - **Claude Sonnet** (Anthropic) as the primary for critique, directions, and code generation, with
@@ -19,9 +18,9 @@ runtime inlined into the preview iframe (see Live-mount preview below). There is
 Vite app in this repo; the standalone Vite prototype Bryan saw earlier lived outside this
 pipeline.
 
-## Pipeline stages (upload → approved round)
+## Pipeline stages (upload → portable prototype)
 
-1. **Upload & inputs** (`components/upload-form.tsx`) — user selects a screenshot and fills
+1. **Upload & inputs** (`components/image-upload-screen.tsx`, `components/feedback-screen.tsx`) — user selects a screenshot and fills
    Design goal + Raw feedback (required), Reviewer context + Constraints (optional). The file
    is read to a `data:` URL (server-readable for the vision call). Natural pixel dimensions are
    captured at upload via `lib/image-dimensions.ts` and stored on the round
@@ -31,20 +30,14 @@ pipeline.
    vague to act on, surfaced for clarification instead of guessed at).
 3. **Directions** (`POST /api/directions`) — 2–3 genuinely different `Direction`s, each with
    `rationale`, `tradeoffs`, `suggestedChanges`, and an optional `patternReference` (21st.dev).
-4. **Code generation** (`POST /api/generate`, SSE) — per-direction, on demand. Streams TSX
-   token-by-token into a full-width bottom sheet (`components/code-sheet.tsx`). Grounded in the
+4. **Direction selection and code generation** (`components/direction-selection-list.tsx`, `POST /api/generate`, SSE) — the user selects one direction and continues. TSX streams into canonical exploration state. Grounded in the
    direction + design goal + screenshot + the active design system.
 5. **Live-mount preview** (`components/preview-frame.tsx`) — on completion, the TSX is
    transpiled with Sucrase and mounted as an interactive component in a sandboxed iframe.
-6. **Compare & export** (`components/comparison-viewport.tsx`, `lib/export-bundle.ts`) — the
-   generated iteration and direct source render in one fixed viewport with a binary `Source` /
-   `Iteration` toggle; an approved direction can be downloaded as a standalone source bundle.
-7. **Approve & persist** — approving a round writes it to Turso (`lib/persist-round.ts` →
-   `POST /api/rounds`), chained to the prior round via `previousRoundId`. A History section
-   (`components/round-history.tsx`) reads back recent rounds.
+6. **Compare & export** (`components/prototype-screen.tsx`, `components/comparison-viewport.tsx`, `lib/export-bundle.ts`) — the generated iteration and direct source render in one fixed viewport with a binary `Source` / `Iteration` toggle. The browser downloads a runnable Vite/React project plus `coqui-context.json` containing raw inputs, critique, selected direction, viewport, generation notes, and the provider/model that actually completed generation.
+7. **Reset** — `Start another exploration` clears the in-memory exploration and viewport. V0 does not persist screenshots, approval state, or history.
 
-The orchestration lives in `components/round-workspace.tsx` over the Zustand store; API routes
-are in `app/api/*/route.ts`.
+The stepped orchestration lives in the `(app)` routes over `lib/stores/round.ts`. Legacy persistence modules remain in the repository temporarily but are not reachable from the canonical V0 path; removal is a separately scoped cleanup.
 
 ## Security boundary and monitoring
 
@@ -85,36 +78,26 @@ codegen provider appends a condensed design-system spec to every prompt (see bel
 not keep a local taxonomy snapshot. Without the key, local development intentionally uses the
 typed mock provider; do not assume live pattern lookups happen in that mode.
 
-## Data model — `lib/types.ts`
+## Active V0 data model
 
-The core shapes (also the Turso persisted shapes, `lib/db/schema.sql`):
+The canonical client store (`lib/stores/round.ts`) carries:
 
-- **`Round`** — inputs (`screenshotRef`, `screenshotDimensions`, `designGoal`, `feedbackText`,
-  `reviewerContext`, `constraints`), outputs (`critique`, `directions`, `selectedDirectionId`,
-  `generatedCode`), `approvalStatus`, and `previousRoundId` (the round-to-round chain).
+- **`RoundImage` / `RoundBrief`** — processed screenshot data, viewport dimensions, and raw user inputs.
 - **`Critique`** — `{ summary, signal[], preference[], flaggedAmbiguities[], model }`. `signal`
   and `preference` are `SignalPreferenceItem[]`.
 - **`Direction`** — `{ id, title, rationale, tradeoffs, suggestedChanges[], patternReference }`.
-- **`GeneratedCode`** — `{ id, directionId, language, code, status, createdAt }` where status is
-  `streaming | complete | error`.
+- **`GeneratedPrototype`** — selected direction id, source, language, status, errors, and post-processing warnings.
 - **`ImageDimensions`** — `{ width, height }`, nullable on a round for legacy rounds captured
   before dimension capture existed. It supplies the initial viewport model; the chain-level
-  corrected and locked viewport is stored separately.
+  corrected and locked viewport is stored separately for the current exploration.
 
 Note there is **no region/selector/bounding-box** concept anywhere — feedback and directions do
 not know *which part of the screen* they target. That gap matters for the visual-diff feature
 (see `roadmap-and-open-work.md`).
 
-## Turso persistence
+## Legacy persistence boundary
 
-- SQLite-at-the-edge via `@libsql/client` (`lib/db/client.ts`, `queries.ts`, `migrate.ts`).
-- Structured fields (signal/preference, directions, suggested changes, pattern references) are
-  stored as JSON `TEXT` columns and parsed at the query layer — SQLite has no array/object type
-  and these are always read whole.
-- Tables: `projects`, `rounds`, `critiques`, `directions`, `generated_code`, with indexes on the
-  foreign keys. `rounds.previous_round_id` self-references for version history.
-- Single-workspace V1: every round belongs to one implicit project, created lazily on first
-  approval (`lib/persist-round.ts`). No project-switcher UI yet.
+Turso/API/history code from the earlier approval model is still present but deprecated and unreachable from the stepped V0 route. Do not build new behavior on it. V0's durable artifact is the user-owned ZIP; deleting the legacy modules is a separate cleanup because it spans database, API, and reusable UI surfaces.
 
 ## DEMO_MODE fixture replay — `lib/demo-mode.ts`, `lib/fixtures/`
 

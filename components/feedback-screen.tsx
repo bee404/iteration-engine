@@ -10,8 +10,7 @@ import { StepHeader } from "@/components/step-header";
 import { LockedViewportNotice } from "@/components/viewport-box-field";
 import { requestCritique } from "@/lib/round-api";
 import { encodeScreenshotForModel } from "@/lib/screenshot-encode";
-import { useRoundGeneration } from "@/lib/stores/round-generation";
-import { useRoundImage } from "@/lib/stores/round-image";
+import { useRoundStore } from "@/lib/stores/round";
 import { useStepStage } from "@/lib/use-step-stage";
 
 type SynthesizeStatus = "idle" | "synthesizing" | "done";
@@ -26,13 +25,13 @@ const MORPH_MS = 520;
  */
 export function FeedbackScreen() {
   const router = useRouter();
-  const image = useRoundImage((state) => state.image);
-  const clearTransition = useRoundImage((state) => state.clearTransition);
-  const setBrief = useRoundImage((state) => state.setBrief);
-  const setCritique = useRoundGeneration((state) => state.setCritique);
+  const image = useRoundStore((state) => state.image);
+  const clearTransition = useRoundStore((state) => state.clearTransition);
+  const setBrief = useRoundStore((state) => state.setBrief);
+  const setCritique = useRoundStore((state) => state.setCritique);
   const stage = useStepStage();
   // Snapshot the origin rect once: the store's copy is cleared as soon as the entrance plays.
-  const [origin] = useState(() => useRoundImage.getState().transitionOrigin);
+  const [origin] = useState(() => useRoundStore.getState().transitionOrigin);
 
   const hasEntrance = Boolean(image && origin);
   const [phase, setPhase] = useState<"pre" | "run" | "done">(hasEntrance ? "pre" : "done");
@@ -154,9 +153,7 @@ export function FeedbackScreen() {
           <Link className="upload-proceed" href="/upload">
             Go to upload
           </Link>
-          {/* The reference image is in-memory only and does not survive a reload, but the chain's
-              locked box does — it is read back from the persisted round, so it still reads out
-              here rather than looking as though the lock were lost with the screenshot. */}
+          {/* The reference and its viewport are intentionally in-memory for V0. */}
           <LockedViewportNotice />
         </section>
       </main>
@@ -298,4 +295,3 @@ export function FeedbackScreen() {
     </main>
   );
 }
-

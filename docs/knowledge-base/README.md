@@ -19,7 +19,7 @@ Read the one file that matches your task, not all of them:
 | File | Read it when you need to know… |
 | --- | --- |
 | [`.agents/product-marketing.md`](../../.agents/product-marketing.md) | How Coquí is positioned publicly, who the initial audience is, what claims are defensible, and what the current launch CTA is. Read before writing marketing, launch, recruiting, or public-facing product copy. |
-| [`architecture.md`](./architecture.md) | How the shipped system actually works — pipeline stages, provider interfaces, data model, persistence, demo mode, live-mount preview, design-system enforcement. Start here for any code change. |
+| [`architecture.md`](./architecture.md) | How the current system works — pipeline stages, provider interfaces, transient state, portable export, demo mode, live-mount preview, and legacy persistence boundary. Start here for any code change. |
 | [`decisions.md`](./decisions.md) | *Why* the system is built the way it is — the durable, load-bearing decisions and their rationale (generation engine, token format, Sucrase, demo mode, 21st.dev shape, etc.). Read before changing a decision. |
 | [`roadmap-and-open-work.md`](./roadmap-and-open-work.md) | What is built vs. still open (including remaining viewport precision work), build-order dependencies, and the paused external UX iteration work. |
 | [`qa-conventions.md`](./qa-conventions.md) | The PR-review and design-QA pattern this project follows before anything merges. Read before opening a PR. |
@@ -48,9 +48,9 @@ surfaces the drift.
 **Coquí** (renamed 2026-08-11 from "Iteration Engine" — see `docs/decisions.md` Decision 8; the
 repo slug and this hub's older prose still say the old name in places) is a personal, single-user
 design tool: a designer uploads a screenshot plus feedback, and the app produces a critique
-(signal separated from preference), 2–3 rationale-backed directions, and on-demand per-direction
-code generation that live-mounts as an interactive React component. Rounds persist to Turso for
-version history. It is a Next.js app on Vercel, Zustand for client state, Claude Sonnet behind
+(signal separated from preference), 2–3 rationale-backed directions, and a generated prototype
+for the selected direction that live-mounts as an interactive React component. V0 state is
+transient; the durable artifact is a context-rich ZIP owned by the user. It is a Next.js app on Vercel, Zustand for client state, Claude Sonnet behind
 typed provider interfaces (with mock and fixture fallbacks), Sucrase for in-browser
 transpilation, and a design-system enforcement pipeline that grounds *generated* code in the
 Vercel Geist style. See `architecture.md` for that detail, and `docs/design-system.md` for the

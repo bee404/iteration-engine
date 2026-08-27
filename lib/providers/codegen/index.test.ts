@@ -29,6 +29,10 @@ test("getCodeGenProvider returns a bare ClaudeCodeGenProvider when OPENAI_API_KE
     assert.ok(provider instanceof ClaudeCodeGenProvider);
     assert.ok(!(provider instanceof FallbackCodeGenProvider));
     assert.equal(provider.name, "claude-codegen");
+    assert.deepEqual(provider.provenance, {
+      provider: "anthropic",
+      model: "claude-sonnet-4-5-20250929",
+    });
   });
 });
 
@@ -36,6 +40,7 @@ test("getCodeGenProvider wraps Claude in FallbackCodeGenProvider once OPENAI_API
   withEnv({ ANTHROPIC_API_KEY: "test-anthropic-key", OPENAI_API_KEY: "test-openai-key" }, () => {
     const provider = getCodeGenProvider();
     assert.ok(provider instanceof FallbackCodeGenProvider);
+    assert.equal(provider.provenance.provider, "anthropic");
   });
 });
 
@@ -44,5 +49,6 @@ test("getCodeGenProvider ignores OPENAI_API_KEY entirely when ANTHROPIC_API_KEY 
     const provider = getCodeGenProvider();
     assert.ok(!(provider instanceof FallbackCodeGenProvider));
     assert.ok(!(provider instanceof ClaudeCodeGenProvider));
+    assert.deepEqual(provider.provenance, { provider: "mock", model: null });
   });
 });

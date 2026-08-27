@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 
-import { useChainViewport, type ChainViewport } from "@/lib/stores/chain-viewport";
+import { useRoundViewport, type RoundViewport } from "@/lib/stores/round-viewport";
 import {
   formatViewportBox,
   parseViewportBox,
@@ -14,7 +14,7 @@ type EditorState =
   | { status: "idle" }
   | { status: "editing"; draft: ViewportBoxDraft; error: string | null };
 
-function readout(viewport: ChainViewport): string {
+function readout(viewport: RoundViewport): string {
   switch (viewport.status) {
     case "unmeasured":
       return "Viewport not measured yet";
@@ -23,18 +23,18 @@ function readout(viewport: ChainViewport): string {
         viewport.source === "inferred" ? "inferred" : "corrected"
       }`;
     case "locked":
-      return `Viewport ${formatViewportBox(viewport.box)} \u00b7 locked for this chain`;
+      return `Viewport ${formatViewportBox(viewport.box)} \u00b7 locked for this exploration`;
   }
 }
 
 /**
- * The chain's box on screens with no reference image to hang it under: the /upload dropzone, and
+ * The exploration's box on screens with no reference image to hang it under: the /upload dropzone, and
  * the /feedback empty state after a reload. Renders only once the box is locked — an open,
  * still-correctable measurement belongs to a screenshot that isn't on screen, and offering the
  * correction control there would invite a correction with nothing to check it against.
  */
 export function LockedViewportNotice() {
-  const viewport = useChainViewport((state) => state.viewport);
+  const viewport = useRoundViewport((state) => state.viewport);
   if (viewport.status !== "locked") return null;
   return (
     <p className="viewport-box is-locked">
@@ -44,8 +44,8 @@ export function LockedViewportNotice() {
 }
 
 /**
- * The inferred viewport box, shown before synthesis with a correction affordance while the chain
- * is still open (Decision 14). Once the chain's first iteration is committed the box is locked and
+ * The inferred viewport box, shown before synthesis with a correction affordance while the round
+ * is still open. Once generation starts the box is locked and
  * this reads out as a fact — the correction control is gone for good, not merely disabled, so a
  * later round can never look like an invitation to re-measure.
  *
@@ -53,8 +53,8 @@ export function LockedViewportNotice() {
  * does not exist for this control yet.
  */
 export function ViewportBoxField() {
-  const viewport = useChainViewport((state) => state.viewport);
-  const correctBox = useChainViewport((state) => state.correctBox);
+  const viewport = useRoundViewport((state) => state.viewport);
+  const correctBox = useRoundViewport((state) => state.correctBox);
   const [editor, setEditor] = useState<EditorState>({ status: "idle" });
 
   const openEditor = useCallback(() => {
@@ -72,7 +72,7 @@ export function ViewportBoxField() {
 
   // The parse and the store write both happen here in the event handler, never inside a
   // `setEditor` updater: React may run an updater during the render phase, so writing to the
-  // chain-viewport store from inside one updates other subscribers mid-render ("Cannot update a
+  // round-viewport store from inside one updates other subscribers mid-render ("Cannot update a
   // component while rendering a different component"). Updaters stay pure; effects stay outside.
   const submitCorrection = useCallback(() => {
     if (editor.status !== "editing") return;
@@ -146,4 +146,3 @@ export function ViewportBoxField() {
     </form>
   );
 }
-

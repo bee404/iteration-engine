@@ -6,7 +6,7 @@ import { useEffect, useState, type CSSProperties, type RefObject } from "react";
 import { ViewportBoxField } from "@/components/viewport-box-field";
 import { toCssColor, type VerticalColorSplit } from "@/lib/screenshot-edge-colors";
 import { useScreenshotColorSplit } from "@/lib/use-screenshot-color-split";
-import type { RoundImage } from "@/lib/stores/round-image";
+import type { RoundImage } from "@/lib/stores/round";
 
 /** The custom properties `.feedback-reference-frame.is-split` reads. */
 type SplitVars = CSSProperties &
@@ -71,8 +71,7 @@ export function ReferenceImage({ image, imgRef, hidden }: ReferenceImageProps) {
           </span>
         </button>
       </div>
-      {/* The measurement is deliberately not read off this image: it belongs to the chain, and
-          after the first committed iteration it stops tracking whatever screenshot is on screen. */}
+      {/* The measurement is captured before preprocessing and locks when generation starts. */}
       <div className="feedback-reference-meta">
         <figcaption className="feedback-caption">{image.fileName}</figcaption>
         <ViewportBoxField />
@@ -114,4 +113,3 @@ function splitVars(split: VerticalColorSplit | null): SplitVars | undefined {
     "--ref-split-at": String(split.boundary),
   };
 }
-
