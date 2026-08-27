@@ -84,10 +84,9 @@ export const IMPLEMENTATION_REQUIREMENTS = [
 /**
  * NOTE (scope gap, tracked but not fully closed by this change): generation is now grounded
  * in a design system (lib/design-systems), but there is still exactly one system, hardcoded
- * via getActiveDesignSystem() — not one selected per project/round. docs/blueprint.md and
- * docs/decisions.md describe a planned W3C DTCG token index + condensed style guide as part
- * of the round input model, but lib/types.ts's Round/Project/Direction shapes carry no
- * per-project design-system reference field yet. Building that selection (or a config UI) is
+ * via getActiveDesignSystem() — not one selected per exploration. docs/blueprint.md and
+ * docs/decisions.md describe a planned W3C DTCG token index + condensed style guide, but the
+ * active transient state carries no design-system reference yet. Building that selection (or a config UI) is
  * out of scope here; this is a proof-of-concept that grounding changes the output at all, with
  * lib/design-systems structured so a different system can replace this one without touching
  * buildPrompt below.

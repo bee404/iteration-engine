@@ -1,7 +1,5 @@
 /**
- * Domain types shared across API routes, providers, the Zustand store, and UI.
- * These are the shapes that get persisted to Turso (see lib/db/schema.sql) and
- * returned from the stubbed provider calls (see lib/providers/**).
+ * Domain types shared across API routes, providers, the transient Zustand store, and UI.
  */
 
 /** Natural pixel size of an uploaded screenshot, captured client-side at upload time.
@@ -54,51 +52,4 @@ export type GeneratedCodeStatus = "streaming" | "complete" | "error";
 export interface GenerationProvenance {
   provider: string;
   model: string | null;
-}
-
-/** On-demand, per-direction code/prototype generation result. */
-export interface GeneratedCode {
-  id: string;
-  directionId: string;
-  language: string;
-  code: string;
-  status: GeneratedCodeStatus;
-  createdAt: string;
-}
-
-export type ApprovalStatus = "pending" | "approved" | "rejected";
-
-export interface Project {
-  id: string;
-  name: string;
-  description: string | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-/** A single round: the inputs that drove it, the critique/directions it produced, and its outcome. */
-export interface Round {
-  id: string;
-  projectId: string;
-  /** Links this round to the round it iterates on, for version history across rounds. */
-  previousRoundId: string | null;
-  screenshotRef: string;
-  /** Natural pixel dimensions of screenshotRef, or null for legacy rounds captured before
-   * dimension capture existed (or when the image never loaded). */
-  screenshotDimensions: ImageDimensions | null;
-  /** The chain's viewport box, fixed when its first iteration was committed (Decision 14). Carried
-   * onto every later round in the chain rather than re-inferred from that round's own reference,
-   * so the comparison box never moves mid-chain. Null for rounds committed before the lock existed. */
-  lockedViewport: ImageDimensions | null;
-  designGoal: string;
-  feedbackText: string;
-  reviewerContext: string | null;
-  constraints: string | null;
-  critique: Critique | null;
-  directions: Direction[];
-  selectedDirectionId: string | null;
-  generatedCode: GeneratedCode[];
-  approvalStatus: ApprovalStatus;
-  createdAt: string;
-  updatedAt: string;
 }

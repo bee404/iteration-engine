@@ -26,7 +26,7 @@ export function getColorAllowlist(system: DesignSystem = getActiveDesignSystem()
 /**
  * PROOF-OF-CONCEPT SCOPE: returns one hardcoded design system for every codegen request,
  * proving that grounding generation in a real style guide changes its output. There is no
- * per-project or per-round selection here — lib/types.ts's Round/Project shapes carry no
+ * per-exploration selection here — the active transient state carries no
  * design-system/token reference field yet (docs/decisions.md tracks a planned W3C DTCG
  * token index + condensed style guide as part of the input model, not yet built). Adding
  * that selection is future scope: a config UI or a per-project field, not this function.
@@ -36,4 +36,3 @@ export function getColorAllowlist(system: DesignSystem = getActiveDesignSystem()
 export function getActiveDesignSystem(): DesignSystem {
   return vercelGeistDesignSystem;
 }
-

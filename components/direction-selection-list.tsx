@@ -150,8 +150,8 @@ function CritiqueSummary({ critique }: { critique: Critique }) {
  * first row is expanded on load, and clicking any other (collapsed) row swaps the expansion over
  * to it, so there is always exactly one row expanded, never zero and never more than one.
  * Rows are generated live from this round's critique, and arrive on the canonical
- * enter-from-bottom step transition straight from /feedback — the /synthesized recap is no longer
- * a stop in this path (see synthesized-screen.tsx).
+ * enter-from-bottom step transition straight from /feedback. `/synthesized` remains only as a
+ * compatibility redirect.
  *
  * This screen used to render a static fixture. That is why a live run through the product returned
  * the same three approaches no matter what was uploaded, while hitting /api/directions directly

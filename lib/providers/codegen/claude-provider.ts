@@ -33,8 +33,8 @@ interface AnthropicStreamEvent {
  * Real Claude Sonnet code-generation provider. Sends the direction (title, rationale,
  * tradeoffs, suggested changes, pattern reference) and the round's screenshot as vision
  * input, and streams Claude's plain-text response straight through token-by-token —
- * matching the SSE transport app/api/generate/route.ts and components/direction-card.tsx
- * already expect from MockCodeGenProvider. Unlike the critique provider, there is no
+ * matching the SSE transport app/api/generate/route.ts and lib/codegen-client.ts expect from
+ * MockCodeGenProvider. Unlike the critique provider, there is no
  * retry-on-failure loop here: tokens are forwarded to the client as they arrive, so once
  * streaming has started there is no unsent output to safely retry from.
  *
@@ -124,7 +124,7 @@ export class ClaudeCodeGenProvider implements CodeGenProvider {
         buffer += decoder.decode(value, { stream: true });
 
         // SSE frames are separated by a blank line, same framing Anthropic's streaming API and
-        // this app's own /api/generate response both use (see components/direction-card.tsx).
+        // this app's own /api/generate response both use (see lib/codegen-client.ts).
         const frames = buffer.split("\n\n");
         buffer = frames.pop() ?? "";
 

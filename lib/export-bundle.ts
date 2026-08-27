@@ -8,7 +8,7 @@ import type { Critique, Direction, GenerationProvenance, ImageDimensions } from 
  * just the bare component file, so the selected direction can actually run outside Coquí's
  * sandboxed preview iframe. Dependencies are pinned to the same React release the preview
  * vendors (lib/preview/react-runtime.generated.ts) so unpacking and running the bundle
- * reproduces exactly what was approved.
+ * reproduces exactly what the user selected for exploration.
  */
 const REACT_VERSION = "19.2.8";
 const TYPES_REACT_VERSION = "19.2.18";

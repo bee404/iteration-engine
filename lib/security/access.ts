@@ -21,8 +21,8 @@ function readAccessConfiguration(): AccessConfiguration {
     return { mode: "misconfigured" };
   }
 
-  // Public fixture previews are safe: provider factories make no external model calls and
-  // every persistence write is refused. Live production fails closed until both credentials
+  // Public fixture previews are safe because provider factories make no external model calls.
+  // Live production fails closed until both credentials
   // are configured. Local development remains frictionless.
   if (process.env.NODE_ENV === "production" && !isDemoMode()) {
     return { mode: "misconfigured" };

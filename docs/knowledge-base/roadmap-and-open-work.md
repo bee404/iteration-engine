@@ -1,6 +1,6 @@
 # Roadmap & Open Work
 
-What is built vs. still open, and what's paused. Grounded in `codex/v0-portable-prototype`, status checked 2026-08-26.
+What is built vs. still open, and what's paused. Grounded in `main`, status checked 2026-08-27.
 
 ## Built and shipped (on `main`)
 
@@ -36,17 +36,16 @@ it does not yet detect and remove browser chrome or letterboxing from a capture.
   that natural dimensions are insufficient.
 - **Pixel-diff region highlighting** — remains an optional exploration, not part of the current
   comparison contract. The shipped control is only the binary `Source` / `Iteration` toggle.
-- **Legacy rounds** — rounds without captured dimensions continue to use the documented fallback
-  behavior rather than inventing a viewport ratio.
 
 ## Other planned-but-not-wired work
 
-- **Per-project / per-round design-system selection** — blocked on a design-system reference
-  field in `Round`/`Project`; one hardcoded Geist system today.
+- **Per-exploration design-system selection** — requires a design-system reference in the active
+  transient state; one hardcoded Geist system today.
 - **W3C DTCG token-index input model** — decided format, not yet built as an input.
 - **ComfyUI** optional local visual pre-iteration / asset generation — decided shape, not in the
   core loop.
-- **Project management UI** — single implicit project today; no switcher.
+- **Project management and retention model** — not part of V0; future work needs a fresh product
+  definition before introducing projects, persistence, or a switcher.
 - **Historical record / lineage** — a future retention enhancement that becomes valuable when the product can show what was selected in each exploration. A future way to browse a chain's full history is a candidate signature
   interaction but has **not been designed yet**. Constraints on any future attempt (Decision 12,
   `decisions.md`): no branching UI, nothing implying history is editable, no drag scrubber, and
@@ -64,12 +63,11 @@ it does not yet detect and remove browser chrome or letterboxing from a capture.
 - Critique is read-only and may be regenerated only before directions exist. The current store
   does not yet enforce that immutability boundary and must clear or lock downstream state.
 - Per-direction generation retry is already shipped through `Retry generation`.
-- Real-problems and taste items are read-only; changing the evidence requires new feedback and a
-  new round once directions exist.
+- Real-problems and taste items are read-only; changing the evidence requires starting another
+  exploration once directions exist.
 - Any future lineage view must preserve adjacent source/iteration comparison. No lineage surface is part of V0.
-- Later rounds require fresh feedback and use the prior iteration as their reference. Whether
-  later rounds also inherit the prior goal, reviewer context, or constraints as editable defaults
-  is explicitly deferred, not decided for V1 — see "Other planned-but-not-wired work" below.
+- If historical rounds are introduced later, whether they inherit the prior goal, reviewer
+  context, or constraints as editable defaults remains explicitly deferred.
 - Responsive and touch behavior remains deferred under Decision 13; it is not a blocker or an
   open design input for the current desktop build.
 - `Download prototype` is the final primary action. `Start another exploration` clears transient state and returns to upload.
