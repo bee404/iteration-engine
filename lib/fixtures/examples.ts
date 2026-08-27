@@ -19,14 +19,16 @@ const CAPTURED_MODEL = "claude-sonnet (captured · demo replay)";
  *    to a secondary underline action, destinations locked/dimmed, ring status indicators, and
  *    Vercel-Geist ink-on-white tokens.
  *
- * The other two directions have no captured code yet (capturedCode: null) — demo mode streams a
- * typed "no capture" code-gen error for them, which is a real shipped state, not fake output.
+ * The demo reuses that one verbatim code capture for all three selectable directions. This is an
+ * intentional QA affordance: every path reaches Step 5, the Source / Iteration comparison, and
+ * the downloadable payload even though only the first direction has direction-specific captured
+ * code. The selected direction metadata remains distinct and is preserved in coqui-context.json.
  */
 const hightouchOnboarding: DemoFixture = {
   id: "hightouch-onboarding",
   label: "Get started with Hightouch — onboarding",
   provenance:
-    "PR #3 Design QA Test Plan (art_cxi3yTtJ) Test 1 inputs; verbatim codegen capture ie-output1-temp-app.tsx.",
+    "PR #3 Design QA Test Plan (art_cxi3yTtJ) Test 1 inputs; one verbatim codegen capture (ie-output1-temp-app.tsx) reused across all three demo selection paths.",
   inputs: {
     designGoal:
       "Help a brand-new workspace admin understand the next onboarding action and complete setup without needing support.",
@@ -99,7 +101,7 @@ const hightouchOnboarding: DemoFixture = {
         ],
         patternReference: null,
       },
-      capturedCode: null,
+      capturedCode: hightouchOnboardingCode,
     },
     {
       direction: {
@@ -116,7 +118,7 @@ const hightouchOnboarding: DemoFixture = {
         ],
         patternReference: null,
       },
-      capturedCode: null,
+      capturedCode: hightouchOnboardingCode,
     },
   ],
 };
@@ -148,4 +150,3 @@ export function getActiveFixture(): DemoFixture {
 export function findCapturedDirection(directionId: string) {
   return getActiveFixture().directions.find((d) => d.direction.id === directionId);
 }
-

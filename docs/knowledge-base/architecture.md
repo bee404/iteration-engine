@@ -105,6 +105,10 @@ API calls:
   the live path.
 - Fixtures are registered in `lib/fixtures/examples.ts`; verbatim captured code lives in
   `lib/fixtures/data/`. `DEMO_FIXTURE=<id>` pins which example replays (defaults to first).
+- The current Hightouch fixture intentionally maps its one real captured component to all three
+  selectable directions. This lets every demo path exercise Step 5, Source / Iteration comparison,
+  and the context-rich ZIP while keeping each selection's distinct direction metadata in
+  `coqui-context.json`; it does not represent three independently generated code captures.
 - The canonical V0 has no application persistence layer. Demo mode only changes provider
   selection; exploration state remains transient and user-owned output remains the ZIP.
 

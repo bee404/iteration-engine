@@ -48,6 +48,7 @@ Set `DEMO_MODE=true` to walk the entire flow on **real, previously-captured** ou
 - Captured examples live in `lib/fixtures/` (`examples.ts` is the registry; `data/` holds verbatim captured code). Add a new example by appending a `DemoFixture` — no provider or format changes needed.
 - Pin which example to replay with `DEMO_FIXTURE=<id>` (defaults to the first registered fixture).
 - Because inputs are replayed, any screenshot/text a reviewer enters is accepted; the fixture's real captured output is what's returned.
+- The current Hightouch fixture reuses one real captured component across all three direction selections so every demo path reaches Step 5, Source / Iteration comparison, and export. The selected direction metadata still remains distinct in the download payload; the code is intentionally shared for QA.
 - The canonical V0 flow does not persist explorations in either live or demo mode.
 
 ## Security baseline
