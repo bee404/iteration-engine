@@ -27,8 +27,8 @@ interface ComparisonViewportSources {
 
 /**
  * Picks the box both comparison layers render into, preferring the chain lock and falling back
- * to the screenshot's natural size. Returns null when neither is usable (legacy rounds captured
- * before dimensions were recorded), which callers render as an unconstrained box.
+ * to the screenshot's natural size. Returns null when neither is usable, which callers render as
+ * an unconstrained box.
  */
 export function resolveComparisonViewport({
   lockedViewport,
@@ -70,7 +70,7 @@ export function comparisonViewportStyle(
   box: ImageDimensions | null,
   stage: StageSize | null,
 ): CSSProperties {
-  // No recorded round size, or the stage hasn't been measured yet: fill what's available. The
+  // No usable screenshot size, or the stage hasn't been measured yet: fill what's available. The
   // ratio is unknown in the first case and unknowable-yet in the second, and a box that fills
   // the stage still registers both layers exactly.
   if (!box || !stage) return { width: "100%", height: "100%" };
@@ -105,4 +105,3 @@ export function iterationScaleStyle(
 export function formatComparisonViewport(box: ImageDimensions | null): string {
   return box ? `${box.width} × ${box.height}` : "size unknown";
 }
-

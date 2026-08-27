@@ -23,7 +23,7 @@ interface OpenAIStreamChunk {
  * attempt fails and throws its typed CodeGenGenerationError (see
  * lib/providers/codegen/fallback-provider.ts and ./index.ts) — never as a parallel primary.
  * Streams plain-text tokens the same way ClaudeCodeGenProvider does, so app/api/generate/route.ts
- * and components/direction-card.tsx don't need to know which backend produced them.
+ * and lib/codegen-client.ts doesn't need to know which backend produced them.
  *
  * Prompt construction and implementation requirements are shared with ClaudeCodeGenProvider
  * via ./shared.ts — only the OpenAI streaming transport lives here.

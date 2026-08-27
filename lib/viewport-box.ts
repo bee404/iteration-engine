@@ -2,8 +2,8 @@ import type { ImageDimensions } from "@/lib/types";
 
 /**
  * The viewport box is the interface rectangle a round is measured in (Decision 14): Coquí infers
- * it from the first screenshot, Bryan may correct it, and once the chain's first iteration is
- * committed it is locked and every later round in that chain reuses it.
+ * it from the screenshot, Bryan may correct it, and prototype generation locks it for the
+ * current exploration.
  */
 
 /** A 3× capture of an 8K display is still under 16k pixels, so anything past this is a typo. */
@@ -45,4 +45,3 @@ export function toViewportBoxDraft(box: ImageDimensions | null): ViewportBoxDraf
 export function formatViewportBox(box: ImageDimensions): string {
   return `${box.width} × ${box.height}`;
 }
-

@@ -19,7 +19,7 @@ Read the one file that matches your task, not all of them:
 | File | Read it when you need to know… |
 | --- | --- |
 | [`.agents/product-marketing.md`](../../.agents/product-marketing.md) | How Coquí is positioned publicly, who the initial audience is, what claims are defensible, and what the current launch CTA is. Read before writing marketing, launch, recruiting, or public-facing product copy. |
-| [`architecture.md`](./architecture.md) | How the current system works — pipeline stages, provider interfaces, transient state, portable export, demo mode, live-mount preview, and legacy persistence boundary. Start here for any code change. |
+| [`architecture.md`](./architecture.md) | How the current system works — pipeline stages, provider interfaces, transient state, portable export, demo mode, and live-mount preview. Start here for any code change. |
 | [`decisions.md`](./decisions.md) | *Why* the system is built the way it is — the durable, load-bearing decisions and their rationale (generation engine, token format, Sucrase, demo mode, 21st.dev shape, etc.). Read before changing a decision. |
 | [`roadmap-and-open-work.md`](./roadmap-and-open-work.md) | What is built vs. still open (including remaining viewport precision work), build-order dependencies, and the paused external UX iteration work. |
 | [`qa-conventions.md`](./qa-conventions.md) | The PR-review and design-QA pattern this project follows before anything merges. Read before opening a PR. |

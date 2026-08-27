@@ -53,9 +53,8 @@ Where behavior is codified, back the manual pass with an automated check and cit
 ## DEMO_MODE for offline QA passes
 
 Front-end/UX QA runs against `DEMO_MODE=true`, which replays real captured outputs with zero API
-cost and refuses persistence writes. Use it to exercise the full flow deterministically. When a
-PR touches the flow, note whether it was QA'd in demo mode, live, or both — and confirm demo
-mode still refuses writes if persistence is in scope.
+cost. Use it to exercise the full flow deterministically. When a PR touches the flow, note whether
+it was QA'd in demo mode, live, or both. The canonical V0 has no application persistence path.
 
 ## Lean working path
 
@@ -74,4 +73,3 @@ default gate.
   repo docs, update the docs first and record the decision in `docs/decisions.md`. Keep the
   README status aligned. (This knowledge base is a synthesis layer — correct it in the same PR
   when you find it drifting.)
-

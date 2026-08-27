@@ -104,7 +104,7 @@ export default function WorkflowPage() {
         <div className="workflow-flow-heading">
           <div>
             <p className="workflow-kicker">The loop</p>
-            <h2>From input to committed iteration.</h2>
+            <h2>From input to selected prototype.</h2>
           </div>
           <span className="workflow-flow-count">04 stages after the reference</span>
         </div>

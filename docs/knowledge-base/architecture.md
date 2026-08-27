@@ -1,6 +1,6 @@
 # Architecture — The Shipped System
 
-This describes the canonical V0 implementation on `codex/v0-portable-prototype` (status checked 2026-08-26).
+This describes the canonical V0 implementation on `main` (status checked 2026-08-27).
 Where a claim in an older research doc is now outdated by shipped code, this file reflects the
 code. Paths are repo-relative.
 
@@ -23,7 +23,7 @@ pipeline.
 1. **Upload & inputs** (`components/image-upload-screen.tsx`, `components/feedback-screen.tsx`) — user selects a screenshot and fills
    Design goal + Raw feedback (required), Reviewer context + Constraints (optional). The file
    is read to a `data:` URL (server-readable for the vision call). Natural pixel dimensions are
-   captured at upload via `lib/image-dimensions.ts` and stored on the round
+   captured at upload via `lib/image-dimensions.ts` and stored in transient exploration state
    (`screenshotDimensions`).
 2. **Critique** (`POST /api/critique`) — Claude Sonnet returns a `Critique`: a summary, `signal`
    (real problems) separated from `preference` (taste), and `flaggedAmbiguities` (feedback too
@@ -37,7 +37,7 @@ pipeline.
 6. **Compare & export** (`components/prototype-screen.tsx`, `components/comparison-viewport.tsx`, `lib/export-bundle.ts`) — the generated iteration and direct source render in one fixed viewport with a binary `Source` / `Iteration` toggle. The browser downloads a runnable Vite/React project plus `coqui-context.json` containing raw inputs, critique, selected direction, viewport, generation notes, and the provider/model that actually completed generation.
 7. **Reset** — `Start another exploration` clears the in-memory exploration and viewport. V0 does not persist screenshots, approval state, or history.
 
-The stepped orchestration lives in the `(app)` routes over `lib/stores/round.ts`. Legacy persistence modules remain in the repository temporarily but are not reachable from the canonical V0 path; removal is a separately scoped cleanup.
+The stepped orchestration lives in the `(app)` routes over `lib/stores/round.ts`. The earlier approval, history, and Turso implementation has been removed; future retention work should begin from the V0 product decision rather than revive that obsolete model.
 
 ## Security boundary and monitoring
 
@@ -74,7 +74,7 @@ codegen provider appends a condensed design-system spec to every prompt (see bel
 
 ### Patterns (21st.dev grounding) — `lib/providers/patterns/`
 `getPatternProvider()` returns `TwentyFirstProvider` when `TWENTYFIRST_API_KEY` is configured and
-`MockPatternProvider` otherwise. The live path performs an on-demand per-round MCP query and does
+`MockPatternProvider` otherwise. The live path performs an on-demand per-exploration MCP query and does
 not keep a local taxonomy snapshot. Without the key, local development intentionally uses the
 typed mock provider; do not assume live pattern lookups happen in that mode.
 
@@ -87,22 +87,17 @@ The canonical client store (`lib/stores/round.ts`) carries:
   and `preference` are `SignalPreferenceItem[]`.
 - **`Direction`** — `{ id, title, rationale, tradeoffs, suggestedChanges[], patternReference }`.
 - **`GeneratedPrototype`** — selected direction id, source, language, status, errors, and post-processing warnings.
-- **`ImageDimensions`** — `{ width, height }`, nullable on a round for legacy rounds captured
-  before dimension capture existed. It supplies the initial viewport model; the chain-level
+- **`ImageDimensions`** — `{ width, height }`. It supplies the initial viewport model; the
   corrected and locked viewport is stored separately for the current exploration.
 
 Note there is **no region/selector/bounding-box** concept anywhere — feedback and directions do
 not know *which part of the screen* they target. That gap matters for the visual-diff feature
 (see `roadmap-and-open-work.md`).
 
-## Legacy persistence boundary
-
-Turso/API/history code from the earlier approval model is still present but deprecated and unreachable from the stepped V0 route. Do not build new behavior on it. V0's durable artifact is the user-owned ZIP; deleting the legacy modules is a separate cleanup because it spans database, API, and reusable UI surfaces.
-
 ## DEMO_MODE fixture replay — `lib/demo-mode.ts`, `lib/fixtures/`
 
 `DEMO_MODE=true` walks the entire flow on **real, previously-captured** data with zero external
-API calls and zero Turso writes:
+API calls:
 
 - `isDemoMode()` is checked **first** in every provider factory, ahead of every other selector,
   so the live path is fully bypassed regardless of `ANTHROPIC_API_KEY` / `LLM_PROVIDER` /
@@ -110,10 +105,8 @@ API calls and zero Turso writes:
   the live path.
 - Fixtures are registered in `lib/fixtures/examples.ts`; verbatim captured code lives in
   `lib/fixtures/data/`. `DEMO_FIXTURE=<id>` pins which example replays (defaults to first).
-- **Writes are refused** while demo mode is on: `assertWritesAllowed()` is a defense-in-depth
-  backstop in the DB layer, and the persistence routes (`POST /api/rounds`, `POST /api/projects`,
-  `PATCH /api/rounds/[id]`) short-circuit with a typed `demo_mode` error before reaching it.
-  Reads are not blocked.
+- The canonical V0 has no application persistence layer. Demo mode only changes provider
+  selection; exploration state remains transient and user-owned output remains the ZIP.
 
 ## Live-mount preview via Sucrase — `lib/preview/`, `components/preview-frame.tsx`
 
@@ -169,5 +162,4 @@ deterministic and prompt sides). See `qa-conventions.md`.
 - `npm run lint` — ESLint (run before every commit; do not run `tsc` in-sandbox).
 - `npm test` — node test runner over `lib/**/*.test.ts`.
 - `npm run verify:codegen` — codegen post-processing regression (must report 12/12).
-- `npm run db:migrate` — apply the Turso schema.
 - `DEMO_MODE=true npm run dev` — offline front-end QA on captured fixtures.

@@ -17,7 +17,7 @@ import { PreviewFrame } from "./preview-frame";
 interface ComparisonViewportProps {
   /** Data URL of the round's reference screenshot — what the `Source` position shows. */
   screenshotRef: string | null;
-  /** The box both layers render into. Null for legacy rounds with no recorded dimensions. */
+  /** The box both layers render into. Null when screenshot dimensions are unavailable. */
   viewport: ImageDimensions | null;
   code: string;
   language: string;
@@ -98,4 +98,3 @@ export function ComparisonViewport({
     </div>
   );
 }
-

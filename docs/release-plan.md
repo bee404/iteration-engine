@@ -6,11 +6,11 @@ Define an achievable release shape, sequencing, validation approach, and deliver
 
 ## Status
 
-Agreed 2026-08-05, reconciled with the shipped system and cross-tool context packets on 2026-08-11. Implementation status last checked against `main` commit `34b7a31` on 2026-08-26. Derived from `docs/blueprint.md`, `docs/decisions.md`, and the implementation status in `docs/knowledge-base/roadmap-and-open-work.md`.
+Agreed 2026-08-05, reconciled with the shipped system and cross-tool context packets on 2026-08-11. Implementation status last checked against `main` on 2026-08-27. Derived from `docs/blueprint.md`, `docs/decisions.md`, and the implementation status in `docs/knowledge-base/roadmap-and-open-work.md`.
 
 ### Implementation status as of 2026-08-26
 
-Implemented on `codex/v0-portable-prototype`: screenshot intake and natural-dimension capture; real Claude critique and direction generation; selected-direction streamed code generation; live-mount preview with source fallback; per-exploration viewport inference, correction, and locking; fixed-box `Source` / `Iteration` comparison; and a client-generated ZIP containing runnable source plus the full exploration context. The canonical V0 flow is transient and does not persist screenshots, approvals, or history.
+Implemented on `main`: screenshot intake and natural-dimension capture; real Claude critique and direction generation; selected-direction streamed code generation; live-mount preview with source fallback; per-exploration viewport inference, correction, and locking; fixed-box `Source` / `Iteration` comparison; and a client-generated ZIP containing runnable source plus the full exploration context. The canonical V0 flow is transient and does not persist screenshots, approvals, or history.
 
 Remaining for V1: validate the complete loop against a real project and evaluate whether content-width autocrop plus a confidence flag is needed beyond the current natural-dimension viewport model. Optional ComfyUI clarification remains a graceful enhancement, not a blocker for the core comparison loop.
 

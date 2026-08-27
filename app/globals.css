@@ -935,7 +935,7 @@ button {
 }
 
 /* ---------------------------------------------------------------------------
-   Preview frame + code sheet (bottom sheet) — re-skinned light.
+   Preview frame
 --------------------------------------------------------------------------- */
 .preview-frame {
   width: 100%;
@@ -970,12 +970,6 @@ button {
   border-radius: var(--r-md);
 }
 
-.code-status {
-  font-size: 12px;
-  color: var(--ink-mute);
-  margin: 0;
-}
-
 .code-warnings {
   margin: 8px 0 0;
   padding-left: 18px;
@@ -986,118 +980,6 @@ button {
 
 .code-warnings li {
   margin: 2px 0;
-}
-
-.code-sheet-scrim {
-  position: fixed;
-  inset: 0;
-  background: rgb(var(--shadow-rgb) / 0.28);
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.25s ease;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  z-index: 100;
-}
-
-.code-sheet-scrim.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.code-sheet {
-  width: 100%;
-  max-width: 100%;
-  height: 85vh;
-  max-height: 85vh;
-  background: var(--surface);
-  border-radius: var(--r-xl) var(--r-xl) 0 0;
-  box-shadow: 0 -8px 40px rgb(var(--shadow-rgb) / 0.22);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 20px 24px;
-  transform: translateY(100%);
-  transition: transform 0.3s ease, height 0.3s ease;
-}
-
-.code-sheet.open {
-  transform: translateY(0);
-}
-
-/* While streaming there's no useful code to read yet, so the sheet sits as a compact status
-   panel sized to its content, capped at 42vh. Once the stream settles, `code-sheet.tsx` briefly
-   pins the sheet's measured pixel height inline before this class is removed, giving the
-   `height` transition above two concrete values (pinned px → 85vh) to ease between instead of
-   snapping straight to full height. */
-.code-sheet.is-streaming {
-  height: auto;
-  max-height: 42vh;
-}
-
-.code-sheet-streaming {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 20px 4px 8px;
-  color: var(--ink-mute);
-  font-size: 14px;
-}
-
-.code-sheet-streaming p {
-  margin: 0;
-}
-
-.code-sheet-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  flex-shrink: 0;
-}
-
-.code-sheet-label {
-  display: block;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--ink-mute);
-}
-
-.code-sheet-header h3 {
-  margin: 4px 0 0;
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 20px;
-  letter-spacing: 0.4px;
-  color: var(--display-ink);
-}
-
-.code-sheet-close {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  background: var(--surface);
-  color: var(--ink-body);
-  border: 1px solid var(--line);
-  border-radius: var(--r-sm);
-  font-size: 14px;
-  cursor: pointer;
-  align-self: flex-start;
-}
-
-.code-sheet-body {
-  flex: 1;
-  min-height: 0;
-}
-
-.code-sheet-body .preview-frame {
-  width: 100%;
-  height: 100%;
 }
 
 /* ---------------------------------------------------------------------------
@@ -1216,59 +1098,6 @@ button {
 }
 
 /* ---------------------------------------------------------------------------
-   Round history
---------------------------------------------------------------------------- */
-.round-history-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.round-history-item {
-  border: 1px solid var(--line);
-  border-radius: var(--r-md);
-  padding: 10px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.round-history-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.round-history-status {
-  font-size: 11px;
-  text-transform: capitalize;
-  padding: 2px 8px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  color: var(--ink-mute);
-}
-
-.round-history-status-approved {
-  color: var(--accent-text);
-  border-color: rgb(var(--accent-rgb) / 0.4);
-}
-
-.round-history-status-rejected {
-  color: var(--signal);
-  border-color: var(--signal);
-}
-
-.round-history-goal {
-  margin: 0;
-  font-size: 13px;
-  color: var(--ink-body);
-}
-
-/* ---------------------------------------------------------------------------
    Responsive — collapse the two-zone intake to a single column.
 --------------------------------------------------------------------------- */
 @media (max-width: 860px) {
@@ -1290,17 +1119,7 @@ button {
   }
 }
 
-@media (max-width: 640px) {
-  .code-sheet {
-    height: 92vh;
-    max-height: 92vh;
-    padding: 16px;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .code-sheet,
-  .code-sheet-scrim,
   .add-image-glyph {
     transition: none;
   }
@@ -3672,8 +3491,7 @@ body:has(.app-chrome) {
 }
 
 /* ---------------------------------------------------------------------------
-   Directions step — three approaches presented for selection (step 04). Reuses
-   the direction-card / directions-grid pattern from the live workflow, on the
+   Directions step — three approaches presented for selection (step 04), on the
    canonical enter-from-bottom step transition.
    --------------------------------------------------------------------------- */
 .directions-body {
@@ -3694,12 +3512,6 @@ body:has(.app-chrome) {
   align-items: center;
   gap: 10px;
   text-align: center;
-}
-
-.directions-body .directions-grid {
-  width: 100%;
-  max-width: 1000px;
-  align-items: start;
 }
 
 .directions-actions {
@@ -3813,9 +3625,7 @@ body:has(.app-chrome) {
 }
 
 /* ---------------------------------------------------------------------------
-   Approach card — step-04 card redesign (Figma node 130:1896). Scoped entirely
-   under approach-card__* so the shared .direction-card pattern used by the live
-   workflow view (direction-card.tsx / directions-comparison.tsx) is untouched.
+   Approach card — step-04 card redesign (Figma node 130:1896).
 
    Three states, all CSS-driven off :hover — no extra component state:
      default          — index badge, title, description, collapsed details

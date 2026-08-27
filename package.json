@@ -14,12 +14,10 @@
     "contextbridge:sync": "node scripts/contextbridge/sync.mjs --scope github",
     "contextbridge:stage-local": "node scripts/contextbridge/stage-local.mjs",
     "prebuild": "npm run build:preview-runtime",
-    "db:migrate": "tsx lib/db/migrate.ts",
     "verify:codegen": "tsx scripts/verify-codegen-postprocess.ts",
     "verify:directions": "tsx scripts/verify-directions.ts"
   },
   "dependencies": {
-    "@libsql/client": "0.17.4",
     "@vercel/analytics": "^2.0.1",
     "fflate": "^0.8.3",
     "next": "16.3.2",

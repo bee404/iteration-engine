@@ -30,8 +30,8 @@ spec injected by `lib/design-systems/` (see below).
 
 Generated code is grounded in the Vercel Geist design system, enforced by both prompt rules and
 deterministic post-processing (see `architecture.md`). This is a **proof-of-concept scope
-decision**: it proves grounding changes output, using exactly one system. Per-project /
-per-round selection is deferred because `Round`/`Project` carry no design-system reference field
+decision**: it proves grounding changes output, using exactly one system. Per-exploration
+selection is deferred because the active transient state carries no design-system reference field
 yet. When that lands, `getActiveDesignSystem()` becomes a lookup and nothing else in the codegen
 path changes.
 
@@ -67,16 +67,16 @@ Bryan runs multiple front-end/UX quality passes without spending real API comput
 live Claude. DEMO_MODE replays real captured outputs through the *same* provider interfaces
 (fixture-backed implementations selected ahead of every other provider), so the whole flow feels
 interactive end-to-end with zero external calls. It reuses the existing
-mock-provider precedent rather than inventing new mocking machinery, and writes are refused while
-it's on. Flipping it off restores live behavior exactly.
+mock-provider precedent rather than inventing new mocking machinery. Flipping it off restores
+live behavior exactly.
 
 ## V0 durability: portable download, not application persistence
 
 The canonical V0 exploration is transient browser state. Selecting a direction is not approval.
 The durable output is a ZIP with runnable source and `coqui-context.json`; the screenshot is not
 included by default and is not retained by the canonical workflow. Historical rounds, lineage,
-and a stronger commit state are future retention features. Legacy Turso code remains isolated
-pending a separately approved removal.
+and a stronger commit state are future retention features. The obsolete Turso approval
+implementation has been removed rather than retained as a competing model.
 
 ## 21st.dev grounding: live per-round MCP query, never a bulk snapshot
 
