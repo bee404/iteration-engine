@@ -1,7 +1,7 @@
 # Product Marketing Context
 
-**Document version:** v4
-**Last updated:** 2026-08-22
+**Document version:** v5
+**Last updated:** 2026-08-26
 **Scope:** Launch-ready context for Coquí's first public post, closed-alpha outreach, and eventual open-source release. Long-term positioning, market sizing, and competitive research are intentionally deferred.
 
 ## Product Overview
@@ -72,7 +72,7 @@
 - Durable rounds: approved inputs, critique, directions, generated code, and history are persisted together.
 - Intended open-source model: users can inspect, fork, adapt, and run Coquí with their own Claude API key once release packaging is complete.
 
-**Planned but not claimable yet:** Perfectly registered `Source` / `Iteration` comparison in a fixed viewport, live 21st.dev grounding, source-bundle export, and GPT-4o fallback.
+**Implemented but not fully validated:** The fixed-box `Source` / `Iteration` comparison, conditional live 21st.dev grounding, source-bundle export, and GPT-4o fallback are now in the codebase. The complete loop still needs validation against a real project before stronger quality or registration claims are made.
 
 **Why this is better:** It compresses the path from feedback to decision while keeping the designer responsible for what advances.
 
@@ -130,6 +130,9 @@
 - Real Claude-generated critique that separates signal from preference and flags ambiguities.
 - Real Claude-generated 2–3 distinct directions with rationale, tradeoffs, and suggested changes.
 - Optional per-direction streamed code generation and interactive sandboxed preview with source/error fallback.
+- Viewport inference, pre-commit correction, chain locking, and fixed-box `Source` / `Iteration` comparison.
+- Approved-prototype export as a downloadable source bundle.
+- Claude-primary GPT-4o fallback and conditional live 21st.dev pattern grounding when the relevant server keys are configured.
 - Approval, Turso persistence, and recent round history.
 - Fixture-backed demo mode that replays captured real output with no external calls or writes.
 
@@ -143,7 +146,7 @@
 
 For the first launch visuals, favor product UI and neutral or permission-safe source screens. Avoid leading with the existing Puerto Rico and water-crisis illustration set.
 
-**Validation:** 50 automated tests pass as of 2026-08-22, including access-control, burst-limit, screenshot-validation, preview-security, and generation-path coverage. Earlier lint/build verification was clean apart from one known font-loading warning. The complete loop has not yet been validated across the planned Alpha A real-world use cases.
+**Validation:** 110 automated tests pass as of 2026-08-26, including access-control, burst-limit, screenshot-validation, preview-security, provider fallback, viewport, comparison, export, and generation-path coverage. The production build passes; lint passes with one known font-loading warning. The complete loop has not yet been validated across the planned Alpha A real-world use cases.
 
 ## Goals
 
@@ -161,9 +164,9 @@ Coquí is a design-iteration tool that turns a screenshot and raw feedback into 
 
 ## Claims Boundary
 
-**Safe today:** The implemented single-screen workflow, designer-controlled direction choice, real critique and directions, optional coded preview, demo mode, persisted rounds/history, the staged Closed Alpha A/B plan, and the stated intent to release Coquí as open source and bring-your-own-key.
+**Safe today:** The implemented single-screen workflow, designer-controlled direction choice, real critique and directions, optional coded preview, fixed-box `Source` / `Iteration` comparison, source-bundle export, demo mode, persisted rounds/history, the staged Closed Alpha A/B plan, and the stated intent to release Coquí as open source and bring-your-own-key. Live 21st.dev grounding and GPT-4o fallback are implemented conditionally when their server-side keys are configured.
 
-**Avoid until proven or built:** Saying the open-source release is available now; quantified time savings; superior output quality; production-ready code; pixel-perfect or perfectly registered comparison; general design-system adherence; multi-screen workflows; live 21st.dev grounding; GPT-4o fallback; source-bundle export; closed-beta maturity; customer adoption or satisfaction; enterprise readiness.
+**Avoid until proven or released:** Saying the open-source release is available now; quantified time savings; superior output quality; production-ready code; pixel-perfect or perfectly registered results; general design-system adherence; multi-screen workflows; closed-beta maturity; customer adoption or satisfaction; enterprise readiness; or implying that live provider integrations are available without their server-side configuration.
 
 ## Launch-Blocking Questions
 
@@ -175,6 +178,7 @@ No positioning question materially blocks a scoped first public post or closed-a
 
 ## Changelog
 
+- v5 (2026-08-26) — Reconciled public proof and claims with the shipped viewport comparison, export, provider fallback, and conditional 21st.dev grounding; updated verification counts and retained real-project validation as the remaining evidence gate.
 - v4 (2026-08-22) — Defined Closed Alpha A as three trusted target users, made a deep security QA pass the gate to public-list Alpha B, added the future Obsidian53 owned-channel direction, and prohibited generic "quietly building" launch openings.
 - v3 (2026-08-21) — Set the first-post CTA to a small alpha testers list and defined the cohort's purpose as testing Coquí against real use cases beyond Bryan's own work.
 - v2 (2026-08-21) — Added open-source, forkable, bring-your-own-Claude-key release direction; pulled Puerto Rico, water-crisis, and illustration-led storytelling out of the initial launch frame.

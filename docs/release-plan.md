@@ -6,13 +6,13 @@ Define an achievable release shape, sequencing, validation approach, and deliver
 
 ## Status
 
-Agreed 2026-08-05, reconciled with the shipped system and cross-tool context packets on 2026-08-11. Derived from `docs/blueprint.md`, `docs/decisions.md`, and the implementation status in `docs/knowledge-base/roadmap-and-open-work.md`.
+Agreed 2026-08-05, reconciled with the shipped system and cross-tool context packets on 2026-08-11. Implementation status last checked against `main` commit `34b7a31` on 2026-08-26. Derived from `docs/blueprint.md`, `docs/decisions.md`, and the implementation status in `docs/knowledge-base/roadmap-and-open-work.md`.
 
-### Implementation status as of 2026-08-11
+### Implementation status as of 2026-08-26
 
-Shipped: screenshot intake and natural-dimension capture; real Claude critique and direction generation; per-direction streamed code generation; live-mount preview with source fallback; Turso round persistence and history; fixture-backed `DEMO_MODE`; and a single-user security baseline covering production access, burst limiting, screenshot validation, preview CSP, dependency audits, and structured security-event logs.
+Shipped: screenshot intake and natural-dimension capture; real Claude critique and direction generation; per-direction streamed code generation; live-mount preview with source fallback; viewport inference, correction, and chain locking; fixed-box `Source` / `Iteration` comparison; downloadable source-bundle export; live 21st.dev grounding when `TWENTYFIRST_API_KEY` is configured; GPT-4o fallback when `OPENAI_API_KEY` is configured alongside Claude; Turso round persistence and history; fixture-backed `DEMO_MODE`; and a single-user security baseline covering production access, burst limiting, screenshot validation, preview CSP, dependency audits, and structured security-event logs.
 
-Remaining for V1: infer and lock the actual interface viewport; build the binary `Source` / `Iteration` comparison in that fixed box; add downloadable source-bundle export to the committing action; wire live 21st.dev grounding and the intended GPT-4o validation fallback; and validate the complete loop against a real project. Optional ComfyUI clarification remains a graceful enhancement, not a blocker for the core comparison loop.
+Remaining for V1: validate the complete loop against a real project and evaluate whether content-width autocrop plus a confidence flag is needed beyond the current natural-dimension viewport model. Optional ComfyUI clarification remains a graceful enhancement, not a blocker for the core comparison loop.
 
 ## Plan
 
@@ -46,12 +46,9 @@ Validated against Decision 7's success bar: run v1 on at least one real Obsidian
 
 ### Remaining sequence
 
-1. Complete viewport inference and correction, then lock the viewport box for the chain.
-2. Build the fixed-box comparison using only the binary `Source` / `Iteration` toggle, including the generated-source fallback for mount failures.
-3. Complete the single committing action: persist the approved round and download its source bundle.
-4. Replace the mock pattern provider with live 21st.dev grounding and wire GPT-4o as the validation fallback.
-5. Run the complete V1 loop on at least one real project and evaluate it against Decision 7's coherence bar.
-6. Add ComfyUI-based visual clarification only if it materially improves ambiguous-feedback cases after the core loop is proven.
+1. Run the complete V1 loop on at least one real project and evaluate it against Decision 7's coherence bar.
+2. If real-project validation exposes registration or cropping problems, add content-width autocrop and a confidence flag as a bounded refinement.
+3. Add ComfyUI-based visual clarification only if it materially improves ambiguous-feedback cases after the core loop is proven.
 
 ### Risks
 

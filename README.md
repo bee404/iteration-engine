@@ -20,9 +20,9 @@ The operating sequence is:
 
 ## Status
 
-Discovery reconciliation was agreed on 2026-08-05 and the cross-tool context packets were consolidated on 2026-08-11. The core round is implemented: upload and intake, real Claude critique and directions, on-demand streamed code generation, live-mount preview with source fallback, Turso persistence and history, and fixture-backed demo mode.
+Discovery reconciliation was agreed on 2026-08-05 and the cross-tool context packets were consolidated on 2026-08-11. As of `main` commit `34b7a31` (2026-08-24), the implemented round includes upload and intake, real Claude critique and directions, on-demand streamed code generation, live-mount preview with source fallback, viewport inference/correction and chain locking, fixed-box `Source` / `Iteration` comparison, downloadable source-bundle export, Turso persistence and history, fixture-backed demo mode, live 21st.dev grounding when configured, and GPT-4o fallback when configured alongside Claude.
 
-V1 is not complete. The remaining release work is the inferred fixed viewport box, the binary `Source` / `Iteration` comparison, downloadable source-bundle export, live 21st.dev grounding, the intended GPT-4o validation fallback, and validation against a real project. See `docs/release-plan.md` and `docs/knowledge-base/roadmap-and-open-work.md` for the current boundary.
+V1's remaining release gate is validation of the complete loop against a real project. Content-width autocrop and a confidence flag remain possible precision improvements, while multi-screen workflows, per-project design systems, responsive behavior, and ComfyUI remain deferred. See `docs/release-plan.md` and `docs/knowledge-base/roadmap-and-open-work.md` for the current boundary.
 
 ## Repository map
 
