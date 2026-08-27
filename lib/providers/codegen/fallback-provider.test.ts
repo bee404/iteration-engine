@@ -25,6 +25,7 @@ const REQUEST: CodeGenRequest = {
 function stubProvider(name: string, tokens: string[], failWith?: Error): CodeGenProvider {
   return {
     name,
+    provenance: { provider: name, model: `${name}-model` },
     language: "tsx",
     async *streamCode(): AsyncGenerator<string, void, unknown> {
       for (const token of tokens) yield token;
@@ -51,6 +52,7 @@ test("streamCode returns the primary's tokens untouched when it completes cleanl
   const { tokens, error } = await collect(fallback);
   assert.equal(tokens.join(""), "abc");
   assert.equal(error, undefined);
+  assert.deepEqual(fallback.provenance, { provider: "claude", model: "claude-model" });
 });
 
 test("streamCode falls back to the secondary when the primary fails before yielding any tokens", async () => {
@@ -61,6 +63,7 @@ test("streamCode falls back to the secondary when the primary fails before yield
   const { tokens, error } = await collect(fallback);
   assert.equal(tokens.join(""), "fallback output");
   assert.equal(error, undefined);
+  assert.deepEqual(fallback.provenance, { provider: "gpt-4o", model: "gpt-4o-model" });
 });
 
 test("streamCode does NOT fall back once the primary has already streamed tokens, even on a typed error", async () => {

@@ -47,6 +47,7 @@ export function PrototypeScreen() {
         },
         viewport: viewport ?? image?.dimensions ?? null,
         warnings: prototype.warnings,
+        provenance: prototype.provenance,
       }),
     );
   }, [direction, brief, critique, prototype, viewport, image]);

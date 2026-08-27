@@ -27,7 +27,7 @@ The canonical V0 experience is one transient browser-session exploration. Histor
 - The page starts with a screenshot, design goal, and feedback.
 - The visible happy path is: input, critique, directions, select direction, code generation, live preview, and download.
 - The explanatory page must not imply that Higgsfield, ComfyUI, or Impeccable are currently runtime stages; the codebase records those as excluded, optional/planned, or external respectively.
-- The final ZIP includes runnable Vite/React source plus the raw inputs, synthesized critique, selected direction, viewport, and generation notes in `coqui-context.json`.
+- The final ZIP includes runnable Vite/React source plus the raw inputs, synthesized critique, selected direction, viewport, generation notes, and completed-run provider/model provenance in `coqui-context.json`.
 - The screenshot is used transiently to ground model calls and compare Source/Iteration. V0 does not save it to application persistence or include it in the ZIP by default.
 - Historical rounds and an explicit approval/commit state are deferred.
 - The current design target is desktop-only at approximately 1241px. Responsive and touch adaptations are deferred until the visual direction and remaining screens are stable.

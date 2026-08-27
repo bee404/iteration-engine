@@ -20,7 +20,7 @@ The operating sequence is:
 
 ## Status
 
-The current V0 flow is screenshot upload and intake, Claude critique and directions, one selected direction, streamed code generation, a fixed-box `Source` / `Iteration` review, and a client-generated ZIP. The ZIP contains a runnable Vite/React prototype plus `coqui-context.json` with the raw inputs, synthesized critique, full selected direction, viewport, and generation notes. The processed screenshot remains transient browser-session state and is excluded from the download by default.
+The current V0 flow is screenshot upload and intake, Claude critique and directions, one selected direction, streamed code generation, a fixed-box `Source` / `Iteration` review, and a client-generated ZIP. The ZIP contains a runnable Vite/React prototype plus `coqui-context.json` with the raw inputs, synthesized critique, full selected direction, viewport, generation notes, and the provider/model that actually completed generation. The processed screenshot remains transient browser-session state and is excluded from the download by default.
 
 The remaining release gate is validation of this complete loop against a real project. Historical rounds, retention features, multi-screen workflows, per-project design systems, responsive behavior, and ComfyUI remain deferred. See `docs/release-plan.md` and `docs/knowledge-base/roadmap-and-open-work.md` for the current boundary.
 

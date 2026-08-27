@@ -29,7 +29,7 @@ Per Bryan's own guidance for this reconciliation: don't optimize solely for a de
 - Vague-feedback flagging and clarification (text-based; ComfyUI visual clarification if available locally).
 - Code/prototype generation for the selected direction (Claude Sonnet primary, GPT-4o fallback), streamed via SSE to a sandboxed preview iframe.
 - Fixed-box `Source` / `Iteration` comparison (the generated iteration against its direct source).
-- Portable prototype export with runnable source, raw inputs, synthesized critique, complete selected direction, viewport, and generation notes.
+- Portable prototype export with runnable source, raw inputs, synthesized critique, complete selected direction, viewport, generation notes, and completed-run provider/model provenance.
 
 ### Explicitly out of scope for v1 (deferred, not rejected)
 

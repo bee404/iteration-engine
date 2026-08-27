@@ -34,7 +34,7 @@ pipeline.
    direction + design goal + screenshot + the active design system.
 5. **Live-mount preview** (`components/preview-frame.tsx`) — on completion, the TSX is
    transpiled with Sucrase and mounted as an interactive component in a sandboxed iframe.
-6. **Compare & export** (`components/prototype-screen.tsx`, `components/comparison-viewport.tsx`, `lib/export-bundle.ts`) — the generated iteration and direct source render in one fixed viewport with a binary `Source` / `Iteration` toggle. The browser downloads a runnable Vite/React project plus `coqui-context.json` containing raw inputs, critique, selected direction, viewport, and generation notes.
+6. **Compare & export** (`components/prototype-screen.tsx`, `components/comparison-viewport.tsx`, `lib/export-bundle.ts`) — the generated iteration and direct source render in one fixed viewport with a binary `Source` / `Iteration` toggle. The browser downloads a runnable Vite/React project plus `coqui-context.json` containing raw inputs, critique, selected direction, viewport, generation notes, and the provider/model that actually completed generation.
 7. **Reset** — `Start another exploration` clears the in-memory exploration and viewport. V0 does not persist screenshots, approval state, or history.
 
 The stepped orchestration lives in the `(app)` routes over `lib/stores/round.ts`. Legacy persistence modules remain in the repository temporarily but are not reachable from the canonical V0 path; removal is a separately scoped cleanup.

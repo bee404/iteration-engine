@@ -51,7 +51,7 @@ and **download payload**.
 4. The system generates 2-3 meaningfully different iteration directions. Each includes a rationale, tradeoffs, and suggested design changes, and — when relevant — a reference to a comparable layout or pattern pulled live from 21st.dev to ground the direction in a known solution rather than inventing from scratch.
 5. Bryan selects the direction worth exploring and chooses **Continue to prototype**.
 6. Code for that direction streams live via SSE to a sandboxed preview iframe. Bryan reviews it against the source in the fixed viewport and can retry a failed generation.
-7. Bryan chooses **Download prototype**. The browser creates a runnable Vite/React ZIP plus `coqui-context.json` containing the raw inputs, synthesized critique, selected direction, viewport, and generation notes. The screenshot is not included by default and no exploration history is persisted in V0.
+7. Bryan chooses **Download prototype**. The browser creates a runnable Vite/React ZIP plus `coqui-context.json` containing the raw inputs, synthesized critique, selected direction, viewport, generation notes, and the provider/model that actually completed generation. The screenshot is not included by default and no exploration history is persisted in V0.
 
 ### Facts that constrain the workflow's design
 
@@ -79,7 +79,7 @@ and **download payload**.
 - 2-3 directions, each with rationale, tradeoffs, and suggested changes, optionally grounded in a 21st.dev pattern reference.
 - Full code/prototype generation for the selected direction, streamed live to a sandboxed preview.
 - A fixed-box comparison between the generated iteration and its direct source.
-- A client-generated ZIP containing runnable source and a structured record of the inputs, critique, selected direction, viewport, and generation notes. The screenshot is excluded by default.
+- A client-generated ZIP containing runnable source and a structured record of the inputs, critique, selected direction, viewport, generation notes, and completed-run provider/model provenance. The screenshot is excluded by default.
 
 ### Technical architecture
 

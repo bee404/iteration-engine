@@ -51,6 +51,7 @@ function unzipBundle(code: string): Record<string, Uint8Array> {
     },
     viewport: { width: 1280, height: 832 },
     warnings: ["One icon was normalized."],
+    provenance: { provider: "anthropic", model: "claude-sonnet-4-5-20250929" },
     exportedAt: "2026-08-26T12:00:00.000Z",
   });
   assert.equal(bundle.fileName, "make-the-next-action-unmistakable.zip");
@@ -106,6 +107,10 @@ test("the export carries the complete exploration context without the screenshot
   assert.deepEqual(context.synthesizedFeedback, CRITIQUE);
   assert.deepEqual(context.selectedDirection, DIRECTION);
   assert.deepEqual(context.prototype.viewport, { width: 1280, height: 832 });
+  assert.deepEqual(context.prototype.provenance, {
+    provider: "anthropic",
+    model: "claude-sonnet-4-5-20250929",
+  });
   assert.equal(context.exportedAt, "2026-08-26T12:00:00.000Z");
   assert.equal(files["reference.png"], undefined);
 

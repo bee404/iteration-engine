@@ -45,7 +45,10 @@ test("one canonical round carries selection into its generated prototype", () =>
   state.selectDirection("a");
   state.startPrototype("a", "tsx");
   state.appendPrototypeToken("a", "function Preview() {} ");
-  state.finalizePrototype("a", "function Preview() {}", []);
+  state.finalizePrototype("a", "function Preview() {}", [], {
+    provider: "anthropic",
+    model: "claude-sonnet-4-5-20250929",
+  });
   state.completePrototype("a");
 
   assert.equal(useRoundStore.getState().selectedDirectionId, "a");
@@ -54,6 +57,7 @@ test("one canonical round carries selection into its generated prototype", () =>
     status: "complete",
     code: "function Preview() {}",
     language: "tsx",
+    provenance: { provider: "anthropic", model: "claude-sonnet-4-5-20250929" },
     warnings: [],
   });
 });
@@ -62,6 +66,7 @@ test("changing the selected direction invalidates generated output", () => {
   const state = useRoundStore.getState();
   state.selectDirection("a");
   state.startPrototype("a", "tsx");
+  assert.equal(useRoundStore.getState().prototype?.provenance, null);
   state.completePrototype("a");
   state.selectDirection("b");
 

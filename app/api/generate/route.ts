@@ -72,7 +72,7 @@ export async function POST(request: Request) {
         // carries the authoritative post-processed source the client replaces the streamed
         // buffer with; "warnings" surfaces issues the model must fix (e.g. emoji icons).
         const { code, warnings } = postProcessGeneratedCode(raw);
-        controller.enqueue(encoder.encode(sseEvent("code", { code, warnings })));
+        controller.enqueue(encoder.encode(sseEvent("code", { code, warnings, provenance: provider.provenance })));
         controller.enqueue(encoder.encode(sseEvent("done", { language: provider.language })));
       } catch (error) {
         const codeGenError =

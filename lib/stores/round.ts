@@ -1,6 +1,12 @@
 import { create } from "zustand";
 
-import type { Critique, Direction, GeneratedCodeStatus, ImageDimensions } from "@/lib/types";
+import type {
+  Critique,
+  Direction,
+  GeneratedCodeStatus,
+  GenerationProvenance,
+  ImageDimensions,
+} from "@/lib/types";
 
 export interface RoundImage {
   /** Processed data URL carried between steps without server-side storage. */
@@ -28,6 +34,7 @@ export interface GeneratedPrototype {
   status: GeneratedCodeStatus;
   code: string;
   language: string;
+  provenance: GenerationProvenance | null;
   error?: string;
   warnings?: string[];
 }
@@ -50,7 +57,12 @@ interface RoundState {
   selectDirection: (directionId: string) => void;
   startPrototype: (directionId: string, language: string) => void;
   appendPrototypeToken: (directionId: string, token: string) => void;
-  finalizePrototype: (directionId: string, code: string, warnings: string[]) => void;
+  finalizePrototype: (
+    directionId: string,
+    code: string,
+    warnings: string[],
+    provenance: GenerationProvenance,
+  ) => void;
   completePrototype: (directionId: string) => void;
   failPrototype: (directionId: string, error: string) => void;
   reset: () => void;
@@ -113,17 +125,17 @@ export const useRoundStore = create<RoundState>((set) => ({
       prototype: state.prototype?.directionId === directionId ? state.prototype : null,
     })),
   startPrototype: (directionId, language) =>
-    set({ prototype: { directionId, status: "streaming", code: "", language } }),
+    set({ prototype: { directionId, status: "streaming", code: "", language, provenance: null } }),
   appendPrototypeToken: (directionId, token) =>
     set((state) =>
       state.prototype?.directionId === directionId
         ? { prototype: { ...state.prototype, code: state.prototype.code + token } }
         : state,
     ),
-  finalizePrototype: (directionId, code, warnings) =>
+  finalizePrototype: (directionId, code, warnings, provenance) =>
     set((state) =>
       state.prototype?.directionId === directionId
-        ? { prototype: { ...state.prototype, code, warnings } }
+        ? { prototype: { ...state.prototype, code, warnings, provenance } }
         : state,
     ),
   completePrototype: (directionId) =>

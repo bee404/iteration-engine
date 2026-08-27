@@ -17,6 +17,7 @@ import type { CodeGenProvider, CodeGenRequest } from "./types";
  */
 export class FixtureCodeGenProvider implements CodeGenProvider {
   readonly name = "fixture-codegen";
+  readonly provenance = { provider: "fixture", model: null };
   readonly language = "tsx";
 
   async *streamCode(request: CodeGenRequest): AsyncGenerator<string, void, unknown> {
@@ -39,4 +40,3 @@ export class FixtureCodeGenProvider implements CodeGenProvider {
     }
   }
 }
-

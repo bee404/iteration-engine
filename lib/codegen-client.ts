@@ -1,4 +1,4 @@
-import type { Direction } from "@/lib/types";
+import type { Direction, GenerationProvenance } from "@/lib/types";
 import { useRoundStore } from "@/lib/stores/round";
 
 interface GeneratePrototypeRequest {
@@ -25,6 +25,13 @@ function parseStreamEvent(frame: string): StreamEvent | null {
 
 function asRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+}
+
+function asGenerationProvenance(value: unknown): GenerationProvenance | null {
+  const provenance = asRecord(value);
+  if (typeof provenance.provider !== "string" || !provenance.provider) return null;
+  if (provenance.model !== null && typeof provenance.model !== "string") return null;
+  return { provider: provenance.provider, model: provenance.model as string | null };
 }
 
 /** Streams one selected direction into the canonical in-memory round store. */
@@ -67,12 +74,14 @@ export async function generatePrototype(request: GeneratePrototypeRequest): Prom
           useRoundStore.getState().appendPrototypeToken(direction.id, data.token);
         }
         if (parsed.event === "code" && typeof data.code === "string") {
+          const provenance = asGenerationProvenance(data.provenance);
+          if (!provenance) throw new Error("Generation completed without provider provenance");
           const warnings = Array.isArray(data.warnings)
             ? data.warnings
                 .map((warning) => asRecord(warning).message)
                 .filter((message): message is string => typeof message === "string")
             : [];
-          useRoundStore.getState().finalizePrototype(direction.id, data.code, warnings);
+          useRoundStore.getState().finalizePrototype(direction.id, data.code, warnings, provenance);
           receivedFinalCode = true;
         }
         if (parsed.event === "error") {

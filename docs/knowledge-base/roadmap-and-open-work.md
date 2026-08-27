@@ -16,7 +16,7 @@ The canonical generation loop is live and transient:
   prototype generation, after which the viewport locks for that exploration.
 - **Fixed-box comparison** — `Source` / `Iteration` is a binary toggle in one registered viewport,
   with source and runtime-error fallbacks when an iteration cannot mount.
-- **Context-rich export** — runnable Vite/React source downloads with raw inputs, synthesized critique, full selected direction, viewport, and generation notes.
+- **Context-rich export** — runnable Vite/React source downloads with raw inputs, synthesized critique, full selected direction, viewport, generation notes, and completed-run provider/model provenance.
 - **Design-system enforcement** (Geist prompt grounding + deterministic post-processing).
 - **Provider fallbacks** — GPT-4o can take over after typed Claude failures when both provider keys
   are configured; 21st.dev grounding uses a live per-round MCP query when its key is configured.

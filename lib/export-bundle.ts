@@ -1,7 +1,7 @@
 import { strToU8, zipSync } from "fflate";
 import { extractInlinedFont } from "./export-inlined-font";
 import { extractComponentName } from "./preview/build-preview-document";
-import type { Critique, Direction, ImageDimensions } from "./types";
+import type { Critique, Direction, GenerationProvenance, ImageDimensions } from "./types";
 
 /**
  * Export (Decision 14, docs/decisions.md #14) ships a standalone Vite + React project, not
@@ -27,6 +27,7 @@ export interface ExportBundleInput {
   };
   viewport: ImageDimensions | null;
   warnings?: string[];
+  provenance?: GenerationProvenance | null;
   exportedAt?: string;
 }
 
@@ -217,6 +218,7 @@ export function buildExportBundle(input: ExportBundleInput): ExportBundleResult 
           prototype: {
             sourceFile: `src/${componentFile}`,
             language: "tsx",
+            provenance: input.provenance ?? null,
             viewport: input.viewport,
             warnings: input.warnings ?? [],
           },

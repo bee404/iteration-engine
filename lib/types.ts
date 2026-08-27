@@ -50,6 +50,12 @@ export interface Direction {
 
 export type GeneratedCodeStatus = "streaming" | "complete" | "error";
 
+/** The backend that actually completed a prototype generation, recorded in portable exports. */
+export interface GenerationProvenance {
+  provider: string;
+  model: string | null;
+}
+
 /** On-demand, per-direction code/prototype generation result. */
 export interface GeneratedCode {
   id: string;
