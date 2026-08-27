@@ -36,6 +36,6 @@
     "eslint": "9.39.5",
     "eslint-config-next": "16.3.2",
     "tsx": "4.23.12",
-    "typescript": "6.0.3"
+    "typescript": "7.0.2"
   }
 }
