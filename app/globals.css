@@ -970,18 +970,6 @@ button {
   border-radius: var(--r-md);
 }
 
-.code-warnings {
-  margin: 8px 0 0;
-  padding-left: 18px;
-  font-size: 12px;
-  color: var(--accent-text);
-  list-style: disc;
-}
-
-.code-warnings li {
-  margin: 2px 0;
-}
-
 /* ---------------------------------------------------------------------------
    Source / Iteration comparison (Decision 10) — a binary toggle over one fixed,
    unmoving viewport box. Both layers are children of that single box, so they
@@ -3549,10 +3537,16 @@ body:has(.app-chrome) {
 .prototype-body {
   flex: 1;
   min-height: 0;
+  width: 100%;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scrollbar-gutter: stable;
+}
+
+.prototype-content {
   width: min(1180px, calc(100% - 48px));
   margin: 0 auto;
   padding: 76px 0 96px;
-  overflow-y: auto;
 }
 
 .prototype-header {
@@ -3579,6 +3573,72 @@ body:has(.app-chrome) {
   margin-top: 32px;
 }
 
+.prototype-generation-notes {
+  margin-top: 16px;
+  color: var(--ink-body);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.prototype-generation-notes summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: var(--r-sm);
+  color: var(--ink-body);
+  cursor: pointer;
+  font-weight: 500;
+  list-style: none;
+}
+
+.prototype-generation-notes summary::-webkit-details-marker {
+  display: none;
+}
+
+.prototype-generation-notes summary::before {
+  content: "+";
+  width: 14px;
+  color: var(--ink-mute);
+  font-family: var(--font-mono);
+  text-align: center;
+}
+
+.prototype-generation-notes[open] summary::before {
+  content: "−";
+}
+
+.prototype-generation-notes summary span {
+  display: inline-flex;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--r-sm);
+  background: var(--line-soft);
+  color: var(--ink-mute);
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.prototype-generation-notes summary:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+.prototype-generation-notes ul {
+  max-width: 80ch;
+  margin: 10px 0 0;
+  padding: 12px 16px 12px 30px;
+  border-radius: var(--r-md);
+  background: rgb(var(--chrome-rgb) / 0.08);
+  color: var(--ink-body);
+}
+
+.prototype-generation-notes li + li {
+  margin-top: 6px;
+}
+
 .prototype-actions .directions-restart {
   border: 0;
   background: transparent;
@@ -3593,7 +3653,7 @@ body:has(.app-chrome) {
 }
 
 @media (max-width: 720px) {
-  .prototype-body {
+  .prototype-content {
     width: min(100% - 28px, 1180px);
     padding-top: 48px;
   }
@@ -4010,9 +4070,52 @@ body:has(.app-chrome) {
 }
 
 .selection-list__details {
+  display: grid;
+  grid-template-rows: 0fr;
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0 solid transparent;
+  transition:
+    grid-template-rows 280ms cubic-bezier(0.4, 0, 1, 1),
+    margin-top 280ms cubic-bezier(0.4, 0, 1, 1),
+    padding-top 280ms cubic-bezier(0.4, 0, 1, 1),
+    border-color 180ms ease-in,
+    border-top-width 180ms ease-in;
+}
+
+.selection-list__details.is-open {
+  grid-template-rows: 1fr;
   margin-top: 16px;
   padding-top: 16px;
-  border-top: 1px solid var(--line-soft);
+  border-top-width: 1px;
+  border-top-color: var(--line-soft);
+  transition:
+    grid-template-rows 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    margin-top 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    padding-top 420ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 180ms ease-out 60ms,
+    border-top-width 180ms ease-out 60ms;
+}
+
+.selection-list__details-clip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.selection-list__details-content {
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity 120ms ease-in,
+    transform 180ms cubic-bezier(0.4, 0, 1, 1);
+}
+
+.selection-list__details.is-open .selection-list__details-content {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 220ms ease-out 80ms,
+    transform 360ms cubic-bezier(0.16, 1, 0.3, 1) 40ms;
 }
 
 .selection-list__details-grid {
@@ -4148,6 +4251,8 @@ body:has(.app-chrome) {
   }
 
   .selection-list__row,
+  .selection-list__details,
+  .selection-list__details-content,
   .selection-list__disclosure-label,
   .selection-list__select {
     transition: none;

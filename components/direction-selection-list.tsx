@@ -62,36 +62,45 @@ function SelectionRow({ direction, isSelected, isExpanded, onSelect, onExpand }:
         </label>
       </div>
 
-      <div id={detailsId} className="selection-list__details" hidden={!isExpanded}>
-        <div className="selection-list__details-grid">
-          <div>
-            <p className="selection-list__details-label">Details</p>
-            <ul className="selection-list__details-list">
-              {direction.suggestedChanges.map((change, i) => (
-                <li key={i}>{change}</li>
-              ))}
-            </ul>
-          </div>
-          <span className="selection-list__divider" aria-hidden="true" />
-          <div>
-            <p className="selection-list__tradeoffs-label">Tradeoffs</p>
-            <p className="selection-list__tradeoffs-text">{direction.tradeoffs}</p>
+      <div
+        id={detailsId}
+        className={`selection-list__details ${isExpanded ? "is-open" : ""}`}
+        aria-hidden={!isExpanded}
+        inert={!isExpanded ? true : undefined}
+      >
+        <div className="selection-list__details-clip">
+          <div className="selection-list__details-content">
+            <div className="selection-list__details-grid">
+              <div>
+                <p className="selection-list__details-label">Details</p>
+                <ul className="selection-list__details-list">
+                  {direction.suggestedChanges.map((change, i) => (
+                    <li key={i}>{change}</li>
+                  ))}
+                </ul>
+              </div>
+              <span className="selection-list__divider" aria-hidden="true" />
+              <div>
+                <p className="selection-list__tradeoffs-label">Tradeoffs</p>
+                <p className="selection-list__tradeoffs-text">{direction.tradeoffs}</p>
+              </div>
+            </div>
+
+            {direction.patternReference && (
+              <div className="selection-list__footer">
+                <a
+                  href={direction.patternReference.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="selection-list__source"
+                >
+                  <PatternLinkIcon />
+                  Inspiration source
+                </a>
+              </div>
+            )}
           </div>
         </div>
-
-        {direction.patternReference && (
-          <div className="selection-list__footer">
-            <a
-              href={direction.patternReference.url}
-              target="_blank"
-              rel="noreferrer"
-              className="selection-list__source"
-            >
-              <PatternLinkIcon />
-              Inspiration source
-            </a>
-          </div>
-        )}
       </div>
     </article>
   );
