@@ -229,7 +229,6 @@ export function DirectionsScreen() {
 
   const header = (
     <>
-      <div className="feedback-atmosphere" aria-hidden="true" />
       <StepHeader />
     </>
   );

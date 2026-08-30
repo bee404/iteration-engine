@@ -162,7 +162,6 @@ export function FeedbackScreen() {
 
   return (
     <main className="upload-page feedback-page">
-      <div className="feedback-atmosphere" aria-hidden="true" />
       {header}
 
       <div className={`feedback-body ${stage.stageClass}`}>

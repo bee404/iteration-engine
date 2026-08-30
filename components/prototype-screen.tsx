@@ -60,7 +60,6 @@ export function PrototypeScreen() {
 
   const header = (
     <>
-      <div className="feedback-atmosphere" aria-hidden="true" />
       <StepHeader />
     </>
   );

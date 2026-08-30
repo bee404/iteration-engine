@@ -2731,18 +2731,6 @@ body:has(.app-chrome) {
   --feedback-panel-w: 320px;
 }
 
-.feedback-atmosphere {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-  width: 180px;
-  pointer-events: none;
-  background: linear-gradient(to right, rgb(var(--surface-rgb) / 0), var(--surface));
-  opacity: 0.9;
-}
-
 .feedback-body {
   display: flex;
   flex: 1;
