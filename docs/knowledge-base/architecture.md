@@ -105,6 +105,10 @@ API calls:
   the live path.
 - Fixtures are registered in `lib/fixtures/examples.ts`; verbatim captured code lives in
   `lib/fixtures/data/`. `DEMO_FIXTURE=<id>` pins which example replays (defaults to first).
+- The current Hightouch fixture intentionally maps its one real captured component to all three
+  selectable directions. This lets every demo path exercise Step 5, Source / Iteration comparison,
+  and the context-rich ZIP while keeping each selection's distinct direction metadata in
+  `coqui-context.json`; it does not represent three independently generated code captures.
 - The canonical V0 has no application persistence layer. Demo mode only changes provider
   selection; exploration state remains transient and user-owned output remains the ZIP.
 
@@ -112,6 +116,10 @@ API calls:
 
 - While streaming (or after a codegen error), `PreviewFrame` shows accumulated source as
   read-only text in a script-less iframe.
+- The Step 5 body owns the app-level scroll and its comparison canvas has an explicit responsive
+  height. The page scrolls around that bounded canvas while the active generated prototype scrolls
+  inside its iframe; screenshot or generated-content height cannot expand the comparison stage,
+  detach it from its toggle, or push the final actions outside the fixed app chrome.
 - On `complete`, `transpilePreviewComponent()` (`lib/preview/build-preview-document.ts`)
   strips any stray markdown fence, transpiles the TSX with Sucrase (`typescript, jsx, imports`
   transforms), and `buildPreviewDocument()` assembles an HTML doc that mounts the component in a

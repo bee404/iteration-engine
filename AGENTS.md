@@ -32,3 +32,13 @@ GitHub is the durable authority. ContextBridge may transport repository changes 
 Run `npm run context:check` after changing shared context. CI runs the same check on every pull request and relevant push. The check verifies that required source files exist, registered platform adapters reference `AGENTS.md`, the marketing document's version matches its newest changelog entry, and ContextBridge scans every entrypoint.
 
 When adding a platform that does not discover `AGENTS.md`, add the smallest instruction file that platform loads automatically, tell it to read and follow `AGENTS.md`, then register that adapter in `scripts/check-agent-context.mjs` and `contextbridge/config.json`.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

@@ -79,6 +79,17 @@ test("a full-page capture still fits rather than overflowing the stage", () => {
   assert.equal(fitted.height, 600);
 });
 
+test("a desktop viewport fits inside the bounded Step 5 canvas", () => {
+  assert.deepEqual(fitViewportBox({ width: 1440, height: 900 }, { width: 1180, height: 720 }), {
+    width: 1152,
+    height: 720,
+  });
+  assert.equal(
+    iterationScaleStyle({ width: 1440, height: 900 }, { width: 1180, height: 720 }).transform,
+    "scale(0.8)",
+  );
+});
+
 test("box style emits the fitted pixel size", () => {
   assert.deepEqual(comparisonViewportStyle({ width: 1440, height: 900 }, { width: 1200, height: 450 }), {
     width: "720px",
@@ -117,4 +128,3 @@ test("caption reports the box, and says so when there isn't one", () => {
   assert.equal(formatComparisonViewport({ width: 1440, height: 900 }), "1440 \u00d7 900");
   assert.equal(formatComparisonViewport(null), "size unknown");
 });
-
