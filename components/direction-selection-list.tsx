@@ -24,7 +24,7 @@ interface SelectionRowProps {
 /**
  * One direction in the shared comparison ledger. The disclosure button and the native radio are
  * siblings, so inspecting a direction and selecting it remain separate decisions with valid
- * keyboard semantics. Exactly one row stays expanded through parent-owned accordion state.
+ * keyboard semantics. At most one row stays expanded through parent-owned accordion state.
  */
 function SelectionRow({ direction, isSelected, isExpanded, onSelect, onExpand }: SelectionRowProps) {
   const detailsId = useId();
@@ -149,9 +149,8 @@ function CritiqueSummary({ critique }: { critique: Critique }) {
 /**
  * The fourth step (directions): three genuinely distinct approaches, each with its rationale,
  * tradeoffs, and a 21st.dev component it's grounded in, presented as a single-column row-list
- * (Figma node 127:1400) for the user to select one. Rows behave as a single-open accordion — the
- * first row is expanded on load, and clicking any other (collapsed) row swaps the expansion over
- * to it, so there is always exactly one row expanded, never zero and never more than one.
+ * (Figma node 127:1400) for the user to select one. Rows behave as a single-open accordion:
+ * opening another row swaps the expansion, while clicking the open row closes it.
  * Rows are generated live from this round's critique, and arrive on the canonical
  * enter-from-bottom step transition straight from /feedback. `/synthesized` remains only as a
  * compatibility redirect.
@@ -185,8 +184,7 @@ export function DirectionsScreen() {
   // condition under which the effect below has a request in flight. A separate status field would
   // be a second source of truth for the same fact, free to drift out of step with it.
   const isGenerating = Boolean(critique && brief) && !hasDirections && !error;
-  // The accordion always has exactly one row open; before the user picks, that's the first row.
-  const openId = expandedId ?? directions[0]?.id ?? null;
+  const openId = expandedId;
 
   useEffect(() => {
     if (!critique || !brief || hasDirections || error) return;
@@ -241,7 +239,7 @@ export function DirectionsScreen() {
   // exist.
   if (!critique || !brief) {
     return (
-      <main className="upload-page feedback-page directions-page" data-theme="coqui">
+      <main className="upload-page feedback-page directions-page">
         {header}
         <section className="feedback-empty">
           <h1>No round in progress</h1>
@@ -255,7 +253,7 @@ export function DirectionsScreen() {
   }
 
   return (
-    <main className="upload-page feedback-page directions-page" data-theme="coqui">
+    <main className="upload-page feedback-page directions-page">
       {header}
 
       <div className={`directions-body ${stage.stageClass}`}>
@@ -302,7 +300,9 @@ export function DirectionsScreen() {
                       isSelected={selectedId === direction.id}
                       isExpanded={openId === direction.id}
                       onSelect={() => selectDirection(direction.id)}
-                      onExpand={() => setExpandedId(direction.id)}
+                      onExpand={() =>
+                        setExpandedId((currentId) => (currentId === direction.id ? null : direction.id))
+                      }
                     />
                   ))}
                 </fieldset>

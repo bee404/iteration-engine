@@ -97,9 +97,13 @@ test("box style emits the fitted pixel size", () => {
   });
 });
 
-test("an unmeasured stage or unknown round size fills the stage instead of guessing a ratio", () => {
+test("an unknown round size fills the stage, while a known box waits for stage measurement", () => {
   const filled = { width: "100%", height: "100%" };
-  assert.deepEqual(comparisonViewportStyle({ width: 1440, height: 900 }, null), filled);
+  assert.deepEqual(comparisonViewportStyle({ width: 1440, height: 900 }, null), {
+    width: "0px",
+    height: "0px",
+    visibility: "hidden",
+  });
   assert.deepEqual(comparisonViewportStyle(null, { width: 1200, height: 450 }), filled);
 });
 
@@ -118,9 +122,13 @@ test("the iteration layer is never scaled up past 1:1", () => {
   assert.equal(style.transform, "scale(1)");
 });
 
-test("an unmeasured stage leaves the iteration layer unscaled", () => {
+test("an unmeasured stage hides the iteration layer until it can be scaled", () => {
   const filled = { width: "100%", height: "100%" };
-  assert.deepEqual(iterationScaleStyle({ width: 1440, height: 900 }, null), filled);
+  assert.deepEqual(iterationScaleStyle({ width: 1440, height: 900 }, null), {
+    width: "0px",
+    height: "0px",
+    visibility: "hidden",
+  });
   assert.deepEqual(iterationScaleStyle(null, { width: 1200, height: 450 }), filled);
 });
 

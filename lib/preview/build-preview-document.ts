@@ -6,6 +6,44 @@ export const PREVIEW_CONTENT_SECURITY_POLICY =
   "default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; font-src data:; img-src data: blob:; connect-src 'none'; media-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
 
 /**
+ * Lets wheel input leave the opaque-origin preview when the element under the pointer has no
+ * more room to scroll. This preserves real scrolling inside a generated interface, while
+ * preventing an iframe with short content (or an internal scroller at its boundary) from
+ * becoming a dead patch in the surrounding Step 5 page.
+ */
+export const PREVIEW_WHEEL_RELAY_SCRIPT = `
+(function () {
+  function canScroll(element, deltaX, deltaY) {
+    for (var node = element instanceof Element ? element : element && element.parentElement; node; node = node.parentElement) {
+      var style = getComputedStyle(node);
+      var canScrollY = /(auto|scroll)/.test(style.overflowY) && node.scrollHeight > node.clientHeight;
+      var canScrollX = /(auto|scroll)/.test(style.overflowX) && node.scrollWidth > node.clientWidth;
+      if (canScrollY && ((deltaY < 0 && node.scrollTop > 0) || (deltaY > 0 && node.scrollTop + node.clientHeight < node.scrollHeight - 1))) return true;
+      if (canScrollX && ((deltaX < 0 && node.scrollLeft > 0) || (deltaX > 0 && node.scrollLeft + node.clientWidth < node.scrollWidth - 1))) return true;
+    }
+    var root = document.scrollingElement;
+    if (!root) return false;
+    if (deltaY < 0 && root.scrollTop > 0) return true;
+    if (deltaY > 0 && root.scrollTop + root.clientHeight < root.scrollHeight - 1) return true;
+    if (deltaX < 0 && root.scrollLeft > 0) return true;
+    return deltaX > 0 && root.scrollLeft + root.clientWidth < root.scrollWidth - 1;
+  }
+
+  window.addEventListener("wheel", function (event) {
+    if (canScroll(event.target, event.deltaX, event.deltaY)) return;
+    try {
+      parent.postMessage({
+        type: "preview-wheel-boundary",
+        deltaX: event.deltaX,
+        deltaY: event.deltaY,
+        deltaMode: event.deltaMode
+      }, "*");
+    } catch (error) {}
+  }, { passive: true });
+})();
+`;
+
+/**
  * Turns a single self-contained generated React component (TSX source) into an HTML document
  * that transpiles and mounts it live inside a sandboxed iframe. The generated code is always
  * one file with no imports to resolve (enforced by the codegen system prompt), so Sucrase's
@@ -202,6 +240,7 @@ export function buildPreviewDocument({ transpiledCode, componentName, runtimeSou
 
   const bootstrap = `
 (function () {
+${PREVIEW_WHEEL_RELAY_SCRIPT}
   var React = window.React;
   function report(message) {
     try { parent.postMessage({ type: "preview-mount-error", message: String(message) }, "*"); } catch (e) {}
@@ -302,6 +341,7 @@ export function nextStreamingSourceMessage(rendered: string, code: string): Stre
 export function buildStreamingSourceDocument(): string {
   const bootstrap = `
 (function () {
+${PREVIEW_WHEEL_RELAY_SCRIPT}
   var pre = document.getElementById("preview-src");
   window.addEventListener("message", function (event) {
     var data = event.data;

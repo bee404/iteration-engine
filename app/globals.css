@@ -1040,9 +1040,9 @@ button {
   position: relative;
   flex-shrink: 0;
   overflow: hidden;
-  border: 1px solid var(--line);
   border-radius: var(--r-md);
   background: var(--surface);
+  box-shadow: var(--e-panel);
 }
 
 .comparison-layer {
@@ -1152,7 +1152,6 @@ body:has(.app-chrome) {
   inset: 0;
   z-index: 0;
   display: flex;
-  padding: 16px;
   border: 8px solid var(--chrome-border);
   border-radius: var(--r-shell);
   background: var(--ground);
@@ -1168,23 +1167,6 @@ body:has(.app-chrome) {
    screen keeps the standard Void ground. */
 .app-chrome:has(.upload-page:not(.feedback-page)) {
   background: #17161a;
-}
-
-/* The approved directions refinement deliberately uses Coquí's light working surface even while
-   Obsidian53 remains the app default. Keep the override on this route and its persistent frame so
-   the separate refactor work and neighboring screens retain their current theme. */
-body:has(.directions-page) {
-  background: #e7e9ee;
-}
-
-.app-chrome:has(.directions-page) {
-  --chrome-border: #e7e9ee;
-  --ground: #f8f9fb;
-  --ink-rgb: 16 18 26;
-  --r-shell: 24px;
-  --bloom: none;
-  --grain-opacity: 0;
-  background: #f8f9fb;
 }
 
 .app-chrome-dot-grid {
@@ -1301,8 +1283,7 @@ body:has(.directions-page) {
   content: "";
   background:
     radial-gradient(ellipse 360px 180px at 27% -14%, rgb(var(--chrome-rgb) / 0.11), transparent 72%),
-    radial-gradient(ellipse 760px 220px at 57% -18%, rgba(187, 230, 222, 0.13), transparent 74%),
-    radial-gradient(ellipse 480px 260px at 103% -6%, rgba(228, 201, 164, 0.1), transparent 72%);
+    radial-gradient(ellipse 760px 220px at 57% -18%, rgba(187, 230, 222, 0.13), transparent 74%);
   background-blend-mode: screen;
   opacity: 0.82;
 }
@@ -1597,7 +1578,6 @@ body:has(.directions-page) {
 
 @media (max-width: 640px) {
   .app-chrome {
-    padding: 10px;
     border-radius: 20px;
   }
 
@@ -3521,7 +3501,9 @@ body:has(.directions-page) {
   align-items: center;
   gap: 16px;
   padding: 20px 32px 24px;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .directions-header {
@@ -3536,10 +3518,9 @@ body:has(.directions-page) {
 
 .directions-workspace {
   display: grid;
-  flex: 1;
+  flex: none;
   width: 100%;
   max-width: 1080px;
-  min-height: 0;
   grid-template-columns: minmax(280px, 320px) minmax(0, 1fr);
   align-items: start;
   gap: 24px;
@@ -3547,9 +3528,7 @@ body:has(.directions-page) {
 
 .directions-decision {
   display: flex;
-  height: 100%;
   min-width: 0;
-  min-height: 0;
   flex-direction: column;
   gap: 16px;
 }
@@ -3908,11 +3887,8 @@ body:has(.directions-page) {
 
 /* One mounted comparison surface. Rows use spacing and a single divider instead of equal cards. */
 .selection-list {
-  flex: 1;
   width: 100%;
-  min-height: 0;
   padding: 20px;
-  overflow-y: auto;
   border-radius: var(--r-xl);
   background: var(--surface);
   box-shadow: 0 0 0 4px var(--bezel), var(--e-card);
@@ -3957,10 +3933,9 @@ body:has(.directions-page) {
 }
 
 .selection-list__row {
-  margin: 0 -12px;
-  padding: 14px 12px;
+  margin: 0;
+  padding: 14px 0;
   border-top: 1px solid var(--line-soft);
-  border-radius: var(--r-md);
   background: transparent;
   transition: background-color 0.16s ease;
 }
@@ -4159,7 +4134,6 @@ body:has(.directions-page) {
   border-color: var(--ink);
   background: var(--line-soft);
   color: var(--ink);
-  box-shadow: inset 0 0 0 1px var(--ink);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -4373,12 +4347,9 @@ body:has(.directions-page) {
 .directions-critique {
   display: flex;
   width: 100%;
-  height: 100%;
-  min-height: 0;
   flex-direction: column;
   gap: 16px;
   padding: 24px;
-  overflow-y: auto;
   border-radius: var(--r-xl);
   background: var(--surface);
   box-shadow: 0 0 0 4px var(--bezel), var(--e-raised);
@@ -4438,4 +4409,37 @@ body:has(.directions-page) {
   color: var(--ink-body);
   font-size: 11px;
   line-height: 1.4;
+}
+
+@media (max-width: 860px) {
+  .directions-body {
+    padding-inline: 20px;
+  }
+
+  .directions-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .directions-body {
+    padding: 20px 14px 24px;
+  }
+
+  .selection-list__row-head {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .selection-list__select {
+    justify-self: start;
+  }
+
+  .selection-list__details-grid {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 16px;
+  }
+
+  .selection-list__divider {
+    display: none;
+  }
 }
