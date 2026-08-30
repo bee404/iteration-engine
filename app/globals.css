@@ -991,7 +991,7 @@ button {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  height: 100%;
+  height: auto;
   min-height: 0;
 }
 
@@ -1023,12 +1023,15 @@ button {
 }
 
 .comparison-stage {
-  flex: 1;
+  flex: none;
+  width: 100%;
+  height: clamp(480px, 68dvh, 720px);
   min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  contain: layout paint;
 }
 
 /* Sized inline in pixels from the round's viewport box fitted to the measured stage (see
@@ -3537,9 +3540,12 @@ body:has(.app-chrome) {
 }
 
 .prototype-body {
+  flex: 1;
+  min-height: 0;
   width: min(1180px, calc(100% - 48px));
   margin: 0 auto;
   padding: 76px 0 96px;
+  overflow-y: auto;
 }
 
 .prototype-header {
