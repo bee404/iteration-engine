@@ -1,13 +1,13 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260827192304923_github",
-  "base_packet": "cb_20260827182312402_github",
+  "packet_id": "cb_20260831012435029_github",
+  "base_packet": "cb_20260827192304923_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-27T19:23:04.923Z",
+  "generated_at": "2026-08-31T01:24:35.029Z",
   "changed": true,
-  "manifest_sha": "fe602f7a7fd8c4ac",
+  "manifest_sha": "388c747b02bdba0e",
   "sources": [
     {
       "id": ".agents/product-marketing.md",
@@ -24,8 +24,8 @@
     {
       "id": "AGENTS.md",
       "file": "AGENTS.md",
-      "sha256": "53f6167f93c09a034d20cfe210391e44959b70627cdd512bad54f775b7fedf77",
-      "bytes": 2589
+      "sha256": "c2082693aa980aca22ad2fbf9e45970e7bfffaf2de6ac2d82d252ee4d64642b6",
+      "bytes": 3268
     },
     {
       "id": "CLAUDE.md",
@@ -42,8 +42,8 @@
     {
       "id": "README.md",
       "file": "README.md",
-      "sha256": "510778cd61af267e494ea711a0d85c87b543ffa64fbb06c4340752e40e8e4a65",
-      "bytes": 6175
+      "sha256": "411f556363ba21f5a097358a2e57298500bd9576a05c2db5081a269d7954203b",
+      "bytes": 6479
     },
     {
       "id": "app/(app)/directions-alt/page.tsx",
@@ -108,8 +108,8 @@
     {
       "id": "app/globals.css",
       "file": "app/globals.css",
-      "sha256": "249af5f52ae5fc03a31e98716deb924dcd60a4243fc7d088679fbe51f0d55543",
-      "bytes": 102711
+      "sha256": "3bfa15dcee57ff9f70eb34571369f080f7a40cd5bc9b0d17320d4daf6a99385d",
+      "bytes": 107277
     },
     {
       "id": "app/icon.png",
@@ -162,32 +162,32 @@
     {
       "id": "components/direction-selection-list.tsx",
       "file": "components/direction-selection-list.tsx",
-      "sha256": "cd1a7f99be40e5d9a9196190e3a76aba709bfd571c39cd6626fe57b7efe74420",
-      "bytes": 12537
+      "sha256": "9dc3fe53ead3a3fc7601057aec1395851eda4ce7450ffa5b0a841635e38c1fc6",
+      "bytes": 13471
     },
     {
       "id": "components/feedback-screen.tsx",
       "file": "components/feedback-screen.tsx",
-      "sha256": "6ddef79acae9c2cde5bc0752c8d33d7d45735f5a0fde25a9240d414e3cd0b3f8",
-      "bytes": 12393
+      "sha256": "f900b7ca8337bcde136374ccf51792c75138ad8b35b1dd54f45b0058890c74e0",
+      "bytes": 12328
     },
     {
       "id": "components/image-upload-screen.tsx",
       "file": "components/image-upload-screen.tsx",
-      "sha256": "ef77b3c2a1c7973e2e4c483eaff3874dc8031d5dcd972f0a84b4ae8c23518f26",
-      "bytes": 9807
+      "sha256": "13d36112a34f3285df4bdd6fb76ea57ed8b7da05cff3258581c23807ad78c12d",
+      "bytes": 10145
     },
     {
       "id": "components/preview-frame.tsx",
       "file": "components/preview-frame.tsx",
-      "sha256": "a4817d5f615102a8adaef07b5c37d47b453d603134e65ddf5ed70de97e7332c0",
-      "bytes": 7909
+      "sha256": "eaa7a4fbec688411cb4960f59b2440485963a3fe8eff813bb05dd52a6a27b598",
+      "bytes": 9328
     },
     {
       "id": "components/prototype-screen.tsx",
       "file": "components/prototype-screen.tsx",
-      "sha256": "5daa58e41430a3b7d6a16fff1d2ebf72a694e8ae920bd32b2b74a8f837677692",
-      "bytes": 5462
+      "sha256": "8ba4f5fc732ef5539dbc033c24263c4bb2e3515530377daedc3964ea5e637e1e",
+      "bytes": 5729
     },
     {
       "id": "components/reference-image.tsx",
@@ -252,8 +252,8 @@
     {
       "id": "docs/knowledge-base/architecture.md",
       "file": "docs/knowledge-base/architecture.md",
-      "sha256": "1497944060481389639f54b29cc4b5c0e3b3e9bc1b5e8c0da6d0eba07adc84d4",
-      "bytes": 11424
+      "sha256": "ddba4bc85157eecad9258a9f714148698a356c54048fc3e372d24e89d6e2a3fe",
+      "bytes": 12176
     },
     {
       "id": "docs/knowledge-base/qa-conventions.md",
@@ -282,14 +282,14 @@
     {
       "id": "lib/comparison-viewport.test.ts",
       "file": "lib/comparison-viewport.test.ts",
-      "sha256": "9861724e6f41897a598b73e100e44ee49b30c3b80fccf9ba02051e56a1283644",
-      "bytes": 4264
+      "sha256": "49a10fc5c3807113ec21a095991170153ae7509983accbff2ba5a83e199a5b1d",
+      "bytes": 4748
     },
     {
       "id": "lib/comparison-viewport.ts",
       "file": "lib/comparison-viewport.ts",
-      "sha256": "32879f8fa3650ce46c2aa7a94f9a1df6d3a3ccde7b5dc53ef8464d6cab8c9a47",
-      "bytes": 4487
+      "sha256": "a017908ee8b1c3f3d9d0854695b4a418370c6bdcd6f42502f59b312b4fcdfb81",
+      "bytes": 4668
     },
     {
       "id": "lib/demo-mode.ts",
@@ -364,34 +364,46 @@
       "bytes": 10631
     },
     {
+      "id": "lib/fixtures/examples.test.ts",
+      "file": "lib/fixtures/examples.test.ts",
+      "sha256": "d6e5cbf121ac56a9af1f86a31c39b1716f73bc9ba1d4835c849ad3e420807dab",
+      "bytes": 590
+    },
+    {
       "id": "lib/fixtures/examples.ts",
       "file": "lib/fixtures/examples.ts",
-      "sha256": "7e28ef85f0894df00747ba7e00c898a039317adf4ed0e1a52352f237d0c63d38",
-      "bytes": 8195
+      "sha256": "9af5cd2304c77bf41c8d4c97a44a1205448471e4d6296194d318ff76334d9d1a",
+      "bytes": 8478
     },
     {
       "id": "lib/fixtures/types.ts",
       "file": "lib/fixtures/types.ts",
-      "sha256": "9d28db6869438c4c2ade11dda29ccd72b50d08cf9d5728859eac9de7e10b28d9",
-      "bytes": 1658
+      "sha256": "89677afc8a30a3e8fb127e2539de52a1d67987f9a63060b68beca42b9fe60b6c",
+      "bytes": 1662
+    },
+    {
+      "id": "lib/image-dimensions.test.ts",
+      "file": "lib/image-dimensions.test.ts",
+      "sha256": "45e03e3be6d47b743531fd46d007ef2bf773932dbb998441ec35cc874f0ad3f0",
+      "bytes": 1294
     },
     {
       "id": "lib/image-dimensions.ts",
       "file": "lib/image-dimensions.ts",
-      "sha256": "595827fc316137bd56a35a9869d69c4dd1fea7abdb9acddecfa2524a4590b78f",
-      "bytes": 735
+      "sha256": "87e7be6ec9a2001c895fec48980833b099c1e8ddb6ffcfa4861989f8f90dc734",
+      "bytes": 3218
     },
     {
       "id": "lib/preview/build-preview-document.test.ts",
       "file": "lib/preview/build-preview-document.test.ts",
-      "sha256": "65caea3bf963594c8af2bd5d589bf89e6346b070f19223f12df0efffd73d602c",
-      "bytes": 10740
+      "sha256": "748ba41484e5b5b70aceef9244e27ff6d7463464a103467f2bf0626ff8d02fa8",
+      "bytes": 11266
     },
     {
       "id": "lib/preview/build-preview-document.ts",
       "file": "lib/preview/build-preview-document.ts",
-      "sha256": "6451a8ae8b88689fd94a66f29b511e5a64f0e609632e48236179567ddf399486",
-      "bytes": 14885
+      "sha256": "839ee1043f42dec1bbcc5b074f67872fcea71a32139eac4c0502a024a6cc04ab",
+      "bytes": 16811
     },
     {
       "id": "lib/preview/preview-fallback.test.ts",
@@ -756,8 +768,8 @@
     {
       "id": "lib/use-element-size.ts",
       "file": "lib/use-element-size.ts",
-      "sha256": "bb6d69fcd9db130cb788e430f9e143aa3935fbd045b4c478b5fc99ab4974db36",
-      "bytes": 1226
+      "sha256": "c913f082f2c622c6c2f65441488fc163e21ca959c43852dd6311154f7af646e7",
+      "bytes": 1616
     },
     {
       "id": "lib/use-screenshot-color-split.ts",
@@ -845,59 +857,29 @@
     }
   ],
   "source_changes": {
-    "added": [],
-    "removed": [
-      "app/api/projects/[id]/route.ts",
-      "app/api/projects/route.ts",
-      "app/api/rounds/[id]/route.ts",
-      "app/api/rounds/route.ts",
-      "components/app-frame.tsx",
-      "components/chain-viewport-hydrator.tsx",
-      "components/code-sheet.tsx",
-      "components/critique-display.tsx",
-      "components/direction-card.tsx",
-      "components/directions-comparison.tsx",
-      "components/round-history.tsx",
-      "components/round-workspace.tsx",
-      "components/synthesized-screen.tsx",
-      "components/upload-form.tsx",
-      "lib/db/client.ts",
-      "lib/db/migrate.ts",
-      "lib/db/queries.ts",
-      "lib/db/schema.sql",
-      "lib/persist-round.ts",
-      "lib/persistence-retired-routes.test.ts",
-      "lib/round-persistence.ts",
-      "lib/stores/chain-viewport.test.ts",
-      "lib/stores/chain-viewport.ts",
-      "lib/stores/round-generation.ts",
-      "lib/stores/round-image.ts",
-      "store/round-store.ts"
+    "added": [
+      "lib/fixtures/examples.test.ts",
+      "lib/image-dimensions.test.ts"
     ],
+    "removed": [],
     "updated": [
-      "app/(app)/synthesized/page.tsx",
+      "AGENTS.md",
+      "README.md",
       "app/globals.css",
-      "app/page.tsx",
-      "app/workflow/page.tsx",
-      "app/workspace/page.tsx",
-      "components/comparison-viewport.tsx",
       "components/direction-selection-list.tsx",
-      "docs/knowledge-base/README.md",
+      "components/feedback-screen.tsx",
+      "components/image-upload-screen.tsx",
+      "components/preview-frame.tsx",
+      "components/prototype-screen.tsx",
       "docs/knowledge-base/architecture.md",
-      "docs/knowledge-base/qa-conventions.md",
-      "docs/knowledge-base/roadmap-and-open-work.md",
-      "docs/release-plan.md",
+      "lib/comparison-viewport.test.ts",
       "lib/comparison-viewport.ts",
-      "lib/demo-mode.ts",
-      "lib/design-systems/index.ts",
-      "lib/export-bundle.ts",
-      "lib/providers/codegen/claude-provider.ts",
-      "lib/providers/codegen/openai-provider.ts",
-      "lib/providers/codegen/shared.ts",
-      "lib/security/access.ts",
-      "lib/types.ts",
-      "lib/viewport-box.ts",
-      "package.json"
+      "lib/fixtures/examples.ts",
+      "lib/fixtures/types.ts",
+      "lib/image-dimensions.ts",
+      "lib/preview/build-preview-document.test.ts",
+      "lib/preview/build-preview-document.ts",
+      "lib/use-element-size.ts"
     ]
   },
   "facts": [
@@ -948,12 +930,12 @@
       "source": "AGENTS.md",
       "kind": "verbatim_excerpt",
       "heading": "Platform adapter contract",
-      "text": "## Platform adapter contract `AGENTS.md` is the canonical entrypoint. Platform-specific instruction files must only point back here and add no competing product rules. Run `npm run context:check` after changing shared context. CI runs the same check on every pull request and relevant push. The check verifies that required source files exist, registered platform adapters reference `AGENTS.md`, the marketing document's version matches its newest changelog entry, and ContextBridge scans every entrypoint. When adding a platform that does not discover `AGENTS.md`, add the smallest instruction file that platform loads automatically, tell it to read and follow `AGENTS.md`, then register that adapter in `scripts/check-agent-context.mjs` and `contextbridge/config.json`.",
+      "text": "## Platform adapter contract `AGENTS.md` is the canonical entrypoint. Platform-specific instruction files must only point back here and add no competing product rules. Run `npm run context:check` after changing shared context. CI runs the same check on every pull request and relevant push. The check verifies that required source files exist, registered platform adapters reference `AGENTS.md`, the marketing document's version matches its newest changelog entry, and ContextBridge scans every entrypoint. When adding a platform that does not discover `AGENTS.md`, add the smallest instruction file that platform loads automatically, tell it to read and follow `AGENTS.md`, then register that adapter in `scripts/check-agent-context.mjs` and `contextbridge/config.json`. <!-- BEGIN:nextjs-agent-rules -->",
       "evidence": {
         "file": "AGENTS.md",
-        "sha256": "53f6167f93c09a034d20cfe210391e44959b70627cdd512bad54f775b7fedf77",
+        "sha256": "c2082693aa980aca22ad2fbf9e45970e7bfffaf2de6ac2d82d252ee4d64642b6",
         "line_start": 28,
-        "line_end": 35,
+        "line_end": 37,
         "truncated": false
       }
     },
@@ -965,7 +947,7 @@
       "text": "## Start with the relevant source of truth - For product definition and current behavior, read `README.md`, `PRODUCT.md`, and the implementation. - Before changing product direction, read `docs/decisions.md`, `docs/blueprint.md`, and `docs/release-plan.md`. - Before writing marketing, launch, recruiting, or other public-facing product copy, read `.agents/product-marketing.md`. - Before changing Coquí's interface or visual language, read `DESIGN.md` and `docs/design-system.md`. - For implementation routing, read `docs/knowledge-base/README.md` and then only the task-relevant knowledge-base files.",
       "evidence": {
         "file": "AGENTS.md",
-        "sha256": "53f6167f93c09a034d20cfe210391e44959b70627cdd512bad54f775b7fedf77",
+        "sha256": "c2082693aa980aca22ad2fbf9e45970e7bfffaf2de6ac2d82d252ee4d64642b6",
         "line_start": 5,
         "line_end": 12,
         "truncated": false
@@ -1315,7 +1297,7 @@
       "text": "# Architecture — The Shipped System This describes the canonical V0 implementation on `main` (status checked 2026-08-27). Where a claim in an older research doc is now outdated by shipped code, this file reflects the code. Paths are repo-relative.",
       "evidence": {
         "file": "docs/knowledge-base/architecture.md",
-        "sha256": "1497944060481389639f54b29cc4b5c0e3b3e9bc1b5e8c0da6d0eba07adc84d4",
+        "sha256": "ddba4bc85157eecad9258a9f714148698a356c54048fc3e372d24e89d6e2a3fe",
         "line_start": 1,
         "line_end": 6,
         "truncated": false
@@ -1329,7 +1311,7 @@
       "text": "## Stack - **Next.js 16** (App Router) + **React 19**, deployed on **Vercel**. TypeScript throughout. - **Zustand 5** for transient client exploration state (`lib/stores/round.ts`). - **Sucrase** for in-browser TSX transpilation of generated components. - **@vercel/analytics** for usage tracking. - **Claude Sonnet** (Anthropic) as the primary for critique, directions, and code generation, with GPT-4o fallback when configured, behind typed provider interfaces with mock + fixture fallbacks. Note: React is used two ways — the app itself (Next.js/React) and a separately vendored React runtime inlined into the preview iframe (see Live-mount preview below). There is no separate Vite app in this repo; the standalone Vite prototype Bryan saw earlier lived outside this pipeline.",
       "evidence": {
         "file": "docs/knowledge-base/architecture.md",
-        "sha256": "1497944060481389639f54b29cc4b5c0e3b3e9bc1b5e8c0da6d0eba07adc84d4",
+        "sha256": "ddba4bc85157eecad9258a9f714148698a356c54048fc3e372d24e89d6e2a3fe",
         "line_start": 7,
         "line_end": 20,
         "truncated": false
@@ -1413,7 +1395,7 @@
       "text": "## Current operating model Obvious is the conductor for planning and building the first release, but the shipped product is a standalone application. Product decisions belong in this repository, not only in an external tool or conversation. The operating sequence is: 1. Keep the agreed product decisions in `docs/decisions.md`. 2. Keep the resulting product shape in `docs/blueprint.md`. 3. Keep release boundaries and validation in `docs/release-plan.md`. 4. Update those documents when product decisions change, then align implementation with them. 5. Use `docs/discovery-diff.md` and the two discovery records as supporting context, not as a substitute for the current blueprint.",
       "evidence": {
         "file": "README.md",
-        "sha256": "510778cd61af267e494ea711a0d85c87b543ffa64fbb06c4340752e40e8e4a65",
+        "sha256": "411f556363ba21f5a097358a2e57298500bd9576a05c2db5081a269d7954203b",
         "line_start": 9,
         "line_end": 20,
         "truncated": false
@@ -1427,7 +1409,7 @@
       "text": "## Repository purpose This repository is the source of truth for Coquí's product definition and implementation. It began as a neutral workspace for reconciling two discovery tracks: the work developed inside Obvious and the supporting discovery developed outside it. That reconciliation, plus the later Claude and ChatGPT context packets, is now distilled into the decision log, blueprint, release plan, design-system documentation, and agent knowledge base.",
       "evidence": {
         "file": "README.md",
-        "sha256": "510778cd61af267e494ea711a0d85c87b543ffa64fbb06c4340752e40e8e4a65",
+        "sha256": "411f556363ba21f5a097358a2e57298500bd9576a05c2db5081a269d7954203b",
         "line_start": 5,
         "line_end": 8,
         "truncated": false
@@ -1441,7 +1423,7 @@
       "text": "## Status The current V0 flow is screenshot upload and intake, Claude critique and directions, one selected direction, streamed code generation, a fixed-box `Source` / `Iteration` review, and a client-generated ZIP. The ZIP contains a runnable Vite/React prototype plus `coqui-context.json` with the raw inputs, synthesized critique, full selected direction, viewport, generation notes, and the provider/model that actually completed generation. The processed screenshot remains transient browser-session state and is excluded from the download by default. The remaining release gate is validation of this complete loop against a real project. Historical rounds, retention features, multi-screen workflows, per-project design systems, responsive behavior, and ComfyUI remain deferred. See `docs/release-plan.md` and `docs/knowledge-base/roadmap-and-open-work.md` for the current boundary.",
       "evidence": {
         "file": "README.md",
-        "sha256": "510778cd61af267e494ea711a0d85c87b543ffa64fbb06c4340752e40e8e4a65",
+        "sha256": "411f556363ba21f5a097358a2e57298500bd9576a05c2db5081a269d7954203b",
         "line_start": 21,
         "line_end": 26,
         "truncated": false
@@ -1465,7 +1447,7 @@
   "missing_sources": [],
   "supplemental": [],
   "stats": {
-    "source_count": 139,
+    "source_count": 141,
     "fact_count": 39,
     "added": 0,
     "removed": 0,
