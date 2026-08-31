@@ -70,10 +70,11 @@ export function comparisonViewportStyle(
   box: ImageDimensions | null,
   stage: StageSize | null,
 ): CSSProperties {
-  // No usable screenshot size, or the stage hasn't been measured yet: fill what's available. The
-  // ratio is unknown in the first case and unknowable-yet in the second, and a box that fills
-  // the stage still registers both layers exactly.
-  if (!box || !stage) return { width: "100%", height: "100%" };
+  // An unknown screenshot size has no ratio to preserve, so it fills the stage. A known box with
+  // an unmeasured stage must stay hidden for the single measurement frame; filling the stage here
+  // produces the giant portrait-shaped flash that can persist in screenshots and rapid toggles.
+  if (!box) return { width: "100%", height: "100%" };
+  if (!stage) return { width: "0px", height: "0px", visibility: "hidden" };
   const fitted = fitViewportBox(box, stage);
   return { width: `${fitted.width}px`, height: `${fitted.height}px` };
 }
@@ -91,7 +92,8 @@ export function iterationScaleStyle(
   box: ImageDimensions | null,
   stage: StageSize | null,
 ): CSSProperties {
-  if (!box || !stage) return { width: "100%", height: "100%" };
+  if (!box) return { width: "100%", height: "100%" };
+  if (!stage) return { width: "0px", height: "0px", visibility: "hidden" };
   const fitted = fitViewportBox(box, stage);
   return {
     width: `${box.width}px`,

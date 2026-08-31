@@ -1,12 +1,14 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { WheelEvent as ReactWheelEvent } from "react";
 import type { GeneratedCodeStatus } from "@/lib/types";
 import {
   buildPreviewDocument,
   buildStreamingSourceDocument,
   nextStreamingSourceMessage,
   PREVIEW_CONTENT_SECURITY_POLICY,
+  PREVIEW_WHEEL_RELAY_SCRIPT,
   transpilePreviewComponent,
 } from "@/lib/preview/build-preview-document";
 import { errorFallbackNotice, PREVIEW_FALLBACK_PREFIX } from "@/lib/preview/preview-fallback";
@@ -20,6 +22,33 @@ interface PreviewFrameProps {
    * from hitting the output-token ceiling). Threaded through so the error path shows the same
    * explicit fallback banner as a transpile/mount failure instead of a bannerless source view. */
   error?: string;
+}
+
+function usePreviewWheelBridge() {
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      const data = event.data;
+      if (!data || typeof data !== "object" || data.type !== "preview-wheel-boundary") return;
+
+      const multiplier = data.deltaMode === 1 ? 16 : data.deltaMode === 2 ? window.innerHeight : 1;
+      const deltaX = typeof data.deltaX === "number" ? data.deltaX * multiplier : 0;
+      const deltaY = typeof data.deltaY === "number" ? data.deltaY * multiplier : 0;
+      document.querySelector<HTMLElement>(".prototype-body")?.scrollBy({
+        left: deltaX,
+        top: deltaY,
+      });
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
+}
+
+function handleFrameWheel(event: ReactWheelEvent<HTMLIFrameElement>) {
+  document.querySelector<HTMLElement>(".prototype-body")?.scrollBy({
+    left: event.deltaX,
+    top: event.deltaY,
+  });
 }
 
 /**
@@ -57,6 +86,7 @@ export function PreviewFrame({ code, language, status, error }: PreviewFrameProp
  */
 function StreamingSourceView({ code, language }: { code: string; language: string }) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  usePreviewWheelBridge();
   // Stable for this mount's lifetime — this referential stability is what keeps the iframe from
   // reloading as tokens arrive.
   const srcDoc = useMemo(() => buildStreamingSourceDocument(), []);
@@ -89,6 +119,7 @@ function StreamingSourceView({ code, language }: { code: string; language: strin
   return (
     <iframe
       ref={iframeRef}
+      onWheel={handleFrameWheel}
       onLoad={handleLoad}
       title={`Streaming ${language} source`}
       className="preview-frame"
@@ -113,6 +144,7 @@ function LiveMount({ code, language }: { code: string; language: string }) {
   );
 
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  usePreviewWheelBridge();
   const [mountError, setMountError] = useState<string | null>(null);
 
   // Clear a stale mount error when the document to mount changes (new code, or a retry).
@@ -159,6 +191,7 @@ function LiveMount({ code, language }: { code: string; language: string }) {
   return (
     <iframe
       ref={iframeRef}
+      onWheel={handleFrameWheel}
       title={`Live ${language} preview`}
       className="preview-frame"
       sandbox="allow-scripts"
@@ -167,12 +200,21 @@ function LiveMount({ code, language }: { code: string; language: string }) {
   );
 }
 
-/** Read-only source view: the generated code escaped into a <pre> inside a script-less
- * iframe. Used while streaming, and as the fallback when a live mount isn't possible. */
+/** Read-only source view: generated code is escaped into a <pre>. The only script in this
+ * opaque-origin frame is the fixed wheel-boundary relay; generated source never executes. */
 function SourceView({ code, language, notice }: { code: string; language: string; notice?: string }) {
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  usePreviewWheelBridge();
   const doc = useMemo(() => sourceDocument(code), [code]);
   const frame = (
-    <iframe title={`Generated ${language} source`} className="preview-frame" sandbox="" srcDoc={doc} />
+    <iframe
+      ref={iframeRef}
+      onWheel={handleFrameWheel}
+      title={`Generated ${language} source`}
+      className="preview-frame"
+      sandbox="allow-scripts"
+      srcDoc={doc}
+    />
   );
   if (!notice) return frame;
   return (
@@ -198,6 +240,7 @@ function sourceDocument(code: string): string {
   </head>
   <body>
     <pre>${escapeHtml(code)}</pre>
+    <script>${PREVIEW_WHEEL_RELAY_SCRIPT}<\/script>
   </body>
 </html>`;
 }

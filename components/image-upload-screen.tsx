@@ -6,7 +6,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { StepHeader } from "@/components/step-header";
 import { LockedViewportNotice } from "@/components/viewport-box-field";
-import { readImageDimensions } from "@/lib/image-dimensions";
+import {
+  cssViewportDimensions,
+  readImageDimensions,
+  readPngBackingScale,
+} from "@/lib/image-dimensions";
 import { preprocessScreenshot } from "@/lib/screenshot-preprocess";
 import { useRoundStore } from "@/lib/stores/round";
 import { useRoundViewport } from "@/lib/stores/round-viewport";
@@ -68,17 +72,20 @@ export function ImageUploadScreen({ onImageSelected }: ImageUploadScreenProps) {
     (async () => {
       try {
         const rawDataUrl = await readAsDataUrl(file);
-        // The viewport box is the capture's own size, read off the file before anything touches
-        // it. It must not be read off the cropped copy below: trimming chrome shrinks the raster
-        // but not the viewport it was captured at, and every other surface in the app captions
-        // this file at its natural size.
-        const capturedBox = await readImageDimensions(rawDataUrl);
+        // The comparison box is the captured CSS viewport, not necessarily the PNG's raster size.
+        // macOS Retina screenshots store two backing pixels per CSS pixel, so laying the iteration
+        // out at the raw PNG width would make its interface appear half-size beside the source.
+        // This must still be read before cropping: trimming chrome changes the displayed raster,
+        // not the viewport against which the iteration should be generated.
+        const capturedRaster = await readImageDimensions(rawDataUrl);
+        const backingScale = await readPngBackingScale(file);
+        const capturedBox = cssViewportDimensions(capturedRaster, backingScale);
         // Strip browser/OS chrome and letterbox padding so the reference on /feedback is a clean UI.
         const processed = await preprocessScreenshot(rawDataUrl);
         const dataUrl = processed.dataUrl;
         // What the reference container actually displays, which is the cropped raster when
         // trimming happened — a different measurement from the viewport box above.
-        const dimensions = processed.dimensions.width > 0 ? processed.dimensions : capturedBox;
+        const dimensions = processed.dimensions.width > 0 ? processed.dimensions : capturedRaster;
         if (cancelled) return;
         // A locked exploration ignores this because generation has already started against its
         // fixed comparison box.

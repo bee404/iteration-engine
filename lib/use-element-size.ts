@@ -21,6 +21,13 @@ export function useElementSize(): [(node: HTMLElement | null) => void, ElementSi
       setSize(null);
       return;
     }
+
+    // ResizeObserver reports asynchronously. Measure once immediately so a fixed-aspect child
+    // never paints against the caller's unmeasured fallback (which previously produced a tall,
+    // stage-filling comparison box during Source / Iteration switches).
+    const initialRect = node.getBoundingClientRect();
+    setSize({ width: initialRect.width, height: initialRect.height });
+
     const observer = new ResizeObserver((entries) => {
       // Only ever one observed node, but the entry list is still index-access: a spec-legal
       // empty batch must not throw.
@@ -35,4 +42,3 @@ export function useElementSize(): [(node: HTMLElement | null) => void, ElementSi
 
   return [ref, size];
 }
-

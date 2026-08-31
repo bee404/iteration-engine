@@ -60,7 +60,6 @@ export function PrototypeScreen() {
 
   const header = (
     <>
-      <div className="feedback-atmosphere" aria-hidden="true" />
       <StepHeader />
     </>
   );
@@ -84,61 +83,69 @@ export function PrototypeScreen() {
     <main className="upload-page feedback-page">
       {header}
       <div className={`prototype-body ${stage.stageClass}`}>
-        <header className="prototype-header">
-          <span className="directions-kicker">Step 05</span>
-          <h1 className="directions-title">Review your prototype</h1>
-          <p className="directions-lede">
-            “{direction.title}” is rendered against the same viewport as your source. Download the
-            runnable code together with the inputs and reasoning that produced it.
-          </p>
-        </header>
+        <div className="prototype-content">
+          <header className="prototype-header">
+            <span className="directions-kicker">Step 05</span>
+            <h1 className="directions-title">Review your prototype</h1>
+            <p className="directions-lede">
+              “{direction.title}” is rendered against the same viewport as your source. Download the
+              runnable code together with the inputs and reasoning that produced it.
+            </p>
+          </header>
 
-        {prototype.status === "streaming" ? (
-          <div className="prototype-generating" role="status" aria-live="polite">
-            <span className="spinner" aria-hidden="true" />
-            <p>Generating the selected direction…</p>
-          </div>
-        ) : (
-          <ComparisonViewport
-            screenshotRef={image.dataUrl}
-            viewport={viewport ?? image.dimensions}
-            code={prototype.code}
-            language={prototype.language}
-            status={prototype.status}
-            error={prototype.error}
-          />
-        )}
-
-        {prototype.warnings && prototype.warnings.length > 0 && (
-          <ul className="code-warnings" aria-label="Prototype generation notes">
-            {prototype.warnings.map((warning) => (
-              <li key={warning}>{warning}</li>
-            ))}
-          </ul>
-        )}
-
-        <div className="prototype-actions">
-          {prototype.status === "error" ? (
-            <button type="button" className="feedback-synthesize" onClick={retry}>
-              Retry generation
-            </button>
+          {prototype.status === "streaming" ? (
+            <div className="prototype-generating" role="status" aria-live="polite">
+              <span className="spinner" aria-hidden="true" />
+              <p>Generating the selected direction…</p>
+            </div>
           ) : (
-            <button
-              type="button"
-              className="feedback-synthesize"
-              onClick={download}
-              disabled={prototype.status !== "complete"}
-            >
-              Download prototype
-            </button>
+            <ComparisonViewport
+              screenshotRef={image.dataUrl}
+              viewport={viewport ?? image.dimensions}
+              code={prototype.code}
+              language={prototype.language}
+              status={prototype.status}
+              error={prototype.error}
+            />
           )}
-          <button type="button" className="directions-restart" onClick={startAnother}>
-            Start another exploration
-          </button>
-          <p className="prototype-privacy-note">
-            The download excludes your screenshot. Coquí keeps this exploration in this browser
-            session only.
-          </p>
+
+          {prototype.warnings && prototype.warnings.length > 0 && (
+            <details className="prototype-generation-notes">
+              <summary>
+                Generation notes
+                <span>{prototype.warnings.length}</span>
+              </summary>
+              <ul>
+                {prototype.warnings.map((warning) => (
+                  <li key={warning}>{warning}</li>
+                ))}
+              </ul>
+            </details>
+          )}
+
+          <div className="prototype-actions">
+            {prototype.status === "error" ? (
+              <button type="button" className="feedback-synthesize" onClick={retry}>
+                Retry generation
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="feedback-synthesize"
+                onClick={download}
+                disabled={prototype.status !== "complete"}
+              >
+                Download prototype
+              </button>
+            )}
+            <button type="button" className="directions-restart" onClick={startAnother}>
+              Start another exploration
+            </button>
+            <p className="prototype-privacy-note">
+              The download excludes your screenshot. Coquí keeps this exploration in this browser
+              session only.
+            </p>
+          </div>
         </div>
       </div>
     </main>

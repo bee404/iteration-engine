@@ -79,6 +79,17 @@ test("a full-page capture still fits rather than overflowing the stage", () => {
   assert.equal(fitted.height, 600);
 });
 
+test("a desktop viewport fits inside the bounded Step 5 canvas", () => {
+  assert.deepEqual(fitViewportBox({ width: 1440, height: 900 }, { width: 1180, height: 720 }), {
+    width: 1152,
+    height: 720,
+  });
+  assert.equal(
+    iterationScaleStyle({ width: 1440, height: 900 }, { width: 1180, height: 720 }).transform,
+    "scale(0.8)",
+  );
+});
+
 test("box style emits the fitted pixel size", () => {
   assert.deepEqual(comparisonViewportStyle({ width: 1440, height: 900 }, { width: 1200, height: 450 }), {
     width: "720px",
@@ -86,9 +97,13 @@ test("box style emits the fitted pixel size", () => {
   });
 });
 
-test("an unmeasured stage or unknown round size fills the stage instead of guessing a ratio", () => {
+test("an unknown round size fills the stage, while a known box waits for stage measurement", () => {
   const filled = { width: "100%", height: "100%" };
-  assert.deepEqual(comparisonViewportStyle({ width: 1440, height: 900 }, null), filled);
+  assert.deepEqual(comparisonViewportStyle({ width: 1440, height: 900 }, null), {
+    width: "0px",
+    height: "0px",
+    visibility: "hidden",
+  });
   assert.deepEqual(comparisonViewportStyle(null, { width: 1200, height: 450 }), filled);
 });
 
@@ -107,9 +122,13 @@ test("the iteration layer is never scaled up past 1:1", () => {
   assert.equal(style.transform, "scale(1)");
 });
 
-test("an unmeasured stage leaves the iteration layer unscaled", () => {
+test("an unmeasured stage hides the iteration layer until it can be scaled", () => {
   const filled = { width: "100%", height: "100%" };
-  assert.deepEqual(iterationScaleStyle({ width: 1440, height: 900 }, null), filled);
+  assert.deepEqual(iterationScaleStyle({ width: 1440, height: 900 }, null), {
+    width: "0px",
+    height: "0px",
+    visibility: "hidden",
+  });
   assert.deepEqual(iterationScaleStyle(null, { width: 1200, height: 450 }), filled);
 });
 
@@ -117,4 +136,3 @@ test("caption reports the box, and says so when there isn't one", () => {
   assert.equal(formatComparisonViewport({ width: 1440, height: 900 }), "1440 \u00d7 900");
   assert.equal(formatComparisonViewport(null), "size unknown");
 });
-

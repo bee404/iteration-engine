@@ -174,6 +174,20 @@ test("buildPreviewDocument inlines the runtime source and neutralizes closing sc
   assert.match(doc, /window\.__PREVIEW_COMPONENT__/);
 });
 
+test("preview documents relay wheel input only when their own scroll boundary is reached", () => {
+  const live = buildPreviewDocument({
+    transpiledCode: "function App(){ return React.createElement('div'); }",
+    componentName: "App",
+    runtimeSource: "window.React = {}; window.ReactDOM = {};",
+  });
+  const streaming = buildStreamingSourceDocument();
+
+  for (const document of [live, streaming]) {
+    assert.match(document, /preview-wheel-boundary/);
+    assert.match(document, /canScroll\(event\.target/);
+  }
+});
+
 
 
 test("nextStreamingSourceMessage appends only the newly streamed suffix", () => {

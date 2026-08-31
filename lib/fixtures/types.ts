@@ -4,10 +4,10 @@ import type { Critique, Direction } from "@/lib/types";
  * One direction inside a demo fixture: the exact `Direction` shape the real providers return,
  * plus the verbatim code-gen output captured for it (if any).
  *
- * `capturedCode` is the real code a live run produced for this direction. When it's null we
- * simply have no real capture for that direction yet — demo mode then streams a typed "no
- * capture" code-gen error (exercising the shipped error state) rather than inventing fake
- * output. Dropping a new real capture in is a one-field change: paste the code, done.
+ * `capturedCode` is real code from a live run. A demo fixture may intentionally reuse one capture
+ * across several direction-selection paths so each path can exercise generation, comparison, and
+ * export. The fixture's provenance must say when the capture is shared rather than
+ * direction-specific. When this is null, demo mode streams a typed "no capture" error.
  */
 export interface DemoDirection {
   direction: Direction;
@@ -39,4 +39,3 @@ export interface DemoFixture {
   critique: Critique;
   directions: DemoDirection[];
 }
-
