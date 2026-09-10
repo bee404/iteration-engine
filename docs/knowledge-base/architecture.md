@@ -1,6 +1,6 @@
 # Architecture — The Shipped System
 
-This describes the canonical V0 implementation on `main` (status checked 2026-08-27).
+This describes the canonical V0 implementation on `main` (status checked 2026-09-09).
 Where a claim in an older research doc is now outdated by shipped code, this file reflects the
 code. Paths are repo-relative.
 
@@ -30,8 +30,7 @@ pipeline.
    vague to act on, surfaced for clarification instead of guessed at).
 3. **Directions** (`POST /api/directions`) — 2–3 genuinely different `Direction`s, each with
    `rationale`, `tradeoffs`, `suggestedChanges`, and an optional `patternReference` (21st.dev).
-4. **Direction selection and code generation** (`components/direction-selection-list.tsx`, `POST /api/generate`, SSE) — the user selects one direction and continues. TSX streams into canonical exploration state. Grounded in the
-   direction + design goal + screenshot + the active design system.
+4. **Direction selection and code generation** (`components/direction-selection-list.tsx`, `POST /api/generate`, SSE) — the user selects one direction and continues. TSX streams into canonical exploration state. The request carries the screenshot, design goal, raw feedback, optional reviewer context and constraints, complete critique, selected direction, generation mode, and locked viewport. It preserves the screenshot's visual system by default.
 5. **Live-mount preview** (`components/preview-frame.tsx`) — on completion, the TSX is
    transpiled with Sucrase and mounted as an interactive component in a sandboxed iframe.
 6. **Compare & export** (`components/prototype-screen.tsx`, `components/comparison-viewport.tsx`, `lib/export-bundle.ts`) — the generated iteration and direct source render in one fixed viewport with a binary `Source` / `Iteration` toggle. The browser downloads a runnable Vite/React project plus `coqui-context.json` containing raw inputs, critique, selected direction, viewport, generation notes, and the provider/model that actually completed generation.
@@ -69,8 +68,9 @@ which implementation runs — that is the whole point of the shape.
 
 ### Codegen — `lib/providers/codegen/`
 `getCodeGenProvider()` mirrors the LLM factory exactly (`FixtureCodeGenProvider` → mock →
-`ClaudeCodeGenProvider` → mock; `CODEGEN_PROVIDER=claude` with no key throws). The Claude
-codegen provider appends a condensed design-system spec to every prompt (see below).
+`ClaudeCodeGenProvider` → mock; `CODEGEN_PROVIDER=claude` with no key throws). Both live providers
+use the same source-preserving prompt contract. A condensed design-system spec is appended only
+when the request explicitly selects a recognized system (see below).
 
 ### Patterns (21st.dev grounding) — `lib/providers/patterns/`
 `getPatternProvider()` returns `TwentyFirstProvider` when `TWENTYFIRST_API_KEY` is configured and
@@ -136,38 +136,38 @@ API calls:
 - This is why generated components are constrained to a single self-contained file with no
   imports (see `decisions.md`): it is exactly the shape Sucrase can transpile without a bundler.
 
-## Design-system enforcement pipeline — `lib/design-systems/`, `lib/providers/codegen/postprocess.ts`
+## Source-preserving generation and optional design-system enforcement
 
 > Not to be confused with Coquí's own application UI (the upload screen, brief panel, header,
 > etc.), which follows a *different* design system — the gold-accent Figma direction documented
 > in `docs/design-system.md` and the repo-root `DESIGN.md`. What follows here grounds only the
 > code this tool *generates* as a direction's prototype.
 
-Generated code is grounded in one hardcoded design system (**Vercel Geist**,
-`lib/design-systems/vercel-geist.ts`) via two cooperating layers:
+`GenerationMode` has three values: `preserve-source` (the default), `apply-design-system`, and
+`redesign`. In the default mode, the screenshot is authoritative: the prompt protects its theme,
+shell, navigation, geometry, typography hierarchy, density, component states, visible copy, and
+unaffected regions. The prompt also forbids an unsolicited responsive reflow and targets the
+round's exact locked desktop viewport.
 
-1. **Prompt grounding** — `formatDesignSystemForPrompt()` appends a condensed Geist spec
-   (palette, type, radii, component rules, a **closed color allowlist**) to every codegen
-   request. `getActiveDesignSystem()` returns the one system today; it becomes a per-project
-   lookup when the data model carries a design-system reference (future scope).
-2. **Deterministic post-processing** (`postProcessGeneratedCode`) — never depends on the model:
-   - `stripCodeFences` — removes stray markdown fences.
-   - `enforceColorAllowlist` — rewrites any off-palette hex to the nearest allowed token and
-     surfaces a warning (`getColorAllowlist()` is derived from the active system so it can't
-     drift from the prompt).
-   - `ensureFontFace` — injects a self-hosted `@font-face` (base64 Geist woff2) so text renders
-     in Geist, not an Arial fallback.
-   - `detectEmojiIcons` — warns when emoji/glyph icons appear (line SVGs are required).
+Every generation receives the complete transient round context. Optional design-system behavior
+uses two cooperating layers only when the request explicitly names a recognized system:
+
+1. **Prompt grounding** — `formatDesignSystemForPrompt()` appends the selected system's condensed
+   palette, type, radii, and component rules. Vercel Geist remains the only registered proof-of-
+   concept system, but it is no longer an automatic global override.
+2. **Deterministic post-processing** (`postProcessGeneratedCode`) — always strips stray markdown
+   fences and warns about emoji/glyph icons. Color allowlisting and font injection run only for an
+   explicitly resolved design system. Source-preserving mode never rewrites source colors or
+   injects Geist.
 
 The combined behavior is regression-tested by `npm run verify:codegen`
-(`scripts/verify-codegen-postprocess.ts`) against the real Test-1 capture fixture; it asserts
-12/12 checks (one sanity + the nine codified fix-ups, two of which are checked on both the
-deterministic and prompt sides). See `qa-conventions.md`.
+(`scripts/verify-codegen-postprocess.ts`) against the real Test-1 capture fixture. It checks both
+the default preservation contract and the opt-in Geist path. See `qa-conventions.md`.
 
 ## Key commands
 
 - `npm run dev` — local dev server.
 - `npm run lint` — ESLint (run before every commit; do not run `tsc` in-sandbox).
 - `npm test` — node test runner over `lib/**/*.test.ts`.
-- `npm run verify:codegen` — codegen post-processing regression (must report 12/12).
+- `npm run verify:codegen` — source-preserving and opt-in design-system regression harness.
 - `DEMO_MODE=true npm run dev` — offline front-end QA on captured fixtures.

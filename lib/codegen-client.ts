@@ -1,9 +1,22 @@
-import type { Direction, GenerationProvenance } from "@/lib/types";
+import type {
+  Critique,
+  Direction,
+  GenerationMode,
+  GenerationProvenance,
+  ImageDimensions,
+} from "@/lib/types";
 import { useRoundStore } from "@/lib/stores/round";
 
 interface GeneratePrototypeRequest {
   direction: Direction;
   designGoal: string;
+  feedbackText: string;
+  reviewerContext?: string;
+  constraints?: string;
+  critique: Critique;
+  viewport: ImageDimensions | null;
+  generationMode?: GenerationMode;
+  designSystemId?: string;
   screenshotRef: string;
 }
 
@@ -36,7 +49,7 @@ function asGenerationProvenance(value: unknown): GenerationProvenance | null {
 
 /** Streams one selected direction into the canonical in-memory round store. */
 export async function generatePrototype(request: GeneratePrototypeRequest): Promise<void> {
-  const { direction, designGoal, screenshotRef } = request;
+  const { direction } = request;
   const actions = useRoundStore.getState();
   actions.startPrototype(direction.id, "tsx");
 
@@ -45,7 +58,10 @@ export async function generatePrototype(request: GeneratePrototypeRequest): Prom
       method: "POST",
       headers: { "Content-Type": "application/json" },
       cache: "no-store",
-      body: JSON.stringify({ direction, designGoal, screenshotRef }),
+      body: JSON.stringify({
+        ...request,
+        generationMode: request.generationMode ?? "preserve-source",
+      }),
     });
 
     if (!response.ok || !response.body) {
