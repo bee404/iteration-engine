@@ -1,8 +1,22 @@
-import type { Direction, GenerationProvenance } from "@/lib/types";
+import type {
+  Critique,
+  Direction,
+  GenerationMode,
+  GenerationProvenance,
+  ImageDimensions,
+} from "@/lib/types";
 
 export interface CodeGenRequest {
   direction: Direction;
   designGoal: string;
+  feedbackText: string;
+  reviewerContext?: string;
+  constraints?: string;
+  critique: Critique;
+  viewport: ImageDimensions | null;
+  generationMode: GenerationMode;
+  /** Required for apply-design-system; optional for an explicitly requested redesign. */
+  designSystemId?: string;
   /** The screenshot this round (and its directions) iterate on — same reference shape as
    * lib/providers/llm's CritiqueRequest.screenshotRef (a browser-uploaded image data URL),
    * so the real provider can ground generated code in what's actually on screen. */

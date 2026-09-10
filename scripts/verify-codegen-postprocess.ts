@@ -1,33 +1,19 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+
+import { getColorAllowlist, getDesignSystemById } from "@/lib/design-systems";
 import { postProcessGeneratedCode } from "@/lib/providers/codegen/postprocess";
-import { IMPLEMENTATION_REQUIREMENTS } from "@/lib/providers/codegen/shared";
-import { formatDesignSystemForPrompt, getActiveDesignSystem, getColorAllowlist } from "@/lib/design-systems";
+import { buildPrompt, IMPLEMENTATION_REQUIREMENTS } from "@/lib/providers/codegen/shared";
+import type { CodeGenRequest } from "@/lib/providers/codegen/types";
 
-/**
- * Regression harness for the codegen design-system enforcement pipeline.
- *
- * The raw Test 1 capture ("Get started with Hightouch", direction "Make the next action
- * unmistakable") needed nine manual fixes before it honored the Vercel Geist design system.
- * This script proves those nine fixes are now handled by the pipeline instead of by hand:
- *
- *   - Deterministic fixes (fences, colors, font) are asserted on the ACTUAL post-processed
- *     output of the real raw capture — the strongest possible regression guard.
- *   - Model-driven fixes (component mapping, icons, interactivity, emphasis, numbering,
- *     responsive) are asserted by confirming the prompt now carries explicit, enforceable
- *     rules for each. Plus the emoji case is proven to be *detected* (warned) so a
- *     regression is visible rather than silent.
- *
- * Run with `npm run verify:codegen`. Exits non-zero if any check fails.
- */
-
+/** Regression harness for source preservation and the optional design-system pass. */
 const RAW_FIXTURE_PATH = join(
   process.cwd(),
   "lib",
   "providers",
   "codegen",
   "__fixtures__",
-  "hightouch-onboarding.raw.txt"
+  "hightouch-onboarding.raw.txt",
 );
 
 interface Check {
@@ -43,97 +29,173 @@ function record(id: string, label: string, pass: boolean, detail: string): void 
 }
 
 const raw = readFileSync(RAW_FIXTURE_PATH, "utf-8");
-const prompt = formatDesignSystemForPrompt(getActiveDesignSystem());
-const requirements = IMPLEMENTATION_REQUIREMENTS;
-const allowlist = getColorAllowlist();
+const request: CodeGenRequest = {
+  direction: {
+    id: "direction-1",
+    title: "Make the next action unmistakable",
+    rationale: "The active task needs stronger hierarchy.",
+    tradeoffs: "The active task carries more visual weight.",
+    suggestedChanges: ["Emphasize only the active task"],
+    patternReference: null,
+  },
+  designGoal: "Make onboarding easier to complete.",
+  feedbackText: "Make the next action clearer without redesigning the product.",
+  reviewerContext: "First-time admin",
+  constraints: "Keep the source theme and sidebar.",
+  critique: {
+    summary: "The active task lacks hierarchy.",
+    signal: [{ kind: "signal", text: "The primary task is hard to distinguish." }],
+    preference: [{ kind: "preference", text: "The reviewer prefers a warmer feel." }],
+    flaggedAmbiguities: [],
+    model: "verification-fixture",
+  },
+  viewport: { width: 1478, height: 1064 },
+  generationMode: "preserve-source",
+  screenshotRef: "data:image/png;base64,fixture",
+};
 
-// Sanity: the fixture must actually contain the problems, or the checks below are vacuous.
+const sourcePrompt = buildPrompt(request);
+const requirements = IMPLEMENTATION_REQUIREMENTS;
+
 record(
   "fixture",
-  "Raw fixture still exhibits the original problems",
+  "Raw fixture still contains cleanup and palette regression cases",
   raw.trimEnd().endsWith("```") && /#f0f9ff/i.test(raw) && !/@font-face/i.test(raw),
-  "Raw capture ends with a code fence, contains off-palette #f0f9ff, and has no @font-face."
+  "Fixture ends with a code fence, contains #f0f9ff, and has no @font-face.",
 );
 
-const { code, warnings } = postProcessGeneratedCode(raw);
-const warningKinds = new Set(warnings.map((w) => w.kind));
-
-// --- Deterministic fixes: asserted on the real post-processed output ---
-
-// #1 markdown fence stripping
+const sourceResult = postProcessGeneratedCode(raw);
+const sourceWarningKinds = new Set(sourceResult.warnings.map((warning) => warning.kind));
 record(
-  "1-fence",
-  "#1 Trailing markdown code fence is stripped",
-  !code.includes("```") && code.includes("export default App;"),
-  "Post-processed output contains no ``` fence; the component's export is intact."
+  "source-fence",
+  "Default cleanup strips markdown fences",
+  !sourceResult.code.includes("```") && sourceResult.code.includes("export default App;"),
+  "The component export remains intact and no fence remains.",
 );
-
-// #2 self-hosted font loading
 record(
-  "2-font",
-  "#2 Self-hosted Geist @font-face is injected",
-  /@font-face/i.test(code) &&
-    code.includes("data:font/woff2;base64,") &&
-    code.includes("ie-ds-geist-font"),
-  "Output now carries a base64 data-URI @font-face injected by the pipeline."
+  "source-colors",
+  "Default cleanup preserves source colors",
+  sourceResult.code.includes("#f0f9ff") && !sourceWarningKinds.has("off_palette_color"),
+  "No design system was selected, so #f0f9ff remains unchanged.",
 );
-
-// #3 color allowlist enforcement
-const residualHexes = [...code.matchAll(/#[0-9a-fA-F]{3}\b|#[0-9a-fA-F]{6}\b/g)]
-  .map((m) => m[0].toLowerCase())
-  .map((hex) => (hex.length === 4 ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}` : hex))
-  .filter((hex) => !allowlist.has(hex));
 record(
-  "3-colors",
-  "#3 All hex colors are on the design-system allowlist",
-  residualHexes.length === 0,
-  residualHexes.length === 0
-    ? `Every hex in the output is an allowlisted token; ${warnings.filter((w) => w.kind === "off_palette_color").length} off-palette value(s) were rewritten.`
-    : `Residual off-palette hexes: ${[...new Set(residualHexes)].join(", ")}`
+  "source-font",
+  "Default cleanup does not inject Geist",
+  !sourceResult.code.includes("ie-ds-geist-font"),
+  "Source-preserving mode introduces no font override.",
 );
-
-// #5 icon policy — emoji are DETECTED (fix is a prompt rule; detection makes regressions visible)
 record(
-  "5-icons-detected",
-  "#5 Emoji-as-icons are detected and warned",
-  warningKinds.has("emoji_icon"),
-  warningKinds.has("emoji_icon")
-    ? "Post-processor flagged emoji icons in the raw capture for regeneration."
-    : "No emoji warning was produced — the detector or fixture changed."
+  "source-icons",
+  "Emoji-as-icons remain visible as a generation warning",
+  sourceWarningKinds.has("emoji_icon"),
+  "The source-preserving pass still detects unsupported glyph icons.",
 );
-
-// --- Model-driven fixes: asserted by confirming the prompt now enforces each rule ---
 
 function promptHas(id: string, label: string, needles: string[], haystack: string): void {
-  const missing = needles.filter((n) => !haystack.toLowerCase().includes(n.toLowerCase()));
-  record(id, label, missing.length === 0, missing.length === 0 ? "Rule present in prompt." : `Missing: ${missing.join(" | ")}`);
+  const missing = needles.filter((needle) => !haystack.toLowerCase().includes(needle.toLowerCase()));
+  record(
+    id,
+    label,
+    missing.length === 0,
+    missing.length === 0 ? "Rule present in prompt." : `Missing: ${missing.join(" | ")}`,
+  );
 }
 
-// #3 (prompt side) closed allowlist is advertised
-promptHas("3-colors-prompt", "#3 Prompt advertises a closed color allowlist", ["CLOSED ALLOWLIST", "Allowed hex values"], prompt);
-// #4 ghost-button component mapping
-promptHas("4-ghost", "#4 Prompt enforces ghost-button mapping for secondary actions", ["ghost-button", "Never render a secondary action as a bare underlined text link"], requirements);
-// #5 icon policy in prompt
-promptHas("5-icons-prompt", "#5 Prompt bans emoji and requires inline SVG line icons", ["inline SVG line icons", "Do NOT use emoji"], requirements);
-// #6 real interactivity
-promptHas("6-interactivity", "#6 Prompt requires real wired state", ["wire actual React state", "useState"], requirements);
-// #7 emphasis isolation
-promptHas("7-emphasis", "#7 Prompt requires single-active-step emphasis isolation", ["emphasize exactly that single item", "Never apply"], requirements);
-// #8 sequential numbering
-promptHas("8-numbering", "#8 Prompt requires sequential step numbering", ["1-based step", "numbers"], requirements);
-// #9 responsive rules
-promptHas("9-responsive", "#9 Prompt requires responsive rules for narrow viewports", ["responsive rules for narrow viewports", "media quer"], requirements);
+promptHas(
+  "source-contract",
+  "Prompt makes the screenshot authoritative and protects unaffected regions",
+  ["PRESERVE SOURCE", "dominant light/dark theme", "generic template", "unaffected source regions"],
+  sourcePrompt,
+);
+promptHas(
+  "full-context",
+  "Prompt receives the complete round context and locked viewport",
+  ["rawFeedback", "reviewerContext", "constraints", "critique", '"width": 1478', '"height": 1064'],
+  sourcePrompt,
+);
+promptHas(
+  "complete-screen",
+  "Prompt requires the full visible screen instead of an isolated fragment",
+  ["complete visible screen", "application shell", "Never return only the area being changed"],
+  requirements,
+);
+promptHas(
+  "copy-retention",
+  "Prompt protects visible copy and unrelated content",
+  ["Preserve every legible piece of visible copy", "remove unrelated content"],
+  requirements,
+);
+promptHas(
+  "viewport-contract",
+  "Prompt preserves desktop geometry at the exact viewport",
+  ["exact target viewport", "desktop geometry", "do not introduce responsive reflow"],
+  requirements,
+);
+promptHas(
+  "icons",
+  "Prompt bans emoji and requires inline SVG icons",
+  ["inline SVG line icons", "Do NOT use emoji"],
+  requirements,
+);
+promptHas(
+  "interactivity",
+  "Prompt requires real wired interaction state",
+  ["wire actual React state", "useState"],
+  requirements,
+);
+promptHas(
+  "emphasis",
+  "Prompt isolates emphasis to the selected target",
+  ["emphasize exactly that item", "Never spread its treatment"],
+  requirements,
+);
 
-// --- Report ---
+const designSystem = getDesignSystemById("vercel-geist");
+if (!designSystem) throw new Error("The registered vercel-geist system is missing.");
+const designSystemRequest: CodeGenRequest = {
+  ...request,
+  generationMode: "apply-design-system",
+  designSystemId: designSystem.id,
+};
+const designSystemPrompt = buildPrompt(designSystemRequest);
+const allowlist = getColorAllowlist(designSystem);
+const designSystemResult = postProcessGeneratedCode(raw, { designSystem });
+const designSystemWarningKinds = new Set(designSystemResult.warnings.map((warning) => warning.kind));
+const residualHexes = [...designSystemResult.code.matchAll(/#[0-9a-fA-F]{3}\b|#[0-9a-fA-F]{6}\b/g)]
+  .map((match) => match[0].toLowerCase())
+  .map((hex) =>
+    hex.length === 4 ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}` : hex,
+  )
+  .filter((hex) => !allowlist.has(hex));
 
-const failed = checks.filter((c) => !c.pass);
-for (const c of checks) {
-  console.log(`${c.pass ? "PASS" : "FAIL"}  ${c.label}\n      ${c.detail}`);
+record(
+  "explicit-prompt",
+  "Explicit design-system mode includes Vercel Geist",
+  designSystemPrompt.includes("Vercel Geist"),
+  "The optional system appears only after it is explicitly selected.",
+);
+record(
+  "explicit-colors",
+  "Explicit Geist mode enforces its palette",
+  residualHexes.length === 0 && designSystemWarningKinds.has("off_palette_color"),
+  residualHexes.length === 0
+    ? "Every output hex is allowlisted and the replacement was reported."
+    : `Residual off-palette hexes: ${[...new Set(residualHexes)].join(", ")}`,
+);
+record(
+  "explicit-font",
+  "Explicit Geist mode injects its self-hosted font",
+  /@font-face/i.test(designSystemResult.code) && designSystemResult.code.includes("ie-ds-geist-font"),
+  "The opt-in pipeline carries the base64 font-face injector.",
+);
+
+const failed = checks.filter((check) => !check.pass);
+for (const check of checks) {
+  console.log(`${check.pass ? "PASS" : "FAIL"}  ${check.label}\n      ${check.detail}`);
 }
 console.log(`\n${checks.length - failed.length}/${checks.length} checks passed.`);
 
 if (failed.length > 0) {
-  console.error(`\n${failed.length} check(s) FAILED: ${failed.map((c) => c.id).join(", ")}`);
+  console.error(`\n${failed.length} check(s) FAILED: ${failed.map((check) => check.id).join(", ")}`);
   process.exitCode = 1;
 }
-

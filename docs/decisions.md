@@ -181,6 +181,29 @@ Historical records, round-to-round lineage, and a stronger “commit iteration�
 
 **Owner:** Bryan. **Date:** 2026-08-26.
 
+### 18. Generated prototypes preserve the source visual system by default
+
+**Decision:** Code generation defaults to `preserve-source`. The screenshot is the visual source
+of truth: the generated component must retain its dominant theme, application shell, navigation,
+region geometry, typography hierarchy, spacing density, component states, visible copy, and
+unaffected content. The selected direction authorizes only the changes it actually describes.
+
+Generation has three explicit modes: `preserve-source`, `apply-design-system`, and `redesign`.
+Design-system prompt grounding, color allowlisting, and font injection run only when an explicitly
+selected design system accompanies a mode that permits it. The codegen request carries the raw
+feedback, reviewer context, constraints, complete critique, selected direction, and locked viewport
+alongside the screenshot and design goal.
+
+**Rationale:** A live real-project run replaced a dark Nexaflow application with a generic white
+onboarding template. The former pipeline hardcoded Vercel Geist into every request, rewrote every
+off-palette color after generation, omitted most of the round context, and encouraged responsive
+reflow despite the current desktop-only scope. That made the iteration visually unrelated to its
+source and defeated the purpose of the registered `Source` / `Iteration` comparison. Source-first
+generation restores the intended bounded-iteration contract while retaining explicit restyle and
+redesign paths for future controls.
+
+**Owner:** Bryan. **Date:** 2026-09-09.
+
 ## Carried forward unchanged (not in conflict, no new decision needed)
 
 - Input model: screenshot(s), feedback text, design tokens (W3C DTCG JSON), condensed style guide, optional flowchart screenshot — extended with "design goal" and "reviewer perspective/context" as explicit fields (external discovery, additive).

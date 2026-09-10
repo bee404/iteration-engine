@@ -9,7 +9,7 @@ import { StepHeader } from "@/components/step-header";
 import { generatePrototype } from "@/lib/codegen-client";
 import { requestDirections } from "@/lib/round-api";
 import { useRoundStore } from "@/lib/stores/round";
-import { useRoundViewport } from "@/lib/stores/round-viewport";
+import { lockedBoxOf, useRoundViewport } from "@/lib/stores/round-viewport";
 import type { Critique, Direction } from "@/lib/types";
 import { useStepStage } from "@/lib/use-step-stage";
 
@@ -229,12 +229,23 @@ export function DirectionsScreen() {
 
   const handleContinue = useCallback(() => {
     const direction = directions.find((candidate) => candidate.id === selectedId);
-    if (!direction || !image || !brief) return;
+    if (!direction || !image || !brief || !critique) return;
     // The comparison box locks at the moment the request is grounded against it.
     lockBox();
-    void generatePrototype({ direction, designGoal: brief.goal, screenshotRef: image.dataUrl });
+    const viewport = lockedBoxOf(useRoundViewport.getState().viewport) ?? image.dimensions;
+    void generatePrototype({
+      direction,
+      designGoal: brief.goal,
+      feedbackText: brief.feedback,
+      reviewerContext: brief.reviewerContext.trim() || undefined,
+      constraints: brief.constraints.trim() || undefined,
+      critique,
+      viewport,
+      generationMode: "preserve-source",
+      screenshotRef: image.dataUrl,
+    });
     stage.exit(() => router.push("/prototype"));
-  }, [selectedId, directions, image, brief, lockBox, stage, router]);
+  }, [selectedId, directions, image, brief, critique, lockBox, stage, router]);
 
   const header = (
     <>

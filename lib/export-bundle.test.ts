@@ -5,6 +5,7 @@ import { test } from "node:test";
 import { strFromU8, unzipSync } from "fflate";
 import { buildExportBundle } from "./export-bundle";
 import { extractInlinedFont } from "./export-inlined-font";
+import { getDesignSystemById } from "./design-systems";
 import { ensureFontFace } from "./providers/codegen/postprocess";
 
 const FONT_ASSET = join(process.cwd(), "lib", "design-systems", "assets", "Geist-Variable.woff2");
@@ -33,7 +34,9 @@ const CRITIQUE = {
 };
 
 function generatedCodeWithInlinedFont(): string {
-  const code = ensureFontFace(RAW_COMPONENT);
+  const designSystem = getDesignSystemById("vercel-geist");
+  assert.ok(designSystem, "fixture precondition: the Geist design system must be registered");
+  const code = ensureFontFace(RAW_COMPONENT, designSystem);
   assert.notEqual(code, RAW_COMPONENT, "fixture precondition: the font injector must have run");
   return code;
 }
