@@ -1,13 +1,13 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260831012435029_github",
-  "base_packet": "cb_20260827192304923_github",
+  "packet_id": "cb_20260916215514497_github",
+  "base_packet": "cb_20260831012435029_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-08-31T01:24:35.029Z",
+  "generated_at": "2026-09-16T21:55:14.497Z",
   "changed": true,
-  "manifest_sha": "388c747b02bdba0e",
+  "manifest_sha": "605b26c9b2cb7ae1",
   "sources": [
     {
       "id": ".agents/product-marketing.md",
@@ -42,8 +42,8 @@
     {
       "id": "README.md",
       "file": "README.md",
-      "sha256": "411f556363ba21f5a097358a2e57298500bd9576a05c2db5081a269d7954203b",
-      "bytes": 6479
+      "sha256": "0229d90b76c7497c403fe9a52286b0ad29f54530375012ef6e089fe0980699d3",
+      "bytes": 12470
     },
     {
       "id": "app/(app)/directions-alt/page.tsx",
@@ -857,29 +857,10 @@
     }
   ],
   "source_changes": {
-    "added": [
-      "lib/fixtures/examples.test.ts",
-      "lib/image-dimensions.test.ts"
-    ],
+    "added": [],
     "removed": [],
     "updated": [
-      "AGENTS.md",
-      "README.md",
-      "app/globals.css",
-      "components/direction-selection-list.tsx",
-      "components/feedback-screen.tsx",
-      "components/image-upload-screen.tsx",
-      "components/preview-frame.tsx",
-      "components/prototype-screen.tsx",
-      "docs/knowledge-base/architecture.md",
-      "lib/comparison-viewport.test.ts",
-      "lib/comparison-viewport.ts",
-      "lib/fixtures/examples.ts",
-      "lib/fixtures/types.ts",
-      "lib/image-dimensions.ts",
-      "lib/preview/build-preview-document.test.ts",
-      "lib/preview/build-preview-document.ts",
-      "lib/use-element-size.ts"
+      "README.md"
     ]
   },
   "facts": [
@@ -1388,49 +1369,35 @@
       }
     },
     {
-      "id": "README.md::current_operating_model",
+      "id": "README.md::architecture",
       "source": "README.md",
       "kind": "verbatim_excerpt",
-      "heading": "Current operating model",
-      "text": "## Current operating model Obvious is the conductor for planning and building the first release, but the shipped product is a standalone application. Product decisions belong in this repository, not only in an external tool or conversation. The operating sequence is: 1. Keep the agreed product decisions in `docs/decisions.md`. 2. Keep the resulting product shape in `docs/blueprint.md`. 3. Keep release boundaries and validation in `docs/release-plan.md`. 4. Update those documents when product decisions change, then align implementation with them. 5. Use `docs/discovery-diff.md` and the two discovery records as supporting context, not as a substitute for the current blueprint.",
+      "heading": "Architecture",
+      "text": "## Architecture | Layer | Current implementation | | --- | --- | | Application | Next.js 16, React 19, TypeScript | | Client state | Zustand, transient per-exploration state | | Primary models | Claude Sonnet for critique, directions, and code generation | | Optional fallback | GPT-4o after typed Claude failures | | Pattern grounding | Live 21st.dev MCP query when configured | | Generated preview | Sucrase transpilation and a zero-network sandboxed iframe | | Export | Client-generated Vite/React ZIP plus `coqui-context.json` | | Hosting | Vercel, with credential-gated live production and open fixture previews | The generated preview uses a vendored React runtime and a Content Security Policy that blocks network requests, remote assets, forms, plugins, media, and base-URL changes. The architecture document covers the provider selection order, active data model, fallback behavior, and sec…",
       "evidence": {
         "file": "README.md",
-        "sha256": "411f556363ba21f5a097358a2e57298500bd9576a05c2db5081a269d7954203b",
-        "line_start": 9,
-        "line_end": 20,
-        "truncated": false
+        "sha256": "0229d90b76c7497c403fe9a52286b0ad29f54530375012ef6e089fe0980699d3",
+        "line_start": 69,
+        "line_end": 83,
+        "truncated": true
       }
     },
     {
-      "id": "README.md::repository_purpose",
+      "id": "README.md::project_history_and_source_of_truth",
       "source": "README.md",
       "kind": "verbatim_excerpt",
-      "heading": "Repository purpose",
-      "text": "## Repository purpose This repository is the source of truth for Coquí's product definition and implementation. It began as a neutral workspace for reconciling two discovery tracks: the work developed inside Obvious and the supporting discovery developed outside it. That reconciliation, plus the later Claude and ChatGPT context packets, is now distilled into the decision log, blueprint, release plan, design-system documentation, and agent knowledge base.",
+      "heading": "Project history and source of truth",
+      "text": "## Project history and source of truth Coquí began as a workspace for reconciling product discovery developed inside Obvious with supporting discovery developed outside it. That work was consolidated into the decision log, blueprint, release plan, design-system documentation, and agent knowledge base. Obvious remains part of the planning and build workflow, but the application is standalone and has no runtime dependency on it. GitHub is the durable authority. When implementation, documentation, or an external conversation conflicts with an approved product decision, update the repository source of truth and record the decision before treating the new direction as current. `AGENTS.md` is the canonical entrypoint for agents working in this repository. Claude Code and GitHub Copilot use small adapters that point back to it rather than duplicating product rules.",
       "evidence": {
         "file": "README.md",
-        "sha256": "411f556363ba21f5a097358a2e57298500bd9576a05c2db5081a269d7954203b",
-        "line_start": 5,
-        "line_end": 8,
-        "truncated": false
-      }
-    },
-    {
-      "id": "README.md::status",
-      "source": "README.md",
-      "kind": "verbatim_excerpt",
-      "heading": "Status",
-      "text": "## Status The current V0 flow is screenshot upload and intake, Claude critique and directions, one selected direction, streamed code generation, a fixed-box `Source` / `Iteration` review, and a client-generated ZIP. The ZIP contains a runnable Vite/React prototype plus `coqui-context.json` with the raw inputs, synthesized critique, full selected direction, viewport, generation notes, and the provider/model that actually completed generation. The processed screenshot remains transient browser-session state and is excluded from the download by default. The remaining release gate is validation of this complete loop against a real project. Historical rounds, retention features, multi-screen workflows, per-project design systems, responsive behavior, and ComfyUI remain deferred. See `docs/release-plan.md` and `docs/knowledge-base/roadmap-and-open-work.md` for the current boundary.",
-      "evidence": {
-        "file": "README.md",
-        "sha256": "411f556363ba21f5a097358a2e57298500bd9576a05c2db5081a269d7954203b",
-        "line_start": 21,
-        "line_end": 26,
+        "sha256": "0229d90b76c7497c403fe9a52286b0ad29f54530375012ef6e089fe0980699d3",
+        "line_start": 169,
+        "line_end": 176,
         "truncated": false
       }
     }
   ],
-  "fact_count": 39,
+  "fact_count": 38,
   "conflicts": [],
   "decisions": [
     {
@@ -1448,9 +1415,9 @@
   "supplemental": [],
   "stats": {
     "source_count": 141,
-    "fact_count": 39,
-    "added": 0,
-    "removed": 0,
-    "updated": 7
+    "fact_count": 38,
+    "added": 2,
+    "removed": 3,
+    "updated": 0
   }
 }
