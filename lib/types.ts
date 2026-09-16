@@ -11,6 +11,9 @@ export interface ImageDimensions {
   height: number;
 }
 
+/** How much freedom code generation has to depart from the uploaded reference. */
+export type GenerationMode = "preserve-source" | "apply-design-system" | "redesign";
+
 export type SignalPreferenceKind = "signal" | "preference";
 
 export interface SignalPreferenceItem {

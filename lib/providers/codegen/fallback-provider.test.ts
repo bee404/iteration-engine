@@ -17,6 +17,16 @@ const DIRECTION: Direction = {
 const REQUEST: CodeGenRequest = {
   direction: DIRECTION,
   designGoal: "g",
+  feedbackText: "Make the next action clearer.",
+  critique: {
+    summary: "The next action lacks hierarchy.",
+    signal: [{ kind: "signal", text: "The primary action is hard to find." }],
+    preference: [],
+    flaggedAmbiguities: [],
+    model: "test-model",
+  },
+  viewport: { width: 1440, height: 1035 },
+  generationMode: "preserve-source",
   screenshotRef: "data:image/png;base64,x",
 };
 

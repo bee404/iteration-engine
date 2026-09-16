@@ -10,7 +10,7 @@ Agreed 2026-08-05, reconciled with the shipped system and cross-tool context pac
 
 ### Implementation status as of 2026-08-26
 
-Implemented on `main`: screenshot intake and natural-dimension capture; real Claude critique and direction generation; selected-direction streamed code generation; live-mount preview with source fallback; per-exploration viewport inference, correction, and locking; fixed-box `Source` / `Iteration` comparison; and a client-generated ZIP containing runnable source plus the full exploration context. The canonical V0 flow is transient and does not persist screenshots, approvals, or history.
+Implemented on `main`: screenshot intake and natural-dimension capture; real Claude critique and direction generation; selected-direction streamed code generation grounded in the complete round context and source-preserving by default; live-mount preview with source fallback; per-exploration viewport inference, correction, and locking; fixed-box `Source` / `Iteration` comparison; and a client-generated ZIP containing runnable source plus the full exploration context. The canonical V0 flow is transient and does not persist screenshots, approvals, or history.
 
 Remaining for V1: validate the complete loop against a real project and evaluate whether content-width autocrop plus a confidence flag is needed beyond the current natural-dimension viewport model. Optional ComfyUI clarification remains a graceful enhancement, not a blocker for the core comparison loop.
 
@@ -27,7 +27,7 @@ Per Bryan's own guidance for this reconciliation: don't optimize solely for a de
 - 2-3 direction generation per round, each with rationale and tradeoffs.
 - Live 21st.dev MCP queries for pattern grounding on direction generation.
 - Vague-feedback flagging and clarification (text-based; ComfyUI visual clarification if available locally).
-- Code/prototype generation for the selected direction (Claude Sonnet primary, GPT-4o fallback), streamed via SSE to a sandboxed preview iframe.
+- Code/prototype generation for the selected direction (Claude Sonnet primary, GPT-4o fallback), streamed via SSE to a sandboxed preview iframe. The screenshot's visual system is preserved by default; alternate design-system styling and broader redesigns require explicit modes.
 - Fixed-box `Source` / `Iteration` comparison (the generated iteration against its direct source).
 - Portable prototype export with runnable source, raw inputs, synthesized critique, complete selected direction, viewport, generation notes, and completed-run provider/model provenance.
 

@@ -28,9 +28,19 @@ export function PrototypeScreen() {
   const direction = directions.find((candidate) => candidate.id === selectedDirectionId) ?? null;
 
   const retry = useCallback(() => {
-    if (!direction || !brief || !image) return;
-    void generatePrototype({ direction, designGoal: brief.goal, screenshotRef: image.dataUrl });
-  }, [direction, brief, image]);
+    if (!direction || !brief || !image || !critique) return;
+    void generatePrototype({
+      direction,
+      designGoal: brief.goal,
+      feedbackText: brief.feedback,
+      reviewerContext: brief.reviewerContext.trim() || undefined,
+      constraints: brief.constraints.trim() || undefined,
+      critique,
+      viewport: viewport ?? image.dimensions,
+      generationMode: "preserve-source",
+      screenshotRef: image.dataUrl,
+    });
+  }, [direction, brief, image, critique, viewport]);
 
   const download = useCallback(() => {
     if (!direction || !brief || !critique || prototype?.status !== "complete") return;

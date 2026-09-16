@@ -58,7 +58,7 @@ export class ClaudeCodeGenProvider implements CodeGenProvider {
   }
 
   async *streamCode(request: CodeGenRequest): AsyncGenerator<string, void, unknown> {
-    const { direction, designGoal, screenshotRef } = request;
+    const { screenshotRef } = request;
     const image = await resolveScreenshot(screenshotRef);
 
     let response: Response;
@@ -79,7 +79,7 @@ export class ClaudeCodeGenProvider implements CodeGenProvider {
             {
               role: "user",
               content: [
-                { type: "text", text: buildPrompt(direction, designGoal) },
+                { type: "text", text: buildPrompt(request) },
                 {
                   type: "image",
                   source: { type: "base64", media_type: image.mediaType, data: image.base64Data },

@@ -44,9 +44,10 @@ The established shape for a QA plan, per numbered test:
 
 Where behavior is codified, back the manual pass with an automated check and cite it in the PR:
 
-- `npm run verify:codegen` — codegen post-processing regression against the real Test-1 capture
-  fixture. Must report **12/12** (one sanity check + the nine codified design-system fix-ups).
-  Any FAIL is a QA failure.
+- `npm run verify:codegen` — codegen regression against the real Test-1 capture fixture. It checks
+  that source-preserving mode does not rewrite colors or inject Geist, that the complete round and
+  locked viewport reach the prompt, and that explicit Geist mode still opts into palette/font
+  enforcement. Any FAIL is a QA failure.
 - `npm test` — unit tests (`lib/**/*.test.ts`), including the pure preview-document builder.
 - `npm run lint` — run before every commit. Do **not** run `tsc` in-sandbox (CI covers types).
 

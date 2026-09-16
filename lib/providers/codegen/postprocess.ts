@@ -1,17 +1,20 @@
-import { getColorAllowlist, getGeistFontFaceCss, GEIST_FONT_FAMILY } from "@/lib/design-systems";
+import {
+  getColorAllowlist,
+  getGeistFontFaceCss,
+  GEIST_FONT_FAMILY,
+  type DesignSystem,
+} from "@/lib/design-systems";
 
 /**
- * Deterministic post-processing for generated code — the part of the design-system
- * grounding that must NEVER depend on the model getting it right.
+ * Deterministic post-processing for generated code. Universal cleanup runs for every mode;
+ * design-system enforcement is an explicit opt-in.
  *
  * The prompt (see claude-provider.ts + lib/design-systems) tells the model what to do;
  * this stage guarantees the parts that are unsafe to leave to model compliance:
  *
  *   1. Strip any markdown code fence the model wrapped the response in (manual fix #1).
- *   2. Reject and rewrite off-palette hex colors to the nearest allowlisted token,
- *      instead of trusting the model to only ever use the palette (manual fix #3).
- *   3. Guarantee the self-hosted Geist @font-face is present so the font actually loads
- *      rather than silently falling back to Arial (manual fix #2).
+ *   2. When a design system was selected, rewrite off-palette colors to its nearest token.
+ *   3. When Geist was selected, guarantee its self-hosted @font-face is present.
  *
  * It also emits non-blocking warnings for issues that can only be *fixed* by the model
  * (e.g. emoji used as icons — manual fix #5) so a regression is visible instead of silent.
@@ -29,6 +32,11 @@ export interface PostProcessWarning {
 export interface PostProcessResult {
   code: string;
   warnings: PostProcessWarning[];
+}
+
+export interface PostProcessOptions {
+  /** Palette and font enforcement are opt-in. Source-preserving generation leaves this null. */
+  designSystem?: DesignSystem | null;
 }
 
 /** Strips a single leading and/or trailing markdown code fence (```lang ... ```). */
@@ -83,12 +91,12 @@ function nearestAllowedHex(hex: string, allowlist: ReadonlySet<string>): string 
 /**
  * Rewrites every 3- or 6-digit hex literal that isn't on the allowlist to the nearest
  * allowlisted token, and reports each substitution. 8-digit (alpha) hexes are left alone
- * so we never silently drop an alpha channel. The allowlist itself is derived from the
- * active design system's tokens, so it can't drift from what the prompt advertised.
+ * so we never silently drop an alpha channel. The caller supplies an allowlist derived
+ * from the explicitly selected design system.
  */
 export function enforceColorAllowlist(
   code: string,
-  allowlist: ReadonlySet<string> = getColorAllowlist()
+  allowlist: ReadonlySet<string>,
 ): { code: string; warnings: PostProcessWarning[] } {
   const warnings: PostProcessWarning[] = [];
   const seen = new Set<string>();
@@ -123,7 +131,8 @@ const FONT_INJECTOR_MARKER = "ie-ds-geist-font";
  * top; it runs on mount, is SSR-guarded, and de-dupes by id so multiple previews on one
  * page share a single style element.
  */
-export function ensureFontFace(code: string): string {
+export function ensureFontFace(code: string, designSystem: DesignSystem): string {
+  if (designSystem.id !== "vercel-geist") return code;
   const referencesGeist = new RegExp(`['\"\`]${GEIST_FONT_FAMILY}\\b`).test(code);
   const alreadyHasFontFace = /@font-face/i.test(code);
   if (!referencesGeist || alreadyHasFontFace) return code;
@@ -164,30 +173,33 @@ export function detectEmojiIcons(code: string): PostProcessWarning[] {
     {
       kind: "emoji_icon",
       message:
-        `Emoji/glyph characters used as icons (${[...found].join(" ")}) — the design system ` +
-        "requires inline SVG line icons. Regenerate; the prompt now forbids emoji.",
+        `Emoji/glyph characters used as icons (${[...found].join(" ")}) — generated previews ` +
+        "require inline SVG line icons. Regenerate; the prompt forbids emoji.",
     },
   ];
 }
 
 /**
- * Runs the full deterministic post-processing stage over one generation's raw output.
- * Order matters: fences are stripped first (so downstream regexes see real source), then
- * colors are normalized, then the font is guaranteed, and finally emoji are flagged.
+ * Runs deterministic post-processing over one generation's raw output. Fences are always
+ * stripped and emoji are always flagged. Colors and font are enforced only when a design system
+ * was explicitly resolved for the request.
  */
-export function postProcessGeneratedCode(raw: string): PostProcessResult {
+export function postProcessGeneratedCode(
+  raw: string,
+  options: PostProcessOptions = {},
+): PostProcessResult {
   const warnings: PostProcessWarning[] = [];
 
   let code = stripCodeFences(raw);
 
-  const colorPass = enforceColorAllowlist(code);
-  code = colorPass.code;
-  warnings.push(...colorPass.warnings);
-
-  code = ensureFontFace(code);
+  if (options.designSystem) {
+    const colorPass = enforceColorAllowlist(code, getColorAllowlist(options.designSystem));
+    code = colorPass.code;
+    warnings.push(...colorPass.warnings);
+    code = ensureFontFace(code, options.designSystem);
+  }
 
   warnings.push(...detectEmojiIcons(code));
 
   return { code, warnings };
 }
-

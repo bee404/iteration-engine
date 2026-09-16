@@ -23,7 +23,7 @@ Read the one file that matches your task, not all of them:
 | [`decisions.md`](./decisions.md) | *Why* the system is built the way it is — the durable, load-bearing decisions and their rationale (generation engine, token format, Sucrase, demo mode, 21st.dev shape, etc.). Read before changing a decision. |
 | [`roadmap-and-open-work.md`](./roadmap-and-open-work.md) | What is built vs. still open (including remaining viewport precision work), build-order dependencies, and the paused external UX iteration work. |
 | [`qa-conventions.md`](./qa-conventions.md) | The PR-review and design-QA pattern this project follows before anything merges. Read before opening a PR. |
-| [`../design-system.md`](../design-system.md) | Coquí's own visual identity, naming, brand assets, copy voice, and design history — distinct from the Vercel Geist system this hub's `architecture.md` covers, which grounds only *generated* code. Read before any UI/visual change to the app shell itself. |
+| [`../design-system.md`](../design-system.md) | Coquí's own visual identity, naming, brand assets, copy voice, and design history — distinct from any optional design system used to restyle *generated* code. Read before any UI/visual change to the app shell itself. |
 
 ## Ground truth precedence
 
@@ -52,6 +52,7 @@ design tool: a designer uploads a screenshot plus feedback, and the app produces
 for the selected direction that live-mounts as an interactive React component. V0 state is
 transient; the durable artifact is a context-rich ZIP owned by the user. It is a Next.js app on Vercel, Zustand for client state, Claude Sonnet behind
 typed provider interfaces (with mock and fixture fallbacks), Sucrase for in-browser
-transpilation, and a design-system enforcement pipeline that grounds *generated* code in the
-Vercel Geist style. See `architecture.md` for that detail, and `docs/design-system.md` for the
-app's own — unrelated — gold-accent visual identity.
+transpilation, and a source-preserving generation pipeline that sends the complete round context
+and locked viewport to codegen. Optional design-system enforcement is explicit rather than a
+global override. See `architecture.md` for that detail, and `docs/design-system.md` for the app's
+own — unrelated — gold-accent visual identity.
