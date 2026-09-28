@@ -1,13 +1,13 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260916220109325_github",
-  "base_packet": "cb_20260916215514497_github",
+  "packet_id": "cb_20260928162625759_github",
+  "base_packet": "cb_20260916220109325_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-09-16T22:01:09.325Z",
+  "generated_at": "2026-09-28T16:26:25.759Z",
   "changed": true,
-  "manifest_sha": "f063465b5ba6cab6",
+  "manifest_sha": "f7d347ecef490e7b",
   "sources": [
     {
       "id": ".agents/product-marketing.md",
@@ -798,7 +798,7 @@
     {
       "id": "package.json",
       "file": "package.json",
-      "sha256": "c23dcf054442c25a08c67f69c6fb91744097d6465e93682ba1e9a48229586cfa",
+      "sha256": "93ac330a828d4c35bd601adf6256fc7e7f7b5412d7ff9a66e2fb0b6adc2f60bb",
       "bytes": 1355
     },
     {
