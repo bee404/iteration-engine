@@ -30,6 +30,7 @@ Bryan only. Internal, not stakeholder-facing — Bryan takes the tool's output t
 - For design systems supplied to Coquí to constrain generated prototypes, code and tokens are the source of truth and Figma mirrors them. For Coquí's own application shell, root `DESIGN.md` is authoritative and the current Figma file is the visual reference. Do not conflate the two systems.
 - **Bounded exploration.** The product presents a small set of alternatives, then asks the designer which one is worth prototyping. There is no branching, forking, merging, or version graph in V0.
 - **Perfect registration is the payoff.** The original screenshot and generated iteration render into one identical, fixed viewport box. This makes the `Source` / `Iteration` comparison trustworthy.
+- **The source visual system is the default.** A generated prototype preserves the reference's theme, shell, navigation, geometry, typography hierarchy, density, visible copy, and unaffected regions. Applying another design system or authorizing a broader redesign requires an explicit generation mode.
 - **Every judgment is cited.** Critique items state their reasoning; directions additionally point to a real named external pattern (21st.dev), not an invented layout.
 - **Failures degrade, they never disappear.** Code that compiles but fails to mount falls back to source plus the raw runtime error — never a blank frame or a generic error state.
 - **The durable artifact belongs to the user.** V0 ends in a context-rich download instead of retaining screenshots or round history on Coquí's server.
@@ -50,7 +51,7 @@ and **download payload**.
 3. If feedback contains vague or ambiguous portions the critique can't resolve on its own, the system flags them. Bryan clarifies in text, or — if ComfyUI is running locally — reviews 2-3 auto-generated visual style variations (img2img, denoise 0.5, ControlNet-preserved layout) to pick a direction before proceeding.
 4. The system generates 2-3 meaningfully different iteration directions. Each includes a rationale, tradeoffs, and suggested design changes, and — when relevant — a reference to a comparable layout or pattern pulled live from 21st.dev to ground the direction in a known solution rather than inventing from scratch.
 5. Bryan selects the direction worth exploring and chooses **Continue to prototype**.
-6. Code for that direction streams live via SSE to a sandboxed preview iframe. Bryan reviews it against the source in the fixed viewport and can retry a failed generation.
+6. Code for that direction streams live via SSE to a sandboxed preview iframe. The generation call receives the screenshot, full raw and synthesized round context, selected direction, and locked viewport. It preserves the source visual system by default. Bryan reviews it against the source in the fixed viewport and can retry a failed generation.
 7. Bryan chooses **Download prototype**. The browser creates a runnable Vite/React ZIP plus `coqui-context.json` containing the raw inputs, synthesized critique, selected direction, viewport, generation notes, and the provider/model that actually completed generation. The screenshot is not included by default and no exploration history is persisted in V0.
 
 ### Facts that constrain the workflow's design
@@ -70,6 +71,7 @@ and **download payload**.
 - Raw feedback — a mix of vague and specific; vague portions are flagged before generation.
 - Optional reviewer perspective/context — who gave the feedback and from what angle (new, explicit field).
 - Optional additional references, requirements, or constraints.
+- Generation mode — source preservation is the default; applying a named design system or authorizing a broader redesign must be explicit.
 - Design tokens (W3C DTCG JSON, compiled to a compressed JSON index) and a condensed style guide for the product being iterated — its code and tokens remain the source of truth. This input system is separate from Coquí's own UI tokens in root `DESIGN.md`.
 - Optional flowchart screenshot for multi-screen workflows, read by the vision LLM.
 
@@ -90,6 +92,7 @@ and **download payload**.
 - **Pattern grounding**: live MCP queries to 21st.dev (`https://21st.dev/api/mcp`) under Bryan's own API key, at generation time only — no local mirror of their taxonomy, per their Terms of Service.
 - **Visual pre-iteration / asset generation**: ComfyUI, running locally on Bryan's machine (port 8188), optional, health-checked via `GET /system_stats`; the system degrades to LLM-only when it's not running.
 - **Preview**: sandboxed iframe within the Next.js app, SSE streaming for generated code.
+- **Codegen grounding**: screenshot plus complete round context and locked viewport. Palette/font enforcement is opt-in and scoped to an explicitly selected design system; it does not run in source-preserving mode.
 - **Secrets**: Vercel server-only environment variables; `.env.local` for local dev (gitignored).
 - **Access**: live production is single-user and credential-gated; missing credentials fail closed. Public fixture demos remain open because they cannot call providers.
 - **Input boundary**: screenshots are browser-uploaded image data URLs only, with a 3 MB decoded-size cap; arbitrary server-side URL fetching is prohibited.

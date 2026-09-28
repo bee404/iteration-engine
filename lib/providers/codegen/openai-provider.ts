@@ -45,7 +45,7 @@ export class OpenAICodeGenProvider implements CodeGenProvider {
   }
 
   async *streamCode(request: CodeGenRequest): AsyncGenerator<string, void, unknown> {
-    const { direction, designGoal, screenshotRef } = request;
+    const { screenshotRef } = request;
     const image = await resolveScreenshot(screenshotRef);
     const dataUrl = `data:${image.mediaType};base64,${image.base64Data}`;
 
@@ -66,7 +66,7 @@ export class OpenAICodeGenProvider implements CodeGenProvider {
             {
               role: "user",
               content: [
-                { type: "text", text: buildPrompt(direction, designGoal) },
+                { type: "text", text: buildPrompt(request) },
                 { type: "image_url", image_url: { url: dataUrl } },
               ],
             },

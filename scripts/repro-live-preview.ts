@@ -47,7 +47,17 @@ const provider = new ClaudeCodeGenProvider(apiKey);
 
 async function runOne(index: number, direction: (typeof directions)[number]) {
   let raw = "";
-  for await (const token of provider.streamCode({ direction, designGoal, screenshotRef })) {
+  for await (const token of provider.streamCode({
+    direction,
+    designGoal,
+    feedbackText: fixture.inputs.feedbackText,
+    reviewerContext: fixture.inputs.reviewerContext ?? undefined,
+    constraints: fixture.inputs.constraints ?? undefined,
+    critique: fixture.critique,
+    viewport: { width: 1440, height: 1035 },
+    generationMode: "preserve-source",
+    screenshotRef,
+  })) {
     raw += token;
   }
   const { code } = postProcessGeneratedCode(raw);
@@ -80,4 +90,3 @@ async function runOne(index: number, direction: (typeof directions)[number]) {
   }
   console.log(`\nDONE. ${failures}/${rounds} rounds fell back to read-only source.`);
 })();
-

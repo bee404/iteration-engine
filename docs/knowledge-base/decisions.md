@@ -23,17 +23,18 @@ Design tokens use the **W3C DTCG** JSON format (`$value`/`$type`), three-layer h
 (primitive → semantic → component). For LLM prompting, compile to a compressed JSON index
 (short keys, shallow nesting, semantic aliases) — structured JSON is far more token-efficient
 than prose. CSS custom properties are generated for runtime use in prototypes. **Status:** the
-token-index input model is decided but not yet built; today's grounding is the hardcoded Geist
-spec injected by `lib/design-systems/` (see below).
+token-index input model is decided but not yet built; Vercel Geist is the one registered example
+system and is applied only through an explicit generation mode (see below).
 
-## Design-system grounding: one hardcoded system (Vercel Geist) for now
+## Source-first generation; alternate visual systems require explicit intent
 
-Generated code is grounded in the Vercel Geist design system, enforced by both prompt rules and
-deterministic post-processing (see `architecture.md`). This is a **proof-of-concept scope
-decision**: it proves grounding changes output, using exactly one system. Per-exploration
-selection is deferred because the active transient state carries no design-system reference field
-yet. When that lands, `getActiveDesignSystem()` becomes a lookup and nothing else in the codegen
-path changes.
+Generated code preserves the screenshot's visual system by default. The codegen prompt receives
+the raw feedback, reviewer context, constraints, critique, selected direction, and locked viewport
+so the model can make a bounded iteration instead of reinterpreting the entire product. A design
+system is never silently imposed: prompt grounding, palette allowlisting, and font injection run
+only when a request explicitly selects `apply-design-system` with a recognized system. `redesign`
+is a separate explicit mode for broader structural freedom. Vercel Geist remains the one registered
+proof-of-concept system; a user-facing selector and token upload remain future input work.
 
 ## Generated components stay single-file, zero-import (v1, by design)
 

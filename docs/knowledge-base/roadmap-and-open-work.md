@@ -1,6 +1,6 @@
 # Roadmap & Open Work
 
-What is built vs. still open, and what's paused. Grounded in `main`, status checked 2026-08-27.
+What is built vs. still open, and what's paused. Grounded in `main`, status checked 2026-09-09.
 
 ## Built and shipped (on `main`)
 
@@ -17,7 +17,9 @@ The canonical generation loop is live and transient:
 - **Fixed-box comparison** — `Source` / `Iteration` is a binary toggle in one registered viewport,
   with source and runtime-error fallbacks when an iteration cannot mount.
 - **Context-rich export** — runnable Vite/React source downloads with raw inputs, synthesized critique, full selected direction, viewport, generation notes, and completed-run provider/model provenance.
-- **Design-system enforcement** (Geist prompt grounding + deterministic post-processing).
+- **Source-preserving codegen** — complete round context and locked viewport reach the prompt;
+  design-system grounding, palette rewriting, and font injection are explicit opt-ins rather than
+  global Geist overrides.
 - **Provider fallbacks** — GPT-4o can take over after typed Claude failures when both provider keys
   are configured; 21st.dev grounding uses a live per-round MCP query when its key is configured.
 - **DEMO_MODE** fixture replay with no external model calls.
@@ -36,11 +38,18 @@ it does not yet detect and remove browser chrome or letterboxing from a capture.
   that natural dimensions are insufficient.
 - **Pixel-diff region highlighting** — remains an optional exploration, not part of the current
   comparison contract. The shipped control is only the binary `Source` / `Iteration` toggle.
+- **Post-generation source-preservation gate** — recommended next quality layer, not built. A
+  renderer/evaluator could reject theme inversions, missing major regions, lost copy, or viewport
+  drift before presenting an iteration. Start with coarse whole-screen invariants; localized
+  visual-diff rules need a change-boundary/region model to avoid rejecting intended edits. This is
+  an internal generation gate, not a replacement for the binary comparison or the designer's
+  judgment.
 
 ## Other planned-but-not-wired work
 
-- **Per-exploration design-system selection** — requires a design-system reference in the active
-  transient state; one hardcoded Geist system today.
+- **Per-exploration design-system controls** — the request and provider contracts support explicit
+  modes and a recognized design-system id, but the active UI has no selector or token upload yet.
+  Preserve-source is the only mode initiated by the current flow.
 - **W3C DTCG token-index input model** — decided format, not yet built as an input.
 - **ComfyUI** optional local visual pre-iteration / asset generation — decided shape, not in the
   core loop.
