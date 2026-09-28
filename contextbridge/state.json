@@ -1,13 +1,13 @@
 {
   "v": 1,
   "project": "Coquí",
-  "packet_id": "cb_20260916220109325_github",
-  "base_packet": "cb_20260916215514497_github",
+  "packet_id": "cb_20260928164256387_github",
+  "base_packet": "cb_20260928162625759_github",
   "mode": "delta",
   "scope": "github",
-  "generated_at": "2026-09-16T22:01:09.325Z",
+  "generated_at": "2026-09-28T16:42:56.387Z",
   "changed": true,
-  "manifest_sha": "f063465b5ba6cab6",
+  "manifest_sha": "d7bd1e641c137b43",
   "sources": [
     {
       "id": ".agents/product-marketing.md",
@@ -426,8 +426,8 @@
     {
       "id": "lib/preview/react-runtime.generated.ts",
       "file": "lib/preview/react-runtime.generated.ts",
-      "sha256": "272d0c8ff67e204f9c8252b83bfb7b0b6f897e2417817cd771bbc3825fe0eb45",
-      "bytes": 197573
+      "sha256": "102eba3897e0deab81015598d625a7c4122ced48e7b6249acd427cb7d77a77fa",
+      "bytes": 227303
     },
     {
       "id": "lib/providers/codegen/__fixtures__/hightouch-onboarding.raw.txt",
@@ -798,8 +798,8 @@
     {
       "id": "package.json",
       "file": "package.json",
-      "sha256": "c23dcf054442c25a08c67f69c6fb91744097d6465e93682ba1e9a48229586cfa",
-      "bytes": 1355
+      "sha256": "7de94e27f6b972b02f9cf2cef76fd30f2eab7e47a5d005b6781688ce7439a4a9",
+      "bytes": 1354
     },
     {
       "id": "public/brand/bg-sky-ambient.svg",
@@ -860,6 +860,7 @@
     "added": [],
     "removed": [],
     "updated": [
+      "lib/preview/react-runtime.generated.ts",
       "package.json"
     ]
   },
